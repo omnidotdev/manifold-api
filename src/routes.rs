@@ -7,8 +7,9 @@ use axum::{
     routing::{get, post},
     Json, Router,
 };
-use manifold_core::{ArtifactSummary, ArtifactType, RegistryStats};
 use serde::{Deserialize, Serialize};
+
+use crate::core::{ArtifactSummary, ArtifactType, RegistryStats};
 
 use crate::SharedState;
 

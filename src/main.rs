@@ -11,12 +11,12 @@
 //! - / - Web UI (served from manifold-app)
 
 mod config;
+mod core;
 mod oci;
 mod routes;
 
 use axum::{routing::get, Router};
 use figment::{providers::Env, Figment};
-use manifold_core::{storage::FileStorage, Registry};
 use sqlx::postgres::PgPoolOptions;
 use std::{net::SocketAddr, path::PathBuf, sync::Arc};
 use tower_http::{
@@ -26,8 +26,9 @@ use tower_http::{
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
 use crate::config::Config;
+use crate::core::{storage::FileStorage, Registry};
 
-pub struct AppState<B: manifold_core::storage::BlobStorage> {
+pub struct AppState<B: crate::core::storage::BlobStorage> {
     pub registry: Registry<B>,
     pub config: Config,
 }

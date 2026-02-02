@@ -10,9 +10,6 @@ name = "manifold"
 path = "src/main.rs"
 
 [dependencies]
-# Core library
-manifold-core = { path = "../manifold-core" }
-
 # Web framework
 axum = { version = "0.7", features = ["macros"] }
 axum-extra = { version = "0.9", features = ["typed-header"] }
@@ -53,3 +50,6 @@ uuid = { version = "1", features = ["v4", "serde"] }
 # Hashing
 sha2 = "0.10"
 hex = "0.4"
+
+# Async traits
+async-trait = "0.1"
