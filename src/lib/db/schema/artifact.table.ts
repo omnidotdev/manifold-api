@@ -1,4 +1,11 @@
-import { bigint, index, pgTable, text, uniqueIndex, uuid } from "drizzle-orm/pg-core";
+import {
+  bigint,
+  index,
+  pgTable,
+  text,
+  uniqueIndex,
+  uuid,
+} from "drizzle-orm/pg-core";
 
 import { repositoryTable } from "lib/db/schema/repository.table";
 import { generateDefaultDate, generateDefaultId } from "lib/db/util";

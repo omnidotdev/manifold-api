@@ -51,9 +51,15 @@ const getRepository = async (namespace: string, repoName: string) => {
       namespace: namespaceTable,
     })
     .from(repositoryTable)
-    .innerJoin(namespaceTable, eq(repositoryTable.namespaceId, namespaceTable.id))
+    .innerJoin(
+      namespaceTable,
+      eq(repositoryTable.namespaceId, namespaceTable.id),
+    )
     .where(
-      and(eq(namespaceTable.name, namespace), eq(repositoryTable.name, repoName)),
+      and(
+        eq(namespaceTable.name, namespace),
+        eq(repositoryTable.name, repoName),
+      ),
     )
     .limit(1);
 
@@ -245,7 +251,7 @@ const ociRouter = new Elysia({ prefix: "/v2" })
       }
 
       set.status = 201;
-      set.headers["Location"] = `/v2/${params.name}/manifests/${digest}`;
+      set.headers.Location = `/v2/${params.name}/manifests/${digest}`;
       set.headers["Docker-Content-Digest"] = digest;
     },
     {
@@ -351,7 +357,9 @@ const ociRouter = new Elysia({ prefix: "/v2" })
       }
 
       // create upload session
-      const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
+      const expiresAt = new Date(
+        Date.now() + 24 * 60 * 60 * 1000,
+      ).toISOString();
       const [session] = await dbPool
         .insert(uploadSessionTable)
         .values({
@@ -361,9 +369,9 @@ const ociRouter = new Elysia({ prefix: "/v2" })
         .returning();
 
       set.status = 202;
-      set.headers["Location"] = `/v2/${params.name}/blobs/uploads/${session.id}`;
+      set.headers.Location = `/v2/${params.name}/blobs/uploads/${session.id}`;
       set.headers["Docker-Upload-UUID"] = session.id;
-      set.headers["Range"] = "0-0";
+      set.headers.Range = "0-0";
     },
     {
       params: t.Object({
@@ -397,9 +405,9 @@ const ociRouter = new Elysia({ prefix: "/v2" })
         .where(eq(uploadSessionTable.id, params.uuid));
 
       set.status = 202;
-      set.headers["Location"] = `/v2/${params.name}/blobs/uploads/${params.uuid}`;
+      set.headers.Location = `/v2/${params.name}/blobs/uploads/${params.uuid}`;
       set.headers["Docker-Upload-UUID"] = params.uuid;
-      set.headers["Range"] = `0-${newOffset}`;
+      set.headers.Range = `0-${newOffset}`;
     },
     {
       params: t.Object({
@@ -460,7 +468,7 @@ const ociRouter = new Elysia({ prefix: "/v2" })
         .where(eq(uploadSessionTable.id, params.uuid));
 
       set.status = 201;
-      set.headers["Location"] = `/v2/${params.name}/blobs/${computedDigest}`;
+      set.headers.Location = `/v2/${params.name}/blobs/${computedDigest}`;
       set.headers["Docker-Content-Digest"] = computedDigest;
     },
     {

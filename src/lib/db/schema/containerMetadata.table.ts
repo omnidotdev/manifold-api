@@ -18,5 +18,9 @@ export const containerMetadataTable = pgTable("container_metadata", {
   layerDigests: jsonb().notNull().default([]),
 });
 
-export type InsertContainerMetadata = InferInsertModel<typeof containerMetadataTable>;
-export type SelectContainerMetadata = InferSelectModel<typeof containerMetadataTable>;
+export type InsertContainerMetadata = InferInsertModel<
+  typeof containerMetadataTable
+>;
+export type SelectContainerMetadata = InferSelectModel<
+  typeof containerMetadataTable
+>;

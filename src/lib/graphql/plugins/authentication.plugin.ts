@@ -7,7 +7,10 @@ import { AUTH_BASE_URL } from "lib/config/env.config";
 
 import type { ResolveUserFn } from "@envelop/generic-auth";
 import type { JWTPayload } from "jose";
-import type { GraphQLContext, Observer } from "lib/graphql/createGraphqlContext";
+import type {
+  GraphQLContext,
+  Observer,
+} from "lib/graphql/createGraphqlContext";
 
 interface UserInfoClaims extends JWTPayload {
   sub: string;

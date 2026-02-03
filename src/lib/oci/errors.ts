@@ -13,7 +13,7 @@ interface OciErrorResponse {
   errors: OciErrorDetail[];
 }
 
-export const createOciError = (
+const createOciError = (
   code: string,
   message: string,
   detail?: unknown,
@@ -34,7 +34,7 @@ export const digestInvalid = (
   expected: string,
   actual: string,
 ): OciErrorResponse =>
-  createOciError("DIGEST_INVALID", `digest mismatch: expected ${expected}, got ${actual}`);
-
-export const unsupported = (message: string): OciErrorResponse =>
-  createOciError("UNSUPPORTED", message);
+  createOciError(
+    "DIGEST_INVALID",
+    `digest mismatch: expected ${expected}, got ${actual}`,
+  );

@@ -31,14 +31,10 @@ const knipConfig: KnipConfig = {
   ignoreDependencies: [
     "@changesets/changelog-github",
     "@changesets/cli",
-    "drizzle-kit",
     // TODO switch to testcontainers (unstable behavior with Bun/Docker), then remove below
     "@testcontainers/postgresql",
     "testcontainers",
     "@faker-js/faker",
-  ],
-  ignoreBinaries: [
-    "tsc", // Bun provides TypeScript compilation
   ],
   tags: ["-knipignore"],
 };
