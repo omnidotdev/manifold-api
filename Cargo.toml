@@ -6,7 +6,7 @@ description = "Manifold API server - universal artifact registry"
 license = "MIT"
 
 [[bin]]
-name = "manifold"
+name = "manifold-api"
 path = "src/main.rs"
 
 [dependencies]
