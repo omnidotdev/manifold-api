@@ -1,0 +1,3370 @@
+"""The root query type which gives access points into the data universe."""
+type Query implements Node {
+  """
+  Exposes the root query type nested one level down. This is helpful for Relay 1
+  which can only query top level fields if they are in a particular form.
+  """
+  query: Query!
+
+  """
+  The root query type must be a `Node` to work well with Relay 1 mutations. This just resolves to `query`.
+  """
+  id: ID!
+
+  """Fetches an object given its globally unique `ID`."""
+  node(
+    """The globally unique `ID`."""
+    id: ID!
+  ): Node
+
+  """Get a single `ContainerMetadatum`."""
+  containerMetadatum(artifactId: UUID!): ContainerMetadatum
+
+  """Get a single `Artifact`."""
+  artifact(rowId: UUID!): Artifact
+
+  """Get a single `WasmMetadatum`."""
+  wasmMetadatum(artifactId: UUID!): WasmMetadatum
+
+  """Get a single `Tag`."""
+  tag(rowId: UUID!): Tag
+
+  """Get a single `Namespace`."""
+  namespace(rowId: UUID!): Namespace
+
+  """Get a single `Namespace`."""
+  namespaceByName(name: String!): Namespace
+
+  """Get a single `UploadSession`."""
+  uploadSession(rowId: UUID!): UploadSession
+
+  """Get a single `SchemaMetadatum`."""
+  schemaMetadatum(artifactId: UUID!): SchemaMetadatum
+
+  """Get a single `Repository`."""
+  repository(rowId: UUID!): Repository
+
+  """Reads a single `ContainerMetadatum` using its globally unique `ID`."""
+  containerMetadatumById(
+    """
+    The globally unique `ID` to be used in selecting a single `ContainerMetadatum`.
+    """
+    id: ID!
+  ): ContainerMetadatum
+
+  """Reads a single `Artifact` using its globally unique `ID`."""
+  artifactById(
+    """The globally unique `ID` to be used in selecting a single `Artifact`."""
+    id: ID!
+  ): Artifact
+
+  """Reads a single `WasmMetadatum` using its globally unique `ID`."""
+  wasmMetadatumById(
+    """
+    The globally unique `ID` to be used in selecting a single `WasmMetadatum`.
+    """
+    id: ID!
+  ): WasmMetadatum
+
+  """Reads a single `Tag` using its globally unique `ID`."""
+  tagById(
+    """The globally unique `ID` to be used in selecting a single `Tag`."""
+    id: ID!
+  ): Tag
+
+  """Reads a single `Namespace` using its globally unique `ID`."""
+  namespaceById(
+    """The globally unique `ID` to be used in selecting a single `Namespace`."""
+    id: ID!
+  ): Namespace
+
+  """Reads a single `UploadSession` using its globally unique `ID`."""
+  uploadSessionById(
+    """
+    The globally unique `ID` to be used in selecting a single `UploadSession`.
+    """
+    id: ID!
+  ): UploadSession
+
+  """Reads a single `SchemaMetadatum` using its globally unique `ID`."""
+  schemaMetadatumById(
+    """
+    The globally unique `ID` to be used in selecting a single `SchemaMetadatum`.
+    """
+    id: ID!
+  ): SchemaMetadatum
+
+  """Reads a single `Repository` using its globally unique `ID`."""
+  repositoryById(
+    """
+    The globally unique `ID` to be used in selecting a single `Repository`.
+    """
+    id: ID!
+  ): Repository
+
+  """Reads and enables pagination through a set of `ContainerMetadatum`."""
+  containerMetadata(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: ContainerMetadatumCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: ContainerMetadatumFilter
+
+    """The method to use when ordering `ContainerMetadatum`."""
+    orderBy: [ContainerMetadatumOrderBy!] = [PRIMARY_KEY_ASC]
+  ): ContainerMetadatumConnection
+
+  """Reads and enables pagination through a set of `Artifact`."""
+  artifacts(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: ArtifactCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: ArtifactFilter
+
+    """The method to use when ordering `Artifact`."""
+    orderBy: [ArtifactOrderBy!] = [PRIMARY_KEY_ASC]
+  ): ArtifactConnection
+
+  """Reads and enables pagination through a set of `WasmMetadatum`."""
+  wasmMetadata(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: WasmMetadatumCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: WasmMetadatumFilter
+
+    """The method to use when ordering `WasmMetadatum`."""
+    orderBy: [WasmMetadatumOrderBy!] = [PRIMARY_KEY_ASC]
+  ): WasmMetadatumConnection
+
+  """Reads and enables pagination through a set of `Tag`."""
+  tags(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: TagCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: TagFilter
+
+    """The method to use when ordering `Tag`."""
+    orderBy: [TagOrderBy!] = [PRIMARY_KEY_ASC]
+  ): TagConnection
+
+  """Reads and enables pagination through a set of `Namespace`."""
+  namespaces(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: NamespaceCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: NamespaceFilter
+
+    """The method to use when ordering `Namespace`."""
+    orderBy: [NamespaceOrderBy!] = [PRIMARY_KEY_ASC]
+  ): NamespaceConnection
+
+  """Reads and enables pagination through a set of `UploadSession`."""
+  uploadSessions(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: UploadSessionCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: UploadSessionFilter
+
+    """The method to use when ordering `UploadSession`."""
+    orderBy: [UploadSessionOrderBy!] = [PRIMARY_KEY_ASC]
+  ): UploadSessionConnection
+
+  """Reads and enables pagination through a set of `SchemaMetadatum`."""
+  schemaMetadata(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: SchemaMetadatumCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: SchemaMetadatumFilter
+
+    """The method to use when ordering `SchemaMetadatum`."""
+    orderBy: [SchemaMetadatumOrderBy!] = [PRIMARY_KEY_ASC]
+  ): SchemaMetadatumConnection
+
+  """Reads and enables pagination through a set of `Repository`."""
+  repositories(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: RepositoryCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: RepositoryFilter
+
+    """The method to use when ordering `Repository`."""
+    orderBy: [RepositoryOrderBy!] = [PRIMARY_KEY_ASC]
+  ): RepositoryConnection
+}
+
+"""An object with a globally unique `ID`."""
+interface Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  id: ID!
+}
+
+type ContainerMetadatum implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  id: ID!
+  artifactId: UUID!
+  schemaVersion: Int!
+  architecture: String
+  os: String
+  configDigest: String
+  layerDigests: JSON!
+
+  """
+  Reads a single `Artifact` that is related to this `ContainerMetadatum`.
+  """
+  artifact: Artifact
+}
+
+"""
+A universally unique identifier as defined by [RFC 4122](https://tools.ietf.org/html/rfc4122).
+"""
+scalar UUID
+
+"""
+Represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+"""
+scalar JSON
+
+type Artifact implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  id: ID!
+  rowId: UUID!
+  repositoryId: UUID!
+  digest: String!
+  size: BigInt!
+  mediaType: String!
+  content: String
+  createdAt: Datetime
+
+  """Reads a single `Repository` that is related to this `Artifact`."""
+  repository: Repository
+
+  """
+  Reads a single `ContainerMetadatum` that is related to this `Artifact`.
+  """
+  containerMetadatum: ContainerMetadatum
+
+  """Reads a single `SchemaMetadatum` that is related to this `Artifact`."""
+  schemaMetadatum: SchemaMetadatum
+
+  """Reads and enables pagination through a set of `Tag`."""
+  tags(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: TagCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: TagFilter
+
+    """The method to use when ordering `Tag`."""
+    orderBy: [TagOrderBy!] = [PRIMARY_KEY_ASC]
+  ): TagConnection!
+
+  """Reads a single `WasmMetadatum` that is related to this `Artifact`."""
+  wasmMetadatum: WasmMetadatum
+}
+
+"""
+A signed eight-byte integer. The upper big integer values are greater than the
+max value for a JavaScript number. Therefore all big integers will be output as
+strings and not numbers.
+"""
+scalar BigInt
+
+"""
+A point in time as described by the [ISO
+8601](https://en.wikipedia.org/wiki/ISO_8601) and, if it has a timezone, [RFC
+3339](https://datatracker.ietf.org/doc/html/rfc3339) standards. Input values
+that do not conform to both ISO 8601 and RFC 3339 may be coerced, which may lead
+to unexpected results.
+"""
+scalar Datetime
+
+type Repository implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  id: ID!
+  rowId: UUID!
+  namespaceId: UUID!
+  name: String!
+  description: String
+  artifactType: String!
+  isPublic: Boolean!
+  createdAt: Datetime
+  updatedAt: Datetime
+
+  """Reads a single `Namespace` that is related to this `Repository`."""
+  namespace: Namespace
+
+  """Reads and enables pagination through a set of `Artifact`."""
+  artifacts(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: ArtifactCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: ArtifactFilter
+
+    """The method to use when ordering `Artifact`."""
+    orderBy: [ArtifactOrderBy!] = [PRIMARY_KEY_ASC]
+  ): ArtifactConnection!
+
+  """Reads and enables pagination through a set of `Tag`."""
+  tags(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: TagCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: TagFilter
+
+    """The method to use when ordering `Tag`."""
+    orderBy: [TagOrderBy!] = [PRIMARY_KEY_ASC]
+  ): TagConnection!
+
+  """Reads and enables pagination through a set of `UploadSession`."""
+  uploadSessions(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: UploadSessionCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: UploadSessionFilter
+
+    """The method to use when ordering `UploadSession`."""
+    orderBy: [UploadSessionOrderBy!] = [PRIMARY_KEY_ASC]
+  ): UploadSessionConnection!
+}
+
+type Namespace implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  id: ID!
+  rowId: UUID!
+  name: String!
+  description: String
+  createdAt: Datetime
+  updatedAt: Datetime
+
+  """Reads and enables pagination through a set of `Repository`."""
+  repositories(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: RepositoryCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: RepositoryFilter
+
+    """The method to use when ordering `Repository`."""
+    orderBy: [RepositoryOrderBy!] = [PRIMARY_KEY_ASC]
+  ): RepositoryConnection!
+}
+
+"""A connection to a list of `Repository` values."""
+type RepositoryConnection {
+  """A list of `Repository` objects."""
+  nodes: [Repository]!
+
+  """
+  A list of edges which contains the `Repository` and cursor to aid in pagination.
+  """
+  edges: [RepositoryEdge]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `Repository` you could get from the connection."""
+  totalCount: Int!
+}
+
+"""A `Repository` edge in the connection."""
+type RepositoryEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `Repository` at the end of the edge."""
+  node: Repository
+}
+
+"""A location in a connection that can be used for resuming pagination."""
+scalar Cursor
+
+"""Information about pagination in a connection."""
+type PageInfo {
+  """When paginating forwards, are there more items?"""
+  hasNextPage: Boolean!
+
+  """When paginating backwards, are there more items?"""
+  hasPreviousPage: Boolean!
+
+  """When paginating backwards, the cursor to continue."""
+  startCursor: Cursor
+
+  """When paginating forwards, the cursor to continue."""
+  endCursor: Cursor
+}
+
+"""
+A condition to be used against `Repository` object types. All fields are tested
+for equality and combined with a logical ‘and.’
+"""
+input RepositoryCondition {
+  """Checks for equality with the object’s `rowId` field."""
+  rowId: UUID
+
+  """Checks for equality with the object’s `namespaceId` field."""
+  namespaceId: UUID
+
+  """Checks for equality with the object’s `name` field."""
+  name: String
+
+  """Checks for equality with the object’s `artifactType` field."""
+  artifactType: String
+}
+
+"""
+A filter to be used against `Repository` object types. All fields are combined with a logical ‘and.’
+"""
+input RepositoryFilter {
+  """Filter by the object’s `rowId` field."""
+  rowId: UUIDFilter
+
+  """Filter by the object’s `namespaceId` field."""
+  namespaceId: UUIDFilter
+
+  """Filter by the object’s `name` field."""
+  name: StringFilter
+
+  """Filter by the object’s `artifactType` field."""
+  artifactType: StringFilter
+
+  """Filter by the object’s `artifacts` relation."""
+  artifacts: RepositoryToManyArtifactFilter
+
+  """Some related `artifacts` exist."""
+  artifactsExist: Boolean
+
+  """Filter by the object’s `tags` relation."""
+  tags: RepositoryToManyTagFilter
+
+  """Some related `tags` exist."""
+  tagsExist: Boolean
+
+  """Filter by the object’s `uploadSessions` relation."""
+  uploadSessions: RepositoryToManyUploadSessionFilter
+
+  """Some related `uploadSessions` exist."""
+  uploadSessionsExist: Boolean
+
+  """Filter by the object’s `namespace` relation."""
+  namespace: NamespaceFilter
+
+  """Checks for all expressions in this list."""
+  and: [RepositoryFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [RepositoryFilter!]
+
+  """Negates the expression."""
+  not: RepositoryFilter
+}
+
+"""
+A filter to be used against UUID fields. All fields are combined with a logical ‘and.’
+"""
+input UUIDFilter {
+  """
+  Is null (if `true` is specified) or is not null (if `false` is specified).
+  """
+  isNull: Boolean
+
+  """Equal to the specified value."""
+  equalTo: UUID
+
+  """Not equal to the specified value."""
+  notEqualTo: UUID
+
+  """
+  Not equal to the specified value, treating null like an ordinary value.
+  """
+  distinctFrom: UUID
+
+  """Equal to the specified value, treating null like an ordinary value."""
+  notDistinctFrom: UUID
+
+  """Included in the specified list."""
+  in: [UUID!]
+
+  """Not included in the specified list."""
+  notIn: [UUID!]
+
+  """Less than the specified value."""
+  lessThan: UUID
+
+  """Less than or equal to the specified value."""
+  lessThanOrEqualTo: UUID
+
+  """Greater than the specified value."""
+  greaterThan: UUID
+
+  """Greater than or equal to the specified value."""
+  greaterThanOrEqualTo: UUID
+}
+
+"""
+A filter to be used against String fields. All fields are combined with a logical ‘and.’
+"""
+input StringFilter {
+  """
+  Is null (if `true` is specified) or is not null (if `false` is specified).
+  """
+  isNull: Boolean
+
+  """Equal to the specified value."""
+  equalTo: String
+
+  """Not equal to the specified value."""
+  notEqualTo: String
+
+  """
+  Not equal to the specified value, treating null like an ordinary value.
+  """
+  distinctFrom: String
+
+  """Equal to the specified value, treating null like an ordinary value."""
+  notDistinctFrom: String
+
+  """Included in the specified list."""
+  in: [String!]
+
+  """Not included in the specified list."""
+  notIn: [String!]
+
+  """Less than the specified value."""
+  lessThan: String
+
+  """Less than or equal to the specified value."""
+  lessThanOrEqualTo: String
+
+  """Greater than the specified value."""
+  greaterThan: String
+
+  """Greater than or equal to the specified value."""
+  greaterThanOrEqualTo: String
+
+  """Contains the specified string (case-sensitive)."""
+  includes: String
+
+  """Does not contain the specified string (case-sensitive)."""
+  notIncludes: String
+
+  """Contains the specified string (case-insensitive)."""
+  includesInsensitive: String
+
+  """Does not contain the specified string (case-insensitive)."""
+  notIncludesInsensitive: String
+
+  """Starts with the specified string (case-sensitive)."""
+  startsWith: String
+
+  """Does not start with the specified string (case-sensitive)."""
+  notStartsWith: String
+
+  """Starts with the specified string (case-insensitive)."""
+  startsWithInsensitive: String
+
+  """Does not start with the specified string (case-insensitive)."""
+  notStartsWithInsensitive: String
+
+  """Ends with the specified string (case-sensitive)."""
+  endsWith: String
+
+  """Does not end with the specified string (case-sensitive)."""
+  notEndsWith: String
+
+  """Ends with the specified string (case-insensitive)."""
+  endsWithInsensitive: String
+
+  """Does not end with the specified string (case-insensitive)."""
+  notEndsWithInsensitive: String
+
+  """
+  Matches the specified pattern (case-sensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters.
+  """
+  like: String
+
+  """
+  Does not match the specified pattern (case-sensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters.
+  """
+  notLike: String
+
+  """
+  Matches the specified pattern (case-insensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters.
+  """
+  likeInsensitive: String
+
+  """
+  Does not match the specified pattern (case-insensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters.
+  """
+  notLikeInsensitive: String
+
+  """Equal to the specified value (case-insensitive)."""
+  equalToInsensitive: String
+
+  """Not equal to the specified value (case-insensitive)."""
+  notEqualToInsensitive: String
+
+  """
+  Not equal to the specified value, treating null like an ordinary value (case-insensitive).
+  """
+  distinctFromInsensitive: String
+
+  """
+  Equal to the specified value, treating null like an ordinary value (case-insensitive).
+  """
+  notDistinctFromInsensitive: String
+
+  """Included in the specified list (case-insensitive)."""
+  inInsensitive: [String!]
+
+  """Not included in the specified list (case-insensitive)."""
+  notInInsensitive: [String!]
+
+  """Less than the specified value (case-insensitive)."""
+  lessThanInsensitive: String
+
+  """Less than or equal to the specified value (case-insensitive)."""
+  lessThanOrEqualToInsensitive: String
+
+  """Greater than the specified value (case-insensitive)."""
+  greaterThanInsensitive: String
+
+  """Greater than or equal to the specified value (case-insensitive)."""
+  greaterThanOrEqualToInsensitive: String
+}
+
+"""
+A filter to be used against many `Artifact` object types. All fields are combined with a logical ‘and.’
+"""
+input RepositoryToManyArtifactFilter {
+  """
+  Every related `Artifact` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  every: ArtifactFilter
+
+  """
+  Some related `Artifact` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  some: ArtifactFilter
+
+  """
+  No related `Artifact` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  none: ArtifactFilter
+}
+
+"""
+A filter to be used against `Artifact` object types. All fields are combined with a logical ‘and.’
+"""
+input ArtifactFilter {
+  """Filter by the object’s `rowId` field."""
+  rowId: UUIDFilter
+
+  """Filter by the object’s `repositoryId` field."""
+  repositoryId: UUIDFilter
+
+  """Filter by the object’s `digest` field."""
+  digest: StringFilter
+
+  """Filter by the object’s `containerMetadatum` relation."""
+  containerMetadatum: ContainerMetadatumFilter
+
+  """A related `containerMetadatum` exists."""
+  containerMetadatumExists: Boolean
+
+  """Filter by the object’s `schemaMetadatum` relation."""
+  schemaMetadatum: SchemaMetadatumFilter
+
+  """A related `schemaMetadatum` exists."""
+  schemaMetadatumExists: Boolean
+
+  """Filter by the object’s `tags` relation."""
+  tags: ArtifactToManyTagFilter
+
+  """Some related `tags` exist."""
+  tagsExist: Boolean
+
+  """Filter by the object’s `wasmMetadatum` relation."""
+  wasmMetadatum: WasmMetadatumFilter
+
+  """A related `wasmMetadatum` exists."""
+  wasmMetadatumExists: Boolean
+
+  """Filter by the object’s `repository` relation."""
+  repository: RepositoryFilter
+
+  """Checks for all expressions in this list."""
+  and: [ArtifactFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [ArtifactFilter!]
+
+  """Negates the expression."""
+  not: ArtifactFilter
+}
+
+"""
+A filter to be used against `ContainerMetadatum` object types. All fields are combined with a logical ‘and.’
+"""
+input ContainerMetadatumFilter {
+  """Filter by the object’s `artifactId` field."""
+  artifactId: UUIDFilter
+
+  """Filter by the object’s `artifact` relation."""
+  artifact: ArtifactFilter
+
+  """Checks for all expressions in this list."""
+  and: [ContainerMetadatumFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [ContainerMetadatumFilter!]
+
+  """Negates the expression."""
+  not: ContainerMetadatumFilter
+}
+
+"""
+A filter to be used against `SchemaMetadatum` object types. All fields are combined with a logical ‘and.’
+"""
+input SchemaMetadatumFilter {
+  """Filter by the object’s `artifactId` field."""
+  artifactId: UUIDFilter
+
+  """Filter by the object’s `artifact` relation."""
+  artifact: ArtifactFilter
+
+  """Checks for all expressions in this list."""
+  and: [SchemaMetadatumFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [SchemaMetadatumFilter!]
+
+  """Negates the expression."""
+  not: SchemaMetadatumFilter
+}
+
+"""
+A filter to be used against many `Tag` object types. All fields are combined with a logical ‘and.’
+"""
+input ArtifactToManyTagFilter {
+  """
+  Every related `Tag` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  every: TagFilter
+
+  """
+  Some related `Tag` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  some: TagFilter
+
+  """
+  No related `Tag` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  none: TagFilter
+}
+
+"""
+A filter to be used against `Tag` object types. All fields are combined with a logical ‘and.’
+"""
+input TagFilter {
+  """Filter by the object’s `rowId` field."""
+  rowId: UUIDFilter
+
+  """Filter by the object’s `repositoryId` field."""
+  repositoryId: UUIDFilter
+
+  """Filter by the object’s `artifactId` field."""
+  artifactId: UUIDFilter
+
+  """Filter by the object’s `name` field."""
+  name: StringFilter
+
+  """Filter by the object’s `artifact` relation."""
+  artifact: ArtifactFilter
+
+  """Filter by the object’s `repository` relation."""
+  repository: RepositoryFilter
+
+  """Checks for all expressions in this list."""
+  and: [TagFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [TagFilter!]
+
+  """Negates the expression."""
+  not: TagFilter
+}
+
+"""
+A filter to be used against `WasmMetadatum` object types. All fields are combined with a logical ‘and.’
+"""
+input WasmMetadatumFilter {
+  """Filter by the object’s `artifactId` field."""
+  artifactId: UUIDFilter
+
+  """Filter by the object’s `artifact` relation."""
+  artifact: ArtifactFilter
+
+  """Checks for all expressions in this list."""
+  and: [WasmMetadatumFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [WasmMetadatumFilter!]
+
+  """Negates the expression."""
+  not: WasmMetadatumFilter
+}
+
+"""
+A filter to be used against many `Tag` object types. All fields are combined with a logical ‘and.’
+"""
+input RepositoryToManyTagFilter {
+  """
+  Every related `Tag` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  every: TagFilter
+
+  """
+  Some related `Tag` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  some: TagFilter
+
+  """
+  No related `Tag` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  none: TagFilter
+}
+
+"""
+A filter to be used against many `UploadSession` object types. All fields are combined with a logical ‘and.’
+"""
+input RepositoryToManyUploadSessionFilter {
+  """
+  Every related `UploadSession` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  every: UploadSessionFilter
+
+  """
+  Some related `UploadSession` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  some: UploadSessionFilter
+
+  """
+  No related `UploadSession` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  none: UploadSessionFilter
+}
+
+"""
+A filter to be used against `UploadSession` object types. All fields are combined with a logical ‘and.’
+"""
+input UploadSessionFilter {
+  """Filter by the object’s `rowId` field."""
+  rowId: UUIDFilter
+
+  """Filter by the object’s `repositoryId` field."""
+  repositoryId: UUIDFilter
+
+  """Filter by the object’s `expiresAt` field."""
+  expiresAt: DatetimeFilter
+
+  """Filter by the object’s `repository` relation."""
+  repository: RepositoryFilter
+
+  """Checks for all expressions in this list."""
+  and: [UploadSessionFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [UploadSessionFilter!]
+
+  """Negates the expression."""
+  not: UploadSessionFilter
+}
+
+"""
+A filter to be used against Datetime fields. All fields are combined with a logical ‘and.’
+"""
+input DatetimeFilter {
+  """
+  Is null (if `true` is specified) or is not null (if `false` is specified).
+  """
+  isNull: Boolean
+
+  """Equal to the specified value."""
+  equalTo: Datetime
+
+  """Not equal to the specified value."""
+  notEqualTo: Datetime
+
+  """
+  Not equal to the specified value, treating null like an ordinary value.
+  """
+  distinctFrom: Datetime
+
+  """Equal to the specified value, treating null like an ordinary value."""
+  notDistinctFrom: Datetime
+
+  """Included in the specified list."""
+  in: [Datetime!]
+
+  """Not included in the specified list."""
+  notIn: [Datetime!]
+
+  """Less than the specified value."""
+  lessThan: Datetime
+
+  """Less than or equal to the specified value."""
+  lessThanOrEqualTo: Datetime
+
+  """Greater than the specified value."""
+  greaterThan: Datetime
+
+  """Greater than or equal to the specified value."""
+  greaterThanOrEqualTo: Datetime
+}
+
+"""
+A filter to be used against `Namespace` object types. All fields are combined with a logical ‘and.’
+"""
+input NamespaceFilter {
+  """Filter by the object’s `rowId` field."""
+  rowId: UUIDFilter
+
+  """Filter by the object’s `name` field."""
+  name: StringFilter
+
+  """Filter by the object’s `repositories` relation."""
+  repositories: NamespaceToManyRepositoryFilter
+
+  """Some related `repositories` exist."""
+  repositoriesExist: Boolean
+
+  """Checks for all expressions in this list."""
+  and: [NamespaceFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [NamespaceFilter!]
+
+  """Negates the expression."""
+  not: NamespaceFilter
+}
+
+"""
+A filter to be used against many `Repository` object types. All fields are combined with a logical ‘and.’
+"""
+input NamespaceToManyRepositoryFilter {
+  """
+  Every related `Repository` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  every: RepositoryFilter
+
+  """
+  Some related `Repository` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  some: RepositoryFilter
+
+  """
+  No related `Repository` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  none: RepositoryFilter
+}
+
+"""Methods to use when ordering `Repository`."""
+enum RepositoryOrderBy {
+  NATURAL
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+  ROW_ID_ASC
+  ROW_ID_DESC
+  NAMESPACE_ID_ASC
+  NAMESPACE_ID_DESC
+  NAME_ASC
+  NAME_DESC
+  ARTIFACT_TYPE_ASC
+  ARTIFACT_TYPE_DESC
+}
+
+"""A connection to a list of `Artifact` values."""
+type ArtifactConnection {
+  """A list of `Artifact` objects."""
+  nodes: [Artifact]!
+
+  """
+  A list of edges which contains the `Artifact` and cursor to aid in pagination.
+  """
+  edges: [ArtifactEdge]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `Artifact` you could get from the connection."""
+  totalCount: Int!
+}
+
+"""A `Artifact` edge in the connection."""
+type ArtifactEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `Artifact` at the end of the edge."""
+  node: Artifact
+}
+
+"""
+A condition to be used against `Artifact` object types. All fields are tested
+for equality and combined with a logical ‘and.’
+"""
+input ArtifactCondition {
+  """Checks for equality with the object’s `rowId` field."""
+  rowId: UUID
+
+  """Checks for equality with the object’s `repositoryId` field."""
+  repositoryId: UUID
+
+  """Checks for equality with the object’s `digest` field."""
+  digest: String
+}
+
+"""Methods to use when ordering `Artifact`."""
+enum ArtifactOrderBy {
+  NATURAL
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+  ROW_ID_ASC
+  ROW_ID_DESC
+  REPOSITORY_ID_ASC
+  REPOSITORY_ID_DESC
+  DIGEST_ASC
+  DIGEST_DESC
+}
+
+"""A connection to a list of `Tag` values."""
+type TagConnection {
+  """A list of `Tag` objects."""
+  nodes: [Tag]!
+
+  """
+  A list of edges which contains the `Tag` and cursor to aid in pagination.
+  """
+  edges: [TagEdge]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `Tag` you could get from the connection."""
+  totalCount: Int!
+}
+
+type Tag implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  id: ID!
+  rowId: UUID!
+  repositoryId: UUID!
+  artifactId: UUID!
+  name: String!
+  createdAt: Datetime
+  updatedAt: Datetime
+
+  """Reads a single `Artifact` that is related to this `Tag`."""
+  artifact: Artifact
+
+  """Reads a single `Repository` that is related to this `Tag`."""
+  repository: Repository
+}
+
+"""A `Tag` edge in the connection."""
+type TagEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `Tag` at the end of the edge."""
+  node: Tag
+}
+
+"""
+A condition to be used against `Tag` object types. All fields are tested for equality and combined with a logical ‘and.’
+"""
+input TagCondition {
+  """Checks for equality with the object’s `rowId` field."""
+  rowId: UUID
+
+  """Checks for equality with the object’s `repositoryId` field."""
+  repositoryId: UUID
+
+  """Checks for equality with the object’s `artifactId` field."""
+  artifactId: UUID
+
+  """Checks for equality with the object’s `name` field."""
+  name: String
+}
+
+"""Methods to use when ordering `Tag`."""
+enum TagOrderBy {
+  NATURAL
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+  ROW_ID_ASC
+  ROW_ID_DESC
+  REPOSITORY_ID_ASC
+  REPOSITORY_ID_DESC
+  ARTIFACT_ID_ASC
+  ARTIFACT_ID_DESC
+  NAME_ASC
+  NAME_DESC
+}
+
+"""A connection to a list of `UploadSession` values."""
+type UploadSessionConnection {
+  """A list of `UploadSession` objects."""
+  nodes: [UploadSession]!
+
+  """
+  A list of edges which contains the `UploadSession` and cursor to aid in pagination.
+  """
+  edges: [UploadSessionEdge]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `UploadSession` you could get from the connection."""
+  totalCount: Int!
+}
+
+type UploadSession implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  id: ID!
+  rowId: UUID!
+  repositoryId: UUID!
+  offset: BigInt!
+  createdAt: Datetime
+  expiresAt: Datetime!
+
+  """Reads a single `Repository` that is related to this `UploadSession`."""
+  repository: Repository
+}
+
+"""A `UploadSession` edge in the connection."""
+type UploadSessionEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `UploadSession` at the end of the edge."""
+  node: UploadSession
+}
+
+"""
+A condition to be used against `UploadSession` object types. All fields are
+tested for equality and combined with a logical ‘and.’
+"""
+input UploadSessionCondition {
+  """Checks for equality with the object’s `rowId` field."""
+  rowId: UUID
+
+  """Checks for equality with the object’s `repositoryId` field."""
+  repositoryId: UUID
+
+  """Checks for equality with the object’s `expiresAt` field."""
+  expiresAt: Datetime
+}
+
+"""Methods to use when ordering `UploadSession`."""
+enum UploadSessionOrderBy {
+  NATURAL
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+  ROW_ID_ASC
+  ROW_ID_DESC
+  REPOSITORY_ID_ASC
+  REPOSITORY_ID_DESC
+  EXPIRES_AT_ASC
+  EXPIRES_AT_DESC
+}
+
+type SchemaMetadatum implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  id: ID!
+  artifactId: UUID!
+  version: String
+  title: String
+  isValid: Boolean!
+  validationErrors: JSON
+
+  """Reads a single `Artifact` that is related to this `SchemaMetadatum`."""
+  artifact: Artifact
+}
+
+type WasmMetadatum implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  id: ID!
+  artifactId: UUID!
+  runtime: String
+  exports: JSON!
+  imports: JSON!
+
+  """Reads a single `Artifact` that is related to this `WasmMetadatum`."""
+  artifact: Artifact
+}
+
+"""A connection to a list of `ContainerMetadatum` values."""
+type ContainerMetadatumConnection {
+  """A list of `ContainerMetadatum` objects."""
+  nodes: [ContainerMetadatum]!
+
+  """
+  A list of edges which contains the `ContainerMetadatum` and cursor to aid in pagination.
+  """
+  edges: [ContainerMetadatumEdge]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """
+  The count of *all* `ContainerMetadatum` you could get from the connection.
+  """
+  totalCount: Int!
+}
+
+"""A `ContainerMetadatum` edge in the connection."""
+type ContainerMetadatumEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `ContainerMetadatum` at the end of the edge."""
+  node: ContainerMetadatum
+}
+
+"""
+A condition to be used against `ContainerMetadatum` object types. All fields are
+tested for equality and combined with a logical ‘and.’
+"""
+input ContainerMetadatumCondition {
+  """Checks for equality with the object’s `artifactId` field."""
+  artifactId: UUID
+}
+
+"""Methods to use when ordering `ContainerMetadatum`."""
+enum ContainerMetadatumOrderBy {
+  NATURAL
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+  ARTIFACT_ID_ASC
+  ARTIFACT_ID_DESC
+}
+
+"""A connection to a list of `WasmMetadatum` values."""
+type WasmMetadatumConnection {
+  """A list of `WasmMetadatum` objects."""
+  nodes: [WasmMetadatum]!
+
+  """
+  A list of edges which contains the `WasmMetadatum` and cursor to aid in pagination.
+  """
+  edges: [WasmMetadatumEdge]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `WasmMetadatum` you could get from the connection."""
+  totalCount: Int!
+}
+
+"""A `WasmMetadatum` edge in the connection."""
+type WasmMetadatumEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `WasmMetadatum` at the end of the edge."""
+  node: WasmMetadatum
+}
+
+"""
+A condition to be used against `WasmMetadatum` object types. All fields are
+tested for equality and combined with a logical ‘and.’
+"""
+input WasmMetadatumCondition {
+  """Checks for equality with the object’s `artifactId` field."""
+  artifactId: UUID
+}
+
+"""Methods to use when ordering `WasmMetadatum`."""
+enum WasmMetadatumOrderBy {
+  NATURAL
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+  ARTIFACT_ID_ASC
+  ARTIFACT_ID_DESC
+}
+
+"""A connection to a list of `Namespace` values."""
+type NamespaceConnection {
+  """A list of `Namespace` objects."""
+  nodes: [Namespace]!
+
+  """
+  A list of edges which contains the `Namespace` and cursor to aid in pagination.
+  """
+  edges: [NamespaceEdge]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `Namespace` you could get from the connection."""
+  totalCount: Int!
+}
+
+"""A `Namespace` edge in the connection."""
+type NamespaceEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `Namespace` at the end of the edge."""
+  node: Namespace
+}
+
+"""
+A condition to be used against `Namespace` object types. All fields are tested
+for equality and combined with a logical ‘and.’
+"""
+input NamespaceCondition {
+  """Checks for equality with the object’s `rowId` field."""
+  rowId: UUID
+
+  """Checks for equality with the object’s `name` field."""
+  name: String
+}
+
+"""Methods to use when ordering `Namespace`."""
+enum NamespaceOrderBy {
+  NATURAL
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+  ROW_ID_ASC
+  ROW_ID_DESC
+  NAME_ASC
+  NAME_DESC
+}
+
+"""A connection to a list of `SchemaMetadatum` values."""
+type SchemaMetadatumConnection {
+  """A list of `SchemaMetadatum` objects."""
+  nodes: [SchemaMetadatum]!
+
+  """
+  A list of edges which contains the `SchemaMetadatum` and cursor to aid in pagination.
+  """
+  edges: [SchemaMetadatumEdge]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """
+  The count of *all* `SchemaMetadatum` you could get from the connection.
+  """
+  totalCount: Int!
+}
+
+"""A `SchemaMetadatum` edge in the connection."""
+type SchemaMetadatumEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `SchemaMetadatum` at the end of the edge."""
+  node: SchemaMetadatum
+}
+
+"""
+A condition to be used against `SchemaMetadatum` object types. All fields are
+tested for equality and combined with a logical ‘and.’
+"""
+input SchemaMetadatumCondition {
+  """Checks for equality with the object’s `artifactId` field."""
+  artifactId: UUID
+}
+
+"""Methods to use when ordering `SchemaMetadatum`."""
+enum SchemaMetadatumOrderBy {
+  NATURAL
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+  ARTIFACT_ID_ASC
+  ARTIFACT_ID_DESC
+}
+
+"""
+The root mutation type which contains root level fields which mutate data.
+"""
+type Mutation {
+  """Creates a single `ContainerMetadatum`."""
+  createContainerMetadatum(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateContainerMetadatumInput!
+  ): CreateContainerMetadatumPayload
+
+  """Creates a single `Artifact`."""
+  createArtifact(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateArtifactInput!
+  ): CreateArtifactPayload
+
+  """Creates a single `WasmMetadatum`."""
+  createWasmMetadatum(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateWasmMetadatumInput!
+  ): CreateWasmMetadatumPayload
+
+  """Creates a single `Tag`."""
+  createTag(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateTagInput!
+  ): CreateTagPayload
+
+  """Creates a single `Namespace`."""
+  createNamespace(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateNamespaceInput!
+  ): CreateNamespacePayload
+
+  """Creates a single `UploadSession`."""
+  createUploadSession(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateUploadSessionInput!
+  ): CreateUploadSessionPayload
+
+  """Creates a single `SchemaMetadatum`."""
+  createSchemaMetadatum(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateSchemaMetadatumInput!
+  ): CreateSchemaMetadatumPayload
+
+  """Creates a single `Repository`."""
+  createRepository(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateRepositoryInput!
+  ): CreateRepositoryPayload
+
+  """
+  Updates a single `ContainerMetadatum` using its globally unique id and a patch.
+  """
+  updateContainerMetadatumById(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateContainerMetadatumByIdInput!
+  ): UpdateContainerMetadatumPayload
+
+  """Updates a single `ContainerMetadatum` using a unique key and a patch."""
+  updateContainerMetadatum(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateContainerMetadatumInput!
+  ): UpdateContainerMetadatumPayload
+
+  """Updates a single `Artifact` using its globally unique id and a patch."""
+  updateArtifactById(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateArtifactByIdInput!
+  ): UpdateArtifactPayload
+
+  """Updates a single `Artifact` using a unique key and a patch."""
+  updateArtifact(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateArtifactInput!
+  ): UpdateArtifactPayload
+
+  """
+  Updates a single `WasmMetadatum` using its globally unique id and a patch.
+  """
+  updateWasmMetadatumById(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateWasmMetadatumByIdInput!
+  ): UpdateWasmMetadatumPayload
+
+  """Updates a single `WasmMetadatum` using a unique key and a patch."""
+  updateWasmMetadatum(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateWasmMetadatumInput!
+  ): UpdateWasmMetadatumPayload
+
+  """Updates a single `Tag` using its globally unique id and a patch."""
+  updateTagById(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateTagByIdInput!
+  ): UpdateTagPayload
+
+  """Updates a single `Tag` using a unique key and a patch."""
+  updateTag(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateTagInput!
+  ): UpdateTagPayload
+
+  """Updates a single `Namespace` using its globally unique id and a patch."""
+  updateNamespaceById(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateNamespaceByIdInput!
+  ): UpdateNamespacePayload
+
+  """Updates a single `Namespace` using a unique key and a patch."""
+  updateNamespace(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateNamespaceInput!
+  ): UpdateNamespacePayload
+
+  """Updates a single `Namespace` using a unique key and a patch."""
+  updateNamespaceByName(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateNamespaceByNameInput!
+  ): UpdateNamespacePayload
+
+  """
+  Updates a single `UploadSession` using its globally unique id and a patch.
+  """
+  updateUploadSessionById(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateUploadSessionByIdInput!
+  ): UpdateUploadSessionPayload
+
+  """Updates a single `UploadSession` using a unique key and a patch."""
+  updateUploadSession(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateUploadSessionInput!
+  ): UpdateUploadSessionPayload
+
+  """
+  Updates a single `SchemaMetadatum` using its globally unique id and a patch.
+  """
+  updateSchemaMetadatumById(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateSchemaMetadatumByIdInput!
+  ): UpdateSchemaMetadatumPayload
+
+  """Updates a single `SchemaMetadatum` using a unique key and a patch."""
+  updateSchemaMetadatum(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateSchemaMetadatumInput!
+  ): UpdateSchemaMetadatumPayload
+
+  """
+  Updates a single `Repository` using its globally unique id and a patch.
+  """
+  updateRepositoryById(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateRepositoryByIdInput!
+  ): UpdateRepositoryPayload
+
+  """Updates a single `Repository` using a unique key and a patch."""
+  updateRepository(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateRepositoryInput!
+  ): UpdateRepositoryPayload
+
+  """Deletes a single `ContainerMetadatum` using its globally unique id."""
+  deleteContainerMetadatumById(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteContainerMetadatumByIdInput!
+  ): DeleteContainerMetadatumPayload
+
+  """Deletes a single `ContainerMetadatum` using a unique key."""
+  deleteContainerMetadatum(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteContainerMetadatumInput!
+  ): DeleteContainerMetadatumPayload
+
+  """Deletes a single `Artifact` using its globally unique id."""
+  deleteArtifactById(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteArtifactByIdInput!
+  ): DeleteArtifactPayload
+
+  """Deletes a single `Artifact` using a unique key."""
+  deleteArtifact(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteArtifactInput!
+  ): DeleteArtifactPayload
+
+  """Deletes a single `WasmMetadatum` using its globally unique id."""
+  deleteWasmMetadatumById(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteWasmMetadatumByIdInput!
+  ): DeleteWasmMetadatumPayload
+
+  """Deletes a single `WasmMetadatum` using a unique key."""
+  deleteWasmMetadatum(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteWasmMetadatumInput!
+  ): DeleteWasmMetadatumPayload
+
+  """Deletes a single `Tag` using its globally unique id."""
+  deleteTagById(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteTagByIdInput!
+  ): DeleteTagPayload
+
+  """Deletes a single `Tag` using a unique key."""
+  deleteTag(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteTagInput!
+  ): DeleteTagPayload
+
+  """Deletes a single `Namespace` using its globally unique id."""
+  deleteNamespaceById(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteNamespaceByIdInput!
+  ): DeleteNamespacePayload
+
+  """Deletes a single `Namespace` using a unique key."""
+  deleteNamespace(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteNamespaceInput!
+  ): DeleteNamespacePayload
+
+  """Deletes a single `Namespace` using a unique key."""
+  deleteNamespaceByName(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteNamespaceByNameInput!
+  ): DeleteNamespacePayload
+
+  """Deletes a single `UploadSession` using its globally unique id."""
+  deleteUploadSessionById(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteUploadSessionByIdInput!
+  ): DeleteUploadSessionPayload
+
+  """Deletes a single `UploadSession` using a unique key."""
+  deleteUploadSession(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteUploadSessionInput!
+  ): DeleteUploadSessionPayload
+
+  """Deletes a single `SchemaMetadatum` using its globally unique id."""
+  deleteSchemaMetadatumById(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteSchemaMetadatumByIdInput!
+  ): DeleteSchemaMetadatumPayload
+
+  """Deletes a single `SchemaMetadatum` using a unique key."""
+  deleteSchemaMetadatum(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteSchemaMetadatumInput!
+  ): DeleteSchemaMetadatumPayload
+
+  """Deletes a single `Repository` using its globally unique id."""
+  deleteRepositoryById(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteRepositoryByIdInput!
+  ): DeleteRepositoryPayload
+
+  """Deletes a single `Repository` using a unique key."""
+  deleteRepository(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteRepositoryInput!
+  ): DeleteRepositoryPayload
+}
+
+"""The output of our create `ContainerMetadatum` mutation."""
+type CreateContainerMetadatumPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `ContainerMetadatum` that was created by this mutation."""
+  containerMetadatum: ContainerMetadatum
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `ContainerMetadatum`. May be used by Relay 1."""
+  containerMetadatumEdge(
+    """The method to use when ordering `ContainerMetadatum`."""
+    orderBy: [ContainerMetadatumOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): ContainerMetadatumEdge
+}
+
+"""All input for the create `ContainerMetadatum` mutation."""
+input CreateContainerMetadatumInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `ContainerMetadatum` to be created by this mutation."""
+  containerMetadatum: ContainerMetadatumInput!
+}
+
+"""An input for mutations affecting `ContainerMetadatum`"""
+input ContainerMetadatumInput {
+  artifactId: UUID!
+  schemaVersion: Int!
+  architecture: String
+  os: String
+  configDigest: String
+  layerDigests: JSON
+}
+
+"""The output of our create `Artifact` mutation."""
+type CreateArtifactPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `Artifact` that was created by this mutation."""
+  artifact: Artifact
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `Artifact`. May be used by Relay 1."""
+  artifactEdge(
+    """The method to use when ordering `Artifact`."""
+    orderBy: [ArtifactOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): ArtifactEdge
+}
+
+"""All input for the create `Artifact` mutation."""
+input CreateArtifactInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `Artifact` to be created by this mutation."""
+  artifact: ArtifactInput!
+}
+
+"""An input for mutations affecting `Artifact`"""
+input ArtifactInput {
+  rowId: UUID
+  repositoryId: UUID!
+  digest: String!
+  size: BigInt!
+  mediaType: String!
+  content: String
+  createdAt: Datetime
+}
+
+"""The output of our create `WasmMetadatum` mutation."""
+type CreateWasmMetadatumPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `WasmMetadatum` that was created by this mutation."""
+  wasmMetadatum: WasmMetadatum
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `WasmMetadatum`. May be used by Relay 1."""
+  wasmMetadatumEdge(
+    """The method to use when ordering `WasmMetadatum`."""
+    orderBy: [WasmMetadatumOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): WasmMetadatumEdge
+}
+
+"""All input for the create `WasmMetadatum` mutation."""
+input CreateWasmMetadatumInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `WasmMetadatum` to be created by this mutation."""
+  wasmMetadatum: WasmMetadatumInput!
+}
+
+"""An input for mutations affecting `WasmMetadatum`"""
+input WasmMetadatumInput {
+  artifactId: UUID!
+  runtime: String
+  exports: JSON
+  imports: JSON
+}
+
+"""The output of our create `Tag` mutation."""
+type CreateTagPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `Tag` that was created by this mutation."""
+  tag: Tag
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `Tag`. May be used by Relay 1."""
+  tagEdge(
+    """The method to use when ordering `Tag`."""
+    orderBy: [TagOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): TagEdge
+}
+
+"""All input for the create `Tag` mutation."""
+input CreateTagInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `Tag` to be created by this mutation."""
+  tag: TagInput!
+}
+
+"""An input for mutations affecting `Tag`"""
+input TagInput {
+  rowId: UUID
+  repositoryId: UUID!
+  artifactId: UUID!
+  name: String!
+  createdAt: Datetime
+  updatedAt: Datetime
+}
+
+"""The output of our create `Namespace` mutation."""
+type CreateNamespacePayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `Namespace` that was created by this mutation."""
+  namespace: Namespace
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `Namespace`. May be used by Relay 1."""
+  namespaceEdge(
+    """The method to use when ordering `Namespace`."""
+    orderBy: [NamespaceOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): NamespaceEdge
+}
+
+"""All input for the create `Namespace` mutation."""
+input CreateNamespaceInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `Namespace` to be created by this mutation."""
+  namespace: NamespaceInput!
+}
+
+"""An input for mutations affecting `Namespace`"""
+input NamespaceInput {
+  rowId: UUID
+  name: String!
+  description: String
+  createdAt: Datetime
+  updatedAt: Datetime
+}
+
+"""The output of our create `UploadSession` mutation."""
+type CreateUploadSessionPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `UploadSession` that was created by this mutation."""
+  uploadSession: UploadSession
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `UploadSession`. May be used by Relay 1."""
+  uploadSessionEdge(
+    """The method to use when ordering `UploadSession`."""
+    orderBy: [UploadSessionOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): UploadSessionEdge
+}
+
+"""All input for the create `UploadSession` mutation."""
+input CreateUploadSessionInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `UploadSession` to be created by this mutation."""
+  uploadSession: UploadSessionInput!
+}
+
+"""An input for mutations affecting `UploadSession`"""
+input UploadSessionInput {
+  rowId: UUID
+  repositoryId: UUID!
+  offset: BigInt
+  createdAt: Datetime
+  expiresAt: Datetime!
+}
+
+"""The output of our create `SchemaMetadatum` mutation."""
+type CreateSchemaMetadatumPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `SchemaMetadatum` that was created by this mutation."""
+  schemaMetadatum: SchemaMetadatum
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `SchemaMetadatum`. May be used by Relay 1."""
+  schemaMetadatumEdge(
+    """The method to use when ordering `SchemaMetadatum`."""
+    orderBy: [SchemaMetadatumOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): SchemaMetadatumEdge
+}
+
+"""All input for the create `SchemaMetadatum` mutation."""
+input CreateSchemaMetadatumInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `SchemaMetadatum` to be created by this mutation."""
+  schemaMetadatum: SchemaMetadatumInput!
+}
+
+"""An input for mutations affecting `SchemaMetadatum`"""
+input SchemaMetadatumInput {
+  artifactId: UUID!
+  version: String
+  title: String
+  isValid: Boolean
+  validationErrors: JSON
+}
+
+"""The output of our create `Repository` mutation."""
+type CreateRepositoryPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `Repository` that was created by this mutation."""
+  repository: Repository
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `Repository`. May be used by Relay 1."""
+  repositoryEdge(
+    """The method to use when ordering `Repository`."""
+    orderBy: [RepositoryOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): RepositoryEdge
+}
+
+"""All input for the create `Repository` mutation."""
+input CreateRepositoryInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `Repository` to be created by this mutation."""
+  repository: RepositoryInput!
+}
+
+"""An input for mutations affecting `Repository`"""
+input RepositoryInput {
+  rowId: UUID
+  namespaceId: UUID!
+  name: String!
+  description: String
+  artifactType: String!
+  isPublic: Boolean
+  createdAt: Datetime
+  updatedAt: Datetime
+}
+
+"""The output of our update `ContainerMetadatum` mutation."""
+type UpdateContainerMetadatumPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `ContainerMetadatum` that was updated by this mutation."""
+  containerMetadatum: ContainerMetadatum
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `ContainerMetadatum`. May be used by Relay 1."""
+  containerMetadatumEdge(
+    """The method to use when ordering `ContainerMetadatum`."""
+    orderBy: [ContainerMetadatumOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): ContainerMetadatumEdge
+}
+
+"""All input for the `updateContainerMetadatumById` mutation."""
+input UpdateContainerMetadatumByIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `ContainerMetadatum` to be updated.
+  """
+  id: ID!
+
+  """
+  An object where the defined keys will be set on the `ContainerMetadatum` being updated.
+  """
+  patch: ContainerMetadatumPatch!
+}
+
+"""
+Represents an update to a `ContainerMetadatum`. Fields that are set will be updated.
+"""
+input ContainerMetadatumPatch {
+  artifactId: UUID
+  schemaVersion: Int
+  architecture: String
+  os: String
+  configDigest: String
+  layerDigests: JSON
+}
+
+"""All input for the `updateContainerMetadatum` mutation."""
+input UpdateContainerMetadatumInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  artifactId: UUID!
+
+  """
+  An object where the defined keys will be set on the `ContainerMetadatum` being updated.
+  """
+  patch: ContainerMetadatumPatch!
+}
+
+"""The output of our update `Artifact` mutation."""
+type UpdateArtifactPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `Artifact` that was updated by this mutation."""
+  artifact: Artifact
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `Artifact`. May be used by Relay 1."""
+  artifactEdge(
+    """The method to use when ordering `Artifact`."""
+    orderBy: [ArtifactOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): ArtifactEdge
+}
+
+"""All input for the `updateArtifactById` mutation."""
+input UpdateArtifactByIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `Artifact` to be updated.
+  """
+  id: ID!
+
+  """
+  An object where the defined keys will be set on the `Artifact` being updated.
+  """
+  patch: ArtifactPatch!
+}
+
+"""
+Represents an update to a `Artifact`. Fields that are set will be updated.
+"""
+input ArtifactPatch {
+  rowId: UUID
+  repositoryId: UUID
+  digest: String
+  size: BigInt
+  mediaType: String
+  content: String
+  createdAt: Datetime
+}
+
+"""All input for the `updateArtifact` mutation."""
+input UpdateArtifactInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  rowId: UUID!
+
+  """
+  An object where the defined keys will be set on the `Artifact` being updated.
+  """
+  patch: ArtifactPatch!
+}
+
+"""The output of our update `WasmMetadatum` mutation."""
+type UpdateWasmMetadatumPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `WasmMetadatum` that was updated by this mutation."""
+  wasmMetadatum: WasmMetadatum
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `WasmMetadatum`. May be used by Relay 1."""
+  wasmMetadatumEdge(
+    """The method to use when ordering `WasmMetadatum`."""
+    orderBy: [WasmMetadatumOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): WasmMetadatumEdge
+}
+
+"""All input for the `updateWasmMetadatumById` mutation."""
+input UpdateWasmMetadatumByIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `WasmMetadatum` to be updated.
+  """
+  id: ID!
+
+  """
+  An object where the defined keys will be set on the `WasmMetadatum` being updated.
+  """
+  patch: WasmMetadatumPatch!
+}
+
+"""
+Represents an update to a `WasmMetadatum`. Fields that are set will be updated.
+"""
+input WasmMetadatumPatch {
+  artifactId: UUID
+  runtime: String
+  exports: JSON
+  imports: JSON
+}
+
+"""All input for the `updateWasmMetadatum` mutation."""
+input UpdateWasmMetadatumInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  artifactId: UUID!
+
+  """
+  An object where the defined keys will be set on the `WasmMetadatum` being updated.
+  """
+  patch: WasmMetadatumPatch!
+}
+
+"""The output of our update `Tag` mutation."""
+type UpdateTagPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `Tag` that was updated by this mutation."""
+  tag: Tag
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `Tag`. May be used by Relay 1."""
+  tagEdge(
+    """The method to use when ordering `Tag`."""
+    orderBy: [TagOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): TagEdge
+}
+
+"""All input for the `updateTagById` mutation."""
+input UpdateTagByIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `Tag` to be updated.
+  """
+  id: ID!
+
+  """
+  An object where the defined keys will be set on the `Tag` being updated.
+  """
+  patch: TagPatch!
+}
+
+"""Represents an update to a `Tag`. Fields that are set will be updated."""
+input TagPatch {
+  rowId: UUID
+  repositoryId: UUID
+  artifactId: UUID
+  name: String
+  createdAt: Datetime
+  updatedAt: Datetime
+}
+
+"""All input for the `updateTag` mutation."""
+input UpdateTagInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  rowId: UUID!
+
+  """
+  An object where the defined keys will be set on the `Tag` being updated.
+  """
+  patch: TagPatch!
+}
+
+"""The output of our update `Namespace` mutation."""
+type UpdateNamespacePayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `Namespace` that was updated by this mutation."""
+  namespace: Namespace
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `Namespace`. May be used by Relay 1."""
+  namespaceEdge(
+    """The method to use when ordering `Namespace`."""
+    orderBy: [NamespaceOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): NamespaceEdge
+}
+
+"""All input for the `updateNamespaceById` mutation."""
+input UpdateNamespaceByIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `Namespace` to be updated.
+  """
+  id: ID!
+
+  """
+  An object where the defined keys will be set on the `Namespace` being updated.
+  """
+  patch: NamespacePatch!
+}
+
+"""
+Represents an update to a `Namespace`. Fields that are set will be updated.
+"""
+input NamespacePatch {
+  rowId: UUID
+  name: String
+  description: String
+  createdAt: Datetime
+  updatedAt: Datetime
+}
+
+"""All input for the `updateNamespace` mutation."""
+input UpdateNamespaceInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  rowId: UUID!
+
+  """
+  An object where the defined keys will be set on the `Namespace` being updated.
+  """
+  patch: NamespacePatch!
+}
+
+"""All input for the `updateNamespaceByName` mutation."""
+input UpdateNamespaceByNameInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  name: String!
+
+  """
+  An object where the defined keys will be set on the `Namespace` being updated.
+  """
+  patch: NamespacePatch!
+}
+
+"""The output of our update `UploadSession` mutation."""
+type UpdateUploadSessionPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `UploadSession` that was updated by this mutation."""
+  uploadSession: UploadSession
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `UploadSession`. May be used by Relay 1."""
+  uploadSessionEdge(
+    """The method to use when ordering `UploadSession`."""
+    orderBy: [UploadSessionOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): UploadSessionEdge
+}
+
+"""All input for the `updateUploadSessionById` mutation."""
+input UpdateUploadSessionByIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `UploadSession` to be updated.
+  """
+  id: ID!
+
+  """
+  An object where the defined keys will be set on the `UploadSession` being updated.
+  """
+  patch: UploadSessionPatch!
+}
+
+"""
+Represents an update to a `UploadSession`. Fields that are set will be updated.
+"""
+input UploadSessionPatch {
+  rowId: UUID
+  repositoryId: UUID
+  offset: BigInt
+  createdAt: Datetime
+  expiresAt: Datetime
+}
+
+"""All input for the `updateUploadSession` mutation."""
+input UpdateUploadSessionInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  rowId: UUID!
+
+  """
+  An object where the defined keys will be set on the `UploadSession` being updated.
+  """
+  patch: UploadSessionPatch!
+}
+
+"""The output of our update `SchemaMetadatum` mutation."""
+type UpdateSchemaMetadatumPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `SchemaMetadatum` that was updated by this mutation."""
+  schemaMetadatum: SchemaMetadatum
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `SchemaMetadatum`. May be used by Relay 1."""
+  schemaMetadatumEdge(
+    """The method to use when ordering `SchemaMetadatum`."""
+    orderBy: [SchemaMetadatumOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): SchemaMetadatumEdge
+}
+
+"""All input for the `updateSchemaMetadatumById` mutation."""
+input UpdateSchemaMetadatumByIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `SchemaMetadatum` to be updated.
+  """
+  id: ID!
+
+  """
+  An object where the defined keys will be set on the `SchemaMetadatum` being updated.
+  """
+  patch: SchemaMetadatumPatch!
+}
+
+"""
+Represents an update to a `SchemaMetadatum`. Fields that are set will be updated.
+"""
+input SchemaMetadatumPatch {
+  artifactId: UUID
+  version: String
+  title: String
+  isValid: Boolean
+  validationErrors: JSON
+}
+
+"""All input for the `updateSchemaMetadatum` mutation."""
+input UpdateSchemaMetadatumInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  artifactId: UUID!
+
+  """
+  An object where the defined keys will be set on the `SchemaMetadatum` being updated.
+  """
+  patch: SchemaMetadatumPatch!
+}
+
+"""The output of our update `Repository` mutation."""
+type UpdateRepositoryPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `Repository` that was updated by this mutation."""
+  repository: Repository
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `Repository`. May be used by Relay 1."""
+  repositoryEdge(
+    """The method to use when ordering `Repository`."""
+    orderBy: [RepositoryOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): RepositoryEdge
+}
+
+"""All input for the `updateRepositoryById` mutation."""
+input UpdateRepositoryByIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `Repository` to be updated.
+  """
+  id: ID!
+
+  """
+  An object where the defined keys will be set on the `Repository` being updated.
+  """
+  patch: RepositoryPatch!
+}
+
+"""
+Represents an update to a `Repository`. Fields that are set will be updated.
+"""
+input RepositoryPatch {
+  rowId: UUID
+  namespaceId: UUID
+  name: String
+  description: String
+  artifactType: String
+  isPublic: Boolean
+  createdAt: Datetime
+  updatedAt: Datetime
+}
+
+"""All input for the `updateRepository` mutation."""
+input UpdateRepositoryInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  rowId: UUID!
+
+  """
+  An object where the defined keys will be set on the `Repository` being updated.
+  """
+  patch: RepositoryPatch!
+}
+
+"""The output of our delete `ContainerMetadatum` mutation."""
+type DeleteContainerMetadatumPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `ContainerMetadatum` that was deleted by this mutation."""
+  containerMetadatum: ContainerMetadatum
+  deletedContainerMetadatumId: ID
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `ContainerMetadatum`. May be used by Relay 1."""
+  containerMetadatumEdge(
+    """The method to use when ordering `ContainerMetadatum`."""
+    orderBy: [ContainerMetadatumOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): ContainerMetadatumEdge
+}
+
+"""All input for the `deleteContainerMetadatumById` mutation."""
+input DeleteContainerMetadatumByIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `ContainerMetadatum` to be deleted.
+  """
+  id: ID!
+}
+
+"""All input for the `deleteContainerMetadatum` mutation."""
+input DeleteContainerMetadatumInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  artifactId: UUID!
+}
+
+"""The output of our delete `Artifact` mutation."""
+type DeleteArtifactPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `Artifact` that was deleted by this mutation."""
+  artifact: Artifact
+  deletedArtifactId: ID
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `Artifact`. May be used by Relay 1."""
+  artifactEdge(
+    """The method to use when ordering `Artifact`."""
+    orderBy: [ArtifactOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): ArtifactEdge
+}
+
+"""All input for the `deleteArtifactById` mutation."""
+input DeleteArtifactByIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `Artifact` to be deleted.
+  """
+  id: ID!
+}
+
+"""All input for the `deleteArtifact` mutation."""
+input DeleteArtifactInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  rowId: UUID!
+}
+
+"""The output of our delete `WasmMetadatum` mutation."""
+type DeleteWasmMetadatumPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `WasmMetadatum` that was deleted by this mutation."""
+  wasmMetadatum: WasmMetadatum
+  deletedWasmMetadatumId: ID
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `WasmMetadatum`. May be used by Relay 1."""
+  wasmMetadatumEdge(
+    """The method to use when ordering `WasmMetadatum`."""
+    orderBy: [WasmMetadatumOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): WasmMetadatumEdge
+}
+
+"""All input for the `deleteWasmMetadatumById` mutation."""
+input DeleteWasmMetadatumByIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `WasmMetadatum` to be deleted.
+  """
+  id: ID!
+}
+
+"""All input for the `deleteWasmMetadatum` mutation."""
+input DeleteWasmMetadatumInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  artifactId: UUID!
+}
+
+"""The output of our delete `Tag` mutation."""
+type DeleteTagPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `Tag` that was deleted by this mutation."""
+  tag: Tag
+  deletedTagId: ID
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `Tag`. May be used by Relay 1."""
+  tagEdge(
+    """The method to use when ordering `Tag`."""
+    orderBy: [TagOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): TagEdge
+}
+
+"""All input for the `deleteTagById` mutation."""
+input DeleteTagByIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `Tag` to be deleted.
+  """
+  id: ID!
+}
+
+"""All input for the `deleteTag` mutation."""
+input DeleteTagInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  rowId: UUID!
+}
+
+"""The output of our delete `Namespace` mutation."""
+type DeleteNamespacePayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `Namespace` that was deleted by this mutation."""
+  namespace: Namespace
+  deletedNamespaceId: ID
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `Namespace`. May be used by Relay 1."""
+  namespaceEdge(
+    """The method to use when ordering `Namespace`."""
+    orderBy: [NamespaceOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): NamespaceEdge
+}
+
+"""All input for the `deleteNamespaceById` mutation."""
+input DeleteNamespaceByIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `Namespace` to be deleted.
+  """
+  id: ID!
+}
+
+"""All input for the `deleteNamespace` mutation."""
+input DeleteNamespaceInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  rowId: UUID!
+}
+
+"""All input for the `deleteNamespaceByName` mutation."""
+input DeleteNamespaceByNameInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  name: String!
+}
+
+"""The output of our delete `UploadSession` mutation."""
+type DeleteUploadSessionPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `UploadSession` that was deleted by this mutation."""
+  uploadSession: UploadSession
+  deletedUploadSessionId: ID
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `UploadSession`. May be used by Relay 1."""
+  uploadSessionEdge(
+    """The method to use when ordering `UploadSession`."""
+    orderBy: [UploadSessionOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): UploadSessionEdge
+}
+
+"""All input for the `deleteUploadSessionById` mutation."""
+input DeleteUploadSessionByIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `UploadSession` to be deleted.
+  """
+  id: ID!
+}
+
+"""All input for the `deleteUploadSession` mutation."""
+input DeleteUploadSessionInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  rowId: UUID!
+}
+
+"""The output of our delete `SchemaMetadatum` mutation."""
+type DeleteSchemaMetadatumPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `SchemaMetadatum` that was deleted by this mutation."""
+  schemaMetadatum: SchemaMetadatum
+  deletedSchemaMetadatumId: ID
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `SchemaMetadatum`. May be used by Relay 1."""
+  schemaMetadatumEdge(
+    """The method to use when ordering `SchemaMetadatum`."""
+    orderBy: [SchemaMetadatumOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): SchemaMetadatumEdge
+}
+
+"""All input for the `deleteSchemaMetadatumById` mutation."""
+input DeleteSchemaMetadatumByIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `SchemaMetadatum` to be deleted.
+  """
+  id: ID!
+}
+
+"""All input for the `deleteSchemaMetadatum` mutation."""
+input DeleteSchemaMetadatumInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  artifactId: UUID!
+}
+
+"""The output of our delete `Repository` mutation."""
+type DeleteRepositoryPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `Repository` that was deleted by this mutation."""
+  repository: Repository
+  deletedRepositoryId: ID
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `Repository`. May be used by Relay 1."""
+  repositoryEdge(
+    """The method to use when ordering `Repository`."""
+    orderBy: [RepositoryOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): RepositoryEdge
+}
+
+"""All input for the `deleteRepositoryById` mutation."""
+input DeleteRepositoryByIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `Repository` to be deleted.
+  """
+  id: ID!
+}
+
+"""All input for the `deleteRepository` mutation."""
+input DeleteRepositoryInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  rowId: UUID!
+}
