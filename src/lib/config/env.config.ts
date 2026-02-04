@@ -29,6 +29,9 @@ export const {
   /** Provider overrides (default based on SELF_HOSTED) */
   BILLING_PROVIDER,
   AUTHZ_PROVIDER,
+  /** Feature flags */
+  FLAGS_API_HOST,
+  FLAGS_CLIENT_KEY,
 } = process.env;
 
 export const isDevEnv = NODE_ENV === "development",
