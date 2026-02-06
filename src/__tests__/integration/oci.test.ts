@@ -1,8 +1,15 @@
-import { beforeEach, describe, expect, test } from "bun:test";
+import { afterEach, beforeEach, describe, expect, test } from "bun:test";
 import { sql } from "drizzle-orm";
 import { Elysia } from "elysia";
 
 import { ociRouter } from "lib/oci";
+import {
+  appendChunk,
+  assembleBlob,
+  cleanupSession,
+  initSession,
+  sessionExists,
+} from "lib/oci/chunkStore";
 import { namespaceFactory, repositoryFactory } from "test/factories";
 
 const BASE = "http://test";
@@ -135,5 +142,89 @@ describe("OCI chunked upload", () => {
     const retrieved = new Uint8Array(blob);
 
     expect(retrieved).toEqual(fullBlob);
+  });
+});
+
+describe("OCI monolithic upload", () => {
+  beforeEach(async () => {
+    const db = getDb();
+    await db.execute(
+      sql`TRUNCATE TABLE upload_session, artifact, tag, repository, namespace CASCADE`,
+    );
+  });
+
+  test("handles monolithic blob upload via POST + PUT", async () => {
+    const db = getDb();
+    const app = makeOciApp();
+
+    const ns = await namespaceFactory.create(db, { name: "library" });
+    const repo = await repositoryFactory.create(db, {
+      namespaceId: ns.id,
+      name: "mono-repo",
+      isPublic: true,
+    });
+
+    const repoName = repo.name;
+
+    // Start upload session
+    const postRes = await app.handle(
+      new Request(`${BASE}/v2/${repoName}/blobs/uploads/`, {
+        method: "POST",
+      }),
+    );
+
+    expect(postRes.status).toBe(202);
+
+    const uploadPath = postRes.headers.get("location");
+    expect(uploadPath).toBeTruthy();
+
+    // Complete upload with body in PUT (monolithic)
+    const blob = new TextEncoder().encode("hello monolithic world");
+    const hasher = new Bun.CryptoHasher("sha256");
+    hasher.update(blob);
+    const expectedDigest = `sha256:${hasher.digest("hex")}`;
+
+    const putRes = await app.handle(
+      new Request(`${BASE}${uploadPath}?digest=${expectedDigest}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/octet-stream" },
+        body: blob,
+      }),
+    );
+
+    expect(putRes.status).toBe(201);
+    expect(putRes.headers.get("docker-content-digest")).toBe(expectedDigest);
+
+    // Verify blob is retrievable
+    const getRes = await app.handle(
+      new Request(`${BASE}/v2/${repoName}/blobs/${expectedDigest}`),
+    );
+
+    expect(getRes.status).toBe(200);
+  });
+});
+
+describe("Chunk Store", () => {
+  const sessionId = "test-session-id";
+
+  afterEach(async () => {
+    await cleanupSession(sessionId);
+  });
+
+  test("should store and assemble chunks", async () => {
+    await initSession(sessionId);
+    expect(await sessionExists(sessionId)).toBe(true);
+
+    await appendChunk(sessionId, new Uint8Array([1, 2, 3]));
+    await appendChunk(sessionId, new Uint8Array([4, 5, 6]));
+
+    const assembled = await assembleBlob(sessionId);
+
+    expect(new Uint8Array(assembled)).toEqual(
+      new Uint8Array([1, 2, 3, 4, 5, 6]),
+    );
+
+    await cleanupSession(sessionId);
+    expect(await sessionExists(sessionId)).toBe(false);
   });
 });

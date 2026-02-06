@@ -26,6 +26,12 @@ import {
   tagTable,
   uploadSessionTable,
 } from "lib/db/schema";
+import {
+  appendChunk,
+  assembleBlob,
+  cleanupSession,
+  initSession,
+} from "lib/oci/chunkStore";
 import { computeDigest } from "lib/oci/digest";
 import * as ociErrors from "lib/oci/errors";
 
@@ -368,6 +374,8 @@ const ociRouter = new Elysia({ prefix: "/v2" })
         })
         .returning();
 
+      await initSession(session.id);
+
       set.status = 202;
       set.headers.Location = `/v2/${params.name}/blobs/uploads/${session.id}`;
       set.headers["Docker-Upload-UUID"] = session.id;
@@ -395,8 +403,19 @@ const ociRouter = new Elysia({ prefix: "/v2" })
         return ociErrors.blobUnknown(params.uuid);
       }
 
-      // TODO: store chunk data
-      const chunkSize = body instanceof ArrayBuffer ? body.byteLength : 0;
+      const chunk =
+        body instanceof ArrayBuffer
+          ? new Uint8Array(body)
+          : typeof body === "string"
+            ? new TextEncoder().encode(body)
+            : new Uint8Array(0);
+
+      const chunkSize = chunk.byteLength;
+
+      if (chunkSize > 0) {
+        await appendChunk(params.uuid, chunk);
+      }
+
       const newOffset = session.offset + chunkSize;
 
       await dbPool
@@ -440,32 +459,58 @@ const ociRouter = new Elysia({ prefix: "/v2" })
         return ociErrors.blobUnknown(params.uuid);
       }
 
-      // for monolithic upload, content is in the body
-      const content = typeof body === "string" ? body : "";
-      const contentBytes = new TextEncoder().encode(content);
-      const computedDigest = await computeDigest(contentBytes);
+      // Determine content source: inline body (monolithic) or assembled chunks
+      let content: Uint8Array;
+
+      const inlineBody =
+        body instanceof ArrayBuffer
+          ? new Uint8Array(body)
+          : typeof body === "string" && body.length > 0
+            ? new TextEncoder().encode(body)
+            : null;
+
+      if (inlineBody && inlineBody.byteLength > 0) {
+        content = inlineBody;
+      } else if (session.offset > 0) {
+        content = new Uint8Array(await assembleBlob(params.uuid));
+      } else {
+        set.status = 400;
+        return {
+          errors: [
+            {
+              code: "BLOB_UPLOAD_INVALID",
+              message: "No content provided",
+            },
+          ],
+        };
+      }
+
+      const computedDigest = await computeDigest(content);
 
       if (query.digest && computedDigest !== query.digest) {
+        await cleanupSession(params.uuid);
         set.status = 400;
         return ociErrors.digestInvalid(query.digest, computedDigest);
       }
 
-      // create artifact
+      // Create artifact
       await dbPool
         .insert(artifactTable)
         .values({
           repositoryId: repoData.repository.id,
           digest: computedDigest,
-          size: contentBytes.length,
+          size: content.byteLength,
           mediaType: "application/octet-stream",
-          content,
+          content: new TextDecoder().decode(content),
         })
         .onConflictDoNothing();
 
-      // cleanup session
+      // Cleanup session and chunk data
       await dbPool
         .delete(uploadSessionTable)
         .where(eq(uploadSessionTable.id, params.uuid));
+
+      await cleanupSession(params.uuid);
 
       set.status = 201;
       set.headers.Location = `/v2/${params.name}/blobs/${computedDigest}`;
