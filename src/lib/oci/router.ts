@@ -27,13 +27,13 @@ import {
   tagTable,
   uploadSessionTable,
 } from "lib/db/schema";
+import { isEnabled } from "lib/flags/client";
 import {
   appendChunk,
   assembleBlob,
   cleanupSession,
   initSession,
 } from "lib/oci/chunkStore";
-import { isEnabled } from "lib/flags/client";
 import { computeDigest } from "lib/oci/digest";
 import * as ociErrors from "lib/oci/errors";
 

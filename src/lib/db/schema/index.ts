@@ -1,3 +1,4 @@
+export * from "./apiToken.table";
 export * from "./artifact.table";
 export * from "./containerMetadata.table";
 export * from "./namespace.table";

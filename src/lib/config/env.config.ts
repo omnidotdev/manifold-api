@@ -32,12 +32,17 @@ export const {
   /** Feature flags */
   FLAGS_API_HOST,
   FLAGS_CLIENT_KEY,
+  /** Comma-separated namespaces allowed during maintenance */
+  MAINTENANCE_ALLOWED_NAMESPACES = "omni",
 } = process.env;
 
 export const isDevEnv = NODE_ENV === "development",
   isProdEnv = NODE_ENV === "production",
   isSelfHosted = SELF_HOSTED === "true",
-  protectRoutes = PROTECT_ROUTES === "true";
+  protectRoutes = PROTECT_ROUTES === "true",
+  maintenanceAllowedNamespaces = MAINTENANCE_ALLOWED_NAMESPACES.split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
 
 /**
  * Resolve a provider based on env var or self-hosted defaults.

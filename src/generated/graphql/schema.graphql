@@ -44,6 +44,9 @@ type Query implements Node {
   """Get a single `Repository`."""
   repository(rowId: UUID!): Repository
 
+  """Get a single `ApiToken`."""
+  apiToken(rowId: UUID!): ApiToken
+
   """Reads a single `ContainerMetadatum` using its globally unique `ID`."""
   containerMetadatumById(
     """
@@ -101,6 +104,12 @@ type Query implements Node {
     """
     id: ID!
   ): Repository
+
+  """Reads a single `ApiToken` using its globally unique `ID`."""
+  apiTokenById(
+    """The globally unique `ID` to be used in selecting a single `ApiToken`."""
+    id: ID!
+  ): ApiToken
 
   """Reads and enables pagination through a set of `ContainerMetadatum`."""
   containerMetadata(
@@ -373,6 +382,40 @@ type Query implements Node {
     """The method to use when ordering `Repository`."""
     orderBy: [RepositoryOrderBy!] = [PRIMARY_KEY_ASC]
   ): RepositoryConnection
+
+  """Reads and enables pagination through a set of `ApiToken`."""
+  apiTokens(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: ApiTokenCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: ApiTokenFilter
+
+    """The method to use when ordering `ApiToken`."""
+    orderBy: [ApiTokenOrderBy!] = [PRIMARY_KEY_ASC]
+  ): ApiTokenConnection
 }
 
 """An object with a globally unique `ID`."""
@@ -607,6 +650,40 @@ type Repository implements Node {
     """The method to use when ordering `UploadSession`."""
     orderBy: [UploadSessionOrderBy!] = [PRIMARY_KEY_ASC]
   ): UploadSessionConnection!
+
+  """Reads and enables pagination through a set of `ApiToken`."""
+  apiTokens(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: ApiTokenCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: ApiTokenFilter
+
+    """The method to use when ordering `ApiToken`."""
+    orderBy: [ApiTokenOrderBy!] = [PRIMARY_KEY_ASC]
+  ): ApiTokenConnection!
 }
 
 type Namespace implements Node {
@@ -653,6 +730,40 @@ type Namespace implements Node {
     """The method to use when ordering `Repository`."""
     orderBy: [RepositoryOrderBy!] = [PRIMARY_KEY_ASC]
   ): RepositoryConnection!
+
+  """Reads and enables pagination through a set of `ApiToken`."""
+  apiTokens(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: ApiTokenCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: ApiTokenFilter
+
+    """The method to use when ordering `ApiToken`."""
+    orderBy: [ApiTokenOrderBy!] = [PRIMARY_KEY_ASC]
+  ): ApiTokenConnection!
 }
 
 """A connection to a list of `Repository` values."""
@@ -750,6 +861,12 @@ input RepositoryFilter {
 
   """Some related `uploadSessions` exist."""
   uploadSessionsExist: Boolean
+
+  """Filter by the object’s `apiTokens` relation."""
+  apiTokens: RepositoryToManyApiTokenFilter
+
+  """Some related `apiTokens` exist."""
+  apiTokensExist: Boolean
 
   """Filter by the object’s `namespace` relation."""
   namespace: NamespaceFilter
@@ -1229,6 +1346,112 @@ input DatetimeFilter {
 }
 
 """
+A filter to be used against many `ApiToken` object types. All fields are combined with a logical ‘and.’
+"""
+input RepositoryToManyApiTokenFilter {
+  """
+  Every related `ApiToken` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  every: ApiTokenFilter
+
+  """
+  Some related `ApiToken` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  some: ApiTokenFilter
+
+  """
+  No related `ApiToken` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  none: ApiTokenFilter
+}
+
+"""
+A filter to be used against `ApiToken` object types. All fields are combined with a logical ‘and.’
+"""
+input ApiTokenFilter {
+  """Filter by the object’s `rowId` field."""
+  rowId: UUIDFilter
+
+  """Filter by the object’s `tokenHash` field."""
+  tokenHash: StringFilter
+
+  """Filter by the object’s `tokenPrefix` field."""
+  tokenPrefix: StringFilter
+
+  """Filter by the object’s `namespaceId` field."""
+  namespaceId: UUIDFilter
+
+  """Filter by the object’s `repositoryId` field."""
+  repositoryId: UUIDFilter
+
+  """Filter by the object’s `createdBy` field."""
+  createdBy: StringFilter
+
+  """Filter by the object’s `isActive` field."""
+  isActive: BooleanFilter
+
+  """Filter by the object’s `namespace` relation."""
+  namespace: NamespaceFilter
+
+  """Filter by the object’s `repository` relation."""
+  repository: RepositoryFilter
+
+  """A related `repository` exists."""
+  repositoryExists: Boolean
+
+  """Checks for all expressions in this list."""
+  and: [ApiTokenFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [ApiTokenFilter!]
+
+  """Negates the expression."""
+  not: ApiTokenFilter
+}
+
+"""
+A filter to be used against Boolean fields. All fields are combined with a logical ‘and.’
+"""
+input BooleanFilter {
+  """
+  Is null (if `true` is specified) or is not null (if `false` is specified).
+  """
+  isNull: Boolean
+
+  """Equal to the specified value."""
+  equalTo: Boolean
+
+  """Not equal to the specified value."""
+  notEqualTo: Boolean
+
+  """
+  Not equal to the specified value, treating null like an ordinary value.
+  """
+  distinctFrom: Boolean
+
+  """Equal to the specified value, treating null like an ordinary value."""
+  notDistinctFrom: Boolean
+
+  """Included in the specified list."""
+  in: [Boolean!]
+
+  """Not included in the specified list."""
+  notIn: [Boolean!]
+
+  """Less than the specified value."""
+  lessThan: Boolean
+
+  """Less than or equal to the specified value."""
+  lessThanOrEqualTo: Boolean
+
+  """Greater than the specified value."""
+  greaterThan: Boolean
+
+  """Greater than or equal to the specified value."""
+  greaterThanOrEqualTo: Boolean
+}
+
+"""
 A filter to be used against `Namespace` object types. All fields are combined with a logical ‘and.’
 """
 input NamespaceFilter {
@@ -1243,6 +1466,12 @@ input NamespaceFilter {
 
   """Some related `repositories` exist."""
   repositoriesExist: Boolean
+
+  """Filter by the object’s `apiTokens` relation."""
+  apiTokens: NamespaceToManyApiTokenFilter
+
+  """Some related `apiTokens` exist."""
+  apiTokensExist: Boolean
 
   """Checks for all expressions in this list."""
   and: [NamespaceFilter!]
@@ -1274,6 +1503,26 @@ input NamespaceToManyRepositoryFilter {
   none: RepositoryFilter
 }
 
+"""
+A filter to be used against many `ApiToken` object types. All fields are combined with a logical ‘and.’
+"""
+input NamespaceToManyApiTokenFilter {
+  """
+  Every related `ApiToken` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  every: ApiTokenFilter
+
+  """
+  Some related `ApiToken` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  some: ApiTokenFilter
+
+  """
+  No related `ApiToken` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  none: ApiTokenFilter
+}
+
 """Methods to use when ordering `Repository`."""
 enum RepositoryOrderBy {
   NATURAL
@@ -1287,6 +1536,107 @@ enum RepositoryOrderBy {
   NAME_DESC
   ARTIFACT_TYPE_ASC
   ARTIFACT_TYPE_DESC
+}
+
+"""A connection to a list of `ApiToken` values."""
+type ApiTokenConnection {
+  """A list of `ApiToken` objects."""
+  nodes: [ApiToken]!
+
+  """
+  A list of edges which contains the `ApiToken` and cursor to aid in pagination.
+  """
+  edges: [ApiTokenEdge]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `ApiToken` you could get from the connection."""
+  totalCount: Int!
+}
+
+type ApiToken implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  id: ID!
+  rowId: UUID!
+  name: String!
+  tokenHash: String!
+  tokenPrefix: String!
+  namespaceId: UUID!
+  repositoryId: UUID
+  scope: String!
+  createdBy: String!
+  description: String
+  isActive: Boolean!
+  expiresAt: Datetime
+  lastUsedAt: Datetime
+  createdAt: Datetime
+  updatedAt: Datetime
+
+  """Reads a single `Namespace` that is related to this `ApiToken`."""
+  namespace: Namespace
+
+  """Reads a single `Repository` that is related to this `ApiToken`."""
+  repository: Repository
+}
+
+"""A `ApiToken` edge in the connection."""
+type ApiTokenEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `ApiToken` at the end of the edge."""
+  node: ApiToken
+}
+
+"""
+A condition to be used against `ApiToken` object types. All fields are tested
+for equality and combined with a logical ‘and.’
+"""
+input ApiTokenCondition {
+  """Checks for equality with the object’s `rowId` field."""
+  rowId: UUID
+
+  """Checks for equality with the object’s `tokenHash` field."""
+  tokenHash: String
+
+  """Checks for equality with the object’s `tokenPrefix` field."""
+  tokenPrefix: String
+
+  """Checks for equality with the object’s `namespaceId` field."""
+  namespaceId: UUID
+
+  """Checks for equality with the object’s `repositoryId` field."""
+  repositoryId: UUID
+
+  """Checks for equality with the object’s `createdBy` field."""
+  createdBy: String
+
+  """Checks for equality with the object’s `isActive` field."""
+  isActive: Boolean
+}
+
+"""Methods to use when ordering `ApiToken`."""
+enum ApiTokenOrderBy {
+  NATURAL
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+  ROW_ID_ASC
+  ROW_ID_DESC
+  TOKEN_HASH_ASC
+  TOKEN_HASH_DESC
+  TOKEN_PREFIX_ASC
+  TOKEN_PREFIX_DESC
+  NAMESPACE_ID_ASC
+  NAMESPACE_ID_DESC
+  REPOSITORY_ID_ASC
+  REPOSITORY_ID_DESC
+  CREATED_BY_ASC
+  CREATED_BY_DESC
+  IS_ACTIVE_ASC
+  IS_ACTIVE_DESC
 }
 
 """A connection to a list of `Artifact` values."""
@@ -1771,6 +2121,14 @@ type Mutation {
     input: CreateRepositoryInput!
   ): CreateRepositoryPayload
 
+  """Creates a single `ApiToken`."""
+  createApiToken(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateApiTokenInput!
+  ): CreateApiTokenPayload
+
   """
   Updates a single `ContainerMetadatum` using its globally unique id and a patch.
   """
@@ -1917,6 +2275,22 @@ type Mutation {
     input: UpdateRepositoryInput!
   ): UpdateRepositoryPayload
 
+  """Updates a single `ApiToken` using its globally unique id and a patch."""
+  updateApiTokenById(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateApiTokenByIdInput!
+  ): UpdateApiTokenPayload
+
+  """Updates a single `ApiToken` using a unique key and a patch."""
+  updateApiToken(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateApiTokenInput!
+  ): UpdateApiTokenPayload
+
   """Deletes a single `ContainerMetadatum` using its globally unique id."""
   deleteContainerMetadatumById(
     """
@@ -2052,6 +2426,22 @@ type Mutation {
     """
     input: DeleteRepositoryInput!
   ): DeleteRepositoryPayload
+
+  """Deletes a single `ApiToken` using its globally unique id."""
+  deleteApiTokenById(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteApiTokenByIdInput!
+  ): DeleteApiTokenPayload
+
+  """Deletes a single `ApiToken` using a unique key."""
+  deleteApiToken(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteApiTokenInput!
+  ): DeleteApiTokenPayload
 }
 
 """The output of our create `ContainerMetadatum` mutation."""
@@ -2408,6 +2798,59 @@ input RepositoryInput {
   description: String
   artifactType: String!
   isPublic: Boolean
+  createdAt: Datetime
+  updatedAt: Datetime
+}
+
+"""The output of our create `ApiToken` mutation."""
+type CreateApiTokenPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `ApiToken` that was created by this mutation."""
+  apiToken: ApiToken
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `ApiToken`. May be used by Relay 1."""
+  apiTokenEdge(
+    """The method to use when ordering `ApiToken`."""
+    orderBy: [ApiTokenOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): ApiTokenEdge
+}
+
+"""All input for the create `ApiToken` mutation."""
+input CreateApiTokenInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `ApiToken` to be created by this mutation."""
+  apiToken: ApiTokenInput!
+}
+
+"""An input for mutations affecting `ApiToken`"""
+input ApiTokenInput {
+  rowId: UUID
+  name: String!
+  tokenHash: String!
+  tokenPrefix: String!
+  namespaceId: UUID!
+  repositoryId: UUID
+  scope: String
+  createdBy: String!
+  description: String
+  isActive: Boolean
+  expiresAt: Datetime
+  lastUsedAt: Datetime
   createdAt: Datetime
   updatedAt: Datetime
 }
@@ -2975,6 +3418,83 @@ input UpdateRepositoryInput {
   patch: RepositoryPatch!
 }
 
+"""The output of our update `ApiToken` mutation."""
+type UpdateApiTokenPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `ApiToken` that was updated by this mutation."""
+  apiToken: ApiToken
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `ApiToken`. May be used by Relay 1."""
+  apiTokenEdge(
+    """The method to use when ordering `ApiToken`."""
+    orderBy: [ApiTokenOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): ApiTokenEdge
+}
+
+"""All input for the `updateApiTokenById` mutation."""
+input UpdateApiTokenByIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `ApiToken` to be updated.
+  """
+  id: ID!
+
+  """
+  An object where the defined keys will be set on the `ApiToken` being updated.
+  """
+  patch: ApiTokenPatch!
+}
+
+"""
+Represents an update to a `ApiToken`. Fields that are set will be updated.
+"""
+input ApiTokenPatch {
+  rowId: UUID
+  name: String
+  tokenHash: String
+  tokenPrefix: String
+  namespaceId: UUID
+  repositoryId: UUID
+  scope: String
+  createdBy: String
+  description: String
+  isActive: Boolean
+  expiresAt: Datetime
+  lastUsedAt: Datetime
+  createdAt: Datetime
+  updatedAt: Datetime
+}
+
+"""All input for the `updateApiToken` mutation."""
+input UpdateApiTokenInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  rowId: UUID!
+
+  """
+  An object where the defined keys will be set on the `ApiToken` being updated.
+  """
+  patch: ApiTokenPatch!
+}
+
 """The output of our delete `ContainerMetadatum` mutation."""
 type DeleteContainerMetadatumPayload {
   """
@@ -3361,6 +3881,54 @@ input DeleteRepositoryByIdInput {
 
 """All input for the `deleteRepository` mutation."""
 input DeleteRepositoryInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  rowId: UUID!
+}
+
+"""The output of our delete `ApiToken` mutation."""
+type DeleteApiTokenPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `ApiToken` that was deleted by this mutation."""
+  apiToken: ApiToken
+  deletedApiTokenId: ID
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `ApiToken`. May be used by Relay 1."""
+  apiTokenEdge(
+    """The method to use when ordering `ApiToken`."""
+    orderBy: [ApiTokenOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): ApiTokenEdge
+}
+
+"""All input for the `deleteApiTokenById` mutation."""
+input DeleteApiTokenByIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `ApiToken` to be deleted.
+  """
+  id: ID!
+}
+
+"""All input for the `deleteApiToken` mutation."""
+input DeleteApiTokenInput {
   """
   An arbitrary string value with no semantic meaning. Will be included in the
   payload verbatim. May be used to track mutations by the client.

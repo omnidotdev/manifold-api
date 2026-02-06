@@ -11,13 +11,16 @@ import { schema } from "generated/graphql/schema.executable";
 import { useGrafast } from "grafast/envelop";
 import webhooks from "webhooks";
 
+import { tokensApi } from "lib/api";
 import appConfig from "lib/config/app.config";
 import {
   CORS_ALLOWED_ORIGINS,
   PORT,
   isDevEnv,
   isProdEnv,
+  maintenanceAllowedNamespaces,
 } from "lib/config/env.config";
+import { isEnabled } from "lib/flags/client";
 import { dbPool, pgPool } from "lib/db";
 import ensureDatabase from "lib/db/ensureDatabase";
 import createGraphqlContext from "lib/graphql/createGraphqlContext";
@@ -91,6 +94,8 @@ const app = new Elysia({
     }
   })
   .use(webhooks)
+  // API tokens REST endpoints
+  .use(tokensApi)
   // OCI Distribution API v2
   .use(ociRouter)
   .use(
@@ -130,6 +135,13 @@ console.log(
 console.log(
   `🧘 ${appConfig.name} GraphQL Yoga API running at ${app.server?.url}graphql`,
 );
+
+if (await isEnabled("manifold-api-maintenance-mode")) {
+  // biome-ignore lint/suspicious/noConsole: root logging
+  console.log(
+    `🔒 Maintenance mode active — OCI access restricted to: ${maintenanceAllowedNamespaces.join(", ")}`,
+  );
+}
 
 /**
  * Graceful shutdown handler.
