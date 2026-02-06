@@ -52,8 +52,8 @@ const handleOrganizationDeleted = async (
 ): Promise<void> => {
   const { organizationId, deletedAt } = payload;
 
-  // TODO: Add cleanup logic for org-scoped resources here
-  // Example: soft-delete projects, revoke API keys, etc.
+  // No org-scoped resources to clean up yet. Once namespaces/repos
+  // are org-scoped, add cascade deletion or soft-delete here
 
   // biome-ignore lint/suspicious/noConsole: structured logging
   console.log(
