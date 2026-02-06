@@ -3,12 +3,17 @@ import { schema } from "generated/graphql/schema.executable";
 import { createYoga } from "graphql-yoga";
 import { createWithPgClient } from "postgraphile/adaptors/pg";
 
+import appConfig from "lib/config/app.config";
 import createAuthenticationPlugin from "lib/graphql/plugins/authentication.plugin";
 
 export const makeElysiaApp = () => {
   const app = new Elysia();
 
-  app.get("/health", () => ({ ok: true }));
+  app.get("/health", () => ({
+    status: "ok",
+    timestamp: Date.now(),
+    service: appConfig.name,
+  }));
 
   return {
     handle: (input: Request | URL | string, init?: RequestInit) =>

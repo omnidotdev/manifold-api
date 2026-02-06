@@ -11,3 +11,4 @@ node_modules/
 !.env.*template
 !.env.development
 !.env.production
+!.env.test

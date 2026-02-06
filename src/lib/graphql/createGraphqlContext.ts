@@ -11,15 +11,49 @@ import type {
 
 const withPgClient = createWithPgClient({ pool: pgPool });
 
+import type { TokenScope } from "lib/db/schema";
+
 export interface Observer {
   id: string;
   name?: string;
   email?: string;
 }
 
+/**
+ * Token-based observer for API token authentication.
+ */
+export interface TokenObserver extends Observer {
+  /** Discriminator for token auth */
+  isApiToken: true;
+  /** Token ID for audit logging */
+  tokenId: string;
+  /** Token name for display */
+  tokenName: string;
+  /** Permission scope */
+  scope: TokenScope;
+  /** Namespace ID scope */
+  namespaceId: string;
+  /** Optional repository ID scope (null = all repos in namespace) */
+  repositoryId: string | null;
+}
+
+/**
+ * Combined observer type (user or token).
+ */
+export type ContextObserver = Observer | TokenObserver;
+
+/**
+ * Type guard for token observer.
+ * @knipignore
+ */
+export const isTokenObserver = (
+  observer: ContextObserver | null,
+): observer is TokenObserver =>
+  observer !== null && "isApiToken" in observer && observer.isApiToken;
+
 export interface GraphQLContext {
   /** API observer, injected by the authentication plugin and controlled via `contextFieldName`. Related to the viewer pattern: https://wundergraph.com/blog/graphql_federation_viewer_pattern */
-  observer: Observer | null;
+  observer: ContextObserver | null;
   /** Network request. */
   request: Request;
   /** Database. */

@@ -27,6 +27,7 @@ const knipConfig: KnipConfig = {
     "src/lib/logging/**",
     "src/lib/middleware/**",
     "src/lib/providers/**",
+    "src/lib/auth/**",
   ],
   ignoreDependencies: [
     "@changesets/changelog-github",
@@ -34,8 +35,8 @@ const knipConfig: KnipConfig = {
     // TODO switch to testcontainers (unstable behavior with Bun/Docker), then remove below
     "@testcontainers/postgresql",
     "testcontainers",
-    "@faker-js/faker",
   ],
+  ignoreBinaries: ["tsc"],
   tags: ["-knipignore"],
 };
 

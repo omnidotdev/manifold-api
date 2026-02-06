@@ -1,5 +1,5 @@
-/* eslint-disable graphile-export/export-instances, graphile-export/export-methods, graphile-export/export-plans, graphile-export/exhaustive-deps */
 // @ts-nocheck
+/* eslint-disable graphile-export/export-instances, graphile-export/export-methods, graphile-export/export-plans, graphile-export/exhaustive-deps */
 import { PgCondition, PgDeleteSingleStep, PgExecutor, TYPES, assertPgClassSingleStep, listOfCodec, makeRegistry, pgDeleteSingle, pgInsertSingle, pgSelectFromRecord, pgUpdateSingle, recordCodec, sqlValueWithCodec } from "@dataplan/pg";
 import { ConnectionStep, EdgeStep, ObjectStep, __ValueStep, access, assertExecutableStep, bakedInputRuntime, connection, constant, context, createObjectAndApplyChildren, first, get as get2, inhibitOnNull, inspect, lambda, list, makeDecodeNodeId, makeGrafastSchema, object, rootValue, specFromNodeId } from "grafast";
 import { GraphQLError, Kind } from "graphql";
@@ -291,6 +291,177 @@ const spec_artifact = {
   executor: executor
 };
 const artifactCodec = recordCodec(spec_artifact);
+const wasmMetadataIdentifier = sql.identifier("public", "wasm_metadata");
+const spec_wasmMetadata = {
+  name: "wasmMetadata",
+  identifier: wasmMetadataIdentifier,
+  attributes: {
+    __proto__: null,
+    artifact_id: {
+      description: undefined,
+      codec: TYPES.uuid,
+      notNull: true,
+      hasDefault: false,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true
+      }
+    },
+    runtime: {
+      description: undefined,
+      codec: TYPES.text,
+      notNull: false,
+      hasDefault: false,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    },
+    exports: {
+      description: undefined,
+      codec: TYPES.jsonb,
+      notNull: true,
+      hasDefault: true,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    },
+    imports: {
+      description: undefined,
+      codec: TYPES.jsonb,
+      notNull: true,
+      hasDefault: true,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    }
+  },
+  description: undefined,
+  extensions: {
+    oid: "376611",
+    isTableLike: true,
+    pg: {
+      serviceName: "main",
+      schemaName: "public",
+      name: "wasm_metadata"
+    },
+    tags: {
+      __proto__: null
+    }
+  },
+  executor: executor
+};
+const wasmMetadataCodec = recordCodec(spec_wasmMetadata);
+const tagIdentifier = sql.identifier("public", "tag");
+const spec_tag = {
+  name: "tag",
+  identifier: tagIdentifier,
+  attributes: {
+    __proto__: null,
+    id: {
+      description: undefined,
+      codec: TYPES.uuid,
+      notNull: true,
+      hasDefault: true,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true
+      }
+    },
+    repository_id: {
+      description: undefined,
+      codec: TYPES.uuid,
+      notNull: true,
+      hasDefault: false,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true
+      }
+    },
+    artifact_id: {
+      description: undefined,
+      codec: TYPES.uuid,
+      notNull: true,
+      hasDefault: false,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true
+      }
+    },
+    name: {
+      description: undefined,
+      codec: TYPES.text,
+      notNull: true,
+      hasDefault: false,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true
+      }
+    },
+    created_at: {
+      description: undefined,
+      codec: TYPES.timestamptz,
+      notNull: false,
+      hasDefault: true,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    },
+    updated_at: {
+      description: undefined,
+      codec: TYPES.timestamptz,
+      notNull: false,
+      hasDefault: true,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    }
+  },
+  description: undefined,
+  extensions: {
+    oid: "376585",
+    isTableLike: true,
+    pg: {
+      serviceName: "main",
+      schemaName: "public",
+      name: "tag"
+    },
+    tags: {
+      __proto__: null
+    }
+  },
+  executor: executor
+};
+const tagCodec = recordCodec(spec_tag);
 const namespaceIdentifier = sql.identifier("public", "namespace");
 const spec_namespace = {
   name: "namespace",
@@ -377,6 +548,178 @@ const spec_namespace = {
   executor: executor
 };
 const namespaceCodec = recordCodec(spec_namespace);
+const uploadSessionIdentifier = sql.identifier("public", "upload_session");
+const spec_uploadSession = {
+  name: "uploadSession",
+  identifier: uploadSessionIdentifier,
+  attributes: {
+    __proto__: null,
+    id: {
+      description: undefined,
+      codec: TYPES.uuid,
+      notNull: true,
+      hasDefault: true,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true
+      }
+    },
+    repository_id: {
+      description: undefined,
+      codec: TYPES.uuid,
+      notNull: true,
+      hasDefault: false,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true
+      }
+    },
+    offset: {
+      description: undefined,
+      codec: TYPES.bigint,
+      notNull: true,
+      hasDefault: true,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    },
+    created_at: {
+      description: undefined,
+      codec: TYPES.timestamptz,
+      notNull: false,
+      hasDefault: true,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    },
+    expires_at: {
+      description: undefined,
+      codec: TYPES.timestamptz,
+      notNull: true,
+      hasDefault: false,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true
+      }
+    }
+  },
+  description: undefined,
+  extensions: {
+    oid: "376599",
+    isTableLike: true,
+    pg: {
+      serviceName: "main",
+      schemaName: "public",
+      name: "upload_session"
+    },
+    tags: {
+      __proto__: null
+    }
+  },
+  executor: executor
+};
+const uploadSessionCodec = recordCodec(spec_uploadSession);
+const schemaMetadataIdentifier = sql.identifier("public", "schema_metadata");
+const spec_schemaMetadata = {
+  name: "schemaMetadata",
+  identifier: schemaMetadataIdentifier,
+  attributes: {
+    __proto__: null,
+    artifact_id: {
+      description: undefined,
+      codec: TYPES.uuid,
+      notNull: true,
+      hasDefault: false,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true
+      }
+    },
+    version: {
+      description: undefined,
+      codec: TYPES.text,
+      notNull: false,
+      hasDefault: false,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    },
+    title: {
+      description: undefined,
+      codec: TYPES.text,
+      notNull: false,
+      hasDefault: false,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    },
+    is_valid: {
+      description: undefined,
+      codec: TYPES.boolean,
+      notNull: true,
+      hasDefault: true,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    },
+    validation_errors: {
+      description: undefined,
+      codec: TYPES.jsonb,
+      notNull: false,
+      hasDefault: false,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    }
+  },
+  description: undefined,
+  extensions: {
+    oid: "376575",
+    isTableLike: true,
+    pg: {
+      serviceName: "main",
+      schemaName: "public",
+      name: "schema_metadata"
+    },
+    tags: {
+      __proto__: null
+    }
+  },
+  executor: executor
+};
+const schemaMetadataCodec = recordCodec(spec_schemaMetadata);
 const repositoryIdentifier = sql.identifier("public", "repository");
 const spec_repository = {
   name: "repository",
@@ -500,97 +843,10 @@ const spec_repository = {
   executor: executor
 };
 const repositoryCodec = recordCodec(spec_repository);
-const schemaMetadataIdentifier = sql.identifier("public", "schema_metadata");
-const spec_schemaMetadata = {
-  name: "schemaMetadata",
-  identifier: schemaMetadataIdentifier,
-  attributes: {
-    __proto__: null,
-    artifact_id: {
-      description: undefined,
-      codec: TYPES.uuid,
-      notNull: true,
-      hasDefault: false,
-      extensions: {
-        tags: {},
-        canSelect: true,
-        canInsert: true,
-        canUpdate: true
-      }
-    },
-    version: {
-      description: undefined,
-      codec: TYPES.text,
-      notNull: false,
-      hasDefault: false,
-      extensions: {
-        tags: {},
-        canSelect: true,
-        canInsert: true,
-        canUpdate: true,
-        isIndexed: false
-      }
-    },
-    title: {
-      description: undefined,
-      codec: TYPES.text,
-      notNull: false,
-      hasDefault: false,
-      extensions: {
-        tags: {},
-        canSelect: true,
-        canInsert: true,
-        canUpdate: true,
-        isIndexed: false
-      }
-    },
-    is_valid: {
-      description: undefined,
-      codec: TYPES.boolean,
-      notNull: true,
-      hasDefault: true,
-      extensions: {
-        tags: {},
-        canSelect: true,
-        canInsert: true,
-        canUpdate: true,
-        isIndexed: false
-      }
-    },
-    validation_errors: {
-      description: undefined,
-      codec: TYPES.jsonb,
-      notNull: false,
-      hasDefault: false,
-      extensions: {
-        tags: {},
-        canSelect: true,
-        canInsert: true,
-        canUpdate: true,
-        isIndexed: false
-      }
-    }
-  },
-  description: undefined,
-  extensions: {
-    oid: "376575",
-    isTableLike: true,
-    pg: {
-      serviceName: "main",
-      schemaName: "public",
-      name: "schema_metadata"
-    },
-    tags: {
-      __proto__: null
-    }
-  },
-  executor: executor
-};
-const schemaMetadataCodec = recordCodec(spec_schemaMetadata);
-const tagIdentifier = sql.identifier("public", "tag");
-const spec_tag = {
-  name: "tag",
-  identifier: tagIdentifier,
+const apiTokenIdentifier = sql.identifier("public", "api_token");
+const spec_apiToken = {
+  name: "apiToken",
+  identifier: apiTokenIdentifier,
   attributes: {
     __proto__: null,
     id: {
@@ -598,30 +854,6 @@ const spec_tag = {
       codec: TYPES.uuid,
       notNull: true,
       hasDefault: true,
-      extensions: {
-        tags: {},
-        canSelect: true,
-        canInsert: true,
-        canUpdate: true
-      }
-    },
-    repository_id: {
-      description: undefined,
-      codec: TYPES.uuid,
-      notNull: true,
-      hasDefault: false,
-      extensions: {
-        tags: {},
-        canSelect: true,
-        canInsert: true,
-        canUpdate: true
-      }
-    },
-    artifact_id: {
-      description: undefined,
-      codec: TYPES.uuid,
-      notNull: true,
-      hasDefault: false,
       extensions: {
         tags: {},
         canSelect: true,
@@ -638,7 +870,132 @@ const spec_tag = {
         tags: {},
         canSelect: true,
         canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    },
+    token_hash: {
+      description: undefined,
+      codec: TYPES.text,
+      notNull: true,
+      hasDefault: false,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
         canUpdate: true
+      }
+    },
+    token_prefix: {
+      description: undefined,
+      codec: TYPES.text,
+      notNull: true,
+      hasDefault: false,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true
+      }
+    },
+    namespace_id: {
+      description: undefined,
+      codec: TYPES.uuid,
+      notNull: true,
+      hasDefault: false,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true
+      }
+    },
+    repository_id: {
+      description: undefined,
+      codec: TYPES.uuid,
+      notNull: false,
+      hasDefault: false,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true
+      }
+    },
+    scope: {
+      description: undefined,
+      codec: TYPES.text,
+      notNull: true,
+      hasDefault: true,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    },
+    created_by: {
+      description: undefined,
+      codec: TYPES.text,
+      notNull: true,
+      hasDefault: false,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true
+      }
+    },
+    description: {
+      description: undefined,
+      codec: TYPES.text,
+      notNull: false,
+      hasDefault: false,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    },
+    is_active: {
+      description: undefined,
+      codec: TYPES.boolean,
+      notNull: true,
+      hasDefault: true,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true
+      }
+    },
+    expires_at: {
+      description: undefined,
+      codec: TYPES.timestamptz,
+      notNull: false,
+      hasDefault: false,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    },
+    last_used_at: {
+      description: undefined,
+      codec: TYPES.timestamptz,
+      notNull: false,
+      hasDefault: false,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
       }
     },
     created_at: {
@@ -670,12 +1027,12 @@ const spec_tag = {
   },
   description: undefined,
   extensions: {
-    oid: "376585",
+    oid: "376809",
     isTableLike: true,
     pg: {
       serviceName: "main",
       schemaName: "public",
-      name: "tag"
+      name: "api_token"
     },
     tags: {
       __proto__: null
@@ -683,166 +1040,7 @@ const spec_tag = {
   },
   executor: executor
 };
-const tagCodec = recordCodec(spec_tag);
-const uploadSessionIdentifier = sql.identifier("public", "upload_session");
-const spec_uploadSession = {
-  name: "uploadSession",
-  identifier: uploadSessionIdentifier,
-  attributes: {
-    __proto__: null,
-    id: {
-      description: undefined,
-      codec: TYPES.uuid,
-      notNull: true,
-      hasDefault: true,
-      extensions: {
-        tags: {},
-        canSelect: true,
-        canInsert: true,
-        canUpdate: true
-      }
-    },
-    repository_id: {
-      description: undefined,
-      codec: TYPES.uuid,
-      notNull: true,
-      hasDefault: false,
-      extensions: {
-        tags: {},
-        canSelect: true,
-        canInsert: true,
-        canUpdate: true
-      }
-    },
-    offset: {
-      description: undefined,
-      codec: TYPES.bigint,
-      notNull: true,
-      hasDefault: true,
-      extensions: {
-        tags: {},
-        canSelect: true,
-        canInsert: true,
-        canUpdate: true,
-        isIndexed: false
-      }
-    },
-    created_at: {
-      description: undefined,
-      codec: TYPES.timestamptz,
-      notNull: false,
-      hasDefault: true,
-      extensions: {
-        tags: {},
-        canSelect: true,
-        canInsert: true,
-        canUpdate: true,
-        isIndexed: false
-      }
-    },
-    expires_at: {
-      description: undefined,
-      codec: TYPES.timestamptz,
-      notNull: true,
-      hasDefault: false,
-      extensions: {
-        tags: {},
-        canSelect: true,
-        canInsert: true,
-        canUpdate: true
-      }
-    }
-  },
-  description: undefined,
-  extensions: {
-    oid: "376599",
-    isTableLike: true,
-    pg: {
-      serviceName: "main",
-      schemaName: "public",
-      name: "upload_session"
-    },
-    tags: {
-      __proto__: null
-    }
-  },
-  executor: executor
-};
-const uploadSessionCodec = recordCodec(spec_uploadSession);
-const wasmMetadataIdentifier = sql.identifier("public", "wasm_metadata");
-const spec_wasmMetadata = {
-  name: "wasmMetadata",
-  identifier: wasmMetadataIdentifier,
-  attributes: {
-    __proto__: null,
-    artifact_id: {
-      description: undefined,
-      codec: TYPES.uuid,
-      notNull: true,
-      hasDefault: false,
-      extensions: {
-        tags: {},
-        canSelect: true,
-        canInsert: true,
-        canUpdate: true
-      }
-    },
-    runtime: {
-      description: undefined,
-      codec: TYPES.text,
-      notNull: false,
-      hasDefault: false,
-      extensions: {
-        tags: {},
-        canSelect: true,
-        canInsert: true,
-        canUpdate: true,
-        isIndexed: false
-      }
-    },
-    exports: {
-      description: undefined,
-      codec: TYPES.jsonb,
-      notNull: true,
-      hasDefault: true,
-      extensions: {
-        tags: {},
-        canSelect: true,
-        canInsert: true,
-        canUpdate: true,
-        isIndexed: false
-      }
-    },
-    imports: {
-      description: undefined,
-      codec: TYPES.jsonb,
-      notNull: true,
-      hasDefault: true,
-      extensions: {
-        tags: {},
-        canSelect: true,
-        canInsert: true,
-        canUpdate: true,
-        isIndexed: false
-      }
-    }
-  },
-  description: undefined,
-  extensions: {
-    oid: "376611",
-    isTableLike: true,
-    pg: {
-      serviceName: "main",
-      schemaName: "public",
-      name: "wasm_metadata"
-    },
-    tags: {
-      __proto__: null
-    }
-  },
-  executor: executor
-};
-const wasmMetadataCodec = recordCodec(spec_wasmMetadata);
+const apiTokenCodec = recordCodec(spec_apiToken);
 const container_metadataUniques = [{
   isPrimary: true,
   attributes: ["artifact_id"],
@@ -1140,6 +1338,42 @@ const registryConfig_pgResources_repository_repository = {
     canDelete: true
   }
 };
+const api_tokenUniques = [{
+  isPrimary: true,
+  attributes: ["id"],
+  description: undefined,
+  extensions: {
+    tags: {
+      __proto__: null
+    }
+  }
+}];
+const registryConfig_pgResources_api_token_api_token = {
+  executor: executor,
+  name: "api_token",
+  identifier: "main.public.api_token",
+  from: apiTokenIdentifier,
+  codec: apiTokenCodec,
+  uniques: api_tokenUniques,
+  isVirtual: false,
+  description: undefined,
+  extensions: {
+    description: undefined,
+    pg: {
+      serviceName: "main",
+      schemaName: "public",
+      name: "api_token"
+    },
+    isInsertable: true,
+    isUpdatable: true,
+    isDeletable: true,
+    tags: {},
+    canSelect: true,
+    canInsert: true,
+    canUpdate: true,
+    canDelete: true
+  }
+};
 const registryConfig = {
   pgExecutors: {
     __proto__: null,
@@ -1155,13 +1389,14 @@ const registryConfig = {
     artifact: artifactCodec,
     int8: TYPES.bigint,
     timestamptz: TYPES.timestamptz,
-    namespace: namespaceCodec,
-    repository: repositoryCodec,
-    bool: TYPES.boolean,
-    schemaMetadata: schemaMetadataCodec,
+    wasmMetadata: wasmMetadataCodec,
     tag: tagCodec,
+    namespace: namespaceCodec,
     uploadSession: uploadSessionCodec,
-    wasmMetadata: wasmMetadataCodec
+    schemaMetadata: schemaMetadataCodec,
+    bool: TYPES.boolean,
+    repository: repositoryCodec,
+    apiToken: apiTokenCodec
   },
   pgResources: {
     __proto__: null,
@@ -1172,10 +1407,44 @@ const registryConfig = {
     namespace: registryConfig_pgResources_namespace_namespace,
     upload_session: registryConfig_pgResources_upload_session_upload_session,
     schema_metadata: registryConfig_pgResources_schema_metadata_schema_metadata,
-    repository: registryConfig_pgResources_repository_repository
+    repository: registryConfig_pgResources_repository_repository,
+    api_token: registryConfig_pgResources_api_token_api_token
   },
   pgRelations: {
     __proto__: null,
+    apiToken: {
+      __proto__: null,
+      namespaceByMyNamespaceId: {
+        localCodec: apiTokenCodec,
+        remoteResourceOptions: registryConfig_pgResources_namespace_namespace,
+        localCodecPolymorphicTypes: undefined,
+        localAttributes: ["namespace_id"],
+        remoteAttributes: ["id"],
+        isUnique: true,
+        isReferencee: false,
+        description: undefined,
+        extensions: {
+          tags: {
+            behavior: []
+          }
+        }
+      },
+      repositoryByMyRepositoryId: {
+        localCodec: apiTokenCodec,
+        remoteResourceOptions: registryConfig_pgResources_repository_repository,
+        localCodecPolymorphicTypes: undefined,
+        localAttributes: ["repository_id"],
+        remoteAttributes: ["id"],
+        isUnique: true,
+        isReferencee: false,
+        description: undefined,
+        extensions: {
+          tags: {
+            behavior: []
+          }
+        }
+      }
+    },
     artifact: {
       __proto__: null,
       repositoryByMyRepositoryId: {
@@ -1288,6 +1557,21 @@ const registryConfig = {
             behavior: []
           }
         }
+      },
+      apiTokensByTheirNamespaceId: {
+        localCodec: namespaceCodec,
+        remoteResourceOptions: registryConfig_pgResources_api_token_api_token,
+        localCodecPolymorphicTypes: undefined,
+        localAttributes: ["id"],
+        remoteAttributes: ["namespace_id"],
+        isUnique: false,
+        isReferencee: true,
+        description: undefined,
+        extensions: {
+          tags: {
+            behavior: []
+          }
+        }
       }
     },
     repository: {
@@ -1340,6 +1624,21 @@ const registryConfig = {
       uploadSessionsByTheirRepositoryId: {
         localCodec: repositoryCodec,
         remoteResourceOptions: registryConfig_pgResources_upload_session_upload_session,
+        localCodecPolymorphicTypes: undefined,
+        localAttributes: ["id"],
+        remoteAttributes: ["repository_id"],
+        isUnique: false,
+        isReferencee: true,
+        description: undefined,
+        extensions: {
+          tags: {
+            behavior: []
+          }
+        }
+      },
+      apiTokensByTheirRepositoryId: {
+        localCodec: repositoryCodec,
+        remoteResourceOptions: registryConfig_pgResources_api_token_api_token,
         localCodecPolymorphicTypes: undefined,
         localAttributes: ["id"],
         remoteAttributes: ["repository_id"],
@@ -1451,6 +1750,7 @@ const resource_namespacePgResource = registry.pgResources["namespace"];
 const resource_upload_sessionPgResource = registry.pgResources["upload_session"];
 const resource_schema_metadataPgResource = registry.pgResources["schema_metadata"];
 const resource_repositoryPgResource = registry.pgResources["repository"];
+const resource_api_tokenPgResource = registry.pgResources["api_token"];
 const nodeIdHandler_ContainerMetadatum = {
   typeName: "ContainerMetadatum",
   codec: nodeIdCodecs_base64JSON_base64JSON,
@@ -1676,6 +1976,32 @@ const nodeFetcher_Repository = $nodeId => {
   const $decoded = lambda($nodeId, specForHandler(nodeIdHandler_Repository));
   return nodeIdHandler_Repository.get(nodeIdHandler_Repository.getSpec($decoded));
 };
+const nodeIdHandler_ApiToken = {
+  typeName: "ApiToken",
+  codec: nodeIdCodecs_base64JSON_base64JSON,
+  deprecationReason: undefined,
+  plan($record) {
+    return list([constant("ApiToken", false), $record.get("id")]);
+  },
+  getSpec($list) {
+    return {
+      id: inhibitOnNull(access($list, [1]))
+    };
+  },
+  getIdentifiers(value) {
+    return value.slice(1);
+  },
+  get(spec) {
+    return resource_api_tokenPgResource.get(spec);
+  },
+  match(obj) {
+    return obj[0] === "ApiToken";
+  }
+};
+const nodeFetcher_ApiToken = $nodeId => {
+  const $decoded = lambda($nodeId, specForHandler(nodeIdHandler_ApiToken));
+  return nodeIdHandler_ApiToken.get(nodeIdHandler_ApiToken.getSpec($decoded));
+};
 function qbWhereBuilder(qb) {
   return qb.whereBuilder();
 }
@@ -1770,6 +2096,17 @@ function assertAllowed8(value, mode) {
   }
   if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
 }
+function assertAllowed9(value, mode) {
+  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+  if (mode === "list" && !false) {
+    const arr = value;
+    if (arr) {
+      const l = arr.length;
+      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+    }
+  }
+  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+}
 const nodeIdHandlerByTypeName = {
   __proto__: null,
   Query: nodeIdHandler_Query,
@@ -1780,7 +2117,8 @@ const nodeIdHandlerByTypeName = {
   Namespace: nodeIdHandler_Namespace,
   UploadSession: nodeIdHandler_UploadSession,
   SchemaMetadatum: nodeIdHandler_SchemaMetadatum,
-  Repository: nodeIdHandler_Repository
+  Repository: nodeIdHandler_Repository,
+  ApiToken: nodeIdHandler_ApiToken
 };
 const decodeNodeId = makeDecodeNodeId(Object.values(nodeIdHandlerByTypeName));
 function findTypeNameMatch(specifier) {
@@ -1799,17 +2137,6 @@ const coerce = string => {
   if (!/^[0-9a-f]{8}-?[0-9a-f]{4}-?[0-9a-f]{4}-?[0-9a-f]{4}-?[0-9a-f]{12}$/i.test(string)) throw new GraphQLError("Invalid UUID, expected 32 hexadecimal characters, optionally with hyphens");
   return string;
 };
-function assertAllowed9(value, mode) {
-  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
-  if (mode === "list" && !false) {
-    const arr = value;
-    if (arr) {
-      const l = arr.length;
-      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
-    }
-  }
-  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
-}
 function assertAllowed10(value, mode) {
   if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
   if (mode === "list" && !false) {
@@ -1854,26 +2181,6 @@ function assertAllowed13(value, mode) {
   }
   if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
 }
-const colSpec = {
-  fieldName: "rowId",
-  attributeName: "id",
-  attribute: spec_repository.attributes.id
-};
-const colSpec2 = {
-  fieldName: "namespaceId",
-  attributeName: "namespace_id",
-  attribute: spec_repository.attributes.namespace_id
-};
-const colSpec3 = {
-  fieldName: "name",
-  attributeName: "name",
-  attribute: spec_repository.attributes.name
-};
-const colSpec4 = {
-  fieldName: "artifactType",
-  attributeName: "artifact_type",
-  attribute: spec_repository.attributes.artifact_type
-};
 function assertAllowed14(value, mode) {
   if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
   if (mode === "list" && !false) {
@@ -1897,6 +2204,59 @@ function assertAllowed15(value, mode) {
   if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
 }
 function assertAllowed16(value, mode) {
+  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+  if (mode === "list" && !false) {
+    const arr = value;
+    if (arr) {
+      const l = arr.length;
+      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+    }
+  }
+  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+}
+const colSpec = {
+  fieldName: "rowId",
+  attributeName: "id",
+  attribute: spec_repository.attributes.id
+};
+const colSpec2 = {
+  fieldName: "namespaceId",
+  attributeName: "namespace_id",
+  attribute: spec_repository.attributes.namespace_id
+};
+const colSpec3 = {
+  fieldName: "name",
+  attributeName: "name",
+  attribute: spec_repository.attributes.name
+};
+const colSpec4 = {
+  fieldName: "artifactType",
+  attributeName: "artifact_type",
+  attribute: spec_repository.attributes.artifact_type
+};
+function assertAllowed17(value, mode) {
+  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+  if (mode === "list" && !false) {
+    const arr = value;
+    if (arr) {
+      const l = arr.length;
+      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+    }
+  }
+  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+}
+function assertAllowed18(value, mode) {
+  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+  if (mode === "list" && !false) {
+    const arr = value;
+    if (arr) {
+      const l = arr.length;
+      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+    }
+  }
+  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+}
+function assertAllowed19(value, mode) {
   if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
   if (mode === "list" && !false) {
     const arr = value;
@@ -2279,7 +2639,7 @@ function resolveSqlValue12(_unused, input, inputCodec) {
     if (inputCodec === TYPES.citext) return sqlValue;else return sql`lower(${sqlValue})`;
   }
 }
-function assertAllowed17(value, mode) {
+function assertAllowed20(value, mode) {
   if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
   if (mode === "list" && !false) {
     const arr = value;
@@ -2305,44 +2665,6 @@ const colSpec7 = {
   attributeName: "digest",
   attribute: spec_artifact.attributes.digest
 };
-function assertAllowed18(value, mode) {
-  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
-  if (mode === "list" && !false) {
-    const arr = value;
-    if (arr) {
-      const l = arr.length;
-      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
-    }
-  }
-  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
-}
-function assertAllowed19(value, mode) {
-  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
-  if (mode === "list" && !false) {
-    const arr = value;
-    if (arr) {
-      const l = arr.length;
-      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
-    }
-  }
-  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
-}
-function assertAllowed20(value, mode) {
-  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
-  if (mode === "list" && !false) {
-    const arr = value;
-    if (arr) {
-      const l = arr.length;
-      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
-    }
-  }
-  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
-}
-const colSpec8 = {
-  fieldName: "artifactId",
-  attributeName: "artifact_id",
-  attribute: spec_containerMetadata.attributes.artifact_id
-};
 function assertAllowed21(value, mode) {
   if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
   if (mode === "list" && !false) {
@@ -2365,11 +2687,6 @@ function assertAllowed22(value, mode) {
   }
   if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
 }
-const colSpec9 = {
-  fieldName: "artifactId",
-  attributeName: "artifact_id",
-  attribute: spec_schemaMetadata.attributes.artifact_id
-};
 function assertAllowed23(value, mode) {
   if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
   if (mode === "list" && !false) {
@@ -2381,6 +2698,11 @@ function assertAllowed23(value, mode) {
   }
   if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
 }
+const colSpec8 = {
+  fieldName: "artifactId",
+  attributeName: "artifact_id",
+  attribute: spec_containerMetadata.attributes.artifact_id
+};
 function assertAllowed24(value, mode) {
   if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
   if (mode === "list" && !false) {
@@ -2393,6 +2715,44 @@ function assertAllowed24(value, mode) {
   if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
 }
 function assertAllowed25(value, mode) {
+  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+  if (mode === "list" && !false) {
+    const arr = value;
+    if (arr) {
+      const l = arr.length;
+      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+    }
+  }
+  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+}
+const colSpec9 = {
+  fieldName: "artifactId",
+  attributeName: "artifact_id",
+  attribute: spec_schemaMetadata.attributes.artifact_id
+};
+function assertAllowed26(value, mode) {
+  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+  if (mode === "list" && !false) {
+    const arr = value;
+    if (arr) {
+      const l = arr.length;
+      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+    }
+  }
+  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+}
+function assertAllowed27(value, mode) {
+  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+  if (mode === "list" && !false) {
+    const arr = value;
+    if (arr) {
+      const l = arr.length;
+      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+    }
+  }
+  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+}
+function assertAllowed28(value, mode) {
   if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
   if (mode === "list" && !false) {
     const arr = value;
@@ -2423,44 +2783,6 @@ const colSpec13 = {
   attributeName: "name",
   attribute: spec_tag.attributes.name
 };
-function assertAllowed26(value, mode) {
-  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
-  if (mode === "list" && !false) {
-    const arr = value;
-    if (arr) {
-      const l = arr.length;
-      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
-    }
-  }
-  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
-}
-function assertAllowed27(value, mode) {
-  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
-  if (mode === "list" && !false) {
-    const arr = value;
-    if (arr) {
-      const l = arr.length;
-      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
-    }
-  }
-  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
-}
-const colSpec14 = {
-  fieldName: "artifactId",
-  attributeName: "artifact_id",
-  attribute: spec_wasmMetadata.attributes.artifact_id
-};
-function assertAllowed28(value, mode) {
-  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
-  if (mode === "list" && !false) {
-    const arr = value;
-    if (arr) {
-      const l = arr.length;
-      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
-    }
-  }
-  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
-}
 function assertAllowed29(value, mode) {
   if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
   if (mode === "list" && !false) {
@@ -2483,7 +2805,45 @@ function assertAllowed30(value, mode) {
   }
   if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
 }
+const colSpec14 = {
+  fieldName: "artifactId",
+  attributeName: "artifact_id",
+  attribute: spec_wasmMetadata.attributes.artifact_id
+};
 function assertAllowed31(value, mode) {
+  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+  if (mode === "list" && !false) {
+    const arr = value;
+    if (arr) {
+      const l = arr.length;
+      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+    }
+  }
+  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+}
+function assertAllowed32(value, mode) {
+  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+  if (mode === "list" && !false) {
+    const arr = value;
+    if (arr) {
+      const l = arr.length;
+      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+    }
+  }
+  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+}
+function assertAllowed33(value, mode) {
+  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+  if (mode === "list" && !false) {
+    const arr = value;
+    if (arr) {
+      const l = arr.length;
+      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+    }
+  }
+  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+}
+function assertAllowed34(value, mode) {
   if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
   if (mode === "list" && !false) {
     const arr = value;
@@ -2509,7 +2869,7 @@ const colSpec17 = {
   attributeName: "expires_at",
   attribute: spec_uploadSession.attributes.expires_at
 };
-function assertAllowed32(value, mode) {
+function assertAllowed35(value, mode) {
   if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
   if (mode === "list" && !false) {
     const arr = value;
@@ -2520,7 +2880,7 @@ function assertAllowed32(value, mode) {
   }
   if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
 }
-function assertAllowed33(value, mode) {
+function assertAllowed36(value, mode) {
   if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
   if (mode === "list" && !false) {
     const arr = value;
@@ -2581,17 +2941,135 @@ const resolve46 = (i, v) => sql`${i} < ${v}`;
 const resolve47 = (i, v) => sql`${i} <= ${v}`;
 const resolve48 = (i, v) => sql`${i} > ${v}`;
 const resolve49 = (i, v) => sql`${i} >= ${v}`;
+function assertAllowed37(value, mode) {
+  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+  if (mode === "list" && !false) {
+    const arr = value;
+    if (arr) {
+      const l = arr.length;
+      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+    }
+  }
+  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+}
 const colSpec18 = {
+  fieldName: "rowId",
+  attributeName: "id",
+  attribute: spec_apiToken.attributes.id
+};
+const colSpec19 = {
+  fieldName: "tokenHash",
+  attributeName: "token_hash",
+  attribute: spec_apiToken.attributes.token_hash
+};
+const colSpec20 = {
+  fieldName: "tokenPrefix",
+  attributeName: "token_prefix",
+  attribute: spec_apiToken.attributes.token_prefix
+};
+const colSpec21 = {
+  fieldName: "namespaceId",
+  attributeName: "namespace_id",
+  attribute: spec_apiToken.attributes.namespace_id
+};
+const colSpec22 = {
+  fieldName: "repositoryId",
+  attributeName: "repository_id",
+  attribute: spec_apiToken.attributes.repository_id
+};
+const colSpec23 = {
+  fieldName: "createdBy",
+  attributeName: "created_by",
+  attribute: spec_apiToken.attributes.created_by
+};
+const colSpec24 = {
+  fieldName: "isActive",
+  attributeName: "is_active",
+  attribute: spec_apiToken.attributes.is_active
+};
+function assertAllowed38(value, mode) {
+  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+  if (mode === "list" && !false) {
+    const arr = value;
+    if (arr) {
+      const l = arr.length;
+      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+    }
+  }
+  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+}
+function assertAllowed39(value, mode) {
+  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+  if (mode === "list" && !false) {
+    const arr = value;
+    if (arr) {
+      const l = arr.length;
+      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+    }
+  }
+  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+}
+const resolve50 = (i, _v, input) => sql`${i} ${input ? sql`IS NULL` : sql`IS NOT NULL`}`;
+const resolveInputCodec21 = () => TYPES.boolean;
+const resolveSqlValue14 = () => sql.null;
+const resolve51 = (i, v) => sql`${i} = ${v}`;
+const forceTextTypesSensitive4 = [TYPES.citext, TYPES.char, TYPES.bpchar];
+function resolveDomains4(c) {
+  let current = c;
+  while (current.domainOfCodec) current = current.domainOfCodec;
+  return current;
+}
+function resolveInputCodec22(c) {
+  if (c.arrayOfCodec) {
+    if (forceTextTypesSensitive4.includes(resolveDomains4(c.arrayOfCodec))) return listOfCodec(TYPES.text, {
+      extensions: {
+        listItemNonNull: c.extensions?.listItemNonNull
+      }
+    });
+    return c;
+  } else {
+    if (forceTextTypesSensitive4.includes(resolveDomains4(c))) return TYPES.text;
+    return c;
+  }
+}
+function resolveSqlIdentifier15(identifier, c) {
+  if (c.arrayOfCodec && forceTextTypesSensitive4.includes(resolveDomains4(c.arrayOfCodec))) return [sql`(${identifier})::text[]`, listOfCodec(TYPES.text, {
+    extensions: {
+      listItemNonNull: c.extensions?.listItemNonNull
+    }
+  })];else if (forceTextTypesSensitive4.includes(resolveDomains4(c))) return [sql`(${identifier})::text`, TYPES.text];else return [identifier, c];
+}
+const resolve52 = (i, v) => sql`${i} <> ${v}`;
+const resolve53 = (i, v) => sql`${i} IS DISTINCT FROM ${v}`;
+const resolve54 = (i, v) => sql`${i} IS NOT DISTINCT FROM ${v}`;
+const resolve55 = (i, v) => sql`${i} = ANY(${v})`;
+function resolveInputCodec23(c) {
+  if (forceTextTypesSensitive4.includes(resolveDomains4(c))) return listOfCodec(TYPES.text, {
+    extensions: {
+      listItemNonNull: !0
+    }
+  });else return listOfCodec(c, {
+    extensions: {
+      listItemNonNull: !0
+    }
+  });
+}
+const resolve56 = (i, v) => sql`${i} <> ALL(${v})`;
+const resolve57 = (i, v) => sql`${i} < ${v}`;
+const resolve58 = (i, v) => sql`${i} <= ${v}`;
+const resolve59 = (i, v) => sql`${i} > ${v}`;
+const resolve60 = (i, v) => sql`${i} >= ${v}`;
+const colSpec25 = {
   fieldName: "rowId",
   attributeName: "id",
   attribute: spec_namespace.attributes.id
 };
-const colSpec19 = {
+const colSpec26 = {
   fieldName: "name",
   attributeName: "name",
   attribute: spec_namespace.attributes.name
 };
-function assertAllowed34(value, mode) {
+function assertAllowed40(value, mode) {
   if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
   if (mode === "list" && !false) {
     const arr = value;
@@ -2602,7 +3080,7 @@ function assertAllowed34(value, mode) {
   }
   if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
 }
-function assertAllowed35(value, mode) {
+function assertAllowed41(value, mode) {
   if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
   if (mode === "list" && !false) {
     const arr = value;
@@ -2613,7 +3091,18 @@ function assertAllowed35(value, mode) {
   }
   if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
 }
-function assertAllowed36(value, mode) {
+function assertAllowed42(value, mode) {
+  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+  if (mode === "list" && !false) {
+    const arr = value;
+    if (arr) {
+      const l = arr.length;
+      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+    }
+  }
+  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+}
+function assertAllowed43(value, mode) {
   if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
   if (mode === "list" && !false) {
     const arr = value;
@@ -2656,6 +3145,10 @@ const specFromArgs_Repository = args => {
   const $nodeId = args.getRaw(["input", "id"]);
   return specFromNodeId(nodeIdHandler_Repository, $nodeId);
 };
+const specFromArgs_ApiToken = args => {
+  const $nodeId = args.getRaw(["input", "id"]);
+  return specFromNodeId(nodeIdHandler_ApiToken, $nodeId);
+};
 const specFromArgs_ContainerMetadatum2 = args => {
   const $nodeId = args.getRaw(["input", "id"]);
   return specFromNodeId(nodeIdHandler_ContainerMetadatum, $nodeId);
@@ -2687,6 +3180,10 @@ const specFromArgs_SchemaMetadatum2 = args => {
 const specFromArgs_Repository2 = args => {
   const $nodeId = args.getRaw(["input", "id"]);
   return specFromNodeId(nodeIdHandler_Repository, $nodeId);
+};
+const specFromArgs_ApiToken2 = args => {
+  const $nodeId = args.getRaw(["input", "id"]);
+  return specFromNodeId(nodeIdHandler_ApiToken, $nodeId);
 };
 const getPgSelectSingleFromMutationResult = (resource, pkAttributes, $mutation) => {
   const $result = $mutation.getStepForKey("result", !0);
@@ -2752,6 +3249,9 @@ type Query implements Node {
   """Get a single \`Repository\`."""
   repository(rowId: UUID!): Repository
 
+  """Get a single \`ApiToken\`."""
+  apiToken(rowId: UUID!): ApiToken
+
   """Reads a single \`ContainerMetadatum\` using its globally unique \`ID\`."""
   containerMetadatumById(
     """
@@ -2809,6 +3309,12 @@ type Query implements Node {
     """
     id: ID!
   ): Repository
+
+  """Reads a single \`ApiToken\` using its globally unique \`ID\`."""
+  apiTokenById(
+    """The globally unique \`ID\` to be used in selecting a single \`ApiToken\`."""
+    id: ID!
+  ): ApiToken
 
   """Reads and enables pagination through a set of \`ContainerMetadatum\`."""
   containerMetadata(
@@ -3081,6 +3587,40 @@ type Query implements Node {
     """The method to use when ordering \`Repository\`."""
     orderBy: [RepositoryOrderBy!] = [PRIMARY_KEY_ASC]
   ): RepositoryConnection
+
+  """Reads and enables pagination through a set of \`ApiToken\`."""
+  apiTokens(
+    """Only read the first \`n\` values of the set."""
+    first: Int
+
+    """Only read the last \`n\` values of the set."""
+    last: Int
+
+    """
+    Skip the first \`n\` values from our \`after\` cursor, an alternative to cursor
+    based pagination. May not be used with \`last\`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: ApiTokenCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: ApiTokenFilter
+
+    """The method to use when ordering \`ApiToken\`."""
+    orderBy: [ApiTokenOrderBy!] = [PRIMARY_KEY_ASC]
+  ): ApiTokenConnection
 }
 
 """An object with a globally unique \`ID\`."""
@@ -3315,6 +3855,40 @@ type Repository implements Node {
     """The method to use when ordering \`UploadSession\`."""
     orderBy: [UploadSessionOrderBy!] = [PRIMARY_KEY_ASC]
   ): UploadSessionConnection!
+
+  """Reads and enables pagination through a set of \`ApiToken\`."""
+  apiTokens(
+    """Only read the first \`n\` values of the set."""
+    first: Int
+
+    """Only read the last \`n\` values of the set."""
+    last: Int
+
+    """
+    Skip the first \`n\` values from our \`after\` cursor, an alternative to cursor
+    based pagination. May not be used with \`last\`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: ApiTokenCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: ApiTokenFilter
+
+    """The method to use when ordering \`ApiToken\`."""
+    orderBy: [ApiTokenOrderBy!] = [PRIMARY_KEY_ASC]
+  ): ApiTokenConnection!
 }
 
 type Namespace implements Node {
@@ -3361,6 +3935,40 @@ type Namespace implements Node {
     """The method to use when ordering \`Repository\`."""
     orderBy: [RepositoryOrderBy!] = [PRIMARY_KEY_ASC]
   ): RepositoryConnection!
+
+  """Reads and enables pagination through a set of \`ApiToken\`."""
+  apiTokens(
+    """Only read the first \`n\` values of the set."""
+    first: Int
+
+    """Only read the last \`n\` values of the set."""
+    last: Int
+
+    """
+    Skip the first \`n\` values from our \`after\` cursor, an alternative to cursor
+    based pagination. May not be used with \`last\`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: ApiTokenCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: ApiTokenFilter
+
+    """The method to use when ordering \`ApiToken\`."""
+    orderBy: [ApiTokenOrderBy!] = [PRIMARY_KEY_ASC]
+  ): ApiTokenConnection!
 }
 
 """A connection to a list of \`Repository\` values."""
@@ -3458,6 +4066,12 @@ input RepositoryFilter {
 
   """Some related \`uploadSessions\` exist."""
   uploadSessionsExist: Boolean
+
+  """Filter by the object’s \`apiTokens\` relation."""
+  apiTokens: RepositoryToManyApiTokenFilter
+
+  """Some related \`apiTokens\` exist."""
+  apiTokensExist: Boolean
 
   """Filter by the object’s \`namespace\` relation."""
   namespace: NamespaceFilter
@@ -3937,6 +4551,112 @@ input DatetimeFilter {
 }
 
 """
+A filter to be used against many \`ApiToken\` object types. All fields are combined with a logical ‘and.’
+"""
+input RepositoryToManyApiTokenFilter {
+  """
+  Every related \`ApiToken\` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  every: ApiTokenFilter
+
+  """
+  Some related \`ApiToken\` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  some: ApiTokenFilter
+
+  """
+  No related \`ApiToken\` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  none: ApiTokenFilter
+}
+
+"""
+A filter to be used against \`ApiToken\` object types. All fields are combined with a logical ‘and.’
+"""
+input ApiTokenFilter {
+  """Filter by the object’s \`rowId\` field."""
+  rowId: UUIDFilter
+
+  """Filter by the object’s \`tokenHash\` field."""
+  tokenHash: StringFilter
+
+  """Filter by the object’s \`tokenPrefix\` field."""
+  tokenPrefix: StringFilter
+
+  """Filter by the object’s \`namespaceId\` field."""
+  namespaceId: UUIDFilter
+
+  """Filter by the object’s \`repositoryId\` field."""
+  repositoryId: UUIDFilter
+
+  """Filter by the object’s \`createdBy\` field."""
+  createdBy: StringFilter
+
+  """Filter by the object’s \`isActive\` field."""
+  isActive: BooleanFilter
+
+  """Filter by the object’s \`namespace\` relation."""
+  namespace: NamespaceFilter
+
+  """Filter by the object’s \`repository\` relation."""
+  repository: RepositoryFilter
+
+  """A related \`repository\` exists."""
+  repositoryExists: Boolean
+
+  """Checks for all expressions in this list."""
+  and: [ApiTokenFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [ApiTokenFilter!]
+
+  """Negates the expression."""
+  not: ApiTokenFilter
+}
+
+"""
+A filter to be used against Boolean fields. All fields are combined with a logical ‘and.’
+"""
+input BooleanFilter {
+  """
+  Is null (if \`true\` is specified) or is not null (if \`false\` is specified).
+  """
+  isNull: Boolean
+
+  """Equal to the specified value."""
+  equalTo: Boolean
+
+  """Not equal to the specified value."""
+  notEqualTo: Boolean
+
+  """
+  Not equal to the specified value, treating null like an ordinary value.
+  """
+  distinctFrom: Boolean
+
+  """Equal to the specified value, treating null like an ordinary value."""
+  notDistinctFrom: Boolean
+
+  """Included in the specified list."""
+  in: [Boolean!]
+
+  """Not included in the specified list."""
+  notIn: [Boolean!]
+
+  """Less than the specified value."""
+  lessThan: Boolean
+
+  """Less than or equal to the specified value."""
+  lessThanOrEqualTo: Boolean
+
+  """Greater than the specified value."""
+  greaterThan: Boolean
+
+  """Greater than or equal to the specified value."""
+  greaterThanOrEqualTo: Boolean
+}
+
+"""
 A filter to be used against \`Namespace\` object types. All fields are combined with a logical ‘and.’
 """
 input NamespaceFilter {
@@ -3951,6 +4671,12 @@ input NamespaceFilter {
 
   """Some related \`repositories\` exist."""
   repositoriesExist: Boolean
+
+  """Filter by the object’s \`apiTokens\` relation."""
+  apiTokens: NamespaceToManyApiTokenFilter
+
+  """Some related \`apiTokens\` exist."""
+  apiTokensExist: Boolean
 
   """Checks for all expressions in this list."""
   and: [NamespaceFilter!]
@@ -3982,6 +4708,26 @@ input NamespaceToManyRepositoryFilter {
   none: RepositoryFilter
 }
 
+"""
+A filter to be used against many \`ApiToken\` object types. All fields are combined with a logical ‘and.’
+"""
+input NamespaceToManyApiTokenFilter {
+  """
+  Every related \`ApiToken\` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  every: ApiTokenFilter
+
+  """
+  Some related \`ApiToken\` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  some: ApiTokenFilter
+
+  """
+  No related \`ApiToken\` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  none: ApiTokenFilter
+}
+
 """Methods to use when ordering \`Repository\`."""
 enum RepositoryOrderBy {
   NATURAL
@@ -3995,6 +4741,107 @@ enum RepositoryOrderBy {
   NAME_DESC
   ARTIFACT_TYPE_ASC
   ARTIFACT_TYPE_DESC
+}
+
+"""A connection to a list of \`ApiToken\` values."""
+type ApiTokenConnection {
+  """A list of \`ApiToken\` objects."""
+  nodes: [ApiToken]!
+
+  """
+  A list of edges which contains the \`ApiToken\` and cursor to aid in pagination.
+  """
+  edges: [ApiTokenEdge]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* \`ApiToken\` you could get from the connection."""
+  totalCount: Int!
+}
+
+type ApiToken implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  id: ID!
+  rowId: UUID!
+  name: String!
+  tokenHash: String!
+  tokenPrefix: String!
+  namespaceId: UUID!
+  repositoryId: UUID
+  scope: String!
+  createdBy: String!
+  description: String
+  isActive: Boolean!
+  expiresAt: Datetime
+  lastUsedAt: Datetime
+  createdAt: Datetime
+  updatedAt: Datetime
+
+  """Reads a single \`Namespace\` that is related to this \`ApiToken\`."""
+  namespace: Namespace
+
+  """Reads a single \`Repository\` that is related to this \`ApiToken\`."""
+  repository: Repository
+}
+
+"""A \`ApiToken\` edge in the connection."""
+type ApiTokenEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The \`ApiToken\` at the end of the edge."""
+  node: ApiToken
+}
+
+"""
+A condition to be used against \`ApiToken\` object types. All fields are tested
+for equality and combined with a logical ‘and.’
+"""
+input ApiTokenCondition {
+  """Checks for equality with the object’s \`rowId\` field."""
+  rowId: UUID
+
+  """Checks for equality with the object’s \`tokenHash\` field."""
+  tokenHash: String
+
+  """Checks for equality with the object’s \`tokenPrefix\` field."""
+  tokenPrefix: String
+
+  """Checks for equality with the object’s \`namespaceId\` field."""
+  namespaceId: UUID
+
+  """Checks for equality with the object’s \`repositoryId\` field."""
+  repositoryId: UUID
+
+  """Checks for equality with the object’s \`createdBy\` field."""
+  createdBy: String
+
+  """Checks for equality with the object’s \`isActive\` field."""
+  isActive: Boolean
+}
+
+"""Methods to use when ordering \`ApiToken\`."""
+enum ApiTokenOrderBy {
+  NATURAL
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+  ROW_ID_ASC
+  ROW_ID_DESC
+  TOKEN_HASH_ASC
+  TOKEN_HASH_DESC
+  TOKEN_PREFIX_ASC
+  TOKEN_PREFIX_DESC
+  NAMESPACE_ID_ASC
+  NAMESPACE_ID_DESC
+  REPOSITORY_ID_ASC
+  REPOSITORY_ID_DESC
+  CREATED_BY_ASC
+  CREATED_BY_DESC
+  IS_ACTIVE_ASC
+  IS_ACTIVE_DESC
 }
 
 """A connection to a list of \`Artifact\` values."""
@@ -4479,6 +5326,14 @@ type Mutation {
     input: CreateRepositoryInput!
   ): CreateRepositoryPayload
 
+  """Creates a single \`ApiToken\`."""
+  createApiToken(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateApiTokenInput!
+  ): CreateApiTokenPayload
+
   """
   Updates a single \`ContainerMetadatum\` using its globally unique id and a patch.
   """
@@ -4625,6 +5480,22 @@ type Mutation {
     input: UpdateRepositoryInput!
   ): UpdateRepositoryPayload
 
+  """Updates a single \`ApiToken\` using its globally unique id and a patch."""
+  updateApiTokenById(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateApiTokenByIdInput!
+  ): UpdateApiTokenPayload
+
+  """Updates a single \`ApiToken\` using a unique key and a patch."""
+  updateApiToken(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateApiTokenInput!
+  ): UpdateApiTokenPayload
+
   """Deletes a single \`ContainerMetadatum\` using its globally unique id."""
   deleteContainerMetadatumById(
     """
@@ -4760,6 +5631,22 @@ type Mutation {
     """
     input: DeleteRepositoryInput!
   ): DeleteRepositoryPayload
+
+  """Deletes a single \`ApiToken\` using its globally unique id."""
+  deleteApiTokenById(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteApiTokenByIdInput!
+  ): DeleteApiTokenPayload
+
+  """Deletes a single \`ApiToken\` using a unique key."""
+  deleteApiToken(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteApiTokenInput!
+  ): DeleteApiTokenPayload
 }
 
 """The output of our create \`ContainerMetadatum\` mutation."""
@@ -5116,6 +6003,59 @@ input RepositoryInput {
   description: String
   artifactType: String!
   isPublic: Boolean
+  createdAt: Datetime
+  updatedAt: Datetime
+}
+
+"""The output of our create \`ApiToken\` mutation."""
+type CreateApiTokenPayload {
+  """
+  The exact same \`clientMutationId\` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The \`ApiToken\` that was created by this mutation."""
+  apiToken: ApiToken
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our \`ApiToken\`. May be used by Relay 1."""
+  apiTokenEdge(
+    """The method to use when ordering \`ApiToken\`."""
+    orderBy: [ApiTokenOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): ApiTokenEdge
+}
+
+"""All input for the create \`ApiToken\` mutation."""
+input CreateApiTokenInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The \`ApiToken\` to be created by this mutation."""
+  apiToken: ApiTokenInput!
+}
+
+"""An input for mutations affecting \`ApiToken\`"""
+input ApiTokenInput {
+  rowId: UUID
+  name: String!
+  tokenHash: String!
+  tokenPrefix: String!
+  namespaceId: UUID!
+  repositoryId: UUID
+  scope: String
+  createdBy: String!
+  description: String
+  isActive: Boolean
+  expiresAt: Datetime
+  lastUsedAt: Datetime
   createdAt: Datetime
   updatedAt: Datetime
 }
@@ -5683,6 +6623,83 @@ input UpdateRepositoryInput {
   patch: RepositoryPatch!
 }
 
+"""The output of our update \`ApiToken\` mutation."""
+type UpdateApiTokenPayload {
+  """
+  The exact same \`clientMutationId\` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The \`ApiToken\` that was updated by this mutation."""
+  apiToken: ApiToken
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our \`ApiToken\`. May be used by Relay 1."""
+  apiTokenEdge(
+    """The method to use when ordering \`ApiToken\`."""
+    orderBy: [ApiTokenOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): ApiTokenEdge
+}
+
+"""All input for the \`updateApiTokenById\` mutation."""
+input UpdateApiTokenByIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique \`ID\` which will identify a single \`ApiToken\` to be updated.
+  """
+  id: ID!
+
+  """
+  An object where the defined keys will be set on the \`ApiToken\` being updated.
+  """
+  patch: ApiTokenPatch!
+}
+
+"""
+Represents an update to a \`ApiToken\`. Fields that are set will be updated.
+"""
+input ApiTokenPatch {
+  rowId: UUID
+  name: String
+  tokenHash: String
+  tokenPrefix: String
+  namespaceId: UUID
+  repositoryId: UUID
+  scope: String
+  createdBy: String
+  description: String
+  isActive: Boolean
+  expiresAt: Datetime
+  lastUsedAt: Datetime
+  createdAt: Datetime
+  updatedAt: Datetime
+}
+
+"""All input for the \`updateApiToken\` mutation."""
+input UpdateApiTokenInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  rowId: UUID!
+
+  """
+  An object where the defined keys will be set on the \`ApiToken\` being updated.
+  """
+  patch: ApiTokenPatch!
+}
+
 """The output of our delete \`ContainerMetadatum\` mutation."""
 type DeleteContainerMetadatumPayload {
   """
@@ -6075,6 +7092,54 @@ input DeleteRepositoryInput {
   """
   clientMutationId: String
   rowId: UUID!
+}
+
+"""The output of our delete \`ApiToken\` mutation."""
+type DeleteApiTokenPayload {
+  """
+  The exact same \`clientMutationId\` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The \`ApiToken\` that was deleted by this mutation."""
+  apiToken: ApiToken
+  deletedApiTokenId: ID
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our \`ApiToken\`. May be used by Relay 1."""
+  apiTokenEdge(
+    """The method to use when ordering \`ApiToken\`."""
+    orderBy: [ApiTokenOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): ApiTokenEdge
+}
+
+"""All input for the \`deleteApiTokenById\` mutation."""
+input DeleteApiTokenByIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique \`ID\` which will identify a single \`ApiToken\` to be deleted.
+  """
+  id: ID!
+}
+
+"""All input for the \`deleteApiToken\` mutation."""
+input DeleteApiTokenInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  rowId: UUID!
 }`;
 export const objects = {
   Query: {
@@ -6082,6 +7147,56 @@ export const objects = {
       return !0;
     },
     plans: {
+      apiToken(_$root, {
+        $rowId
+      }) {
+        return resource_api_tokenPgResource.get({
+          id: $rowId
+        });
+      },
+      apiTokenById(_$parent, args) {
+        const $nodeId = args.getRaw("id");
+        return nodeFetcher_ApiToken($nodeId);
+      },
+      apiTokens: {
+        plan() {
+          return connection(resource_api_tokenPgResource.find());
+        },
+        args: {
+          first(_, $connection, arg) {
+            $connection.setFirst(arg.getRaw());
+          },
+          last(_, $connection, val) {
+            $connection.setLast(val.getRaw());
+          },
+          offset(_, $connection, val) {
+            $connection.setOffset(val.getRaw());
+          },
+          before(_, $connection, val) {
+            $connection.setBefore(val.getRaw());
+          },
+          after(_, $connection, val) {
+            $connection.setAfter(val.getRaw());
+          },
+          condition(_condition, $connection, arg) {
+            const $select = $connection.getSubplan();
+            arg.apply($select, qbWhereBuilder);
+          },
+          filter(_, $connection, fieldArg) {
+            const $pgSelect = $connection.getSubplan();
+            fieldArg.apply($pgSelect, (queryBuilder, value) => {
+              assertAllowed9(value, "object");
+              if (value == null) return;
+              const condition = new PgCondition(queryBuilder);
+              return condition;
+            });
+          },
+          orderBy(parent, $connection, value) {
+            const $select = $connection.getSubplan();
+            value.apply($select);
+          }
+        }
+      },
       artifact(_$root, {
         $rowId
       }) {
@@ -6504,6 +7619,20 @@ export const objects = {
   Mutation: {
     assertStep: __ValueStep,
     plans: {
+      createApiToken: {
+        plan(_, args) {
+          const $insert = pgInsertSingle(resource_api_tokenPgResource, Object.create(null));
+          args.apply($insert);
+          return object({
+            result: $insert
+          });
+        },
+        args: {
+          input(_, $object) {
+            return $object;
+          }
+        }
+      },
       createArtifact: {
         plan(_, args) {
           const $insert = pgInsertSingle(resource_artifactPgResource, Object.create(null));
@@ -6608,6 +7737,36 @@ export const objects = {
           args.apply($insert);
           return object({
             result: $insert
+          });
+        },
+        args: {
+          input(_, $object) {
+            return $object;
+          }
+        }
+      },
+      deleteApiToken: {
+        plan(_$root, args) {
+          const $delete = pgDeleteSingle(resource_api_tokenPgResource, {
+            id: args.getRaw(['input', "rowId"])
+          });
+          args.apply($delete);
+          return object({
+            result: $delete
+          });
+        },
+        args: {
+          input(_, $object) {
+            return $object;
+          }
+        }
+      },
+      deleteApiTokenById: {
+        plan(_$root, args) {
+          const $delete = pgDeleteSingle(resource_api_tokenPgResource, specFromArgs_ApiToken2(args));
+          args.apply($delete);
+          return object({
+            result: $delete
           });
         },
         args: {
@@ -6864,6 +8023,36 @@ export const objects = {
           args.apply($delete);
           return object({
             result: $delete
+          });
+        },
+        args: {
+          input(_, $object) {
+            return $object;
+          }
+        }
+      },
+      updateApiToken: {
+        plan(_$root, args) {
+          const $update = pgUpdateSingle(resource_api_tokenPgResource, {
+            id: args.getRaw(['input', "rowId"])
+          });
+          args.apply($update);
+          return object({
+            result: $update
+          });
+        },
+        args: {
+          input(_, $object) {
+            return $object;
+          }
+        }
+      },
+      updateApiTokenById: {
+        plan(_$root, args) {
+          const $update = pgUpdateSingle(resource_api_tokenPgResource, specFromArgs_ApiToken(args));
+          args.apply($update);
+          return object({
+            result: $update
           });
         },
         args: {
@@ -7130,6 +8319,71 @@ export const objects = {
       }
     }
   },
+  ApiToken: {
+    assertStep: assertPgClassSingleStep,
+    plans: {
+      createdAt($record) {
+        return $record.get("created_at");
+      },
+      createdBy($record) {
+        return $record.get("created_by");
+      },
+      expiresAt($record) {
+        return $record.get("expires_at");
+      },
+      id($parent) {
+        const specifier = nodeIdHandler_ApiToken.plan($parent);
+        return lambda(specifier, nodeIdCodecs[nodeIdHandler_ApiToken.codec.name].encode);
+      },
+      isActive($record) {
+        return $record.get("is_active");
+      },
+      lastUsedAt($record) {
+        return $record.get("last_used_at");
+      },
+      namespace($record) {
+        return resource_namespacePgResource.get({
+          id: $record.get("namespace_id")
+        });
+      },
+      namespaceId($record) {
+        return $record.get("namespace_id");
+      },
+      repository($record) {
+        return resource_repositoryPgResource.get({
+          id: $record.get("repository_id")
+        });
+      },
+      repositoryId($record) {
+        return $record.get("repository_id");
+      },
+      rowId($record) {
+        return $record.get("id");
+      },
+      tokenHash($record) {
+        return $record.get("token_hash");
+      },
+      tokenPrefix($record) {
+        return $record.get("token_prefix");
+      },
+      updatedAt($record) {
+        return $record.get("updated_at");
+      }
+    },
+    planType($specifier) {
+      const spec = Object.create(null);
+      for (const pkCol of api_tokenUniques[0].attributes) spec[pkCol] = get2($specifier, pkCol);
+      return resource_api_tokenPgResource.get(spec);
+    }
+  },
+  ApiTokenConnection: {
+    assertStep: ConnectionStep,
+    plans: {
+      totalCount($connection) {
+        return $connection.cloneSubplanWithoutPagination("aggregate").singleAsRecord().select(sql`count(*)`, TYPES.bigint, !1);
+      }
+    }
+  },
   Artifact: {
     assertStep: assertPgClassSingleStep,
     plans: {
@@ -7194,7 +8448,7 @@ export const objects = {
           filter(_, $connection, fieldArg) {
             const $pgSelect = $connection.getSubplan();
             fieldArg.apply($pgSelect, (queryBuilder, value) => {
-              assertAllowed9(value, "object");
+              assertAllowed10(value, "object");
               if (value == null) return;
               const condition = new PgCondition(queryBuilder);
               return condition;
@@ -7262,6 +8516,23 @@ export const objects = {
     plans: {
       totalCount($connection) {
         return $connection.cloneSubplanWithoutPagination("aggregate").singleAsRecord().select(sql`count(*)`, TYPES.bigint, !1);
+      }
+    }
+  },
+  CreateApiTokenPayload: {
+    assertStep: assertExecutableStep,
+    plans: {
+      apiToken($object) {
+        return $object.get("result");
+      },
+      apiTokenEdge($mutation, fieldArgs) {
+        return pgMutationPayloadEdge(resource_api_tokenPgResource, api_tokenUniques[0].attributes, $mutation, fieldArgs);
+      },
+      clientMutationId($mutation) {
+        return $mutation.getStepForKey("result").getMeta("clientMutationId");
+      },
+      query() {
+        return rootValue();
       }
     }
   },
@@ -7398,6 +8669,28 @@ export const objects = {
       },
       wasmMetadatumEdge($mutation, fieldArgs) {
         return pgMutationPayloadEdge(resource_wasm_metadataPgResource, wasm_metadataUniques[0].attributes, $mutation, fieldArgs);
+      }
+    }
+  },
+  DeleteApiTokenPayload: {
+    assertStep: ObjectStep,
+    plans: {
+      apiToken($object) {
+        return $object.get("result");
+      },
+      apiTokenEdge($mutation, fieldArgs) {
+        return pgMutationPayloadEdge(resource_api_tokenPgResource, api_tokenUniques[0].attributes, $mutation, fieldArgs);
+      },
+      clientMutationId($mutation) {
+        return $mutation.getStepForKey("result").getMeta("clientMutationId");
+      },
+      deletedApiTokenId($object) {
+        const $record = $object.getStepForKey("result"),
+          specifier = nodeIdHandler_ApiToken.plan($record);
+        return lambda(specifier, nodeIdCodecs_base64JSON_base64JSON.encode);
+      },
+      query() {
+        return rootValue();
       }
     }
   },
@@ -7580,6 +8873,48 @@ export const objects = {
   Namespace: {
     assertStep: assertPgClassSingleStep,
     plans: {
+      apiTokens: {
+        plan($record) {
+          const $records = resource_api_tokenPgResource.find({
+            namespace_id: $record.get("id")
+          });
+          return connection($records);
+        },
+        args: {
+          first(_, $connection, arg) {
+            $connection.setFirst(arg.getRaw());
+          },
+          last(_, $connection, val) {
+            $connection.setLast(val.getRaw());
+          },
+          offset(_, $connection, val) {
+            $connection.setOffset(val.getRaw());
+          },
+          before(_, $connection, val) {
+            $connection.setBefore(val.getRaw());
+          },
+          after(_, $connection, val) {
+            $connection.setAfter(val.getRaw());
+          },
+          condition(_condition, $connection, arg) {
+            const $select = $connection.getSubplan();
+            arg.apply($select, qbWhereBuilder);
+          },
+          filter(_, $connection, fieldArg) {
+            const $pgSelect = $connection.getSubplan();
+            fieldArg.apply($pgSelect, (queryBuilder, value) => {
+              assertAllowed16(value, "object");
+              if (value == null) return;
+              const condition = new PgCondition(queryBuilder);
+              return condition;
+            });
+          },
+          orderBy(parent, $connection, value) {
+            const $select = $connection.getSubplan();
+            value.apply($select);
+          }
+        }
+      },
       createdAt($record) {
         return $record.get("created_at");
       },
@@ -7617,7 +8952,7 @@ export const objects = {
           filter(_, $connection, fieldArg) {
             const $pgSelect = $connection.getSubplan();
             fieldArg.apply($pgSelect, (queryBuilder, value) => {
-              assertAllowed13(value, "object");
+              assertAllowed15(value, "object");
               if (value == null) return;
               const condition = new PgCondition(queryBuilder);
               return condition;
@@ -7653,6 +8988,48 @@ export const objects = {
   Repository: {
     assertStep: assertPgClassSingleStep,
     plans: {
+      apiTokens: {
+        plan($record) {
+          const $records = resource_api_tokenPgResource.find({
+            repository_id: $record.get("id")
+          });
+          return connection($records);
+        },
+        args: {
+          first(_, $connection, arg) {
+            $connection.setFirst(arg.getRaw());
+          },
+          last(_, $connection, val) {
+            $connection.setLast(val.getRaw());
+          },
+          offset(_, $connection, val) {
+            $connection.setOffset(val.getRaw());
+          },
+          before(_, $connection, val) {
+            $connection.setBefore(val.getRaw());
+          },
+          after(_, $connection, val) {
+            $connection.setAfter(val.getRaw());
+          },
+          condition(_condition, $connection, arg) {
+            const $select = $connection.getSubplan();
+            arg.apply($select, qbWhereBuilder);
+          },
+          filter(_, $connection, fieldArg) {
+            const $pgSelect = $connection.getSubplan();
+            fieldArg.apply($pgSelect, (queryBuilder, value) => {
+              assertAllowed14(value, "object");
+              if (value == null) return;
+              const condition = new PgCondition(queryBuilder);
+              return condition;
+            });
+          },
+          orderBy(parent, $connection, value) {
+            const $select = $connection.getSubplan();
+            value.apply($select);
+          }
+        }
+      },
       artifacts: {
         plan($record) {
           const $records = resource_artifactPgResource.find({
@@ -7683,7 +9060,7 @@ export const objects = {
           filter(_, $connection, fieldArg) {
             const $pgSelect = $connection.getSubplan();
             fieldArg.apply($pgSelect, (queryBuilder, value) => {
-              assertAllowed10(value, "object");
+              assertAllowed11(value, "object");
               if (value == null) return;
               const condition = new PgCondition(queryBuilder);
               return condition;
@@ -7749,7 +9126,7 @@ export const objects = {
           filter(_, $connection, fieldArg) {
             const $pgSelect = $connection.getSubplan();
             fieldArg.apply($pgSelect, (queryBuilder, value) => {
-              assertAllowed11(value, "object");
+              assertAllowed12(value, "object");
               if (value == null) return;
               const condition = new PgCondition(queryBuilder);
               return condition;
@@ -7794,7 +9171,7 @@ export const objects = {
           filter(_, $connection, fieldArg) {
             const $pgSelect = $connection.getSubplan();
             fieldArg.apply($pgSelect, (queryBuilder, value) => {
-              assertAllowed12(value, "object");
+              assertAllowed13(value, "object");
               if (value == null) return;
               const condition = new PgCondition(queryBuilder);
               return condition;
@@ -7901,6 +9278,23 @@ export const objects = {
     plans: {
       totalCount($connection) {
         return $connection.cloneSubplanWithoutPagination("aggregate").singleAsRecord().select(sql`count(*)`, TYPES.bigint, !1);
+      }
+    }
+  },
+  UpdateApiTokenPayload: {
+    assertStep: ObjectStep,
+    plans: {
+      apiToken($object) {
+        return $object.get("result");
+      },
+      apiTokenEdge($mutation, fieldArgs) {
+        return pgMutationPayloadEdge(resource_api_tokenPgResource, api_tokenUniques[0].attributes, $mutation, fieldArgs);
+      },
+      clientMutationId($mutation) {
+        return $mutation.getStepForKey("result").getMeta("clientMutationId");
+      },
+      query() {
+        return rootValue();
       }
     }
   },
@@ -8125,6 +9519,366 @@ export const interfaces = {
   }
 };
 export const inputObjects = {
+  ApiTokenCondition: {
+    plans: {
+      createdBy($condition, val) {
+        $condition.where({
+          type: "attribute",
+          attribute: "created_by",
+          callback(expression) {
+            return val === null ? sql`${expression} is null` : sql`${expression} = ${sqlValueWithCodec(val, TYPES.text)}`;
+          }
+        });
+      },
+      isActive($condition, val) {
+        $condition.where({
+          type: "attribute",
+          attribute: "is_active",
+          callback(expression) {
+            return val === null ? sql`${expression} is null` : sql`${expression} = ${sqlValueWithCodec(val, TYPES.boolean)}`;
+          }
+        });
+      },
+      namespaceId($condition, val) {
+        $condition.where({
+          type: "attribute",
+          attribute: "namespace_id",
+          callback(expression) {
+            return val === null ? sql`${expression} is null` : sql`${expression} = ${sqlValueWithCodec(val, TYPES.uuid)}`;
+          }
+        });
+      },
+      repositoryId($condition, val) {
+        $condition.where({
+          type: "attribute",
+          attribute: "repository_id",
+          callback(expression) {
+            return val === null ? sql`${expression} is null` : sql`${expression} = ${sqlValueWithCodec(val, TYPES.uuid)}`;
+          }
+        });
+      },
+      rowId($condition, val) {
+        $condition.where({
+          type: "attribute",
+          attribute: "id",
+          callback(expression) {
+            return val === null ? sql`${expression} is null` : sql`${expression} = ${sqlValueWithCodec(val, TYPES.uuid)}`;
+          }
+        });
+      },
+      tokenHash($condition, val) {
+        $condition.where({
+          type: "attribute",
+          attribute: "token_hash",
+          callback(expression) {
+            return val === null ? sql`${expression} is null` : sql`${expression} = ${sqlValueWithCodec(val, TYPES.text)}`;
+          }
+        });
+      },
+      tokenPrefix($condition, val) {
+        $condition.where({
+          type: "attribute",
+          attribute: "token_prefix",
+          callback(expression) {
+            return val === null ? sql`${expression} is null` : sql`${expression} = ${sqlValueWithCodec(val, TYPES.text)}`;
+          }
+        });
+      }
+    }
+  },
+  ApiTokenFilter: {
+    plans: {
+      and($where, value) {
+        assertAllowed39(value, "list");
+        if (value == null) return;
+        return $where.andPlan();
+      },
+      createdBy(queryBuilder, value) {
+        if (value === void 0) return;
+        if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+        if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+        const condition = new PgCondition(queryBuilder);
+        condition.extensions.pgFilterAttribute = colSpec23;
+        return condition;
+      },
+      isActive(queryBuilder, value) {
+        if (value === void 0) return;
+        if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+        if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+        const condition = new PgCondition(queryBuilder);
+        condition.extensions.pgFilterAttribute = colSpec24;
+        return condition;
+      },
+      namespace($where, value) {
+        assertAllowed38(value, "object");
+        if (value == null) return;
+        const $subQuery = $where.existsPlan({
+          tableExpression: namespaceIdentifier,
+          alias: resource_namespacePgResource.name
+        });
+        registryConfig.pgRelations.apiToken.namespaceByMyNamespaceId.localAttributes.forEach((localAttribute, i) => {
+          const remoteAttribute = registryConfig.pgRelations.apiToken.namespaceByMyNamespaceId.remoteAttributes[i];
+          $subQuery.where(sql`${$where.alias}.${sql.identifier(localAttribute)} = ${$subQuery.alias}.${sql.identifier(remoteAttribute)}`);
+        });
+        return $subQuery;
+      },
+      namespaceId(queryBuilder, value) {
+        if (value === void 0) return;
+        if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+        if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+        const condition = new PgCondition(queryBuilder);
+        condition.extensions.pgFilterAttribute = colSpec21;
+        return condition;
+      },
+      not($where, value) {
+        assertAllowed39(value, "object");
+        if (value == null) return;
+        return $where.notPlan().andPlan();
+      },
+      or($where, value) {
+        assertAllowed39(value, "list");
+        if (value == null) return;
+        const $or = $where.orPlan();
+        return () => $or.andPlan();
+      },
+      repository($where, value) {
+        assertAllowed38(value, "object");
+        if (value == null) return;
+        const $subQuery = $where.existsPlan({
+          tableExpression: repositoryIdentifier,
+          alias: resource_repositoryPgResource.name
+        });
+        registryConfig.pgRelations.apiToken.repositoryByMyRepositoryId.localAttributes.forEach((localAttribute, i) => {
+          const remoteAttribute = registryConfig.pgRelations.apiToken.repositoryByMyRepositoryId.remoteAttributes[i];
+          $subQuery.where(sql`${$where.alias}.${sql.identifier(localAttribute)} = ${$subQuery.alias}.${sql.identifier(remoteAttribute)}`);
+        });
+        return $subQuery;
+      },
+      repositoryExists($where, value) {
+        assertAllowed38(value, "scalar");
+        if (value == null) return;
+        const $subQuery = $where.existsPlan({
+          tableExpression: repositoryIdentifier,
+          alias: resource_repositoryPgResource.name,
+          equals: value
+        });
+        registryConfig.pgRelations.apiToken.repositoryByMyRepositoryId.localAttributes.forEach((localAttribute, i) => {
+          const remoteAttribute = registryConfig.pgRelations.apiToken.repositoryByMyRepositoryId.remoteAttributes[i];
+          $subQuery.where(sql`${$where.alias}.${sql.identifier(localAttribute)} = ${$subQuery.alias}.${sql.identifier(remoteAttribute)}`);
+        });
+      },
+      repositoryId(queryBuilder, value) {
+        if (value === void 0) return;
+        if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+        if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+        const condition = new PgCondition(queryBuilder);
+        condition.extensions.pgFilterAttribute = colSpec22;
+        return condition;
+      },
+      rowId(queryBuilder, value) {
+        if (value === void 0) return;
+        if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+        if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+        const condition = new PgCondition(queryBuilder);
+        condition.extensions.pgFilterAttribute = colSpec18;
+        return condition;
+      },
+      tokenHash(queryBuilder, value) {
+        if (value === void 0) return;
+        if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+        if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+        const condition = new PgCondition(queryBuilder);
+        condition.extensions.pgFilterAttribute = colSpec19;
+        return condition;
+      },
+      tokenPrefix(queryBuilder, value) {
+        if (value === void 0) return;
+        if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+        if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+        const condition = new PgCondition(queryBuilder);
+        condition.extensions.pgFilterAttribute = colSpec20;
+        return condition;
+      }
+    }
+  },
+  ApiTokenInput: {
+    baked: createObjectAndApplyChildren,
+    plans: {
+      createdAt(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("created_at", bakedInputRuntime(schema, field.type, val));
+      },
+      createdBy(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("created_by", bakedInputRuntime(schema, field.type, val));
+      },
+      description(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("description", bakedInputRuntime(schema, field.type, val));
+      },
+      expiresAt(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("expires_at", bakedInputRuntime(schema, field.type, val));
+      },
+      isActive(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("is_active", bakedInputRuntime(schema, field.type, val));
+      },
+      lastUsedAt(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("last_used_at", bakedInputRuntime(schema, field.type, val));
+      },
+      name(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("name", bakedInputRuntime(schema, field.type, val));
+      },
+      namespaceId(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("namespace_id", bakedInputRuntime(schema, field.type, val));
+      },
+      repositoryId(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("repository_id", bakedInputRuntime(schema, field.type, val));
+      },
+      rowId(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("id", bakedInputRuntime(schema, field.type, val));
+      },
+      scope(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("scope", bakedInputRuntime(schema, field.type, val));
+      },
+      tokenHash(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("token_hash", bakedInputRuntime(schema, field.type, val));
+      },
+      tokenPrefix(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("token_prefix", bakedInputRuntime(schema, field.type, val));
+      },
+      updatedAt(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("updated_at", bakedInputRuntime(schema, field.type, val));
+      }
+    }
+  },
+  ApiTokenPatch: {
+    baked: createObjectAndApplyChildren,
+    plans: {
+      createdAt(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("created_at", bakedInputRuntime(schema, field.type, val));
+      },
+      createdBy(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("created_by", bakedInputRuntime(schema, field.type, val));
+      },
+      description(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("description", bakedInputRuntime(schema, field.type, val));
+      },
+      expiresAt(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("expires_at", bakedInputRuntime(schema, field.type, val));
+      },
+      isActive(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("is_active", bakedInputRuntime(schema, field.type, val));
+      },
+      lastUsedAt(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("last_used_at", bakedInputRuntime(schema, field.type, val));
+      },
+      name(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("name", bakedInputRuntime(schema, field.type, val));
+      },
+      namespaceId(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("namespace_id", bakedInputRuntime(schema, field.type, val));
+      },
+      repositoryId(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("repository_id", bakedInputRuntime(schema, field.type, val));
+      },
+      rowId(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("id", bakedInputRuntime(schema, field.type, val));
+      },
+      scope(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("scope", bakedInputRuntime(schema, field.type, val));
+      },
+      tokenHash(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("token_hash", bakedInputRuntime(schema, field.type, val));
+      },
+      tokenPrefix(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("token_prefix", bakedInputRuntime(schema, field.type, val));
+      },
+      updatedAt(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("updated_at", bakedInputRuntime(schema, field.type, val));
+      }
+    }
+  },
   ArtifactCondition: {
     plans: {
       digest($condition, val) {
@@ -8159,12 +9913,12 @@ export const inputObjects = {
   ArtifactFilter: {
     plans: {
       and($where, value) {
-        assertAllowed20(value, "list");
+        assertAllowed23(value, "list");
         if (value == null) return;
         return $where.andPlan();
       },
       containerMetadatum($where, value) {
-        assertAllowed18(value, "object");
+        assertAllowed21(value, "object");
         const $subQuery = $where.existsPlan({
           tableExpression: containerMetadataIdentifier,
           alias: resource_container_metadataPgResource.name
@@ -8176,7 +9930,7 @@ export const inputObjects = {
         return $subQuery;
       },
       containerMetadatumExists($where, value) {
-        assertAllowed18(value, "scalar");
+        assertAllowed21(value, "scalar");
         if (value == null) return;
         const $subQuery = $where.existsPlan({
           tableExpression: containerMetadataIdentifier,
@@ -8197,18 +9951,18 @@ export const inputObjects = {
         return condition;
       },
       not($where, value) {
-        assertAllowed20(value, "object");
+        assertAllowed23(value, "object");
         if (value == null) return;
         return $where.notPlan().andPlan();
       },
       or($where, value) {
-        assertAllowed20(value, "list");
+        assertAllowed23(value, "list");
         if (value == null) return;
         const $or = $where.orPlan();
         return () => $or.andPlan();
       },
       repository($where, value) {
-        assertAllowed19(value, "object");
+        assertAllowed22(value, "object");
         if (value == null) return;
         const $subQuery = $where.existsPlan({
           tableExpression: repositoryIdentifier,
@@ -8237,7 +9991,7 @@ export const inputObjects = {
         return condition;
       },
       schemaMetadatum($where, value) {
-        assertAllowed18(value, "object");
+        assertAllowed21(value, "object");
         const $subQuery = $where.existsPlan({
           tableExpression: schemaMetadataIdentifier,
           alias: resource_schema_metadataPgResource.name
@@ -8249,7 +10003,7 @@ export const inputObjects = {
         return $subQuery;
       },
       schemaMetadatumExists($where, value) {
-        assertAllowed18(value, "scalar");
+        assertAllowed21(value, "scalar");
         if (value == null) return;
         const $subQuery = $where.existsPlan({
           tableExpression: schemaMetadataIdentifier,
@@ -8262,7 +10016,7 @@ export const inputObjects = {
         });
       },
       tags($where, value) {
-        assertAllowed18(value, "object");
+        assertAllowed21(value, "object");
         const $rel = $where.andPlan();
         $rel.extensions.pgFilterRelation = {
           tableExpression: tagIdentifier,
@@ -8273,7 +10027,7 @@ export const inputObjects = {
         return $rel;
       },
       tagsExist($where, value) {
-        assertAllowed18(value, "scalar");
+        assertAllowed21(value, "scalar");
         if (value == null) return;
         const $subQuery = $where.existsPlan({
           tableExpression: tagIdentifier,
@@ -8286,7 +10040,7 @@ export const inputObjects = {
         });
       },
       wasmMetadatum($where, value) {
-        assertAllowed18(value, "object");
+        assertAllowed21(value, "object");
         const $subQuery = $where.existsPlan({
           tableExpression: wasmMetadataIdentifier,
           alias: resource_wasm_metadataPgResource.name
@@ -8298,7 +10052,7 @@ export const inputObjects = {
         return $subQuery;
       },
       wasmMetadatumExists($where, value) {
-        assertAllowed18(value, "scalar");
+        assertAllowed21(value, "scalar");
         if (value == null) return;
         const $subQuery = $where.existsPlan({
           tableExpression: wasmMetadataIdentifier,
@@ -8409,7 +10163,7 @@ export const inputObjects = {
   ArtifactToManyTagFilter: {
     plans: {
       every($where, value) {
-        assertAllowed25(value, "object");
+        assertAllowed28(value, "object");
         if (value == null) return;
         if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
         const {
@@ -8429,7 +10183,7 @@ export const inputObjects = {
         return $subQuery.notPlan().andPlan();
       },
       none($where, value) {
-        assertAllowed25(value, "object");
+        assertAllowed28(value, "object");
         if (value == null) return;
         if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
         const {
@@ -8449,7 +10203,7 @@ export const inputObjects = {
         return $subQuery;
       },
       some($where, value) {
-        assertAllowed25(value, "object");
+        assertAllowed28(value, "object");
         if (value == null) return;
         if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
         const {
@@ -8470,6 +10224,274 @@ export const inputObjects = {
       }
     }
   },
+  BooleanFilter: {
+    plans: {
+      distinctFrom($where, value) {
+        if (!$where.extensions?.pgFilterAttribute) throw Error("Planning error: expected 'pgFilterAttribute' to be present on the $where plan's extensions; your extensions to `postgraphile-plugin-connection-filter` does not implement the required interfaces.");
+        if (value === void 0) return;
+        const {
+            fieldName: parentFieldName,
+            attributeName,
+            attribute,
+            codec,
+            expression
+          } = $where.extensions.pgFilterAttribute,
+          sourceAlias = attribute ? attribute.expression ? attribute.expression($where.alias) : sql`${$where.alias}.${sql.identifier(attributeName)}` : expression ? expression : $where.alias,
+          sourceCodec = codec ?? attribute.codec,
+          [sqlIdentifier, identifierCodec] = resolveSqlIdentifier15 ? resolveSqlIdentifier15(sourceAlias, sourceCodec) : [sourceAlias, sourceCodec];
+        if (false && value === null) return;
+        if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+        const resolvedInput = value,
+          inputCodec = resolveInputCodec22 ? resolveInputCodec22(codec ?? attribute.codec) : codec ?? attribute.codec,
+          sqlValue = sqlValueWithCodec(resolvedInput, inputCodec),
+          fragment = resolve53(sqlIdentifier, sqlValue, value, $where, {
+            fieldName: parentFieldName ?? null,
+            operatorName: "distinctFrom"
+          });
+        $where.where(fragment);
+      },
+      equalTo($where, value) {
+        if (!$where.extensions?.pgFilterAttribute) throw Error("Planning error: expected 'pgFilterAttribute' to be present on the $where plan's extensions; your extensions to `postgraphile-plugin-connection-filter` does not implement the required interfaces.");
+        if (value === void 0) return;
+        const {
+            fieldName: parentFieldName,
+            attributeName,
+            attribute,
+            codec,
+            expression
+          } = $where.extensions.pgFilterAttribute,
+          sourceAlias = attribute ? attribute.expression ? attribute.expression($where.alias) : sql`${$where.alias}.${sql.identifier(attributeName)}` : expression ? expression : $where.alias,
+          sourceCodec = codec ?? attribute.codec,
+          [sqlIdentifier, identifierCodec] = resolveSqlIdentifier15 ? resolveSqlIdentifier15(sourceAlias, sourceCodec) : [sourceAlias, sourceCodec];
+        if (false && value === null) return;
+        if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+        const resolvedInput = value,
+          inputCodec = resolveInputCodec22 ? resolveInputCodec22(codec ?? attribute.codec) : codec ?? attribute.codec,
+          sqlValue = sqlValueWithCodec(resolvedInput, inputCodec),
+          fragment = resolve51(sqlIdentifier, sqlValue, value, $where, {
+            fieldName: parentFieldName ?? null,
+            operatorName: "equalTo"
+          });
+        $where.where(fragment);
+      },
+      greaterThan($where, value) {
+        if (!$where.extensions?.pgFilterAttribute) throw Error("Planning error: expected 'pgFilterAttribute' to be present on the $where plan's extensions; your extensions to `postgraphile-plugin-connection-filter` does not implement the required interfaces.");
+        if (value === void 0) return;
+        const {
+            fieldName: parentFieldName,
+            attributeName,
+            attribute,
+            codec,
+            expression
+          } = $where.extensions.pgFilterAttribute,
+          sourceAlias = attribute ? attribute.expression ? attribute.expression($where.alias) : sql`${$where.alias}.${sql.identifier(attributeName)}` : expression ? expression : $where.alias,
+          sourceCodec = codec ?? attribute.codec,
+          [sqlIdentifier, identifierCodec] = resolveSqlIdentifier15 ? resolveSqlIdentifier15(sourceAlias, sourceCodec) : [sourceAlias, sourceCodec];
+        if (false && value === null) return;
+        if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+        const resolvedInput = value,
+          inputCodec = resolveInputCodec22 ? resolveInputCodec22(codec ?? attribute.codec) : codec ?? attribute.codec,
+          sqlValue = sqlValueWithCodec(resolvedInput, inputCodec),
+          fragment = resolve59(sqlIdentifier, sqlValue, value, $where, {
+            fieldName: parentFieldName ?? null,
+            operatorName: "greaterThan"
+          });
+        $where.where(fragment);
+      },
+      greaterThanOrEqualTo($where, value) {
+        if (!$where.extensions?.pgFilterAttribute) throw Error("Planning error: expected 'pgFilterAttribute' to be present on the $where plan's extensions; your extensions to `postgraphile-plugin-connection-filter` does not implement the required interfaces.");
+        if (value === void 0) return;
+        const {
+            fieldName: parentFieldName,
+            attributeName,
+            attribute,
+            codec,
+            expression
+          } = $where.extensions.pgFilterAttribute,
+          sourceAlias = attribute ? attribute.expression ? attribute.expression($where.alias) : sql`${$where.alias}.${sql.identifier(attributeName)}` : expression ? expression : $where.alias,
+          sourceCodec = codec ?? attribute.codec,
+          [sqlIdentifier, identifierCodec] = resolveSqlIdentifier15 ? resolveSqlIdentifier15(sourceAlias, sourceCodec) : [sourceAlias, sourceCodec];
+        if (false && value === null) return;
+        if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+        const resolvedInput = value,
+          inputCodec = resolveInputCodec22 ? resolveInputCodec22(codec ?? attribute.codec) : codec ?? attribute.codec,
+          sqlValue = sqlValueWithCodec(resolvedInput, inputCodec),
+          fragment = resolve60(sqlIdentifier, sqlValue, value, $where, {
+            fieldName: parentFieldName ?? null,
+            operatorName: "greaterThanOrEqualTo"
+          });
+        $where.where(fragment);
+      },
+      in($where, value) {
+        if (!$where.extensions?.pgFilterAttribute) throw Error("Planning error: expected 'pgFilterAttribute' to be present on the $where plan's extensions; your extensions to `postgraphile-plugin-connection-filter` does not implement the required interfaces.");
+        if (value === void 0) return;
+        const {
+            fieldName: parentFieldName,
+            attributeName,
+            attribute,
+            codec,
+            expression
+          } = $where.extensions.pgFilterAttribute,
+          sourceAlias = attribute ? attribute.expression ? attribute.expression($where.alias) : sql`${$where.alias}.${sql.identifier(attributeName)}` : expression ? expression : $where.alias,
+          sourceCodec = codec ?? attribute.codec,
+          [sqlIdentifier, identifierCodec] = resolveSqlIdentifier15 ? resolveSqlIdentifier15(sourceAlias, sourceCodec) : [sourceAlias, sourceCodec];
+        if (false && value === null) return;
+        if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+        const resolvedInput = value,
+          inputCodec = resolveInputCodec23 ? resolveInputCodec23(codec ?? attribute.codec) : codec ?? attribute.codec,
+          sqlValue = sqlValueWithCodec(resolvedInput, inputCodec),
+          fragment = resolve55(sqlIdentifier, sqlValue, value, $where, {
+            fieldName: parentFieldName ?? null,
+            operatorName: "in"
+          });
+        $where.where(fragment);
+      },
+      isNull($where, value) {
+        if (!$where.extensions?.pgFilterAttribute) throw Error("Planning error: expected 'pgFilterAttribute' to be present on the $where plan's extensions; your extensions to `postgraphile-plugin-connection-filter` does not implement the required interfaces.");
+        if (value === void 0) return;
+        const {
+            fieldName: parentFieldName,
+            attributeName,
+            attribute,
+            codec,
+            expression
+          } = $where.extensions.pgFilterAttribute,
+          sourceAlias = attribute ? attribute.expression ? attribute.expression($where.alias) : sql`${$where.alias}.${sql.identifier(attributeName)}` : expression ? expression : $where.alias,
+          sourceCodec = codec ?? attribute.codec,
+          [sqlIdentifier, identifierCodec] = [sourceAlias, sourceCodec];
+        if (false && value === null) return;
+        if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+        const resolvedInput = value,
+          inputCodec = resolveInputCodec21 ? resolveInputCodec21(codec ?? attribute.codec) : codec ?? attribute.codec,
+          sqlValue = resolveSqlValue14 ? resolveSqlValue14($where, value, inputCodec) : sqlValueWithCodec(resolvedInput, inputCodec),
+          fragment = resolve50(sqlIdentifier, sqlValue, value, $where, {
+            fieldName: parentFieldName ?? null,
+            operatorName: "isNull"
+          });
+        $where.where(fragment);
+      },
+      lessThan($where, value) {
+        if (!$where.extensions?.pgFilterAttribute) throw Error("Planning error: expected 'pgFilterAttribute' to be present on the $where plan's extensions; your extensions to `postgraphile-plugin-connection-filter` does not implement the required interfaces.");
+        if (value === void 0) return;
+        const {
+            fieldName: parentFieldName,
+            attributeName,
+            attribute,
+            codec,
+            expression
+          } = $where.extensions.pgFilterAttribute,
+          sourceAlias = attribute ? attribute.expression ? attribute.expression($where.alias) : sql`${$where.alias}.${sql.identifier(attributeName)}` : expression ? expression : $where.alias,
+          sourceCodec = codec ?? attribute.codec,
+          [sqlIdentifier, identifierCodec] = resolveSqlIdentifier15 ? resolveSqlIdentifier15(sourceAlias, sourceCodec) : [sourceAlias, sourceCodec];
+        if (false && value === null) return;
+        if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+        const resolvedInput = value,
+          inputCodec = resolveInputCodec22 ? resolveInputCodec22(codec ?? attribute.codec) : codec ?? attribute.codec,
+          sqlValue = sqlValueWithCodec(resolvedInput, inputCodec),
+          fragment = resolve57(sqlIdentifier, sqlValue, value, $where, {
+            fieldName: parentFieldName ?? null,
+            operatorName: "lessThan"
+          });
+        $where.where(fragment);
+      },
+      lessThanOrEqualTo($where, value) {
+        if (!$where.extensions?.pgFilterAttribute) throw Error("Planning error: expected 'pgFilterAttribute' to be present on the $where plan's extensions; your extensions to `postgraphile-plugin-connection-filter` does not implement the required interfaces.");
+        if (value === void 0) return;
+        const {
+            fieldName: parentFieldName,
+            attributeName,
+            attribute,
+            codec,
+            expression
+          } = $where.extensions.pgFilterAttribute,
+          sourceAlias = attribute ? attribute.expression ? attribute.expression($where.alias) : sql`${$where.alias}.${sql.identifier(attributeName)}` : expression ? expression : $where.alias,
+          sourceCodec = codec ?? attribute.codec,
+          [sqlIdentifier, identifierCodec] = resolveSqlIdentifier15 ? resolveSqlIdentifier15(sourceAlias, sourceCodec) : [sourceAlias, sourceCodec];
+        if (false && value === null) return;
+        if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+        const resolvedInput = value,
+          inputCodec = resolveInputCodec22 ? resolveInputCodec22(codec ?? attribute.codec) : codec ?? attribute.codec,
+          sqlValue = sqlValueWithCodec(resolvedInput, inputCodec),
+          fragment = resolve58(sqlIdentifier, sqlValue, value, $where, {
+            fieldName: parentFieldName ?? null,
+            operatorName: "lessThanOrEqualTo"
+          });
+        $where.where(fragment);
+      },
+      notDistinctFrom($where, value) {
+        if (!$where.extensions?.pgFilterAttribute) throw Error("Planning error: expected 'pgFilterAttribute' to be present on the $where plan's extensions; your extensions to `postgraphile-plugin-connection-filter` does not implement the required interfaces.");
+        if (value === void 0) return;
+        const {
+            fieldName: parentFieldName,
+            attributeName,
+            attribute,
+            codec,
+            expression
+          } = $where.extensions.pgFilterAttribute,
+          sourceAlias = attribute ? attribute.expression ? attribute.expression($where.alias) : sql`${$where.alias}.${sql.identifier(attributeName)}` : expression ? expression : $where.alias,
+          sourceCodec = codec ?? attribute.codec,
+          [sqlIdentifier, identifierCodec] = resolveSqlIdentifier15 ? resolveSqlIdentifier15(sourceAlias, sourceCodec) : [sourceAlias, sourceCodec];
+        if (false && value === null) return;
+        if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+        const resolvedInput = value,
+          inputCodec = resolveInputCodec22 ? resolveInputCodec22(codec ?? attribute.codec) : codec ?? attribute.codec,
+          sqlValue = sqlValueWithCodec(resolvedInput, inputCodec),
+          fragment = resolve54(sqlIdentifier, sqlValue, value, $where, {
+            fieldName: parentFieldName ?? null,
+            operatorName: "notDistinctFrom"
+          });
+        $where.where(fragment);
+      },
+      notEqualTo($where, value) {
+        if (!$where.extensions?.pgFilterAttribute) throw Error("Planning error: expected 'pgFilterAttribute' to be present on the $where plan's extensions; your extensions to `postgraphile-plugin-connection-filter` does not implement the required interfaces.");
+        if (value === void 0) return;
+        const {
+            fieldName: parentFieldName,
+            attributeName,
+            attribute,
+            codec,
+            expression
+          } = $where.extensions.pgFilterAttribute,
+          sourceAlias = attribute ? attribute.expression ? attribute.expression($where.alias) : sql`${$where.alias}.${sql.identifier(attributeName)}` : expression ? expression : $where.alias,
+          sourceCodec = codec ?? attribute.codec,
+          [sqlIdentifier, identifierCodec] = resolveSqlIdentifier15 ? resolveSqlIdentifier15(sourceAlias, sourceCodec) : [sourceAlias, sourceCodec];
+        if (false && value === null) return;
+        if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+        const resolvedInput = value,
+          inputCodec = resolveInputCodec22 ? resolveInputCodec22(codec ?? attribute.codec) : codec ?? attribute.codec,
+          sqlValue = sqlValueWithCodec(resolvedInput, inputCodec),
+          fragment = resolve52(sqlIdentifier, sqlValue, value, $where, {
+            fieldName: parentFieldName ?? null,
+            operatorName: "notEqualTo"
+          });
+        $where.where(fragment);
+      },
+      notIn($where, value) {
+        if (!$where.extensions?.pgFilterAttribute) throw Error("Planning error: expected 'pgFilterAttribute' to be present on the $where plan's extensions; your extensions to `postgraphile-plugin-connection-filter` does not implement the required interfaces.");
+        if (value === void 0) return;
+        const {
+            fieldName: parentFieldName,
+            attributeName,
+            attribute,
+            codec,
+            expression
+          } = $where.extensions.pgFilterAttribute,
+          sourceAlias = attribute ? attribute.expression ? attribute.expression($where.alias) : sql`${$where.alias}.${sql.identifier(attributeName)}` : expression ? expression : $where.alias,
+          sourceCodec = codec ?? attribute.codec,
+          [sqlIdentifier, identifierCodec] = resolveSqlIdentifier15 ? resolveSqlIdentifier15(sourceAlias, sourceCodec) : [sourceAlias, sourceCodec];
+        if (false && value === null) return;
+        if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+        const resolvedInput = value,
+          inputCodec = resolveInputCodec23 ? resolveInputCodec23(codec ?? attribute.codec) : codec ?? attribute.codec,
+          sqlValue = sqlValueWithCodec(resolvedInput, inputCodec),
+          fragment = resolve56(sqlIdentifier, sqlValue, value, $where, {
+            fieldName: parentFieldName ?? null,
+            operatorName: "notIn"
+          });
+        $where.where(fragment);
+      }
+    }
+  },
   ContainerMetadatumCondition: {
     plans: {
       artifactId($condition, val) {
@@ -8486,12 +10508,12 @@ export const inputObjects = {
   ContainerMetadatumFilter: {
     plans: {
       and($where, value) {
-        assertAllowed22(value, "list");
+        assertAllowed25(value, "list");
         if (value == null) return;
         return $where.andPlan();
       },
       artifact($where, value) {
-        assertAllowed21(value, "object");
+        assertAllowed24(value, "object");
         if (value == null) return;
         const $subQuery = $where.existsPlan({
           tableExpression: artifactIdentifier,
@@ -8512,12 +10534,12 @@ export const inputObjects = {
         return condition;
       },
       not($where, value) {
-        assertAllowed22(value, "object");
+        assertAllowed25(value, "object");
         if (value == null) return;
         return $where.notPlan().andPlan();
       },
       or($where, value) {
-        assertAllowed22(value, "list");
+        assertAllowed25(value, "list");
         if (value == null) return;
         const $or = $where.orPlan();
         return () => $or.andPlan();
@@ -8603,6 +10625,16 @@ export const inputObjects = {
         schema
       }) {
         obj.set("schema_version", bakedInputRuntime(schema, field.type, val));
+      }
+    }
+  },
+  CreateApiTokenInput: {
+    plans: {
+      apiToken(qb, arg) {
+        if (arg != null) return qb.setBuilder();
+      },
+      clientMutationId(qb, val) {
+        qb.setMeta("clientMutationId", val);
       }
     }
   },
@@ -8954,6 +10986,20 @@ export const inputObjects = {
       }
     }
   },
+  DeleteApiTokenByIdInput: {
+    plans: {
+      clientMutationId(qb, val) {
+        qb.setMeta("clientMutationId", val);
+      }
+    }
+  },
+  DeleteApiTokenInput: {
+    plans: {
+      clientMutationId(qb, val) {
+        qb.setMeta("clientMutationId", val);
+      }
+    }
+  },
   DeleteArtifactByIdInput: {
     plans: {
       clientMutationId(qb, val) {
@@ -9098,31 +11144,55 @@ export const inputObjects = {
   NamespaceFilter: {
     plans: {
       and($where, value) {
-        assertAllowed35(value, "list");
+        assertAllowed41(value, "list");
         if (value == null) return;
         return $where.andPlan();
+      },
+      apiTokens($where, value) {
+        assertAllowed40(value, "object");
+        const $rel = $where.andPlan();
+        $rel.extensions.pgFilterRelation = {
+          tableExpression: apiTokenIdentifier,
+          alias: resource_api_tokenPgResource.name,
+          localAttributes: registryConfig.pgRelations.namespace.apiTokensByTheirNamespaceId.localAttributes,
+          remoteAttributes: registryConfig.pgRelations.namespace.apiTokensByTheirNamespaceId.remoteAttributes
+        };
+        return $rel;
+      },
+      apiTokensExist($where, value) {
+        assertAllowed40(value, "scalar");
+        if (value == null) return;
+        const $subQuery = $where.existsPlan({
+          tableExpression: apiTokenIdentifier,
+          alias: resource_api_tokenPgResource.name,
+          equals: value
+        });
+        registryConfig.pgRelations.namespace.apiTokensByTheirNamespaceId.localAttributes.forEach((localAttribute, i) => {
+          const remoteAttribute = registryConfig.pgRelations.namespace.apiTokensByTheirNamespaceId.remoteAttributes[i];
+          $subQuery.where(sql`${$where.alias}.${sql.identifier(localAttribute)} = ${$subQuery.alias}.${sql.identifier(remoteAttribute)}`);
+        });
       },
       name(queryBuilder, value) {
         if (value === void 0) return;
         if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
         if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
         const condition = new PgCondition(queryBuilder);
-        condition.extensions.pgFilterAttribute = colSpec19;
+        condition.extensions.pgFilterAttribute = colSpec26;
         return condition;
       },
       not($where, value) {
-        assertAllowed35(value, "object");
+        assertAllowed41(value, "object");
         if (value == null) return;
         return $where.notPlan().andPlan();
       },
       or($where, value) {
-        assertAllowed35(value, "list");
+        assertAllowed41(value, "list");
         if (value == null) return;
         const $or = $where.orPlan();
         return () => $or.andPlan();
       },
       repositories($where, value) {
-        assertAllowed34(value, "object");
+        assertAllowed40(value, "object");
         const $rel = $where.andPlan();
         $rel.extensions.pgFilterRelation = {
           tableExpression: repositoryIdentifier,
@@ -9133,7 +11203,7 @@ export const inputObjects = {
         return $rel;
       },
       repositoriesExist($where, value) {
-        assertAllowed34(value, "scalar");
+        assertAllowed40(value, "scalar");
         if (value == null) return;
         const $subQuery = $where.existsPlan({
           tableExpression: repositoryIdentifier,
@@ -9150,7 +11220,7 @@ export const inputObjects = {
         if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
         if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
         const condition = new PgCondition(queryBuilder);
-        condition.extensions.pgFilterAttribute = colSpec18;
+        condition.extensions.pgFilterAttribute = colSpec25;
         return condition;
       }
     }
@@ -9225,10 +11295,10 @@ export const inputObjects = {
       }
     }
   },
-  NamespaceToManyRepositoryFilter: {
+  NamespaceToManyApiTokenFilter: {
     plans: {
       every($where, value) {
-        assertAllowed36(value, "object");
+        assertAllowed43(value, "object");
         if (value == null) return;
         if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
         const {
@@ -9248,7 +11318,7 @@ export const inputObjects = {
         return $subQuery.notPlan().andPlan();
       },
       none($where, value) {
-        assertAllowed36(value, "object");
+        assertAllowed43(value, "object");
         if (value == null) return;
         if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
         const {
@@ -9268,7 +11338,71 @@ export const inputObjects = {
         return $subQuery;
       },
       some($where, value) {
-        assertAllowed36(value, "object");
+        assertAllowed43(value, "object");
+        if (value == null) return;
+        if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
+        const {
+            localAttributes,
+            remoteAttributes,
+            tableExpression,
+            alias
+          } = $where.extensions.pgFilterRelation,
+          $subQuery = $where.existsPlan({
+            tableExpression,
+            alias
+          });
+        localAttributes.forEach((localAttribute, i) => {
+          const remoteAttribute = remoteAttributes[i];
+          $subQuery.where(sql`${$where.alias}.${sql.identifier(localAttribute)} = ${$subQuery.alias}.${sql.identifier(remoteAttribute)}`);
+        });
+        return $subQuery;
+      }
+    }
+  },
+  NamespaceToManyRepositoryFilter: {
+    plans: {
+      every($where, value) {
+        assertAllowed42(value, "object");
+        if (value == null) return;
+        if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
+        const {
+            localAttributes,
+            remoteAttributes,
+            tableExpression,
+            alias
+          } = $where.extensions.pgFilterRelation,
+          $subQuery = $where.notPlan().existsPlan({
+            tableExpression,
+            alias
+          });
+        localAttributes.forEach((localAttribute, i) => {
+          const remoteAttribute = remoteAttributes[i];
+          $subQuery.where(sql`${$where.alias}.${sql.identifier(localAttribute)} = ${$subQuery.alias}.${sql.identifier(remoteAttribute)}`);
+        });
+        return $subQuery.notPlan().andPlan();
+      },
+      none($where, value) {
+        assertAllowed42(value, "object");
+        if (value == null) return;
+        if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
+        const {
+            localAttributes,
+            remoteAttributes,
+            tableExpression,
+            alias
+          } = $where.extensions.pgFilterRelation,
+          $subQuery = $where.notPlan().existsPlan({
+            tableExpression,
+            alias
+          });
+        localAttributes.forEach((localAttribute, i) => {
+          const remoteAttribute = remoteAttributes[i];
+          $subQuery.where(sql`${$where.alias}.${sql.identifier(localAttribute)} = ${$subQuery.alias}.${sql.identifier(remoteAttribute)}`);
+        });
+        return $subQuery;
+      },
+      some($where, value) {
+        assertAllowed42(value, "object");
         if (value == null) return;
         if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
         const {
@@ -9332,12 +11466,36 @@ export const inputObjects = {
   RepositoryFilter: {
     plans: {
       and($where, value) {
-        assertAllowed16(value, "list");
+        assertAllowed19(value, "list");
         if (value == null) return;
         return $where.andPlan();
       },
+      apiTokens($where, value) {
+        assertAllowed17(value, "object");
+        const $rel = $where.andPlan();
+        $rel.extensions.pgFilterRelation = {
+          tableExpression: apiTokenIdentifier,
+          alias: resource_api_tokenPgResource.name,
+          localAttributes: registryConfig.pgRelations.repository.apiTokensByTheirRepositoryId.localAttributes,
+          remoteAttributes: registryConfig.pgRelations.repository.apiTokensByTheirRepositoryId.remoteAttributes
+        };
+        return $rel;
+      },
+      apiTokensExist($where, value) {
+        assertAllowed17(value, "scalar");
+        if (value == null) return;
+        const $subQuery = $where.existsPlan({
+          tableExpression: apiTokenIdentifier,
+          alias: resource_api_tokenPgResource.name,
+          equals: value
+        });
+        registryConfig.pgRelations.repository.apiTokensByTheirRepositoryId.localAttributes.forEach((localAttribute, i) => {
+          const remoteAttribute = registryConfig.pgRelations.repository.apiTokensByTheirRepositoryId.remoteAttributes[i];
+          $subQuery.where(sql`${$where.alias}.${sql.identifier(localAttribute)} = ${$subQuery.alias}.${sql.identifier(remoteAttribute)}`);
+        });
+      },
       artifacts($where, value) {
-        assertAllowed14(value, "object");
+        assertAllowed17(value, "object");
         const $rel = $where.andPlan();
         $rel.extensions.pgFilterRelation = {
           tableExpression: artifactIdentifier,
@@ -9348,7 +11506,7 @@ export const inputObjects = {
         return $rel;
       },
       artifactsExist($where, value) {
-        assertAllowed14(value, "scalar");
+        assertAllowed17(value, "scalar");
         if (value == null) return;
         const $subQuery = $where.existsPlan({
           tableExpression: artifactIdentifier,
@@ -9377,7 +11535,7 @@ export const inputObjects = {
         return condition;
       },
       namespace($where, value) {
-        assertAllowed15(value, "object");
+        assertAllowed18(value, "object");
         if (value == null) return;
         const $subQuery = $where.existsPlan({
           tableExpression: namespaceIdentifier,
@@ -9398,12 +11556,12 @@ export const inputObjects = {
         return condition;
       },
       not($where, value) {
-        assertAllowed16(value, "object");
+        assertAllowed19(value, "object");
         if (value == null) return;
         return $where.notPlan().andPlan();
       },
       or($where, value) {
-        assertAllowed16(value, "list");
+        assertAllowed19(value, "list");
         if (value == null) return;
         const $or = $where.orPlan();
         return () => $or.andPlan();
@@ -9417,7 +11575,7 @@ export const inputObjects = {
         return condition;
       },
       tags($where, value) {
-        assertAllowed14(value, "object");
+        assertAllowed17(value, "object");
         const $rel = $where.andPlan();
         $rel.extensions.pgFilterRelation = {
           tableExpression: tagIdentifier,
@@ -9428,7 +11586,7 @@ export const inputObjects = {
         return $rel;
       },
       tagsExist($where, value) {
-        assertAllowed14(value, "scalar");
+        assertAllowed17(value, "scalar");
         if (value == null) return;
         const $subQuery = $where.existsPlan({
           tableExpression: tagIdentifier,
@@ -9441,7 +11599,7 @@ export const inputObjects = {
         });
       },
       uploadSessions($where, value) {
-        assertAllowed14(value, "object");
+        assertAllowed17(value, "object");
         const $rel = $where.andPlan();
         $rel.extensions.pgFilterRelation = {
           tableExpression: uploadSessionIdentifier,
@@ -9452,7 +11610,7 @@ export const inputObjects = {
         return $rel;
       },
       uploadSessionsExist($where, value) {
-        assertAllowed14(value, "scalar");
+        assertAllowed17(value, "scalar");
         if (value == null) return;
         const $subQuery = $where.existsPlan({
           tableExpression: uploadSessionIdentifier,
@@ -9572,10 +11730,10 @@ export const inputObjects = {
       }
     }
   },
-  RepositoryToManyArtifactFilter: {
+  RepositoryToManyApiTokenFilter: {
     plans: {
       every($where, value) {
-        assertAllowed17(value, "object");
+        assertAllowed37(value, "object");
         if (value == null) return;
         if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
         const {
@@ -9595,7 +11753,7 @@ export const inputObjects = {
         return $subQuery.notPlan().andPlan();
       },
       none($where, value) {
-        assertAllowed17(value, "object");
+        assertAllowed37(value, "object");
         if (value == null) return;
         if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
         const {
@@ -9615,7 +11773,71 @@ export const inputObjects = {
         return $subQuery;
       },
       some($where, value) {
-        assertAllowed17(value, "object");
+        assertAllowed37(value, "object");
+        if (value == null) return;
+        if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
+        const {
+            localAttributes,
+            remoteAttributes,
+            tableExpression,
+            alias
+          } = $where.extensions.pgFilterRelation,
+          $subQuery = $where.existsPlan({
+            tableExpression,
+            alias
+          });
+        localAttributes.forEach((localAttribute, i) => {
+          const remoteAttribute = remoteAttributes[i];
+          $subQuery.where(sql`${$where.alias}.${sql.identifier(localAttribute)} = ${$subQuery.alias}.${sql.identifier(remoteAttribute)}`);
+        });
+        return $subQuery;
+      }
+    }
+  },
+  RepositoryToManyArtifactFilter: {
+    plans: {
+      every($where, value) {
+        assertAllowed20(value, "object");
+        if (value == null) return;
+        if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
+        const {
+            localAttributes,
+            remoteAttributes,
+            tableExpression,
+            alias
+          } = $where.extensions.pgFilterRelation,
+          $subQuery = $where.notPlan().existsPlan({
+            tableExpression,
+            alias
+          });
+        localAttributes.forEach((localAttribute, i) => {
+          const remoteAttribute = remoteAttributes[i];
+          $subQuery.where(sql`${$where.alias}.${sql.identifier(localAttribute)} = ${$subQuery.alias}.${sql.identifier(remoteAttribute)}`);
+        });
+        return $subQuery.notPlan().andPlan();
+      },
+      none($where, value) {
+        assertAllowed20(value, "object");
+        if (value == null) return;
+        if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
+        const {
+            localAttributes,
+            remoteAttributes,
+            tableExpression,
+            alias
+          } = $where.extensions.pgFilterRelation,
+          $subQuery = $where.notPlan().existsPlan({
+            tableExpression,
+            alias
+          });
+        localAttributes.forEach((localAttribute, i) => {
+          const remoteAttribute = remoteAttributes[i];
+          $subQuery.where(sql`${$where.alias}.${sql.identifier(localAttribute)} = ${$subQuery.alias}.${sql.identifier(remoteAttribute)}`);
+        });
+        return $subQuery;
+      },
+      some($where, value) {
+        assertAllowed20(value, "object");
         if (value == null) return;
         if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
         const {
@@ -9639,7 +11861,7 @@ export const inputObjects = {
   RepositoryToManyTagFilter: {
     plans: {
       every($where, value) {
-        assertAllowed30(value, "object");
+        assertAllowed33(value, "object");
         if (value == null) return;
         if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
         const {
@@ -9659,7 +11881,7 @@ export const inputObjects = {
         return $subQuery.notPlan().andPlan();
       },
       none($where, value) {
-        assertAllowed30(value, "object");
+        assertAllowed33(value, "object");
         if (value == null) return;
         if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
         const {
@@ -9679,7 +11901,7 @@ export const inputObjects = {
         return $subQuery;
       },
       some($where, value) {
-        assertAllowed30(value, "object");
+        assertAllowed33(value, "object");
         if (value == null) return;
         if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
         const {
@@ -9703,7 +11925,7 @@ export const inputObjects = {
   RepositoryToManyUploadSessionFilter: {
     plans: {
       every($where, value) {
-        assertAllowed31(value, "object");
+        assertAllowed34(value, "object");
         if (value == null) return;
         if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
         const {
@@ -9723,7 +11945,7 @@ export const inputObjects = {
         return $subQuery.notPlan().andPlan();
       },
       none($where, value) {
-        assertAllowed31(value, "object");
+        assertAllowed34(value, "object");
         if (value == null) return;
         if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
         const {
@@ -9743,7 +11965,7 @@ export const inputObjects = {
         return $subQuery;
       },
       some($where, value) {
-        assertAllowed31(value, "object");
+        assertAllowed34(value, "object");
         if (value == null) return;
         if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
         const {
@@ -9780,12 +12002,12 @@ export const inputObjects = {
   SchemaMetadatumFilter: {
     plans: {
       and($where, value) {
-        assertAllowed24(value, "list");
+        assertAllowed27(value, "list");
         if (value == null) return;
         return $where.andPlan();
       },
       artifact($where, value) {
-        assertAllowed23(value, "object");
+        assertAllowed26(value, "object");
         if (value == null) return;
         const $subQuery = $where.existsPlan({
           tableExpression: artifactIdentifier,
@@ -9806,12 +12028,12 @@ export const inputObjects = {
         return condition;
       },
       not($where, value) {
-        assertAllowed24(value, "object");
+        assertAllowed27(value, "object");
         if (value == null) return;
         return $where.notPlan().andPlan();
       },
       or($where, value) {
-        assertAllowed24(value, "list");
+        assertAllowed27(value, "list");
         if (value == null) return;
         const $or = $where.orPlan();
         return () => $or.andPlan();
@@ -10823,12 +13045,12 @@ export const inputObjects = {
   TagFilter: {
     plans: {
       and($where, value) {
-        assertAllowed27(value, "list");
+        assertAllowed30(value, "list");
         if (value == null) return;
         return $where.andPlan();
       },
       artifact($where, value) {
-        assertAllowed26(value, "object");
+        assertAllowed29(value, "object");
         if (value == null) return;
         const $subQuery = $where.existsPlan({
           tableExpression: artifactIdentifier,
@@ -10857,18 +13079,18 @@ export const inputObjects = {
         return condition;
       },
       not($where, value) {
-        assertAllowed27(value, "object");
+        assertAllowed30(value, "object");
         if (value == null) return;
         return $where.notPlan().andPlan();
       },
       or($where, value) {
-        assertAllowed27(value, "list");
+        assertAllowed30(value, "list");
         if (value == null) return;
         const $or = $where.orPlan();
         return () => $or.andPlan();
       },
       repository($where, value) {
-        assertAllowed26(value, "object");
+        assertAllowed29(value, "object");
         if (value == null) return;
         const $subQuery = $where.existsPlan({
           tableExpression: repositoryIdentifier,
@@ -10977,6 +13199,26 @@ export const inputObjects = {
         schema
       }) {
         obj.set("updated_at", bakedInputRuntime(schema, field.type, val));
+      }
+    }
+  },
+  UpdateApiTokenByIdInput: {
+    plans: {
+      clientMutationId(qb, val) {
+        qb.setMeta("clientMutationId", val);
+      },
+      patch(qb, arg) {
+        if (arg != null) return qb.setBuilder();
+      }
+    }
+  },
+  UpdateApiTokenInput: {
+    plans: {
+      clientMutationId(qb, val) {
+        qb.setMeta("clientMutationId", val);
+      },
+      patch(qb, arg) {
+        if (arg != null) return qb.setBuilder();
       }
     }
   },
@@ -11184,7 +13426,7 @@ export const inputObjects = {
   UploadSessionFilter: {
     plans: {
       and($where, value) {
-        assertAllowed33(value, "list");
+        assertAllowed36(value, "list");
         if (value == null) return;
         return $where.andPlan();
       },
@@ -11197,18 +13439,18 @@ export const inputObjects = {
         return condition;
       },
       not($where, value) {
-        assertAllowed33(value, "object");
+        assertAllowed36(value, "object");
         if (value == null) return;
         return $where.notPlan().andPlan();
       },
       or($where, value) {
-        assertAllowed33(value, "list");
+        assertAllowed36(value, "list");
         if (value == null) return;
         const $or = $where.orPlan();
         return () => $or.andPlan();
       },
       repository($where, value) {
-        assertAllowed32(value, "object");
+        assertAllowed35(value, "object");
         if (value == null) return;
         const $subQuery = $where.existsPlan({
           tableExpression: repositoryIdentifier,
@@ -11592,12 +13834,12 @@ export const inputObjects = {
   WasmMetadatumFilter: {
     plans: {
       and($where, value) {
-        assertAllowed29(value, "list");
+        assertAllowed32(value, "list");
         if (value == null) return;
         return $where.andPlan();
       },
       artifact($where, value) {
-        assertAllowed28(value, "object");
+        assertAllowed31(value, "object");
         if (value == null) return;
         const $subQuery = $where.existsPlan({
           tableExpression: artifactIdentifier,
@@ -11618,12 +13860,12 @@ export const inputObjects = {
         return condition;
       },
       not($where, value) {
-        assertAllowed29(value, "object");
+        assertAllowed32(value, "object");
         if (value == null) return;
         return $where.notPlan().andPlan();
       },
       or($where, value) {
-        assertAllowed29(value, "list");
+        assertAllowed32(value, "list");
         if (value == null) return;
         const $or = $where.orPlan();
         return () => $or.andPlan();
@@ -11766,6 +14008,114 @@ export const scalars = {
   }
 };
 export const enums = {
+  ApiTokenOrderBy: {
+    values: {
+      CREATED_BY_ASC(queryBuilder) {
+        queryBuilder.orderBy({
+          attribute: "created_by",
+          direction: "ASC"
+        });
+      },
+      CREATED_BY_DESC(queryBuilder) {
+        queryBuilder.orderBy({
+          attribute: "created_by",
+          direction: "DESC"
+        });
+      },
+      IS_ACTIVE_ASC(queryBuilder) {
+        queryBuilder.orderBy({
+          attribute: "is_active",
+          direction: "ASC"
+        });
+      },
+      IS_ACTIVE_DESC(queryBuilder) {
+        queryBuilder.orderBy({
+          attribute: "is_active",
+          direction: "DESC"
+        });
+      },
+      NAMESPACE_ID_ASC(queryBuilder) {
+        queryBuilder.orderBy({
+          attribute: "namespace_id",
+          direction: "ASC"
+        });
+      },
+      NAMESPACE_ID_DESC(queryBuilder) {
+        queryBuilder.orderBy({
+          attribute: "namespace_id",
+          direction: "DESC"
+        });
+      },
+      PRIMARY_KEY_ASC(queryBuilder) {
+        api_tokenUniques[0].attributes.forEach(attributeName => {
+          queryBuilder.orderBy({
+            attribute: attributeName,
+            direction: "ASC"
+          });
+        });
+        queryBuilder.setOrderIsUnique();
+      },
+      PRIMARY_KEY_DESC(queryBuilder) {
+        api_tokenUniques[0].attributes.forEach(attributeName => {
+          queryBuilder.orderBy({
+            attribute: attributeName,
+            direction: "DESC"
+          });
+        });
+        queryBuilder.setOrderIsUnique();
+      },
+      REPOSITORY_ID_ASC(queryBuilder) {
+        queryBuilder.orderBy({
+          attribute: "repository_id",
+          direction: "ASC"
+        });
+      },
+      REPOSITORY_ID_DESC(queryBuilder) {
+        queryBuilder.orderBy({
+          attribute: "repository_id",
+          direction: "DESC"
+        });
+      },
+      ROW_ID_ASC(queryBuilder) {
+        queryBuilder.orderBy({
+          attribute: "id",
+          direction: "ASC"
+        });
+        queryBuilder.setOrderIsUnique();
+      },
+      ROW_ID_DESC(queryBuilder) {
+        queryBuilder.orderBy({
+          attribute: "id",
+          direction: "DESC"
+        });
+        queryBuilder.setOrderIsUnique();
+      },
+      TOKEN_HASH_ASC(queryBuilder) {
+        queryBuilder.orderBy({
+          attribute: "token_hash",
+          direction: "ASC"
+        });
+      },
+      TOKEN_HASH_DESC(queryBuilder) {
+        queryBuilder.orderBy({
+          attribute: "token_hash",
+          direction: "DESC"
+        });
+      },
+      TOKEN_PREFIX_ASC(queryBuilder) {
+        queryBuilder.orderBy({
+          attribute: "token_prefix",
+          direction: "ASC"
+        });
+      },
+      TOKEN_PREFIX_DESC(queryBuilder) {
+        queryBuilder.orderBy({
+          attribute: "token_prefix",
+          direction: "DESC"
+        });
+      }
+    }
+  },
   ArtifactOrderBy: {
     values: {
       DIGEST_ASC(queryBuilder) {
