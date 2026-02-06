@@ -13,7 +13,7 @@ describe("GraphQL auth via useAuth", () => {
 
     const query = /* GraphQL */ `
       {
-        users {
+        namespaces {
           nodes {
             id
           }
@@ -42,7 +42,7 @@ describe("GraphQL auth via useAuth", () => {
 
     const query = /* GraphQL */ `
       {
-        users {
+        namespaces {
           nodes {
             id
           }

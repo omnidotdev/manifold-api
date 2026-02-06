@@ -18,6 +18,7 @@
 import { and, eq } from "drizzle-orm";
 import { Elysia, t } from "elysia";
 
+import { maintenanceAllowedNamespaces } from "lib/config/env.config";
 import { dbPool } from "lib/db";
 import {
   artifactTable,
@@ -32,8 +33,13 @@ import {
   cleanupSession,
   initSession,
 } from "lib/oci/chunkStore";
+import { isEnabled } from "lib/flags/client";
 import { computeDigest } from "lib/oci/digest";
 import * as ociErrors from "lib/oci/errors";
+
+const FLAGS = {
+  MAINTENANCE: "manifold-api-maintenance-mode",
+} as const;
 
 /**
  * Parse repository name into namespace and repository.
@@ -76,6 +82,24 @@ const getRepository = async (namespace: string, repoName: string) => {
  * OCI Distribution API router.
  */
 const ociRouter = new Elysia({ prefix: "/v2" })
+  // Block non-allowed namespaces during maintenance
+  .onBeforeHandle(async ({ request, set }) => {
+    const path = new URL(request.url).pathname.replace(/^\/v2\/?/, "");
+
+    // Allow /v2/ version check
+    if (!path) return;
+
+    if (!(await isEnabled(FLAGS.MAINTENANCE))) return;
+
+    const segment = decodeURIComponent(path.split("/")[0]);
+    const namespace = segment.split("/")[0];
+
+    if (!maintenanceAllowedNamespaces.includes(namespace)) {
+      set.status = 503;
+      return ociErrors.denied("Registry is in maintenance mode");
+    }
+  })
+
   // version check
   .get("/", ({ set }) => {
     set.headers["Docker-Distribution-API-Version"] = "registry/2.0";
@@ -217,7 +241,13 @@ const ociRouter = new Elysia({ prefix: "/v2" })
         request.headers.get("Content-Type") ??
         "application/vnd.oci.image.manifest.v1+json";
 
-      const content = typeof body === "string" ? body : JSON.stringify(body);
+      // Elysia may not parse vendor media types; fall back to raw request body
+      const content =
+        typeof body === "string"
+          ? body
+          : body && typeof body === "object"
+            ? JSON.stringify(body)
+            : await request.text();
       const contentBytes = new TextEncoder().encode(content);
       const digest = await computeDigest(contentBytes);
 
