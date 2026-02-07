@@ -1,7 +1,7 @@
 import { Elysia } from "elysia";
 
 import idpWebhook from "lib/idp/webhooks";
-import billingWebhook from "lib/providers/billing/webhooks";
+import billingWebhook from "lib/providers/webhooks";
 
 /**
  * Webhooks Elysia instance (effectively used as a plugin).

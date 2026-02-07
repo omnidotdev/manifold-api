@@ -32,6 +32,8 @@ const knipConfig: KnipConfig = {
   ignoreDependencies: [
     "@changesets/changelog-github",
     "@changesets/cli",
+    // GitHub dep not resolvable by knip
+    "@omnidotdev/providers",
     // TODO switch to testcontainers (unstable behavior with Bun/Docker), then remove below
     "@testcontainers/postgresql",
     "testcontainers",

@@ -29,6 +29,8 @@ export const {
   /** Provider overrides (default based on SELF_HOSTED) */
   BILLING_PROVIDER,
   AUTHZ_PROVIDER,
+  /** Billing service API key for service-to-service auth */
+  BILLING_SERVICE_API_KEY,
   /** Feature flags */
   FLAGS_API_HOST,
   FLAGS_CLIENT_KEY,
@@ -44,18 +46,3 @@ export const isDevEnv = NODE_ENV === "development",
     .map((s) => s.trim())
     .filter(Boolean);
 
-/**
- * Resolve a provider based on env var or self-hosted defaults.
- * Explicit *_PROVIDER env var always wins.
- */
-const resolveProvider = (
-  envVar: string | undefined,
-  defaultSaas: string,
-  defaultSelfHosted = "local",
-): string => {
-  if (envVar) return envVar;
-  return isSelfHosted ? defaultSelfHosted : defaultSaas;
-};
-
-export const billingProvider = resolveProvider(BILLING_PROVIDER, "aether");
-export const authzProvider = resolveProvider(AUTHZ_PROVIDER, "warden");
