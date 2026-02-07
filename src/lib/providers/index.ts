@@ -17,10 +17,7 @@ import {
   BILLING_SERVICE_API_KEY,
 } from "lib/config/env.config";
 
-const authzProviderName = resolveProvider(
-  process.env.AUTHZ_PROVIDER,
-  "warden",
-);
+const authzProviderName = resolveProvider(process.env.AUTHZ_PROVIDER, "warden");
 
 const billingProviderName = resolveProvider(
   process.env.BILLING_PROVIDER,

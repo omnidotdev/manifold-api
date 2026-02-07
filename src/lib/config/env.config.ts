@@ -45,4 +45,3 @@ export const isDevEnv = NODE_ENV === "development",
   maintenanceAllowedNamespaces = MAINTENANCE_ALLOWED_NAMESPACES.split(",")
     .map((s) => s.trim())
     .filter(Boolean);
-
