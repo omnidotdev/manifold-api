@@ -39,6 +39,5 @@ export const digestInvalid = (
     `digest mismatch: expected ${expected}, got ${actual}`,
   );
 
-export const denied = (
-  message = "access denied",
-): OciErrorResponse => createOciError("DENIED", message);
+export const denied = (message = "access denied"): OciErrorResponse =>
+  createOciError("DENIED", message);

@@ -20,9 +20,9 @@ import {
   isProdEnv,
   maintenanceAllowedNamespaces,
 } from "lib/config/env.config";
-import { isEnabled } from "lib/flags/client";
 import { dbPool, pgPool } from "lib/db";
 import ensureDatabase from "lib/db/ensureDatabase";
+import { isEnabled } from "lib/flags/client";
 import createGraphqlContext from "lib/graphql/createGraphqlContext";
 import { armorPlugin, createAuthenticationPlugin } from "lib/graphql/plugins";
 import { ociRouter } from "lib/oci";

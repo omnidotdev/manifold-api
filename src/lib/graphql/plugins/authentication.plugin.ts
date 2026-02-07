@@ -11,12 +11,12 @@ import { apiTokenTable } from "lib/db/schema";
 
 import type { ResolveUserFn } from "@envelop/generic-auth";
 import type { JWTPayload } from "jose";
+import type { TokenScope } from "lib/db/schema";
 import type {
   ContextObserver,
   GraphQLContext,
   TokenObserver,
 } from "lib/graphql/createGraphqlContext";
-import type { TokenScope } from "lib/db/schema";
 
 interface UserInfoClaims extends JWTPayload {
   sub: string;
@@ -150,7 +150,9 @@ const resolveFromApiToken = async (
  * Validate user session and resolve user if successful.
  * @see https://the-guild.dev/graphql/envelop/plugins/use-generic-auth#getting-started
  */
-const resolveUser: ResolveUserFn<ContextObserver, GraphQLContext> = async (ctx) => {
+const resolveUser: ResolveUserFn<ContextObserver, GraphQLContext> = async (
+  ctx,
+) => {
   try {
     const accessToken = ctx.request.headers
       .get("authorization")
