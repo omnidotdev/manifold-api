@@ -24,13 +24,18 @@ const billingProviderName = resolveProvider(
   "aether",
 );
 
-export const authz = createAuthzProvider(authzProviderName, {
-  apiUrl: AUTHZ_API_URL ?? "",
-  source: "manifold",
-});
+export const authz = createAuthzProvider(
+  authzProviderName,
+  AUTHZ_API_URL ? { apiUrl: AUTHZ_API_URL, source: "manifold" } : undefined,
+);
 
-export const billing = createBillingProvider(billingProviderName, {
-  baseUrl: BILLING_BASE_URL ?? "",
-  serviceApiKey: BILLING_SERVICE_API_KEY,
-  appId: "manifold",
-});
+export const billing = createBillingProvider(
+  billingProviderName,
+  BILLING_BASE_URL
+    ? {
+        baseUrl: BILLING_BASE_URL,
+        serviceApiKey: BILLING_SERVICE_API_KEY,
+        appId: "manifold",
+      }
+    : undefined,
+);
