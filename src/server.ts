@@ -26,6 +26,7 @@ import { isEnabled } from "lib/flags/client";
 import createGraphqlContext from "lib/graphql/createGraphqlContext";
 import { armorPlugin, createAuthenticationPlugin } from "lib/graphql/plugins";
 import { ociRouter } from "lib/oci";
+import webRouter from "lib/web/router";
 
 // ensure database exists before starting
 await ensureDatabase();
@@ -96,6 +97,8 @@ const app = new Elysia({
   .use(webhooks)
   // API tokens REST endpoints
   .use(tokensApi)
+  // Web content routes (/@namespace/repo/reference)
+  .use(webRouter)
   // OCI Distribution API v2
   .use(ociRouter)
   .use(
