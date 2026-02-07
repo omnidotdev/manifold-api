@@ -462,92 +462,6 @@ const spec_tag = {
   executor: executor
 };
 const tagCodec = recordCodec(spec_tag);
-const namespaceIdentifier = sql.identifier("public", "namespace");
-const spec_namespace = {
-  name: "namespace",
-  identifier: namespaceIdentifier,
-  attributes: {
-    __proto__: null,
-    id: {
-      description: undefined,
-      codec: TYPES.uuid,
-      notNull: true,
-      hasDefault: true,
-      extensions: {
-        tags: {},
-        canSelect: true,
-        canInsert: true,
-        canUpdate: true
-      }
-    },
-    name: {
-      description: undefined,
-      codec: TYPES.text,
-      notNull: true,
-      hasDefault: false,
-      extensions: {
-        tags: {},
-        canSelect: true,
-        canInsert: true,
-        canUpdate: true
-      }
-    },
-    description: {
-      description: undefined,
-      codec: TYPES.text,
-      notNull: false,
-      hasDefault: false,
-      extensions: {
-        tags: {},
-        canSelect: true,
-        canInsert: true,
-        canUpdate: true,
-        isIndexed: false
-      }
-    },
-    created_at: {
-      description: undefined,
-      codec: TYPES.timestamptz,
-      notNull: false,
-      hasDefault: true,
-      extensions: {
-        tags: {},
-        canSelect: true,
-        canInsert: true,
-        canUpdate: true,
-        isIndexed: false
-      }
-    },
-    updated_at: {
-      description: undefined,
-      codec: TYPES.timestamptz,
-      notNull: false,
-      hasDefault: true,
-      extensions: {
-        tags: {},
-        canSelect: true,
-        canInsert: true,
-        canUpdate: true,
-        isIndexed: false
-      }
-    }
-  },
-  description: undefined,
-  extensions: {
-    oid: "376545",
-    isTableLike: true,
-    pg: {
-      serviceName: "main",
-      schemaName: "public",
-      name: "namespace"
-    },
-    tags: {
-      __proto__: null
-    }
-  },
-  executor: executor
-};
-const namespaceCodec = recordCodec(spec_namespace);
 const uploadSessionIdentifier = sql.identifier("public", "upload_session");
 const spec_uploadSession = {
   name: "uploadSession",
@@ -720,6 +634,104 @@ const spec_schemaMetadata = {
   executor: executor
 };
 const schemaMetadataCodec = recordCodec(spec_schemaMetadata);
+const namespaceIdentifier = sql.identifier("public", "namespace");
+const spec_namespace = {
+  name: "namespace",
+  identifier: namespaceIdentifier,
+  attributes: {
+    __proto__: null,
+    id: {
+      description: undefined,
+      codec: TYPES.uuid,
+      notNull: true,
+      hasDefault: true,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true
+      }
+    },
+    name: {
+      description: undefined,
+      codec: TYPES.text,
+      notNull: true,
+      hasDefault: false,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true
+      }
+    },
+    description: {
+      description: undefined,
+      codec: TYPES.text,
+      notNull: false,
+      hasDefault: false,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    },
+    created_at: {
+      description: undefined,
+      codec: TYPES.timestamptz,
+      notNull: false,
+      hasDefault: true,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    },
+    updated_at: {
+      description: undefined,
+      codec: TYPES.timestamptz,
+      notNull: false,
+      hasDefault: true,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    },
+    organization_id: {
+      description: undefined,
+      codec: TYPES.uuid,
+      notNull: false,
+      hasDefault: false,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true
+      }
+    }
+  },
+  description: undefined,
+  extensions: {
+    oid: "376545",
+    isTableLike: true,
+    pg: {
+      serviceName: "main",
+      schemaName: "public",
+      name: "namespace"
+    },
+    tags: {
+      __proto__: null
+    }
+  },
+  executor: executor
+};
+const namespaceCodec = recordCodec(spec_namespace);
 const repositoryIdentifier = sql.identifier("public", "repository");
 const spec_repository = {
   name: "repository",
@@ -1185,51 +1197,6 @@ const registryConfig_pgResources_tag_tag = {
     canDelete: true
   }
 };
-const namespaceUniques = [{
-  isPrimary: true,
-  attributes: ["id"],
-  description: undefined,
-  extensions: {
-    tags: {
-      __proto__: null
-    }
-  }
-}, {
-  isPrimary: false,
-  attributes: ["name"],
-  description: undefined,
-  extensions: {
-    tags: {
-      __proto__: null
-    }
-  }
-}];
-const registryConfig_pgResources_namespace_namespace = {
-  executor: executor,
-  name: "namespace",
-  identifier: "main.public.namespace",
-  from: namespaceIdentifier,
-  codec: namespaceCodec,
-  uniques: namespaceUniques,
-  isVirtual: false,
-  description: undefined,
-  extensions: {
-    description: undefined,
-    pg: {
-      serviceName: "main",
-      schemaName: "public",
-      name: "namespace"
-    },
-    isInsertable: true,
-    isUpdatable: true,
-    isDeletable: true,
-    tags: {},
-    canSelect: true,
-    canInsert: true,
-    canUpdate: true,
-    canDelete: true
-  }
-};
 const upload_sessionUniques = [{
   isPrimary: true,
   attributes: ["id"],
@@ -1291,6 +1258,51 @@ const registryConfig_pgResources_schema_metadata_schema_metadata = {
       serviceName: "main",
       schemaName: "public",
       name: "schema_metadata"
+    },
+    isInsertable: true,
+    isUpdatable: true,
+    isDeletable: true,
+    tags: {},
+    canSelect: true,
+    canInsert: true,
+    canUpdate: true,
+    canDelete: true
+  }
+};
+const namespaceUniques = [{
+  isPrimary: true,
+  attributes: ["id"],
+  description: undefined,
+  extensions: {
+    tags: {
+      __proto__: null
+    }
+  }
+}, {
+  isPrimary: false,
+  attributes: ["name"],
+  description: undefined,
+  extensions: {
+    tags: {
+      __proto__: null
+    }
+  }
+}];
+const registryConfig_pgResources_namespace_namespace = {
+  executor: executor,
+  name: "namespace",
+  identifier: "main.public.namespace",
+  from: namespaceIdentifier,
+  codec: namespaceCodec,
+  uniques: namespaceUniques,
+  isVirtual: false,
+  description: undefined,
+  extensions: {
+    description: undefined,
+    pg: {
+      serviceName: "main",
+      schemaName: "public",
+      name: "namespace"
     },
     isInsertable: true,
     isUpdatable: true,
@@ -1391,10 +1403,10 @@ const registryConfig = {
     timestamptz: TYPES.timestamptz,
     wasmMetadata: wasmMetadataCodec,
     tag: tagCodec,
-    namespace: namespaceCodec,
     uploadSession: uploadSessionCodec,
     schemaMetadata: schemaMetadataCodec,
     bool: TYPES.boolean,
+    namespace: namespaceCodec,
     repository: repositoryCodec,
     apiToken: apiTokenCodec
   },
@@ -1404,9 +1416,9 @@ const registryConfig = {
     artifact: registryConfig_pgResources_artifact_artifact,
     wasm_metadata: registryConfig_pgResources_wasm_metadata_wasm_metadata,
     tag: registryConfig_pgResources_tag_tag,
-    namespace: registryConfig_pgResources_namespace_namespace,
     upload_session: registryConfig_pgResources_upload_session_upload_session,
     schema_metadata: registryConfig_pgResources_schema_metadata_schema_metadata,
+    namespace: registryConfig_pgResources_namespace_namespace,
     repository: registryConfig_pgResources_repository_repository,
     api_token: registryConfig_pgResources_api_token_api_token
   },
@@ -1746,9 +1758,9 @@ const resource_container_metadataPgResource = registry.pgResources["container_me
 const resource_artifactPgResource = registry.pgResources["artifact"];
 const resource_wasm_metadataPgResource = registry.pgResources["wasm_metadata"];
 const resource_tagPgResource = registry.pgResources["tag"];
-const resource_namespacePgResource = registry.pgResources["namespace"];
 const resource_upload_sessionPgResource = registry.pgResources["upload_session"];
 const resource_schema_metadataPgResource = registry.pgResources["schema_metadata"];
+const resource_namespacePgResource = registry.pgResources["namespace"];
 const resource_repositoryPgResource = registry.pgResources["repository"];
 const resource_api_tokenPgResource = registry.pgResources["api_token"];
 const nodeIdHandler_ContainerMetadatum = {
@@ -1872,32 +1884,6 @@ const nodeFetcher_Tag = $nodeId => {
   const $decoded = lambda($nodeId, specForHandler(nodeIdHandler_Tag));
   return nodeIdHandler_Tag.get(nodeIdHandler_Tag.getSpec($decoded));
 };
-const nodeIdHandler_Namespace = {
-  typeName: "Namespace",
-  codec: nodeIdCodecs_base64JSON_base64JSON,
-  deprecationReason: undefined,
-  plan($record) {
-    return list([constant("Namespace", false), $record.get("id")]);
-  },
-  getSpec($list) {
-    return {
-      id: inhibitOnNull(access($list, [1]))
-    };
-  },
-  getIdentifiers(value) {
-    return value.slice(1);
-  },
-  get(spec) {
-    return resource_namespacePgResource.get(spec);
-  },
-  match(obj) {
-    return obj[0] === "Namespace";
-  }
-};
-const nodeFetcher_Namespace = $nodeId => {
-  const $decoded = lambda($nodeId, specForHandler(nodeIdHandler_Namespace));
-  return nodeIdHandler_Namespace.get(nodeIdHandler_Namespace.getSpec($decoded));
-};
 const nodeIdHandler_UploadSession = {
   typeName: "UploadSession",
   codec: nodeIdCodecs_base64JSON_base64JSON,
@@ -1949,6 +1935,32 @@ const nodeIdHandler_SchemaMetadatum = {
 const nodeFetcher_SchemaMetadatum = $nodeId => {
   const $decoded = lambda($nodeId, specForHandler(nodeIdHandler_SchemaMetadatum));
   return nodeIdHandler_SchemaMetadatum.get(nodeIdHandler_SchemaMetadatum.getSpec($decoded));
+};
+const nodeIdHandler_Namespace = {
+  typeName: "Namespace",
+  codec: nodeIdCodecs_base64JSON_base64JSON,
+  deprecationReason: undefined,
+  plan($record) {
+    return list([constant("Namespace", false), $record.get("id")]);
+  },
+  getSpec($list) {
+    return {
+      id: inhibitOnNull(access($list, [1]))
+    };
+  },
+  getIdentifiers(value) {
+    return value.slice(1);
+  },
+  get(spec) {
+    return resource_namespacePgResource.get(spec);
+  },
+  match(obj) {
+    return obj[0] === "Namespace";
+  }
+};
+const nodeFetcher_Namespace = $nodeId => {
+  const $decoded = lambda($nodeId, specForHandler(nodeIdHandler_Namespace));
+  return nodeIdHandler_Namespace.get(nodeIdHandler_Namespace.getSpec($decoded));
 };
 const nodeIdHandler_Repository = {
   typeName: "Repository",
@@ -2114,9 +2126,9 @@ const nodeIdHandlerByTypeName = {
   Artifact: nodeIdHandler_Artifact,
   WasmMetadatum: nodeIdHandler_WasmMetadatum,
   Tag: nodeIdHandler_Tag,
-  Namespace: nodeIdHandler_Namespace,
   UploadSession: nodeIdHandler_UploadSession,
   SchemaMetadatum: nodeIdHandler_SchemaMetadatum,
+  Namespace: nodeIdHandler_Namespace,
   Repository: nodeIdHandler_Repository,
   ApiToken: nodeIdHandler_ApiToken
 };
@@ -3069,6 +3081,11 @@ const colSpec26 = {
   attributeName: "name",
   attribute: spec_namespace.attributes.name
 };
+const colSpec27 = {
+  fieldName: "organizationId",
+  attributeName: "organization_id",
+  attribute: spec_namespace.attributes.organization_id
+};
 function assertAllowed40(value, mode) {
   if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
   if (mode === "list" && !false) {
@@ -3129,10 +3146,6 @@ const specFromArgs_Tag = args => {
   const $nodeId = args.getRaw(["input", "id"]);
   return specFromNodeId(nodeIdHandler_Tag, $nodeId);
 };
-const specFromArgs_Namespace = args => {
-  const $nodeId = args.getRaw(["input", "id"]);
-  return specFromNodeId(nodeIdHandler_Namespace, $nodeId);
-};
 const specFromArgs_UploadSession = args => {
   const $nodeId = args.getRaw(["input", "id"]);
   return specFromNodeId(nodeIdHandler_UploadSession, $nodeId);
@@ -3140,6 +3153,10 @@ const specFromArgs_UploadSession = args => {
 const specFromArgs_SchemaMetadatum = args => {
   const $nodeId = args.getRaw(["input", "id"]);
   return specFromNodeId(nodeIdHandler_SchemaMetadatum, $nodeId);
+};
+const specFromArgs_Namespace = args => {
+  const $nodeId = args.getRaw(["input", "id"]);
+  return specFromNodeId(nodeIdHandler_Namespace, $nodeId);
 };
 const specFromArgs_Repository = args => {
   const $nodeId = args.getRaw(["input", "id"]);
@@ -3165,10 +3182,6 @@ const specFromArgs_Tag2 = args => {
   const $nodeId = args.getRaw(["input", "id"]);
   return specFromNodeId(nodeIdHandler_Tag, $nodeId);
 };
-const specFromArgs_Namespace2 = args => {
-  const $nodeId = args.getRaw(["input", "id"]);
-  return specFromNodeId(nodeIdHandler_Namespace, $nodeId);
-};
 const specFromArgs_UploadSession2 = args => {
   const $nodeId = args.getRaw(["input", "id"]);
   return specFromNodeId(nodeIdHandler_UploadSession, $nodeId);
@@ -3176,6 +3189,10 @@ const specFromArgs_UploadSession2 = args => {
 const specFromArgs_SchemaMetadatum2 = args => {
   const $nodeId = args.getRaw(["input", "id"]);
   return specFromNodeId(nodeIdHandler_SchemaMetadatum, $nodeId);
+};
+const specFromArgs_Namespace2 = args => {
+  const $nodeId = args.getRaw(["input", "id"]);
+  return specFromNodeId(nodeIdHandler_Namespace, $nodeId);
 };
 const specFromArgs_Repository2 = args => {
   const $nodeId = args.getRaw(["input", "id"]);
@@ -3234,17 +3251,17 @@ type Query implements Node {
   """Get a single \`Tag\`."""
   tag(rowId: UUID!): Tag
 
-  """Get a single \`Namespace\`."""
-  namespace(rowId: UUID!): Namespace
-
-  """Get a single \`Namespace\`."""
-  namespaceByName(name: String!): Namespace
-
   """Get a single \`UploadSession\`."""
   uploadSession(rowId: UUID!): UploadSession
 
   """Get a single \`SchemaMetadatum\`."""
   schemaMetadatum(artifactId: UUID!): SchemaMetadatum
+
+  """Get a single \`Namespace\`."""
+  namespace(rowId: UUID!): Namespace
+
+  """Get a single \`Namespace\`."""
+  namespaceByName(name: String!): Namespace
 
   """Get a single \`Repository\`."""
   repository(rowId: UUID!): Repository
@@ -3280,12 +3297,6 @@ type Query implements Node {
     id: ID!
   ): Tag
 
-  """Reads a single \`Namespace\` using its globally unique \`ID\`."""
-  namespaceById(
-    """The globally unique \`ID\` to be used in selecting a single \`Namespace\`."""
-    id: ID!
-  ): Namespace
-
   """Reads a single \`UploadSession\` using its globally unique \`ID\`."""
   uploadSessionById(
     """
@@ -3301,6 +3312,12 @@ type Query implements Node {
     """
     id: ID!
   ): SchemaMetadatum
+
+  """Reads a single \`Namespace\` using its globally unique \`ID\`."""
+  namespaceById(
+    """The globally unique \`ID\` to be used in selecting a single \`Namespace\`."""
+    id: ID!
+  ): Namespace
 
   """Reads a single \`Repository\` using its globally unique \`ID\`."""
   repositoryById(
@@ -3452,40 +3469,6 @@ type Query implements Node {
     orderBy: [TagOrderBy!] = [PRIMARY_KEY_ASC]
   ): TagConnection
 
-  """Reads and enables pagination through a set of \`Namespace\`."""
-  namespaces(
-    """Only read the first \`n\` values of the set."""
-    first: Int
-
-    """Only read the last \`n\` values of the set."""
-    last: Int
-
-    """
-    Skip the first \`n\` values from our \`after\` cursor, an alternative to cursor
-    based pagination. May not be used with \`last\`.
-    """
-    offset: Int
-
-    """Read all values in the set before (above) this cursor."""
-    before: Cursor
-
-    """Read all values in the set after (below) this cursor."""
-    after: Cursor
-
-    """
-    A condition to be used in determining which values should be returned by the collection.
-    """
-    condition: NamespaceCondition
-
-    """
-    A filter to be used in determining which values should be returned by the collection.
-    """
-    filter: NamespaceFilter
-
-    """The method to use when ordering \`Namespace\`."""
-    orderBy: [NamespaceOrderBy!] = [PRIMARY_KEY_ASC]
-  ): NamespaceConnection
-
   """Reads and enables pagination through a set of \`UploadSession\`."""
   uploadSessions(
     """Only read the first \`n\` values of the set."""
@@ -3553,6 +3536,40 @@ type Query implements Node {
     """The method to use when ordering \`SchemaMetadatum\`."""
     orderBy: [SchemaMetadatumOrderBy!] = [PRIMARY_KEY_ASC]
   ): SchemaMetadatumConnection
+
+  """Reads and enables pagination through a set of \`Namespace\`."""
+  namespaces(
+    """Only read the first \`n\` values of the set."""
+    first: Int
+
+    """Only read the last \`n\` values of the set."""
+    last: Int
+
+    """
+    Skip the first \`n\` values from our \`after\` cursor, an alternative to cursor
+    based pagination. May not be used with \`last\`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: NamespaceCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: NamespaceFilter
+
+    """The method to use when ordering \`Namespace\`."""
+    orderBy: [NamespaceOrderBy!] = [PRIMARY_KEY_ASC]
+  ): NamespaceConnection
 
   """Reads and enables pagination through a set of \`Repository\`."""
   repositories(
@@ -3901,6 +3918,7 @@ type Namespace implements Node {
   description: String
   createdAt: Datetime
   updatedAt: Datetime
+  organizationId: UUID
 
   """Reads and enables pagination through a set of \`Repository\`."""
   repositories(
@@ -4666,6 +4684,9 @@ input NamespaceFilter {
   """Filter by the object’s \`name\` field."""
   name: StringFilter
 
+  """Filter by the object’s \`organizationId\` field."""
+  organizationId: UUIDFilter
+
   """Filter by the object’s \`repositories\` relation."""
   repositories: NamespaceToManyRepositoryFilter
 
@@ -5163,55 +5184,6 @@ enum WasmMetadatumOrderBy {
   ARTIFACT_ID_DESC
 }
 
-"""A connection to a list of \`Namespace\` values."""
-type NamespaceConnection {
-  """A list of \`Namespace\` objects."""
-  nodes: [Namespace]!
-
-  """
-  A list of edges which contains the \`Namespace\` and cursor to aid in pagination.
-  """
-  edges: [NamespaceEdge]!
-
-  """Information to aid in pagination."""
-  pageInfo: PageInfo!
-
-  """The count of *all* \`Namespace\` you could get from the connection."""
-  totalCount: Int!
-}
-
-"""A \`Namespace\` edge in the connection."""
-type NamespaceEdge {
-  """A cursor for use in pagination."""
-  cursor: Cursor
-
-  """The \`Namespace\` at the end of the edge."""
-  node: Namespace
-}
-
-"""
-A condition to be used against \`Namespace\` object types. All fields are tested
-for equality and combined with a logical ‘and.’
-"""
-input NamespaceCondition {
-  """Checks for equality with the object’s \`rowId\` field."""
-  rowId: UUID
-
-  """Checks for equality with the object’s \`name\` field."""
-  name: String
-}
-
-"""Methods to use when ordering \`Namespace\`."""
-enum NamespaceOrderBy {
-  NATURAL
-  PRIMARY_KEY_ASC
-  PRIMARY_KEY_DESC
-  ROW_ID_ASC
-  ROW_ID_DESC
-  NAME_ASC
-  NAME_DESC
-}
-
 """A connection to a list of \`SchemaMetadatum\` values."""
 type SchemaMetadatumConnection {
   """A list of \`SchemaMetadatum\` objects."""
@@ -5258,6 +5230,60 @@ enum SchemaMetadatumOrderBy {
   ARTIFACT_ID_DESC
 }
 
+"""A connection to a list of \`Namespace\` values."""
+type NamespaceConnection {
+  """A list of \`Namespace\` objects."""
+  nodes: [Namespace]!
+
+  """
+  A list of edges which contains the \`Namespace\` and cursor to aid in pagination.
+  """
+  edges: [NamespaceEdge]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* \`Namespace\` you could get from the connection."""
+  totalCount: Int!
+}
+
+"""A \`Namespace\` edge in the connection."""
+type NamespaceEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The \`Namespace\` at the end of the edge."""
+  node: Namespace
+}
+
+"""
+A condition to be used against \`Namespace\` object types. All fields are tested
+for equality and combined with a logical ‘and.’
+"""
+input NamespaceCondition {
+  """Checks for equality with the object’s \`rowId\` field."""
+  rowId: UUID
+
+  """Checks for equality with the object’s \`name\` field."""
+  name: String
+
+  """Checks for equality with the object’s \`organizationId\` field."""
+  organizationId: UUID
+}
+
+"""Methods to use when ordering \`Namespace\`."""
+enum NamespaceOrderBy {
+  NATURAL
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+  ROW_ID_ASC
+  ROW_ID_DESC
+  NAME_ASC
+  NAME_DESC
+  ORGANIZATION_ID_ASC
+  ORGANIZATION_ID_DESC
+}
+
 """
 The root mutation type which contains root level fields which mutate data.
 """
@@ -5294,14 +5320,6 @@ type Mutation {
     input: CreateTagInput!
   ): CreateTagPayload
 
-  """Creates a single \`Namespace\`."""
-  createNamespace(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: CreateNamespaceInput!
-  ): CreateNamespacePayload
-
   """Creates a single \`UploadSession\`."""
   createUploadSession(
     """
@@ -5317,6 +5335,14 @@ type Mutation {
     """
     input: CreateSchemaMetadatumInput!
   ): CreateSchemaMetadatumPayload
+
+  """Creates a single \`Namespace\`."""
+  createNamespace(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateNamespaceInput!
+  ): CreateNamespacePayload
 
   """Creates a single \`Repository\`."""
   createRepository(
@@ -5402,30 +5428,6 @@ type Mutation {
     input: UpdateTagInput!
   ): UpdateTagPayload
 
-  """Updates a single \`Namespace\` using its globally unique id and a patch."""
-  updateNamespaceById(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdateNamespaceByIdInput!
-  ): UpdateNamespacePayload
-
-  """Updates a single \`Namespace\` using a unique key and a patch."""
-  updateNamespace(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdateNamespaceInput!
-  ): UpdateNamespacePayload
-
-  """Updates a single \`Namespace\` using a unique key and a patch."""
-  updateNamespaceByName(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdateNamespaceByNameInput!
-  ): UpdateNamespacePayload
-
   """
   Updates a single \`UploadSession\` using its globally unique id and a patch.
   """
@@ -5461,6 +5463,30 @@ type Mutation {
     """
     input: UpdateSchemaMetadatumInput!
   ): UpdateSchemaMetadatumPayload
+
+  """Updates a single \`Namespace\` using its globally unique id and a patch."""
+  updateNamespaceById(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateNamespaceByIdInput!
+  ): UpdateNamespacePayload
+
+  """Updates a single \`Namespace\` using a unique key and a patch."""
+  updateNamespace(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateNamespaceInput!
+  ): UpdateNamespacePayload
+
+  """Updates a single \`Namespace\` using a unique key and a patch."""
+  updateNamespaceByName(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateNamespaceByNameInput!
+  ): UpdateNamespacePayload
 
   """
   Updates a single \`Repository\` using its globally unique id and a patch.
@@ -5560,30 +5586,6 @@ type Mutation {
     input: DeleteTagInput!
   ): DeleteTagPayload
 
-  """Deletes a single \`Namespace\` using its globally unique id."""
-  deleteNamespaceById(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteNamespaceByIdInput!
-  ): DeleteNamespacePayload
-
-  """Deletes a single \`Namespace\` using a unique key."""
-  deleteNamespace(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteNamespaceInput!
-  ): DeleteNamespacePayload
-
-  """Deletes a single \`Namespace\` using a unique key."""
-  deleteNamespaceByName(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteNamespaceByNameInput!
-  ): DeleteNamespacePayload
-
   """Deletes a single \`UploadSession\` using its globally unique id."""
   deleteUploadSessionById(
     """
@@ -5615,6 +5617,30 @@ type Mutation {
     """
     input: DeleteSchemaMetadatumInput!
   ): DeleteSchemaMetadatumPayload
+
+  """Deletes a single \`Namespace\` using its globally unique id."""
+  deleteNamespaceById(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteNamespaceByIdInput!
+  ): DeleteNamespacePayload
+
+  """Deletes a single \`Namespace\` using a unique key."""
+  deleteNamespace(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteNamespaceInput!
+  ): DeleteNamespacePayload
+
+  """Deletes a single \`Namespace\` using a unique key."""
+  deleteNamespaceByName(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteNamespaceByNameInput!
+  ): DeleteNamespacePayload
 
   """Deletes a single \`Repository\` using its globally unique id."""
   deleteRepositoryById(
@@ -5828,50 +5854,6 @@ input TagInput {
   updatedAt: Datetime
 }
 
-"""The output of our create \`Namespace\` mutation."""
-type CreateNamespacePayload {
-  """
-  The exact same \`clientMutationId\` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """The \`Namespace\` that was created by this mutation."""
-  namespace: Namespace
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-
-  """An edge for our \`Namespace\`. May be used by Relay 1."""
-  namespaceEdge(
-    """The method to use when ordering \`Namespace\`."""
-    orderBy: [NamespaceOrderBy!]! = [PRIMARY_KEY_ASC]
-  ): NamespaceEdge
-}
-
-"""All input for the create \`Namespace\` mutation."""
-input CreateNamespaceInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-
-  """The \`Namespace\` to be created by this mutation."""
-  namespace: NamespaceInput!
-}
-
-"""An input for mutations affecting \`Namespace\`"""
-input NamespaceInput {
-  rowId: UUID
-  name: String!
-  description: String
-  createdAt: Datetime
-  updatedAt: Datetime
-}
-
 """The output of our create \`UploadSession\` mutation."""
 type CreateUploadSessionPayload {
   """
@@ -5958,6 +5940,51 @@ input SchemaMetadatumInput {
   title: String
   isValid: Boolean
   validationErrors: JSON
+}
+
+"""The output of our create \`Namespace\` mutation."""
+type CreateNamespacePayload {
+  """
+  The exact same \`clientMutationId\` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The \`Namespace\` that was created by this mutation."""
+  namespace: Namespace
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our \`Namespace\`. May be used by Relay 1."""
+  namespaceEdge(
+    """The method to use when ordering \`Namespace\`."""
+    orderBy: [NamespaceOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): NamespaceEdge
+}
+
+"""All input for the create \`Namespace\` mutation."""
+input CreateNamespaceInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The \`Namespace\` to be created by this mutation."""
+  namespace: NamespaceInput!
+}
+
+"""An input for mutations affecting \`Namespace\`"""
+input NamespaceInput {
+  rowId: UUID
+  name: String!
+  description: String
+  createdAt: Datetime
+  updatedAt: Datetime
+  organizationId: UUID
 }
 
 """The output of our create \`Repository\` mutation."""
@@ -6333,89 +6360,6 @@ input UpdateTagInput {
   patch: TagPatch!
 }
 
-"""The output of our update \`Namespace\` mutation."""
-type UpdateNamespacePayload {
-  """
-  The exact same \`clientMutationId\` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """The \`Namespace\` that was updated by this mutation."""
-  namespace: Namespace
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-
-  """An edge for our \`Namespace\`. May be used by Relay 1."""
-  namespaceEdge(
-    """The method to use when ordering \`Namespace\`."""
-    orderBy: [NamespaceOrderBy!]! = [PRIMARY_KEY_ASC]
-  ): NamespaceEdge
-}
-
-"""All input for the \`updateNamespaceById\` mutation."""
-input UpdateNamespaceByIdInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-
-  """
-  The globally unique \`ID\` which will identify a single \`Namespace\` to be updated.
-  """
-  id: ID!
-
-  """
-  An object where the defined keys will be set on the \`Namespace\` being updated.
-  """
-  patch: NamespacePatch!
-}
-
-"""
-Represents an update to a \`Namespace\`. Fields that are set will be updated.
-"""
-input NamespacePatch {
-  rowId: UUID
-  name: String
-  description: String
-  createdAt: Datetime
-  updatedAt: Datetime
-}
-
-"""All input for the \`updateNamespace\` mutation."""
-input UpdateNamespaceInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-  rowId: UUID!
-
-  """
-  An object where the defined keys will be set on the \`Namespace\` being updated.
-  """
-  patch: NamespacePatch!
-}
-
-"""All input for the \`updateNamespaceByName\` mutation."""
-input UpdateNamespaceByNameInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-  name: String!
-
-  """
-  An object where the defined keys will be set on the \`Namespace\` being updated.
-  """
-  patch: NamespacePatch!
-}
-
 """The output of our update \`UploadSession\` mutation."""
 type UpdateUploadSessionPayload {
   """
@@ -6550,6 +6494,90 @@ input UpdateSchemaMetadatumInput {
   An object where the defined keys will be set on the \`SchemaMetadatum\` being updated.
   """
   patch: SchemaMetadatumPatch!
+}
+
+"""The output of our update \`Namespace\` mutation."""
+type UpdateNamespacePayload {
+  """
+  The exact same \`clientMutationId\` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The \`Namespace\` that was updated by this mutation."""
+  namespace: Namespace
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our \`Namespace\`. May be used by Relay 1."""
+  namespaceEdge(
+    """The method to use when ordering \`Namespace\`."""
+    orderBy: [NamespaceOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): NamespaceEdge
+}
+
+"""All input for the \`updateNamespaceById\` mutation."""
+input UpdateNamespaceByIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique \`ID\` which will identify a single \`Namespace\` to be updated.
+  """
+  id: ID!
+
+  """
+  An object where the defined keys will be set on the \`Namespace\` being updated.
+  """
+  patch: NamespacePatch!
+}
+
+"""
+Represents an update to a \`Namespace\`. Fields that are set will be updated.
+"""
+input NamespacePatch {
+  rowId: UUID
+  name: String
+  description: String
+  createdAt: Datetime
+  updatedAt: Datetime
+  organizationId: UUID
+}
+
+"""All input for the \`updateNamespace\` mutation."""
+input UpdateNamespaceInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  rowId: UUID!
+
+  """
+  An object where the defined keys will be set on the \`Namespace\` being updated.
+  """
+  patch: NamespacePatch!
+}
+
+"""All input for the \`updateNamespaceByName\` mutation."""
+input UpdateNamespaceByNameInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  name: String!
+
+  """
+  An object where the defined keys will be set on the \`Namespace\` being updated.
+  """
+  patch: NamespacePatch!
 }
 
 """The output of our update \`Repository\` mutation."""
@@ -6892,64 +6920,6 @@ input DeleteTagInput {
   rowId: UUID!
 }
 
-"""The output of our delete \`Namespace\` mutation."""
-type DeleteNamespacePayload {
-  """
-  The exact same \`clientMutationId\` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """The \`Namespace\` that was deleted by this mutation."""
-  namespace: Namespace
-  deletedNamespaceId: ID
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-
-  """An edge for our \`Namespace\`. May be used by Relay 1."""
-  namespaceEdge(
-    """The method to use when ordering \`Namespace\`."""
-    orderBy: [NamespaceOrderBy!]! = [PRIMARY_KEY_ASC]
-  ): NamespaceEdge
-}
-
-"""All input for the \`deleteNamespaceById\` mutation."""
-input DeleteNamespaceByIdInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-
-  """
-  The globally unique \`ID\` which will identify a single \`Namespace\` to be deleted.
-  """
-  id: ID!
-}
-
-"""All input for the \`deleteNamespace\` mutation."""
-input DeleteNamespaceInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-  rowId: UUID!
-}
-
-"""All input for the \`deleteNamespaceByName\` mutation."""
-input DeleteNamespaceByNameInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-  name: String!
-}
-
 """The output of our delete \`UploadSession\` mutation."""
 type DeleteUploadSessionPayload {
   """
@@ -7044,6 +7014,64 @@ input DeleteSchemaMetadatumInput {
   """
   clientMutationId: String
   artifactId: UUID!
+}
+
+"""The output of our delete \`Namespace\` mutation."""
+type DeleteNamespacePayload {
+  """
+  The exact same \`clientMutationId\` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The \`Namespace\` that was deleted by this mutation."""
+  namespace: Namespace
+  deletedNamespaceId: ID
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our \`Namespace\`. May be used by Relay 1."""
+  namespaceEdge(
+    """The method to use when ordering \`Namespace\`."""
+    orderBy: [NamespaceOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): NamespaceEdge
+}
+
+"""All input for the \`deleteNamespaceById\` mutation."""
+input DeleteNamespaceByIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique \`ID\` which will identify a single \`Namespace\` to be deleted.
+  """
+  id: ID!
+}
+
+"""All input for the \`deleteNamespace\` mutation."""
+input DeleteNamespaceInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  rowId: UUID!
+}
+
+"""All input for the \`deleteNamespaceByName\` mutation."""
+input DeleteNamespaceByNameInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  name: String!
 }
 
 """The output of our delete \`Repository\` mutation."""
@@ -7346,7 +7374,7 @@ export const objects = {
           filter(_, $connection, fieldArg) {
             const $pgSelect = $connection.getSubplan();
             fieldArg.apply($pgSelect, (queryBuilder, value) => {
-              assertAllowed5(value, "object");
+              assertAllowed7(value, "object");
               if (value == null) return;
               const condition = new PgCondition(queryBuilder);
               return condition;
@@ -7441,7 +7469,7 @@ export const objects = {
           filter(_, $connection, fieldArg) {
             const $pgSelect = $connection.getSubplan();
             fieldArg.apply($pgSelect, (queryBuilder, value) => {
-              assertAllowed7(value, "object");
+              assertAllowed6(value, "object");
               if (value == null) return;
               const condition = new PgCondition(queryBuilder);
               return condition;
@@ -7552,7 +7580,7 @@ export const objects = {
           filter(_, $connection, fieldArg) {
             const $pgSelect = $connection.getSubplan();
             fieldArg.apply($pgSelect, (queryBuilder, value) => {
-              assertAllowed6(value, "object");
+              assertAllowed5(value, "object");
               if (value == null) return;
               const condition = new PgCondition(queryBuilder);
               return condition;
@@ -8921,6 +8949,9 @@ export const objects = {
       id($parent) {
         const specifier = nodeIdHandler_Namespace.plan($parent);
         return lambda(specifier, nodeIdCodecs[nodeIdHandler_Namespace.codec.name].encode);
+      },
+      organizationId($record) {
+        return $record.get("organization_id");
       },
       repositories: {
         plan($record) {
@@ -11130,6 +11161,15 @@ export const inputObjects = {
           }
         });
       },
+      organizationId($condition, val) {
+        $condition.where({
+          type: "attribute",
+          attribute: "organization_id",
+          callback(expression) {
+            return val === null ? sql`${expression} is null` : sql`${expression} = ${sqlValueWithCodec(val, TYPES.uuid)}`;
+          }
+        });
+      },
       rowId($condition, val) {
         $condition.where({
           type: "attribute",
@@ -11191,6 +11231,14 @@ export const inputObjects = {
         const $or = $where.orPlan();
         return () => $or.andPlan();
       },
+      organizationId(queryBuilder, value) {
+        if (value === void 0) return;
+        if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+        if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+        const condition = new PgCondition(queryBuilder);
+        condition.extensions.pgFilterAttribute = colSpec27;
+        return condition;
+      },
       repositories($where, value) {
         assertAllowed40(value, "object");
         const $rel = $where.andPlan();
@@ -11246,6 +11294,12 @@ export const inputObjects = {
       }) {
         obj.set("name", bakedInputRuntime(schema, field.type, val));
       },
+      organizationId(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("organization_id", bakedInputRuntime(schema, field.type, val));
+      },
       rowId(obj, val, {
         field,
         schema
@@ -11280,6 +11334,12 @@ export const inputObjects = {
         schema
       }) {
         obj.set("name", bakedInputRuntime(schema, field.type, val));
+      },
+      organizationId(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("organization_id", bakedInputRuntime(schema, field.type, val));
       },
       rowId(obj, val, {
         field,
@@ -14227,6 +14287,18 @@ export const enums = {
           direction: "DESC"
         });
         queryBuilder.setOrderIsUnique();
+      },
+      ORGANIZATION_ID_ASC(queryBuilder) {
+        queryBuilder.orderBy({
+          attribute: "organization_id",
+          direction: "ASC"
+        });
+      },
+      ORGANIZATION_ID_DESC(queryBuilder) {
+        queryBuilder.orderBy({
+          attribute: "organization_id",
+          direction: "DESC"
+        });
       },
       PRIMARY_KEY_ASC(queryBuilder) {
         namespaceUniques[0].attributes.forEach(attributeName => {
