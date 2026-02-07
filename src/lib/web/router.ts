@@ -37,8 +37,7 @@ const inferContentType = (path: string): string => {
   if (path.endsWith(".json")) return "application/json";
   if (path.endsWith(".yaml") || path.endsWith(".yml"))
     return "application/yaml";
-  if (path.endsWith(".graphql") || path.endsWith(".gql"))
-    return "text/graphql";
+  if (path.endsWith(".graphql") || path.endsWith(".gql")) return "text/graphql";
   if (path.endsWith(".wasm")) return "application/wasm";
   return "application/octet-stream";
 };
@@ -83,89 +82,85 @@ const resolveManifestBlob = async (
 /**
  * Web content router for serving artifacts at friendly URLs.
  */
-const webRouter = new Elysia()
-  .get(
-    "/@:namespace/:repo/*",
-    async ({ params, set }) => {
-      const { namespace, repo } = params;
-      const reference = params["*"];
+const webRouter = new Elysia().get(
+  "/@:namespace/:repo/*",
+  async ({ params, set }) => {
+    const { namespace, repo } = params;
+    const reference = params["*"];
 
-      // Maintenance mode: block non-allowed namespaces
-      if (await isEnabled(FLAGS.MAINTENANCE)) {
-        if (!maintenanceAllowedNamespaces.includes(namespace)) {
-          set.status = 503;
-          return { error: "Registry is in maintenance mode" };
-        }
+    // Maintenance mode: block non-allowed namespaces
+    if (await isEnabled(FLAGS.MAINTENANCE)) {
+      if (!maintenanceAllowedNamespaces.includes(namespace)) {
+        set.status = 503;
+        return { error: "Registry is in maintenance mode" };
       }
+    }
 
-      // Look up repository
-      const [repoData] = await dbPool
-        .select({
-          repository: repositoryTable,
-        })
-        .from(repositoryTable)
-        .innerJoin(
-          namespaceTable,
-          eq(repositoryTable.namespaceId, namespaceTable.id),
-        )
-        .where(
-          and(
-            eq(namespaceTable.name, namespace),
-            eq(repositoryTable.name, repo),
-          ),
-        )
-        .limit(1);
+    // Look up repository
+    const [repoData] = await dbPool
+      .select({
+        repository: repositoryTable,
+      })
+      .from(repositoryTable)
+      .innerJoin(
+        namespaceTable,
+        eq(repositoryTable.namespaceId, namespaceTable.id),
+      )
+      .where(
+        and(eq(namespaceTable.name, namespace), eq(repositoryTable.name, repo)),
+      )
+      .limit(1);
 
-      if (!repoData) {
-        set.status = 404;
-        return { error: "Not found" };
+    if (!repoData) {
+      set.status = 404;
+      return { error: "Not found" };
+    }
+
+    // Find artifact by tag
+    const [tagResult] = await dbPool
+      .select({ artifact: artifactTable })
+      .from(tagTable)
+      .innerJoin(artifactTable, eq(tagTable.artifactId, artifactTable.id))
+      .where(
+        and(
+          eq(tagTable.repositoryId, repoData.repository.id),
+          eq(tagTable.name, reference),
+        ),
+      )
+      .limit(1);
+
+    if (!tagResult?.artifact) {
+      set.status = 404;
+      return { error: "Not found" };
+    }
+
+    const { artifact } = tagResult;
+
+    // If the artifact is an OCI manifest, resolve the first layer blob
+    if (OCI_MANIFEST_TYPES.has(artifact.mediaType) && artifact.content) {
+      const blob = await resolveManifestBlob(
+        repoData.repository.id,
+        artifact.content,
+      );
+
+      if (blob) {
+        set.headers["Content-Type"] = inferContentType(reference);
+        return blob.content;
       }
+    }
 
-      // Find artifact by tag
-      const [tagResult] = await dbPool
-        .select({ artifact: artifactTable })
-        .from(tagTable)
-        .innerJoin(artifactTable, eq(tagTable.artifactId, artifactTable.id))
-        .where(
-          and(
-            eq(tagTable.repositoryId, repoData.repository.id),
-            eq(tagTable.name, reference),
-          ),
-        )
-        .limit(1);
+    // Serve artifact content directly
+    set.headers["Content-Type"] = inferContentType(reference);
 
-      if (!tagResult?.artifact) {
-        set.status = 404;
-        return { error: "Not found" };
-      }
-
-      const { artifact } = tagResult;
-
-      // If the artifact is an OCI manifest, resolve the first layer blob
-      if (OCI_MANIFEST_TYPES.has(artifact.mediaType) && artifact.content) {
-        const blob = await resolveManifestBlob(
-          repoData.repository.id,
-          artifact.content,
-        );
-
-        if (blob) {
-          set.headers["Content-Type"] = inferContentType(reference);
-          return blob.content;
-        }
-      }
-
-      // Serve artifact content directly
-      set.headers["Content-Type"] = inferContentType(reference);
-
-      return artifact.content ?? "";
-    },
-    {
-      params: t.Object({
-        namespace: t.String(),
-        repo: t.String(),
-        "*": t.String(),
-      }),
-    },
-  );
+    return artifact.content ?? "";
+  },
+  {
+    params: t.Object({
+      namespace: t.String(),
+      repo: t.String(),
+      "*": t.String(),
+    }),
+  },
+);
 
 export default webRouter;

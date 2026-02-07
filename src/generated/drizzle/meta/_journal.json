@@ -15,6 +15,13 @@
       "when": 1770189177239,
       "tag": "0001_wakeful_logan",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1770492855527,
+      "tag": "0002_opposite_wendell_rand",
+      "breakpoints": true
     }
   ]
 }
