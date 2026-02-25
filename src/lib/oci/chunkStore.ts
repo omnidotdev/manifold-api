@@ -11,8 +11,7 @@ import { join } from "node:path";
 const CHUNK_DIR = process.env.CHUNK_STORAGE_DIR ?? "/tmp/manifold-chunks";
 
 /** Resolve the filesystem path for a session's blob file */
-const sessionPath = (sessionId: string) =>
-  join(CHUNK_DIR, `${sessionId}.blob`);
+const sessionPath = (sessionId: string) => join(CHUNK_DIR, `${sessionId}.blob`);
 
 /**
  * Create an empty blob file for a new upload session.
