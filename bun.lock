@@ -14,7 +14,7 @@
         "@escape.tech/graphql-armor": "^3.2.0",
         "@graphile/simplify-inflection": "^8.0.0-rc.3",
         "@graphql-yoga/plugin-disable-introspection": "^2.19.0",
-        "@omnidotdev/providers": "github:omnidotdev/providers#789a977",
+        "@omnidotdev/providers": "github:omnidotdev/providers#567a9b7",
         "@tanstack/query-core": "^5.90.20",
         "drizzle-kit": "^0.31.8",
         "drizzle-orm": "^0.45.1",
@@ -365,7 +365,7 @@
 
     "@npmcli/fs": ["@npmcli/fs@5.0.0", "", { "dependencies": { "semver": "^7.3.5" } }, "sha512-7OsC1gNORBEawOa5+j2pXN9vsicaIOH5cPXxoR6fJOmH6/EXpJB2CajXOu1fPRFun2m1lktEFX11+P89hqO/og=="],
 
-    "@omnidotdev/providers": ["@omnidotdev/providers@github:omnidotdev/providers#789a977", { "dependencies": { "jose": "^6.1.3" }, "peerDependencies": { "@envelop/types": ">=5.0.0", "@escape.tech/graphql-armor": ">=3.0.0", "@iggy.rs/sdk": ">=1.0.0", "@tanstack/query-core": ">=5.0.0", "graphile-export": ">=1.0.0-rc.0", "postgraphile": ">=5.0.0-rc.0", "react": ">=19.0.0" }, "optionalPeers": ["@envelop/types", "@escape.tech/graphql-armor", "@iggy.rs/sdk", "@tanstack/query-core", "graphile-export", "postgraphile", "react"] }, "omnidotdev-providers-789a977"],
+    "@omnidotdev/providers": ["@omnidotdev/providers@github:omnidotdev/providers#567a9b7", { "dependencies": { "jose": "^6.1.3" }, "peerDependencies": { "@aws-sdk/client-s3": ">=3.0.0", "@aws-sdk/s3-request-presigner": ">=3.0.0", "@envelop/types": ">=5.0.0", "@escape.tech/graphql-armor": ">=3.0.0", "@iggy.rs/sdk": ">=1.0.0", "@tanstack/query-core": ">=5.0.0", "graphile-export": ">=1.0.0-rc.0", "postgraphile": ">=5.0.0-rc.0", "react": ">=19.0.0", "resend": ">=4.0.0", "unleash-client": ">=6.0.0" }, "optionalPeers": ["@aws-sdk/client-s3", "@aws-sdk/s3-request-presigner", "@envelop/types", "@escape.tech/graphql-armor", "@iggy.rs/sdk", "@tanstack/query-core", "graphile-export", "postgraphile", "react", "resend", "unleash-client"] }, "omnidotdev-providers-567a9b7"],
 
     "@open-draft/deferred-promise": ["@open-draft/deferred-promise@2.2.0", "", {}, "sha512-CecwLWx3rhxVQF6V4bAgPS5t+So2sTbPgAzafKkVizyi7tlwpcFpdFqq+wqF2OwNBmqFuu6tOyouTuxgpMfzmA=="],
 
