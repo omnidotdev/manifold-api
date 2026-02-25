@@ -22,10 +22,10 @@ import {
 } from "lib/config/env.config";
 import { dbPool, pgPool } from "lib/db";
 import ensureDatabase from "lib/db/ensureDatabase";
-import { flags } from "lib/providers";
 import createGraphqlContext from "lib/graphql/createGraphqlContext";
 import { armorPlugin, createAuthenticationPlugin } from "lib/graphql/plugins";
 import { ociRouter } from "lib/oci";
+import { flags } from "lib/providers";
 import webRouter from "lib/web/router";
 
 // ensure database exists before starting

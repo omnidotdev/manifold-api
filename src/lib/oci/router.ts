@@ -27,7 +27,6 @@ import {
   tagTable,
   uploadSessionTable,
 } from "lib/db/schema";
-import { flags } from "lib/providers";
 import {
   appendChunk,
   assembleBlob,
@@ -36,6 +35,7 @@ import {
 } from "lib/oci/chunkStore";
 import { computeDigest } from "lib/oci/digest";
 import * as ociErrors from "lib/oci/errors";
+import { flags } from "lib/providers";
 
 const FLAGS = {
   MAINTENANCE: "manifold-api-maintenance-mode",
