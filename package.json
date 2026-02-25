@@ -62,7 +62,7 @@
     "@escape.tech/graphql-armor": "^3.2.0",
     "@graphile/simplify-inflection": "^8.0.0-rc.3",
     "@graphql-yoga/plugin-disable-introspection": "^2.19.0",
-    "@omnidotdev/providers": "github:omnidotdev/providers#567a9b7",
+    "@omnidotdev/providers": "github:omnidotdev/providers#316498f",
     "@tanstack/query-core": "^5.90.20",
     "drizzle-kit": "^0.31.8",
     "drizzle-orm": "^0.45.1",
