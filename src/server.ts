@@ -22,7 +22,7 @@ import {
 } from "lib/config/env.config";
 import { dbPool, pgPool } from "lib/db";
 import ensureDatabase from "lib/db/ensureDatabase";
-import { isEnabled } from "lib/flags/client";
+import { flags } from "lib/providers";
 import createGraphqlContext from "lib/graphql/createGraphqlContext";
 import { armorPlugin, createAuthenticationPlugin } from "lib/graphql/plugins";
 import { ociRouter } from "lib/oci";
@@ -139,7 +139,7 @@ console.log(
   `🧘 ${appConfig.name} GraphQL Yoga API running at ${app.server?.url}graphql`,
 );
 
-if (await isEnabled("manifold-api-maintenance-mode")) {
+if (await flags.isEnabled("manifold-api-maintenance-mode")) {
   // biome-ignore lint/suspicious/noConsole: root logging
   console.log(
     `🔒 Maintenance mode active — OCI access restricted to: ${maintenanceAllowedNamespaces.join(", ")}`,

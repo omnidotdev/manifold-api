@@ -17,7 +17,7 @@ import {
   repositoryTable,
   tagTable,
 } from "lib/db/schema";
-import { isEnabled } from "lib/flags/client";
+import { flags } from "lib/providers";
 
 const FLAGS = {
   MAINTENANCE: "manifold-api-maintenance-mode",
@@ -89,7 +89,7 @@ const webRouter = new Elysia().get(
     const reference = params["*"];
 
     // Maintenance mode: block non-allowed namespaces
-    if (await isEnabled(FLAGS.MAINTENANCE)) {
+    if (await flags.isEnabled(FLAGS.MAINTENANCE)) {
       if (!maintenanceAllowedNamespaces.includes(namespace)) {
         set.status = 503;
         return { error: "Registry is in maintenance mode" };

@@ -27,7 +27,7 @@ import {
   tagTable,
   uploadSessionTable,
 } from "lib/db/schema";
-import { isEnabled } from "lib/flags/client";
+import { flags } from "lib/providers";
 import {
   appendChunk,
   assembleBlob,
@@ -89,7 +89,7 @@ const ociRouter = new Elysia({ prefix: "/v2" })
     // Allow /v2/ version check
     if (!path) return;
 
-    if (!(await isEnabled(FLAGS.MAINTENANCE))) return;
+    if (!(await flags.isEnabled(FLAGS.MAINTENANCE))) return;
 
     const segment = decodeURIComponent(path.split("/")[0]);
     const namespace = segment.split("/")[0];
