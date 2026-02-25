@@ -89,7 +89,7 @@ const billingWebhook = new Elysia().post(
         case "entitlement.created":
         case "entitlement.updated":
         case "entitlement.deleted":
-          billing.invalidateCache?.(body.entityType, body.entityId);
+          billing?.invalidateCache?.(body.entityType, body.entityId);
           break;
         default:
           break;

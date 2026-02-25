@@ -8,34 +8,36 @@
 import {
   createAuthzProvider,
   createBillingProvider,
-  resolveProvider,
+  createEventsProvider,
 } from "@omnidotdev/providers";
 
 import {
   AUTHZ_API_URL,
   BILLING_BASE_URL,
   BILLING_SERVICE_API_KEY,
+  VORTEX_API_KEY,
+  VORTEX_API_URL,
 } from "lib/config/env.config";
 
-const authzProviderName = resolveProvider(process.env.AUTHZ_PROVIDER, "warden");
+export const authz = AUTHZ_API_URL
+  ? createAuthzProvider({ apiUrl: AUTHZ_API_URL, source: "manifold" })
+  : undefined;
 
-const billingProviderName = resolveProvider(
-  process.env.BILLING_PROVIDER,
-  "aether",
-);
+export const billing = BILLING_BASE_URL
+  ? createBillingProvider({
+      baseUrl: BILLING_BASE_URL,
+      serviceApiKey: BILLING_SERVICE_API_KEY,
+      appId: "manifold",
+    })
+  : undefined;
 
-export const authz = createAuthzProvider(
-  authzProviderName,
-  AUTHZ_API_URL ? { apiUrl: AUTHZ_API_URL, source: "manifold" } : undefined,
-);
-
-export const billing = createBillingProvider(
-  billingProviderName,
-  BILLING_BASE_URL
+export const events = createEventsProvider(
+  VORTEX_API_URL
     ? {
-        baseUrl: BILLING_BASE_URL,
-        serviceApiKey: BILLING_SERVICE_API_KEY,
-        appId: "manifold",
+        provider: "http",
+        baseUrl: VORTEX_API_URL,
+        apiKey: VORTEX_API_KEY,
+        source: "omni.manifold",
       }
-    : undefined,
+    : {},
 );

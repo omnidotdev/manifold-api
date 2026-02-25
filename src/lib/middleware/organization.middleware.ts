@@ -67,7 +67,7 @@ const organizationMiddleware = new Elysia({
   }
 
   // Check organization-level authorization via authz provider
-  const canAccess = await authz.checkPermission(
+  const canAccess = await authz?.checkPermission(
     session.user.id,
     "organization",
     orgClaim.id,

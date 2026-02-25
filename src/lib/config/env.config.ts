@@ -36,6 +36,10 @@ export const {
   FLAGS_CLIENT_KEY,
   /** Comma-separated namespaces allowed during maintenance */
   MAINTENANCE_ALLOWED_NAMESPACES = "omni",
+  /** Vortex event streaming API URL */
+  VORTEX_API_URL,
+  /** Vortex event streaming API key */
+  VORTEX_API_KEY,
 } = process.env;
 
 export const isDevEnv = NODE_ENV === "development",
