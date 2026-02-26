@@ -6,6 +6,8 @@ import {
   S3Client,
 } from "@aws-sdk/client-s3";
 
+import { parseDigest } from "lib/storage/util";
+
 import type { BlobStorage } from "lib/storage/storage";
 
 type S3StorageConfig = {
@@ -13,24 +15,6 @@ type S3StorageConfig = {
   region?: string;
   endpoint?: string;
   prefix?: string;
-};
-
-/**
- * Parse a digest string into algorithm and hash components.
- * @param digest - Digest in "algo:hash" format
- * @returns Parsed algorithm and hash
- */
-const parseDigest = (digest: string): { algorithm: string; hash: string } => {
-  const colonIdx = digest.indexOf(":");
-
-  if (colonIdx === -1) {
-    throw new Error(`Invalid digest format: ${digest}`);
-  }
-
-  return {
-    algorithm: digest.slice(0, colonIdx),
-    hash: digest.slice(colonIdx + 1),
-  };
 };
 
 /**

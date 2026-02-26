@@ -1,25 +1,9 @@
 import { mkdir, unlink } from "node:fs/promises";
 import { dirname, join } from "node:path";
 
+import { parseDigest } from "lib/storage/util";
+
 import type { BlobStorage } from "lib/storage/storage";
-
-/**
- * Parse a digest string into algorithm and hash components.
- * @param digest - Digest in "algo:hash" format
- * @returns Parsed algorithm and hash
- */
-const parseDigest = (digest: string): { algorithm: string; hash: string } => {
-  const colonIdx = digest.indexOf(":");
-
-  if (colonIdx === -1) {
-    throw new Error(`Invalid digest format: ${digest}`);
-  }
-
-  return {
-    algorithm: digest.slice(0, colonIdx),
-    hash: digest.slice(colonIdx + 1),
-  };
-};
 
 /**
  * Filesystem-backed blob storage.

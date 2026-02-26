@@ -327,16 +327,17 @@ const ociRouter = new Elysia({ prefix: "/v2" })
         return ociErrors.blobUnknown(params.digest);
       }
 
-      set.headers["Content-Type"] = "application/octet-stream";
-      set.headers["Docker-Content-Digest"] = artifact.digest;
-      set.headers["Content-Length"] = String(artifact.size);
-
       // Read from storage backend when available, fall back to inline content
       if (artifact.storagePath) {
         const blob = await storage.get(artifact.digest);
 
         if (blob) {
-          return new Response(blob.buffer as ArrayBuffer, {
+          const body = blob.buffer.slice(
+            blob.byteOffset,
+            blob.byteOffset + blob.byteLength,
+          ) as ArrayBuffer;
+
+          return new Response(body, {
             headers: {
               "Content-Type": "application/octet-stream",
               "Docker-Content-Digest": artifact.digest,
@@ -345,6 +346,10 @@ const ociRouter = new Elysia({ prefix: "/v2" })
           });
         }
       }
+
+      set.headers["Content-Type"] = "application/octet-stream";
+      set.headers["Docker-Content-Digest"] = artifact.digest;
+      set.headers["Content-Length"] = String(artifact.size);
 
       return artifact.content ?? "";
     },
