@@ -1,5 +1,12 @@
+import { mkdtempSync, rmSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+
 // Set env vars before importing modules that read them at load time
 process.env.PROTECT_ROUTES = "true";
+process.env.BLOB_STORAGE_DIR = mkdtempSync(
+  join(tmpdir(), "manifold-blob-test-"),
+);
 
 import { createTestDatabase } from "./setup/createTestDatabase";
 import { mswServer } from "./setup/mswServer";
@@ -25,6 +32,11 @@ const cleanup = async () => {
   globalThis.__TEST_CLEANUP_IN_PROGRESS__ = true;
 
   console.log("\n[preload] Cleaning up test environment...");
+
+  // Clean up temp blob storage directory
+  if (process.env.BLOB_STORAGE_DIR) {
+    rmSync(process.env.BLOB_STORAGE_DIR, { recursive: true, force: true });
+  }
 
   mswServer.close();
 

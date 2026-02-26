@@ -36,6 +36,7 @@ import {
 import { computeDigest } from "lib/oci/digest";
 import * as ociErrors from "lib/oci/errors";
 import { flags } from "lib/providers";
+import { storage } from "lib/storage";
 
 const FLAGS = {
   MAINTENANCE: "manifold-api-maintenance-mode",
@@ -330,6 +331,21 @@ const ociRouter = new Elysia({ prefix: "/v2" })
       set.headers["Docker-Content-Digest"] = artifact.digest;
       set.headers["Content-Length"] = String(artifact.size);
 
+      // Read from storage backend when available, fall back to inline content
+      if (artifact.storagePath) {
+        const blob = await storage.get(artifact.digest);
+
+        if (blob) {
+          return new Response(blob.buffer as ArrayBuffer, {
+            headers: {
+              "Content-Type": "application/octet-stream",
+              "Docker-Content-Digest": artifact.digest,
+              "Content-Length": String(artifact.size),
+            },
+          });
+        }
+      }
+
       return artifact.content ?? "";
     },
     {
@@ -523,7 +539,10 @@ const ociRouter = new Elysia({ prefix: "/v2" })
         return ociErrors.digestInvalid(query.digest, computedDigest);
       }
 
-      // Create artifact
+      // Store blob content in storage backend
+      const storagePath = await storage.put(computedDigest, content);
+
+      // Create artifact record (content stays null; blob lives in storage)
       await dbPool
         .insert(artifactTable)
         .values({
@@ -531,7 +550,7 @@ const ociRouter = new Elysia({ prefix: "/v2" })
           digest: computedDigest,
           size: content.byteLength,
           mediaType: "application/octet-stream",
-          content: new TextDecoder().decode(content),
+          storagePath,
         })
         .onConflictDoNothing();
 

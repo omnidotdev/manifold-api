@@ -53,6 +53,7 @@
     "testcontainers": "^11.11.0"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.998.0",
     "@elysiajs/cors": "^1.4.1",
     "@elysiajs/graphql-yoga": "^1.4.0",
     "@envelop/generic-auth": "^11.1.0",

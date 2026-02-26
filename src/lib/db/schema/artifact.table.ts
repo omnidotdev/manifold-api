@@ -26,8 +26,10 @@ export const artifactTable = pgTable(
     digest: text().notNull(),
     size: bigint({ mode: "number" }).notNull(),
     mediaType: text().notNull(),
-    // small artifacts can be stored inline; large ones use blob storage
+    // Small artifacts can be stored inline; large ones use blob storage
     content: text(),
+    // Storage backend path/key (null = content is inline)
+    storagePath: text(),
     createdAt: generateDefaultDate(),
   },
   (table) => [

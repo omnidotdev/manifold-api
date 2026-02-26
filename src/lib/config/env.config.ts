@@ -40,6 +40,18 @@ export const {
   VORTEX_API_URL,
   /** Vortex event streaming API key */
   VORTEX_API_KEY,
+  /** Blob storage backend ("fs" or "s3") */
+  BLOB_STORAGE_BACKEND,
+  /** Filesystem blob storage directory */
+  BLOB_STORAGE_DIR,
+  /** S3 bucket name for blob storage */
+  BLOB_S3_BUCKET,
+  /** S3 region for blob storage */
+  BLOB_S3_REGION,
+  /** S3 endpoint for blob storage (MinIO, R2) */
+  BLOB_S3_ENDPOINT,
+  /** S3 key prefix for blob storage */
+  BLOB_S3_PREFIX,
 } = process.env;
 
 export const isDevEnv = NODE_ENV === "development",
