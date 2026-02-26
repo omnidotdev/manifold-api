@@ -6,7 +6,8 @@ import { createYoga } from "graphql-yoga";
 import { createWithPgClient } from "postgraphile/adaptors/pg";
 
 import type { ExecutionResult } from "graphql";
-import type { Observer } from "lib/graphql/createGraphqlContext";
+import type { Plugin } from "graphql-yoga";
+import type { ContextObserver } from "lib/graphql/createGraphqlContext";
 import type { Pool } from "pg";
 import type { TestDatabase } from "test/setup/createTestDatabase";
 
@@ -20,7 +21,9 @@ export interface GraphQLTestClient {
 export interface CreateTestGraphQLClientOptions {
   pool: Pool;
   db: TestDatabase["db"];
-  observer?: Observer | null;
+  observer?: ContextObserver | null;
+  /** Additional yoga plugins to include in the test server */
+  plugins?: Plugin[];
 }
 
 /**
@@ -30,7 +33,7 @@ export interface CreateTestGraphQLClientOptions {
 export const createTestGraphQLClient = (
   options: CreateTestGraphQLClientOptions,
 ): GraphQLTestClient => {
-  const { pool, db, observer = null } = options;
+  const { pool, db, observer = null, plugins: extraPlugins = [] } = options;
 
   const withPgClient = createWithPgClient({ pool });
 
@@ -44,7 +47,12 @@ export const createTestGraphQLClient = (
       pgSubscriber: null,
       request: new Request("http://localhost:4000/graphql"),
     }),
-    plugins: [useParserCache(), useValidationCache(), useGrafast()],
+    plugins: [
+      ...extraPlugins,
+      useParserCache(),
+      useValidationCache(),
+      useGrafast(),
+    ],
   });
 
   return {

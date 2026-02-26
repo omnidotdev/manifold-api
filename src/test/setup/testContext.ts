@@ -5,7 +5,7 @@ import { createTestGraphQLClient } from "test/util/graphqlClient";
 import { mswServer } from "./mswServer";
 import { resetDatabase } from "./resetDatabase";
 
-import type { Observer } from "lib/graphql/createGraphqlContext";
+import type { ContextObserver } from "lib/graphql/createGraphqlContext";
 import type { Pool } from "pg";
 import type { GraphQLTestClient } from "test/util/graphqlClient";
 import type { TestDatabase } from "./createTestDatabase";
@@ -14,7 +14,7 @@ export interface TestContext {
   db: TestDatabase["db"];
   pool: Pool;
   graphql: GraphQLTestClient;
-  graphqlAs: (observer: Observer) => GraphQLTestClient;
+  graphqlAs: (observer: ContextObserver) => GraphQLTestClient;
 }
 
 /**
@@ -50,7 +50,7 @@ export const setupTestContext = (): TestContext => {
       if (prop === "pool") return pool;
       if (prop === "graphql") return createTestGraphQLClient({ pool, db });
       if (prop === "graphqlAs") {
-        return (observer: Observer) =>
+        return (observer: ContextObserver) =>
           createTestGraphQLClient({ pool, db, observer });
       }
 
