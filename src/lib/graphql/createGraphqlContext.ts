@@ -44,7 +44,6 @@ export type ContextObserver = Observer | TokenObserver;
 
 /**
  * Type guard for token observer.
- * @knipignore
  */
 export const isTokenObserver = (
   observer: ContextObserver | null,
