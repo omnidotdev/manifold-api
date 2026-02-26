@@ -23,13 +23,22 @@ import {
 import { dbPool, pgPool } from "lib/db";
 import ensureDatabase from "lib/db/ensureDatabase";
 import createGraphqlContext from "lib/graphql/createGraphqlContext";
-import { armorPlugin, createAuthenticationPlugin } from "lib/graphql/plugins";
+import {
+  armorPlugin,
+  createAuditLogPlugin,
+  createAuthenticationPlugin,
+  createScopeEnforcementPlugin,
+} from "lib/graphql/plugins";
+import { startSessionCleanup } from "lib/jobs";
 import { ociRouter } from "lib/oci";
 import { flags } from "lib/providers";
 import webRouter from "lib/web/router";
 
 // ensure database exists before starting
 await ensureDatabase();
+
+// Start background cleanup of expired upload sessions
+const cleanupTimer = startSessionCleanup();
 
 /**
  * Elysia server.
@@ -109,6 +118,8 @@ const app = new Elysia({
       plugins: [
         ...armorPlugin,
         createAuthenticationPlugin(),
+        createScopeEnforcementPlugin(),
+        createAuditLogPlugin(),
         // disable GraphQL schema introspection in production to mitigate reverse engineering
         isProdEnv && useDisableIntrospection(),
         useOpenTelemetry({
@@ -152,6 +163,9 @@ if (await flags.isEnabled("manifold-api-maintenance-mode")) {
 const shutdown = async (signal: string) => {
   // biome-ignore lint/suspicious/noConsole: shutdown logging
   console.log(`[Server] Received ${signal}, shutting down gracefully...`);
+
+  // Stop background cleanup timer
+  clearInterval(cleanupTimer);
 
   // Stop accepting new connections
   app.stop();

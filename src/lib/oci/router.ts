@@ -27,6 +27,7 @@ import {
   tagTable,
   uploadSessionTable,
 } from "lib/db/schema";
+import logAuditEvent from "lib/logging/logAuditEvent";
 import {
   appendChunk,
   assembleBlob,
@@ -153,6 +154,16 @@ const ociRouter = new Elysia({ prefix: "/v2" })
         set.status = 404;
         return ociErrors.manifestUnknown(params.reference);
       }
+
+      logAuditEvent(
+        { organizationId: repoData.namespace.organizationId ?? undefined },
+        {
+          action: "artifact.pull",
+          resource: "manifest",
+          resourceId: artifact.digest,
+          details: { namespace, repo, reference: params.reference },
+        },
+      );
 
       set.headers["Content-Type"] = artifact.mediaType;
       set.headers["Docker-Content-Digest"] = artifact.digest;
@@ -287,6 +298,16 @@ const ociRouter = new Elysia({ prefix: "/v2" })
           });
       }
 
+      logAuditEvent(
+        { organizationId: repoData.namespace.organizationId ?? undefined },
+        {
+          action: "artifact.push",
+          resource: "manifest",
+          resourceId: digest,
+          details: { namespace, repo, reference: params.reference },
+        },
+      );
+
       set.status = 201;
       set.headers.Location = `/v2/${params.name}/manifests/${digest}`;
       set.headers["Docker-Content-Digest"] = digest;
@@ -326,6 +347,16 @@ const ociRouter = new Elysia({ prefix: "/v2" })
         set.status = 404;
         return ociErrors.blobUnknown(params.digest);
       }
+
+      logAuditEvent(
+        { organizationId: repoData.namespace.organizationId ?? undefined },
+        {
+          action: "blob.pull",
+          resource: "blob",
+          resourceId: artifact.digest,
+          details: { namespace, repo, digest: params.digest },
+        },
+      );
 
       // Read from storage backend when available, fall back to inline content
       if (artifact.storagePath) {
@@ -565,6 +596,16 @@ const ociRouter = new Elysia({ prefix: "/v2" })
         .where(eq(uploadSessionTable.id, params.uuid));
 
       await cleanupSession(params.uuid);
+
+      logAuditEvent(
+        { organizationId: repoData.namespace.organizationId ?? undefined },
+        {
+          action: "blob.push",
+          resource: "blob",
+          resourceId: computedDigest,
+          details: { namespace, repo, uuid: params.uuid },
+        },
+      );
 
       set.status = 201;
       set.headers.Location = `/v2/${params.name}/blobs/${computedDigest}`;
