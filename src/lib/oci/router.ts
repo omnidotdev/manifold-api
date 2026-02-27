@@ -18,6 +18,13 @@
 import { and, eq } from "drizzle-orm";
 import { Elysia, t } from "elysia";
 
+import {
+  checkUsage,
+  getTier,
+  limitExceeded,
+  recordUsage,
+  resolveEntitlements,
+} from "lib/billing";
 import { maintenanceAllowedNamespaces } from "lib/config/env.config";
 import { dbPool } from "lib/db";
 import {
@@ -27,13 +34,6 @@ import {
   tagTable,
   uploadSessionTable,
 } from "lib/db/schema";
-import {
-  checkUsage,
-  getTier,
-  limitExceeded,
-  recordUsage,
-  resolveEntitlements,
-} from "lib/billing";
 import logAuditEvent from "lib/logging/logAuditEvent";
 import {
   appendChunk,
