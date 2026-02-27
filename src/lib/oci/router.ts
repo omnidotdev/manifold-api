@@ -27,6 +27,13 @@ import {
   tagTable,
   uploadSessionTable,
 } from "lib/db/schema";
+import {
+  checkUsage,
+  getTier,
+  limitExceeded,
+  recordUsage,
+  resolveEntitlements,
+} from "lib/billing";
 import logAuditEvent from "lib/logging/logAuditEvent";
 import {
   appendChunk,
@@ -164,6 +171,18 @@ const ociRouter = new Elysia({ prefix: "/v2" })
           details: { namespace, repo, reference: params.reference },
         },
       );
+
+      // Record bandwidth usage for billing
+      const orgId = repoData.namespace.organizationId;
+
+      if (orgId) {
+        await recordUsage(
+          "organization",
+          orgId,
+          "bandwidth_bytes",
+          artifact.size,
+        );
+      }
 
       set.headers["Content-Type"] = artifact.mediaType;
       set.headers["Docker-Content-Digest"] = artifact.digest;
@@ -308,6 +327,18 @@ const ociRouter = new Elysia({ prefix: "/v2" })
         },
       );
 
+      // Record storage usage for billing
+      const orgId = repoData.namespace.organizationId;
+
+      if (orgId) {
+        await recordUsage(
+          "organization",
+          orgId,
+          "storage_bytes",
+          contentBytes.length,
+        );
+      }
+
       set.status = 201;
       set.headers.Location = `/v2/${params.name}/manifests/${digest}`;
       set.headers["Docker-Content-Digest"] = digest;
@@ -357,6 +388,18 @@ const ociRouter = new Elysia({ prefix: "/v2" })
           details: { namespace, repo, digest: params.digest },
         },
       );
+
+      // Record bandwidth usage for billing
+      const orgId = repoData.namespace.organizationId;
+
+      if (orgId) {
+        await recordUsage(
+          "organization",
+          orgId,
+          "bandwidth_bytes",
+          artifact.size,
+        );
+      }
 
       // Read from storage backend when available, fall back to inline content
       if (artifact.storagePath) {
@@ -442,6 +485,31 @@ const ociRouter = new Elysia({ prefix: "/v2" })
       if (!repoData) {
         set.status = 404;
         return ociErrors.nameUnknown(params.name);
+      }
+
+      // Enforce storage limit before accepting upload
+      const orgId = repoData.namespace.organizationId;
+
+      if (orgId) {
+        const entitlements = await resolveEntitlements(orgId);
+        const storageCheck = await checkUsage(
+          "organization",
+          orgId,
+          "storage_bytes",
+        );
+
+        if (storageCheck && !storageCheck.withinLimit) {
+          const tier = getTier(entitlements);
+          const { status, body } = limitExceeded(
+            "Storage",
+            storageCheck.value,
+            storageCheck.limit ?? 0,
+            tier,
+          );
+
+          set.status = status;
+          return body;
+        }
       }
 
       // create upload session
@@ -589,6 +657,18 @@ const ociRouter = new Elysia({ prefix: "/v2" })
           storagePath,
         })
         .onConflictDoNothing();
+
+      // Record storage usage for billing
+      const orgId = repoData.namespace.organizationId;
+
+      if (orgId) {
+        await recordUsage(
+          "organization",
+          orgId,
+          "storage_bytes",
+          content.byteLength,
+        );
+      }
 
       // Cleanup session and chunk data
       await dbPool

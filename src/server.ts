@@ -27,6 +27,7 @@ import {
   armorPlugin,
   createAuditLogPlugin,
   createAuthenticationPlugin,
+  createBillingPlugin,
   createScopeEnforcementPlugin,
 } from "lib/graphql/plugins";
 import { startSessionCleanup } from "lib/jobs";
@@ -73,7 +74,7 @@ const app = new Elysia({
   // rate limiting
   .use(
     rateLimit({
-      max: 100,
+      max: 60,
       duration: 60_000,
     }),
   )
@@ -119,6 +120,7 @@ const app = new Elysia({
         ...armorPlugin,
         createAuthenticationPlugin(),
         createScopeEnforcementPlugin(),
+        createBillingPlugin(),
         createAuditLogPlugin(),
         // disable GraphQL schema introspection in production to mitigate reverse engineering
         isProdEnv && useDisableIntrospection(),

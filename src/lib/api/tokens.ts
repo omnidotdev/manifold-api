@@ -1,9 +1,10 @@
-import { and, eq } from "drizzle-orm";
+import { and, count, eq } from "drizzle-orm";
 import { Elysia, t } from "elysia";
 
 import { generateApiToken } from "lib/auth/token";
+import { getLimit, getTier, resolveEntitlements } from "lib/billing";
 import { dbPool } from "lib/db";
-import { apiTokenTable, isValidScope } from "lib/db/schema";
+import { apiTokenTable, isValidScope, namespaceTable } from "lib/db/schema";
 
 import type { TokenScope } from "lib/db/schema";
 
@@ -63,6 +64,44 @@ const tokensApi = new Elysia({ prefix: "/api/tokens" })
 
       const { name, namespaceId, repositoryId, scope, description, expiresAt } =
         body;
+
+      // Check billing limits for API token creation
+      const [namespace] = await dbPool
+        .select({ organizationId: namespaceTable.organizationId })
+        .from(namespaceTable)
+        .where(eq(namespaceTable.id, namespaceId));
+
+      if (namespace?.organizationId) {
+        const entitlements = await resolveEntitlements(
+          namespace.organizationId,
+        );
+        const limit = getLimit(entitlements, "max_api_tokens");
+
+        if (limit !== -1) {
+          const [row] = await dbPool
+            .select({ count: count() })
+            .from(apiTokenTable)
+            .where(
+              and(
+                eq(apiTokenTable.namespaceId, namespaceId),
+                eq(apiTokenTable.isActive, true),
+              ),
+            );
+          const currentCount = row?.count ?? 0;
+
+          if (currentCount >= limit) {
+            const tier = getTier(entitlements);
+            set.status = 402;
+            return {
+              error: `API token limit reached (${currentCount}/${limit}). Upgrade from ${tier} plan`,
+              code: "BILLING_LIMIT_EXCEEDED",
+              tier,
+              limit,
+              current: currentCount,
+            };
+          }
+        }
+      }
 
       if (!isValidScope(scope)) {
         set.status = 400;

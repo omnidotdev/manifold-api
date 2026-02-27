@@ -81,10 +81,4 @@ function isFeatureEnabled(
   return entitlement?.value === "1" || entitlement?.value === "true";
 }
 
-export {
-  getLimit,
-  getTier,
-  isAllowed,
-  isFeatureEnabled,
-  resolveEntitlements,
-};
+export { getLimit, getTier, isAllowed, isFeatureEnabled, resolveEntitlements };
