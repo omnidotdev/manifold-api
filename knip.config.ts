@@ -28,6 +28,7 @@ const knipConfig: KnipConfig = {
     "src/lib/middleware/**",
     "src/lib/providers/**",
     "src/lib/auth/**",
+    "src/lib/billing/**",
   ],
   ignoreDependencies: [
     "@changesets/changelog-github",
