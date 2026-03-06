@@ -180,117 +180,6 @@ const spec_containerMetadata = {
   executor: executor
 };
 const containerMetadataCodec = recordCodec(spec_containerMetadata);
-const artifactIdentifier = sql.identifier("public", "artifact");
-const spec_artifact = {
-  name: "artifact",
-  identifier: artifactIdentifier,
-  attributes: {
-    __proto__: null,
-    id: {
-      description: undefined,
-      codec: TYPES.uuid,
-      notNull: true,
-      hasDefault: true,
-      extensions: {
-        tags: {},
-        canSelect: true,
-        canInsert: true,
-        canUpdate: true
-      }
-    },
-    repository_id: {
-      description: undefined,
-      codec: TYPES.uuid,
-      notNull: true,
-      hasDefault: false,
-      extensions: {
-        tags: {},
-        canSelect: true,
-        canInsert: true,
-        canUpdate: true
-      }
-    },
-    digest: {
-      description: undefined,
-      codec: TYPES.text,
-      notNull: true,
-      hasDefault: false,
-      extensions: {
-        tags: {},
-        canSelect: true,
-        canInsert: true,
-        canUpdate: true
-      }
-    },
-    size: {
-      description: undefined,
-      codec: TYPES.bigint,
-      notNull: true,
-      hasDefault: false,
-      extensions: {
-        tags: {},
-        canSelect: true,
-        canInsert: true,
-        canUpdate: true,
-        isIndexed: false
-      }
-    },
-    media_type: {
-      description: undefined,
-      codec: TYPES.text,
-      notNull: true,
-      hasDefault: false,
-      extensions: {
-        tags: {},
-        canSelect: true,
-        canInsert: true,
-        canUpdate: true,
-        isIndexed: false
-      }
-    },
-    content: {
-      description: undefined,
-      codec: TYPES.text,
-      notNull: false,
-      hasDefault: false,
-      extensions: {
-        tags: {},
-        canSelect: true,
-        canInsert: true,
-        canUpdate: true,
-        isIndexed: false
-      }
-    },
-    created_at: {
-      description: undefined,
-      codec: TYPES.timestamptz,
-      notNull: false,
-      hasDefault: true,
-      extensions: {
-        tags: {},
-        canSelect: true,
-        canInsert: true,
-        canUpdate: true,
-        isIndexed: false
-      }
-    }
-  },
-  description: undefined,
-  extensions: {
-    oid: "376520",
-    isTableLike: true,
-    pg: {
-      serviceName: "main",
-      schemaName: "public",
-      name: "artifact"
-    },
-    tags: {
-      __proto__: null
-    }
-  },
-  executor: executor
-};
-const artifactCodec = recordCodec(spec_artifact);
 const wasmMetadataIdentifier = sql.identifier("public", "wasm_metadata");
 const spec_wasmMetadata = {
   name: "wasmMetadata",
@@ -547,6 +436,130 @@ const spec_uploadSession = {
   executor: executor
 };
 const uploadSessionCodec = recordCodec(spec_uploadSession);
+const artifactIdentifier = sql.identifier("public", "artifact");
+const spec_artifact = {
+  name: "artifact",
+  identifier: artifactIdentifier,
+  attributes: {
+    __proto__: null,
+    id: {
+      description: undefined,
+      codec: TYPES.uuid,
+      notNull: true,
+      hasDefault: true,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true
+      }
+    },
+    repository_id: {
+      description: undefined,
+      codec: TYPES.uuid,
+      notNull: true,
+      hasDefault: false,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true
+      }
+    },
+    digest: {
+      description: undefined,
+      codec: TYPES.text,
+      notNull: true,
+      hasDefault: false,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true
+      }
+    },
+    size: {
+      description: undefined,
+      codec: TYPES.bigint,
+      notNull: true,
+      hasDefault: false,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    },
+    media_type: {
+      description: undefined,
+      codec: TYPES.text,
+      notNull: true,
+      hasDefault: false,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    },
+    content: {
+      description: undefined,
+      codec: TYPES.text,
+      notNull: false,
+      hasDefault: false,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    },
+    created_at: {
+      description: undefined,
+      codec: TYPES.timestamptz,
+      notNull: false,
+      hasDefault: true,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    },
+    storage_path: {
+      description: undefined,
+      codec: TYPES.text,
+      notNull: false,
+      hasDefault: false,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    }
+  },
+  description: undefined,
+  extensions: {
+    oid: "376520",
+    isTableLike: true,
+    pg: {
+      serviceName: "main",
+      schemaName: "public",
+      name: "artifact"
+    },
+    tags: {
+      __proto__: null
+    }
+  },
+  executor: executor
+};
+const artifactCodec = recordCodec(spec_artifact);
 const schemaMetadataIdentifier = sql.identifier("public", "schema_metadata");
 const spec_schemaMetadata = {
   name: "schemaMetadata",
@@ -855,6 +868,356 @@ const spec_repository = {
   executor: executor
 };
 const repositoryCodec = recordCodec(spec_repository);
+const federatedSourceIdentifier = sql.identifier("public", "federated_source");
+const spec_federatedSource = {
+  name: "federatedSource",
+  identifier: federatedSourceIdentifier,
+  attributes: {
+    __proto__: null,
+    id: {
+      description: undefined,
+      codec: TYPES.uuid,
+      notNull: true,
+      hasDefault: true,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true
+      }
+    },
+    namespace: {
+      description: undefined,
+      codec: TYPES.text,
+      notNull: true,
+      hasDefault: false,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true
+      }
+    },
+    upstream_base_url: {
+      description: undefined,
+      codec: TYPES.text,
+      notNull: true,
+      hasDefault: false,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    },
+    upstream_type: {
+      description: undefined,
+      codec: TYPES.text,
+      notNull: true,
+      hasDefault: false,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true
+      }
+    },
+    enabled: {
+      description: undefined,
+      codec: TYPES.boolean,
+      notNull: true,
+      hasDefault: true,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    },
+    rate_limit_rpm: {
+      description: undefined,
+      codec: TYPES.int,
+      notNull: true,
+      hasDefault: true,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    },
+    cache_ttl_seconds: {
+      description: undefined,
+      codec: TYPES.int,
+      notNull: true,
+      hasDefault: true,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    },
+    tag_list_cache_ttl_seconds: {
+      description: undefined,
+      codec: TYPES.int,
+      notNull: true,
+      hasDefault: true,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    },
+    require_vetting: {
+      description: undefined,
+      codec: TYPES.boolean,
+      notNull: true,
+      hasDefault: true,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    },
+    created_at: {
+      description: undefined,
+      codec: TYPES.timestamptz,
+      notNull: false,
+      hasDefault: true,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    },
+    updated_at: {
+      description: undefined,
+      codec: TYPES.timestamptz,
+      notNull: false,
+      hasDefault: true,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    }
+  },
+  description: undefined,
+  extensions: {
+    oid: "445316",
+    isTableLike: true,
+    pg: {
+      serviceName: "main",
+      schemaName: "public",
+      name: "federated_source"
+    },
+    tags: {
+      __proto__: null
+    }
+  },
+  executor: executor
+};
+const federatedSourceCodec = recordCodec(spec_federatedSource);
+const federatedSkillCacheIdentifier = sql.identifier("public", "federated_skill_cache");
+const spec_federatedSkillCache = {
+  name: "federatedSkillCache",
+  identifier: federatedSkillCacheIdentifier,
+  attributes: {
+    __proto__: null,
+    id: {
+      description: undefined,
+      codec: TYPES.uuid,
+      notNull: true,
+      hasDefault: true,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true
+      }
+    },
+    source_id: {
+      description: undefined,
+      codec: TYPES.uuid,
+      notNull: true,
+      hasDefault: false,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true
+      }
+    },
+    slug: {
+      description: undefined,
+      codec: TYPES.text,
+      notNull: true,
+      hasDefault: false,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true
+      }
+    },
+    content: {
+      description: undefined,
+      codec: TYPES.text,
+      notNull: false,
+      hasDefault: false,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    },
+    content_digest: {
+      description: undefined,
+      codec: TYPES.text,
+      notNull: false,
+      hasDefault: false,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    },
+    fetched_at: {
+      description: undefined,
+      codec: TYPES.timestamptz,
+      notNull: false,
+      hasDefault: false,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    },
+    expires_at: {
+      description: undefined,
+      codec: TYPES.timestamptz,
+      notNull: false,
+      hasDefault: false,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true
+      }
+    },
+    vet_status: {
+      description: undefined,
+      codec: TYPES.text,
+      notNull: true,
+      hasDefault: true,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true
+      }
+    },
+    vet_reason: {
+      description: undefined,
+      codec: TYPES.text,
+      notNull: false,
+      hasDefault: false,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    },
+    vetted_by: {
+      description: undefined,
+      codec: TYPES.text,
+      notNull: false,
+      hasDefault: false,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    },
+    vetted_at: {
+      description: undefined,
+      codec: TYPES.timestamptz,
+      notNull: false,
+      hasDefault: false,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    },
+    upstream_meta: {
+      description: undefined,
+      codec: TYPES.jsonb,
+      notNull: false,
+      hasDefault: false,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    },
+    created_at: {
+      description: undefined,
+      codec: TYPES.timestamptz,
+      notNull: false,
+      hasDefault: true,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    }
+  },
+  description: undefined,
+  extensions: {
+    oid: "445302",
+    isTableLike: true,
+    pg: {
+      serviceName: "main",
+      schemaName: "public",
+      name: "federated_skill_cache"
+    },
+    tags: {
+      __proto__: null
+    }
+  },
+  executor: executor
+};
+const federatedSkillCacheCodec = recordCodec(spec_federatedSkillCache);
 const apiTokenIdentifier = sql.identifier("public", "api_token");
 const spec_apiToken = {
   name: "apiToken",
@@ -1089,42 +1452,6 @@ const registryConfig_pgResources_container_metadata_container_metadata = {
     canDelete: true
   }
 };
-const artifactUniques = [{
-  isPrimary: true,
-  attributes: ["id"],
-  description: undefined,
-  extensions: {
-    tags: {
-      __proto__: null
-    }
-  }
-}];
-const registryConfig_pgResources_artifact_artifact = {
-  executor: executor,
-  name: "artifact",
-  identifier: "main.public.artifact",
-  from: artifactIdentifier,
-  codec: artifactCodec,
-  uniques: artifactUniques,
-  isVirtual: false,
-  description: undefined,
-  extensions: {
-    description: undefined,
-    pg: {
-      serviceName: "main",
-      schemaName: "public",
-      name: "artifact"
-    },
-    isInsertable: true,
-    isUpdatable: true,
-    isDeletable: true,
-    tags: {},
-    canSelect: true,
-    canInsert: true,
-    canUpdate: true,
-    canDelete: true
-  }
-};
 const wasm_metadataUniques = [{
   isPrimary: true,
   attributes: ["artifact_id"],
@@ -1222,6 +1549,42 @@ const registryConfig_pgResources_upload_session_upload_session = {
       serviceName: "main",
       schemaName: "public",
       name: "upload_session"
+    },
+    isInsertable: true,
+    isUpdatable: true,
+    isDeletable: true,
+    tags: {},
+    canSelect: true,
+    canInsert: true,
+    canUpdate: true,
+    canDelete: true
+  }
+};
+const artifactUniques = [{
+  isPrimary: true,
+  attributes: ["id"],
+  description: undefined,
+  extensions: {
+    tags: {
+      __proto__: null
+    }
+  }
+}];
+const registryConfig_pgResources_artifact_artifact = {
+  executor: executor,
+  name: "artifact",
+  identifier: "main.public.artifact",
+  from: artifactIdentifier,
+  codec: artifactCodec,
+  uniques: artifactUniques,
+  isVirtual: false,
+  description: undefined,
+  extensions: {
+    description: undefined,
+    pg: {
+      serviceName: "main",
+      schemaName: "public",
+      name: "artifact"
     },
     isInsertable: true,
     isUpdatable: true,
@@ -1350,6 +1713,87 @@ const registryConfig_pgResources_repository_repository = {
     canDelete: true
   }
 };
+const federated_sourceUniques = [{
+  isPrimary: true,
+  attributes: ["id"],
+  description: undefined,
+  extensions: {
+    tags: {
+      __proto__: null
+    }
+  }
+}, {
+  isPrimary: false,
+  attributes: ["namespace"],
+  description: undefined,
+  extensions: {
+    tags: {
+      __proto__: null
+    }
+  }
+}];
+const registryConfig_pgResources_federated_source_federated_source = {
+  executor: executor,
+  name: "federated_source",
+  identifier: "main.public.federated_source",
+  from: federatedSourceIdentifier,
+  codec: federatedSourceCodec,
+  uniques: federated_sourceUniques,
+  isVirtual: false,
+  description: undefined,
+  extensions: {
+    description: undefined,
+    pg: {
+      serviceName: "main",
+      schemaName: "public",
+      name: "federated_source"
+    },
+    isInsertable: true,
+    isUpdatable: true,
+    isDeletable: true,
+    tags: {},
+    canSelect: true,
+    canInsert: true,
+    canUpdate: true,
+    canDelete: true
+  }
+};
+const federated_skill_cacheUniques = [{
+  isPrimary: true,
+  attributes: ["id"],
+  description: undefined,
+  extensions: {
+    tags: {
+      __proto__: null
+    }
+  }
+}];
+const registryConfig_pgResources_federated_skill_cache_federated_skill_cache = {
+  executor: executor,
+  name: "federated_skill_cache",
+  identifier: "main.public.federated_skill_cache",
+  from: federatedSkillCacheIdentifier,
+  codec: federatedSkillCacheCodec,
+  uniques: federated_skill_cacheUniques,
+  isVirtual: false,
+  description: undefined,
+  extensions: {
+    description: undefined,
+    pg: {
+      serviceName: "main",
+      schemaName: "public",
+      name: "federated_skill_cache"
+    },
+    isInsertable: true,
+    isUpdatable: true,
+    isDeletable: true,
+    tags: {},
+    canSelect: true,
+    canInsert: true,
+    canUpdate: true,
+    canDelete: true
+  }
+};
 const api_tokenUniques = [{
   isPrimary: true,
   attributes: ["id"],
@@ -1398,28 +1842,32 @@ const registryConfig = {
     int4: TYPES.int,
     text: TYPES.text,
     jsonb: TYPES.jsonb,
-    artifact: artifactCodec,
-    int8: TYPES.bigint,
-    timestamptz: TYPES.timestamptz,
     wasmMetadata: wasmMetadataCodec,
     tag: tagCodec,
+    timestamptz: TYPES.timestamptz,
     uploadSession: uploadSessionCodec,
+    int8: TYPES.bigint,
+    artifact: artifactCodec,
     schemaMetadata: schemaMetadataCodec,
     bool: TYPES.boolean,
     namespace: namespaceCodec,
     repository: repositoryCodec,
+    federatedSource: federatedSourceCodec,
+    federatedSkillCache: federatedSkillCacheCodec,
     apiToken: apiTokenCodec
   },
   pgResources: {
     __proto__: null,
     container_metadata: registryConfig_pgResources_container_metadata_container_metadata,
-    artifact: registryConfig_pgResources_artifact_artifact,
     wasm_metadata: registryConfig_pgResources_wasm_metadata_wasm_metadata,
     tag: registryConfig_pgResources_tag_tag,
     upload_session: registryConfig_pgResources_upload_session_upload_session,
+    artifact: registryConfig_pgResources_artifact_artifact,
     schema_metadata: registryConfig_pgResources_schema_metadata_schema_metadata,
     namespace: registryConfig_pgResources_namespace_namespace,
     repository: registryConfig_pgResources_repository_repository,
+    federated_source: registryConfig_pgResources_federated_source_federated_source,
+    federated_skill_cache: registryConfig_pgResources_federated_skill_cache_federated_skill_cache,
     api_token: registryConfig_pgResources_api_token_api_token
   },
   pgRelations: {
@@ -1545,6 +1993,42 @@ const registryConfig = {
         remoteAttributes: ["id"],
         isUnique: true,
         isReferencee: false,
+        description: undefined,
+        extensions: {
+          tags: {
+            behavior: []
+          }
+        }
+      }
+    },
+    federatedSkillCache: {
+      __proto__: null,
+      federatedSourceByMySourceId: {
+        localCodec: federatedSkillCacheCodec,
+        remoteResourceOptions: registryConfig_pgResources_federated_source_federated_source,
+        localCodecPolymorphicTypes: undefined,
+        localAttributes: ["source_id"],
+        remoteAttributes: ["id"],
+        isUnique: true,
+        isReferencee: false,
+        description: undefined,
+        extensions: {
+          tags: {
+            behavior: []
+          }
+        }
+      }
+    },
+    federatedSource: {
+      __proto__: null,
+      federatedSkillCachesByTheirSourceId: {
+        localCodec: federatedSourceCodec,
+        remoteResourceOptions: registryConfig_pgResources_federated_skill_cache_federated_skill_cache,
+        localCodecPolymorphicTypes: undefined,
+        localAttributes: ["id"],
+        remoteAttributes: ["source_id"],
+        isUnique: false,
+        isReferencee: true,
         description: undefined,
         extensions: {
           tags: {
@@ -1755,13 +2239,15 @@ const registryConfig = {
 };
 const registry = makeRegistry(registryConfig);
 const resource_container_metadataPgResource = registry.pgResources["container_metadata"];
-const resource_artifactPgResource = registry.pgResources["artifact"];
 const resource_wasm_metadataPgResource = registry.pgResources["wasm_metadata"];
 const resource_tagPgResource = registry.pgResources["tag"];
 const resource_upload_sessionPgResource = registry.pgResources["upload_session"];
+const resource_artifactPgResource = registry.pgResources["artifact"];
 const resource_schema_metadataPgResource = registry.pgResources["schema_metadata"];
 const resource_namespacePgResource = registry.pgResources["namespace"];
 const resource_repositoryPgResource = registry.pgResources["repository"];
+const resource_federated_sourcePgResource = registry.pgResources["federated_source"];
+const resource_federated_skill_cachePgResource = registry.pgResources["federated_skill_cache"];
 const resource_api_tokenPgResource = registry.pgResources["api_token"];
 const nodeIdHandler_ContainerMetadatum = {
   typeName: "ContainerMetadatum",
@@ -1805,32 +2291,6 @@ function specForHandler(handler) {
 const nodeFetcher_ContainerMetadatum = $nodeId => {
   const $decoded = lambda($nodeId, specForHandler(nodeIdHandler_ContainerMetadatum));
   return nodeIdHandler_ContainerMetadatum.get(nodeIdHandler_ContainerMetadatum.getSpec($decoded));
-};
-const nodeIdHandler_Artifact = {
-  typeName: "Artifact",
-  codec: nodeIdCodecs_base64JSON_base64JSON,
-  deprecationReason: undefined,
-  plan($record) {
-    return list([constant("Artifact", false), $record.get("id")]);
-  },
-  getSpec($list) {
-    return {
-      id: inhibitOnNull(access($list, [1]))
-    };
-  },
-  getIdentifiers(value) {
-    return value.slice(1);
-  },
-  get(spec) {
-    return resource_artifactPgResource.get(spec);
-  },
-  match(obj) {
-    return obj[0] === "Artifact";
-  }
-};
-const nodeFetcher_Artifact = $nodeId => {
-  const $decoded = lambda($nodeId, specForHandler(nodeIdHandler_Artifact));
-  return nodeIdHandler_Artifact.get(nodeIdHandler_Artifact.getSpec($decoded));
 };
 const nodeIdHandler_WasmMetadatum = {
   typeName: "WasmMetadatum",
@@ -1910,6 +2370,32 @@ const nodeFetcher_UploadSession = $nodeId => {
   const $decoded = lambda($nodeId, specForHandler(nodeIdHandler_UploadSession));
   return nodeIdHandler_UploadSession.get(nodeIdHandler_UploadSession.getSpec($decoded));
 };
+const nodeIdHandler_Artifact = {
+  typeName: "Artifact",
+  codec: nodeIdCodecs_base64JSON_base64JSON,
+  deprecationReason: undefined,
+  plan($record) {
+    return list([constant("Artifact", false), $record.get("id")]);
+  },
+  getSpec($list) {
+    return {
+      id: inhibitOnNull(access($list, [1]))
+    };
+  },
+  getIdentifiers(value) {
+    return value.slice(1);
+  },
+  get(spec) {
+    return resource_artifactPgResource.get(spec);
+  },
+  match(obj) {
+    return obj[0] === "Artifact";
+  }
+};
+const nodeFetcher_Artifact = $nodeId => {
+  const $decoded = lambda($nodeId, specForHandler(nodeIdHandler_Artifact));
+  return nodeIdHandler_Artifact.get(nodeIdHandler_Artifact.getSpec($decoded));
+};
 const nodeIdHandler_SchemaMetadatum = {
   typeName: "SchemaMetadatum",
   codec: nodeIdCodecs_base64JSON_base64JSON,
@@ -1987,6 +2473,58 @@ const nodeIdHandler_Repository = {
 const nodeFetcher_Repository = $nodeId => {
   const $decoded = lambda($nodeId, specForHandler(nodeIdHandler_Repository));
   return nodeIdHandler_Repository.get(nodeIdHandler_Repository.getSpec($decoded));
+};
+const nodeIdHandler_FederatedSource = {
+  typeName: "FederatedSource",
+  codec: nodeIdCodecs_base64JSON_base64JSON,
+  deprecationReason: undefined,
+  plan($record) {
+    return list([constant("FederatedSource", false), $record.get("id")]);
+  },
+  getSpec($list) {
+    return {
+      id: inhibitOnNull(access($list, [1]))
+    };
+  },
+  getIdentifiers(value) {
+    return value.slice(1);
+  },
+  get(spec) {
+    return resource_federated_sourcePgResource.get(spec);
+  },
+  match(obj) {
+    return obj[0] === "FederatedSource";
+  }
+};
+const nodeFetcher_FederatedSource = $nodeId => {
+  const $decoded = lambda($nodeId, specForHandler(nodeIdHandler_FederatedSource));
+  return nodeIdHandler_FederatedSource.get(nodeIdHandler_FederatedSource.getSpec($decoded));
+};
+const nodeIdHandler_FederatedSkillCache = {
+  typeName: "FederatedSkillCache",
+  codec: nodeIdCodecs_base64JSON_base64JSON,
+  deprecationReason: undefined,
+  plan($record) {
+    return list([constant("FederatedSkillCache", false), $record.get("id")]);
+  },
+  getSpec($list) {
+    return {
+      id: inhibitOnNull(access($list, [1]))
+    };
+  },
+  getIdentifiers(value) {
+    return value.slice(1);
+  },
+  get(spec) {
+    return resource_federated_skill_cachePgResource.get(spec);
+  },
+  match(obj) {
+    return obj[0] === "FederatedSkillCache";
+  }
+};
+const nodeFetcher_FederatedSkillCache = $nodeId => {
+  const $decoded = lambda($nodeId, specForHandler(nodeIdHandler_FederatedSkillCache));
+  return nodeIdHandler_FederatedSkillCache.get(nodeIdHandler_FederatedSkillCache.getSpec($decoded));
 };
 const nodeIdHandler_ApiToken = {
   typeName: "ApiToken",
@@ -2119,36 +2657,6 @@ function assertAllowed9(value, mode) {
   }
   if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
 }
-const nodeIdHandlerByTypeName = {
-  __proto__: null,
-  Query: nodeIdHandler_Query,
-  ContainerMetadatum: nodeIdHandler_ContainerMetadatum,
-  Artifact: nodeIdHandler_Artifact,
-  WasmMetadatum: nodeIdHandler_WasmMetadatum,
-  Tag: nodeIdHandler_Tag,
-  UploadSession: nodeIdHandler_UploadSession,
-  SchemaMetadatum: nodeIdHandler_SchemaMetadatum,
-  Namespace: nodeIdHandler_Namespace,
-  Repository: nodeIdHandler_Repository,
-  ApiToken: nodeIdHandler_ApiToken
-};
-const decodeNodeId = makeDecodeNodeId(Object.values(nodeIdHandlerByTypeName));
-function findTypeNameMatch(specifier) {
-  if (!specifier) return null;
-  for (const [typeName, typeSpec] of Object.entries(nodeIdHandlerByTypeName)) {
-    const value = specifier[typeSpec.codec.name];
-    if (value != null && typeSpec.match(value)) return typeName;
-  }
-  console.warn(`Could not find a type that matched the specifier '${inspect(specifier)}'`);
-  return null;
-}
-function UUIDSerialize(value) {
-  return "" + value;
-}
-const coerce = string => {
-  if (!/^[0-9a-f]{8}-?[0-9a-f]{4}-?[0-9a-f]{4}-?[0-9a-f]{4}-?[0-9a-f]{12}$/i.test(string)) throw new GraphQLError("Invalid UUID, expected 32 hexadecimal characters, optionally with hyphens");
-  return string;
-};
 function assertAllowed10(value, mode) {
   if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
   if (mode === "list" && !false) {
@@ -2171,6 +2679,38 @@ function assertAllowed11(value, mode) {
   }
   if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
 }
+const nodeIdHandlerByTypeName = {
+  __proto__: null,
+  Query: nodeIdHandler_Query,
+  ContainerMetadatum: nodeIdHandler_ContainerMetadatum,
+  WasmMetadatum: nodeIdHandler_WasmMetadatum,
+  Tag: nodeIdHandler_Tag,
+  UploadSession: nodeIdHandler_UploadSession,
+  Artifact: nodeIdHandler_Artifact,
+  SchemaMetadatum: nodeIdHandler_SchemaMetadatum,
+  Namespace: nodeIdHandler_Namespace,
+  Repository: nodeIdHandler_Repository,
+  FederatedSource: nodeIdHandler_FederatedSource,
+  FederatedSkillCache: nodeIdHandler_FederatedSkillCache,
+  ApiToken: nodeIdHandler_ApiToken
+};
+const decodeNodeId = makeDecodeNodeId(Object.values(nodeIdHandlerByTypeName));
+function findTypeNameMatch(specifier) {
+  if (!specifier) return null;
+  for (const [typeName, typeSpec] of Object.entries(nodeIdHandlerByTypeName)) {
+    const value = specifier[typeSpec.codec.name];
+    if (value != null && typeSpec.match(value)) return typeName;
+  }
+  console.warn(`Could not find a type that matched the specifier '${inspect(specifier)}'`);
+  return null;
+}
+function UUIDSerialize(value) {
+  return "" + value;
+}
+const coerce = string => {
+  if (!/^[0-9a-f]{8}-?[0-9a-f]{4}-?[0-9a-f]{4}-?[0-9a-f]{4}-?[0-9a-f]{12}$/i.test(string)) throw new GraphQLError("Invalid UUID, expected 32 hexadecimal characters, optionally with hyphens");
+  return string;
+};
 function assertAllowed12(value, mode) {
   if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
   if (mode === "list" && !false) {
@@ -2226,26 +2766,6 @@ function assertAllowed16(value, mode) {
   }
   if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
 }
-const colSpec = {
-  fieldName: "rowId",
-  attributeName: "id",
-  attribute: spec_repository.attributes.id
-};
-const colSpec2 = {
-  fieldName: "namespaceId",
-  attributeName: "namespace_id",
-  attribute: spec_repository.attributes.namespace_id
-};
-const colSpec3 = {
-  fieldName: "name",
-  attributeName: "name",
-  attribute: spec_repository.attributes.name
-};
-const colSpec4 = {
-  fieldName: "artifactType",
-  attributeName: "artifact_type",
-  attribute: spec_repository.attributes.artifact_type
-};
 function assertAllowed17(value, mode) {
   if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
   if (mode === "list" && !false) {
@@ -2268,7 +2788,49 @@ function assertAllowed18(value, mode) {
   }
   if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
 }
+const colSpec = {
+  fieldName: "rowId",
+  attributeName: "id",
+  attribute: spec_repository.attributes.id
+};
+const colSpec2 = {
+  fieldName: "namespaceId",
+  attributeName: "namespace_id",
+  attribute: spec_repository.attributes.namespace_id
+};
+const colSpec3 = {
+  fieldName: "name",
+  attributeName: "name",
+  attribute: spec_repository.attributes.name
+};
+const colSpec4 = {
+  fieldName: "artifactType",
+  attributeName: "artifact_type",
+  attribute: spec_repository.attributes.artifact_type
+};
 function assertAllowed19(value, mode) {
+  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+  if (mode === "list" && !false) {
+    const arr = value;
+    if (arr) {
+      const l = arr.length;
+      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+    }
+  }
+  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+}
+function assertAllowed20(value, mode) {
+  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+  if (mode === "list" && !false) {
+    const arr = value;
+    if (arr) {
+      const l = arr.length;
+      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+    }
+  }
+  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+}
+function assertAllowed21(value, mode) {
   if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
   if (mode === "list" && !false) {
     const arr = value;
@@ -2651,7 +3213,7 @@ function resolveSqlValue12(_unused, input, inputCodec) {
     if (inputCodec === TYPES.citext) return sqlValue;else return sql`lower(${sqlValue})`;
   }
 }
-function assertAllowed20(value, mode) {
+function assertAllowed22(value, mode) {
   if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
   if (mode === "list" && !false) {
     const arr = value;
@@ -2677,28 +3239,6 @@ const colSpec7 = {
   attributeName: "digest",
   attribute: spec_artifact.attributes.digest
 };
-function assertAllowed21(value, mode) {
-  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
-  if (mode === "list" && !false) {
-    const arr = value;
-    if (arr) {
-      const l = arr.length;
-      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
-    }
-  }
-  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
-}
-function assertAllowed22(value, mode) {
-  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
-  if (mode === "list" && !false) {
-    const arr = value;
-    if (arr) {
-      const l = arr.length;
-      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
-    }
-  }
-  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
-}
 function assertAllowed23(value, mode) {
   if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
   if (mode === "list" && !false) {
@@ -2710,11 +3250,6 @@ function assertAllowed23(value, mode) {
   }
   if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
 }
-const colSpec8 = {
-  fieldName: "artifactId",
-  attributeName: "artifact_id",
-  attribute: spec_containerMetadata.attributes.artifact_id
-};
 function assertAllowed24(value, mode) {
   if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
   if (mode === "list" && !false) {
@@ -2737,10 +3272,10 @@ function assertAllowed25(value, mode) {
   }
   if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
 }
-const colSpec9 = {
+const colSpec8 = {
   fieldName: "artifactId",
   attributeName: "artifact_id",
-  attribute: spec_schemaMetadata.attributes.artifact_id
+  attribute: spec_containerMetadata.attributes.artifact_id
 };
 function assertAllowed26(value, mode) {
   if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
@@ -2764,7 +3299,34 @@ function assertAllowed27(value, mode) {
   }
   if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
 }
+const colSpec9 = {
+  fieldName: "artifactId",
+  attributeName: "artifact_id",
+  attribute: spec_schemaMetadata.attributes.artifact_id
+};
 function assertAllowed28(value, mode) {
+  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+  if (mode === "list" && !false) {
+    const arr = value;
+    if (arr) {
+      const l = arr.length;
+      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+    }
+  }
+  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+}
+function assertAllowed29(value, mode) {
+  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+  if (mode === "list" && !false) {
+    const arr = value;
+    if (arr) {
+      const l = arr.length;
+      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+    }
+  }
+  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+}
+function assertAllowed30(value, mode) {
   if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
   if (mode === "list" && !false) {
     const arr = value;
@@ -2795,33 +3357,6 @@ const colSpec13 = {
   attributeName: "name",
   attribute: spec_tag.attributes.name
 };
-function assertAllowed29(value, mode) {
-  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
-  if (mode === "list" && !false) {
-    const arr = value;
-    if (arr) {
-      const l = arr.length;
-      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
-    }
-  }
-  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
-}
-function assertAllowed30(value, mode) {
-  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
-  if (mode === "list" && !false) {
-    const arr = value;
-    if (arr) {
-      const l = arr.length;
-      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
-    }
-  }
-  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
-}
-const colSpec14 = {
-  fieldName: "artifactId",
-  attributeName: "artifact_id",
-  attribute: spec_wasmMetadata.attributes.artifact_id
-};
 function assertAllowed31(value, mode) {
   if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
   if (mode === "list" && !false) {
@@ -2844,6 +3379,11 @@ function assertAllowed32(value, mode) {
   }
   if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
 }
+const colSpec14 = {
+  fieldName: "artifactId",
+  attributeName: "artifact_id",
+  attribute: spec_wasmMetadata.attributes.artifact_id
+};
 function assertAllowed33(value, mode) {
   if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
   if (mode === "list" && !false) {
@@ -2856,6 +3396,28 @@ function assertAllowed33(value, mode) {
   if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
 }
 function assertAllowed34(value, mode) {
+  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+  if (mode === "list" && !false) {
+    const arr = value;
+    if (arr) {
+      const l = arr.length;
+      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+    }
+  }
+  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+}
+function assertAllowed35(value, mode) {
+  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+  if (mode === "list" && !false) {
+    const arr = value;
+    if (arr) {
+      const l = arr.length;
+      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+    }
+  }
+  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+}
+function assertAllowed36(value, mode) {
   if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
   if (mode === "list" && !false) {
     const arr = value;
@@ -2881,7 +3443,7 @@ const colSpec17 = {
   attributeName: "expires_at",
   attribute: spec_uploadSession.attributes.expires_at
 };
-function assertAllowed35(value, mode) {
+function assertAllowed37(value, mode) {
   if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
   if (mode === "list" && !false) {
     const arr = value;
@@ -2892,7 +3454,7 @@ function assertAllowed35(value, mode) {
   }
   if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
 }
-function assertAllowed36(value, mode) {
+function assertAllowed38(value, mode) {
   if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
   if (mode === "list" && !false) {
     const arr = value;
@@ -2953,7 +3515,7 @@ const resolve46 = (i, v) => sql`${i} < ${v}`;
 const resolve47 = (i, v) => sql`${i} <= ${v}`;
 const resolve48 = (i, v) => sql`${i} > ${v}`;
 const resolve49 = (i, v) => sql`${i} >= ${v}`;
-function assertAllowed37(value, mode) {
+function assertAllowed39(value, mode) {
   if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
   if (mode === "list" && !false) {
     const arr = value;
@@ -2999,7 +3561,7 @@ const colSpec24 = {
   attributeName: "is_active",
   attribute: spec_apiToken.attributes.is_active
 };
-function assertAllowed38(value, mode) {
+function assertAllowed40(value, mode) {
   if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
   if (mode === "list" && !false) {
     const arr = value;
@@ -3010,7 +3572,7 @@ function assertAllowed38(value, mode) {
   }
   if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
 }
-function assertAllowed39(value, mode) {
+function assertAllowed41(value, mode) {
   if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
   if (mode === "list" && !false) {
     const arr = value;
@@ -3086,28 +3648,6 @@ const colSpec27 = {
   attributeName: "organization_id",
   attribute: spec_namespace.attributes.organization_id
 };
-function assertAllowed40(value, mode) {
-  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
-  if (mode === "list" && !false) {
-    const arr = value;
-    if (arr) {
-      const l = arr.length;
-      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
-    }
-  }
-  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
-}
-function assertAllowed41(value, mode) {
-  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
-  if (mode === "list" && !false) {
-    const arr = value;
-    if (arr) {
-      const l = arr.length;
-      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
-    }
-  }
-  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
-}
 function assertAllowed42(value, mode) {
   if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
   if (mode === "list" && !false) {
@@ -3130,13 +3670,137 @@ function assertAllowed43(value, mode) {
   }
   if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
 }
+function assertAllowed44(value, mode) {
+  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+  if (mode === "list" && !false) {
+    const arr = value;
+    if (arr) {
+      const l = arr.length;
+      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+    }
+  }
+  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+}
+function assertAllowed45(value, mode) {
+  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+  if (mode === "list" && !false) {
+    const arr = value;
+    if (arr) {
+      const l = arr.length;
+      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+    }
+  }
+  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+}
+function assertAllowed46(value, mode) {
+  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+  if (mode === "list" && !false) {
+    const arr = value;
+    if (arr) {
+      const l = arr.length;
+      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+    }
+  }
+  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+}
+const colSpec28 = {
+  fieldName: "rowId",
+  attributeName: "id",
+  attribute: spec_federatedSkillCache.attributes.id
+};
+const colSpec29 = {
+  fieldName: "sourceId",
+  attributeName: "source_id",
+  attribute: spec_federatedSkillCache.attributes.source_id
+};
+const colSpec30 = {
+  fieldName: "slug",
+  attributeName: "slug",
+  attribute: spec_federatedSkillCache.attributes.slug
+};
+const colSpec31 = {
+  fieldName: "expiresAt",
+  attributeName: "expires_at",
+  attribute: spec_federatedSkillCache.attributes.expires_at
+};
+const colSpec32 = {
+  fieldName: "vetStatus",
+  attributeName: "vet_status",
+  attribute: spec_federatedSkillCache.attributes.vet_status
+};
+function assertAllowed47(value, mode) {
+  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+  if (mode === "list" && !false) {
+    const arr = value;
+    if (arr) {
+      const l = arr.length;
+      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+    }
+  }
+  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+}
+function assertAllowed48(value, mode) {
+  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+  if (mode === "list" && !false) {
+    const arr = value;
+    if (arr) {
+      const l = arr.length;
+      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+    }
+  }
+  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+}
+const colSpec33 = {
+  fieldName: "rowId",
+  attributeName: "id",
+  attribute: spec_federatedSource.attributes.id
+};
+const colSpec34 = {
+  fieldName: "namespace",
+  attributeName: "namespace",
+  attribute: spec_federatedSource.attributes.namespace
+};
+const colSpec35 = {
+  fieldName: "upstreamType",
+  attributeName: "upstream_type",
+  attribute: spec_federatedSource.attributes.upstream_type
+};
+function assertAllowed49(value, mode) {
+  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+  if (mode === "list" && !false) {
+    const arr = value;
+    if (arr) {
+      const l = arr.length;
+      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+    }
+  }
+  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+}
+function assertAllowed50(value, mode) {
+  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+  if (mode === "list" && !false) {
+    const arr = value;
+    if (arr) {
+      const l = arr.length;
+      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+    }
+  }
+  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+}
+function assertAllowed51(value, mode) {
+  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+  if (mode === "list" && !false) {
+    const arr = value;
+    if (arr) {
+      const l = arr.length;
+      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+    }
+  }
+  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+}
 const specFromArgs_ContainerMetadatum = args => {
   const $nodeId = args.getRaw(["input", "id"]);
   return specFromNodeId(nodeIdHandler_ContainerMetadatum, $nodeId);
-};
-const specFromArgs_Artifact = args => {
-  const $nodeId = args.getRaw(["input", "id"]);
-  return specFromNodeId(nodeIdHandler_Artifact, $nodeId);
 };
 const specFromArgs_WasmMetadatum = args => {
   const $nodeId = args.getRaw(["input", "id"]);
@@ -3150,6 +3814,10 @@ const specFromArgs_UploadSession = args => {
   const $nodeId = args.getRaw(["input", "id"]);
   return specFromNodeId(nodeIdHandler_UploadSession, $nodeId);
 };
+const specFromArgs_Artifact = args => {
+  const $nodeId = args.getRaw(["input", "id"]);
+  return specFromNodeId(nodeIdHandler_Artifact, $nodeId);
+};
 const specFromArgs_SchemaMetadatum = args => {
   const $nodeId = args.getRaw(["input", "id"]);
   return specFromNodeId(nodeIdHandler_SchemaMetadatum, $nodeId);
@@ -3162,6 +3830,14 @@ const specFromArgs_Repository = args => {
   const $nodeId = args.getRaw(["input", "id"]);
   return specFromNodeId(nodeIdHandler_Repository, $nodeId);
 };
+const specFromArgs_FederatedSource = args => {
+  const $nodeId = args.getRaw(["input", "id"]);
+  return specFromNodeId(nodeIdHandler_FederatedSource, $nodeId);
+};
+const specFromArgs_FederatedSkillCache = args => {
+  const $nodeId = args.getRaw(["input", "id"]);
+  return specFromNodeId(nodeIdHandler_FederatedSkillCache, $nodeId);
+};
 const specFromArgs_ApiToken = args => {
   const $nodeId = args.getRaw(["input", "id"]);
   return specFromNodeId(nodeIdHandler_ApiToken, $nodeId);
@@ -3169,10 +3845,6 @@ const specFromArgs_ApiToken = args => {
 const specFromArgs_ContainerMetadatum2 = args => {
   const $nodeId = args.getRaw(["input", "id"]);
   return specFromNodeId(nodeIdHandler_ContainerMetadatum, $nodeId);
-};
-const specFromArgs_Artifact2 = args => {
-  const $nodeId = args.getRaw(["input", "id"]);
-  return specFromNodeId(nodeIdHandler_Artifact, $nodeId);
 };
 const specFromArgs_WasmMetadatum2 = args => {
   const $nodeId = args.getRaw(["input", "id"]);
@@ -3186,6 +3858,10 @@ const specFromArgs_UploadSession2 = args => {
   const $nodeId = args.getRaw(["input", "id"]);
   return specFromNodeId(nodeIdHandler_UploadSession, $nodeId);
 };
+const specFromArgs_Artifact2 = args => {
+  const $nodeId = args.getRaw(["input", "id"]);
+  return specFromNodeId(nodeIdHandler_Artifact, $nodeId);
+};
 const specFromArgs_SchemaMetadatum2 = args => {
   const $nodeId = args.getRaw(["input", "id"]);
   return specFromNodeId(nodeIdHandler_SchemaMetadatum, $nodeId);
@@ -3197,6 +3873,14 @@ const specFromArgs_Namespace2 = args => {
 const specFromArgs_Repository2 = args => {
   const $nodeId = args.getRaw(["input", "id"]);
   return specFromNodeId(nodeIdHandler_Repository, $nodeId);
+};
+const specFromArgs_FederatedSource2 = args => {
+  const $nodeId = args.getRaw(["input", "id"]);
+  return specFromNodeId(nodeIdHandler_FederatedSource, $nodeId);
+};
+const specFromArgs_FederatedSkillCache2 = args => {
+  const $nodeId = args.getRaw(["input", "id"]);
+  return specFromNodeId(nodeIdHandler_FederatedSkillCache, $nodeId);
 };
 const specFromArgs_ApiToken2 = args => {
   const $nodeId = args.getRaw(["input", "id"]);
@@ -3242,9 +3926,6 @@ type Query implements Node {
   """Get a single \`ContainerMetadatum\`."""
   containerMetadatum(artifactId: UUID!): ContainerMetadatum
 
-  """Get a single \`Artifact\`."""
-  artifact(rowId: UUID!): Artifact
-
   """Get a single \`WasmMetadatum\`."""
   wasmMetadatum(artifactId: UUID!): WasmMetadatum
 
@@ -3253,6 +3934,9 @@ type Query implements Node {
 
   """Get a single \`UploadSession\`."""
   uploadSession(rowId: UUID!): UploadSession
+
+  """Get a single \`Artifact\`."""
+  artifact(rowId: UUID!): Artifact
 
   """Get a single \`SchemaMetadatum\`."""
   schemaMetadatum(artifactId: UUID!): SchemaMetadatum
@@ -3266,6 +3950,15 @@ type Query implements Node {
   """Get a single \`Repository\`."""
   repository(rowId: UUID!): Repository
 
+  """Get a single \`FederatedSource\`."""
+  federatedSource(rowId: UUID!): FederatedSource
+
+  """Get a single \`FederatedSource\`."""
+  federatedSourceByNamespace(namespace: String!): FederatedSource
+
+  """Get a single \`FederatedSkillCache\`."""
+  federatedSkillCache(rowId: UUID!): FederatedSkillCache
+
   """Get a single \`ApiToken\`."""
   apiToken(rowId: UUID!): ApiToken
 
@@ -3276,12 +3969,6 @@ type Query implements Node {
     """
     id: ID!
   ): ContainerMetadatum
-
-  """Reads a single \`Artifact\` using its globally unique \`ID\`."""
-  artifactById(
-    """The globally unique \`ID\` to be used in selecting a single \`Artifact\`."""
-    id: ID!
-  ): Artifact
 
   """Reads a single \`WasmMetadatum\` using its globally unique \`ID\`."""
   wasmMetadatumById(
@@ -3305,6 +3992,12 @@ type Query implements Node {
     id: ID!
   ): UploadSession
 
+  """Reads a single \`Artifact\` using its globally unique \`ID\`."""
+  artifactById(
+    """The globally unique \`ID\` to be used in selecting a single \`Artifact\`."""
+    id: ID!
+  ): Artifact
+
   """Reads a single \`SchemaMetadatum\` using its globally unique \`ID\`."""
   schemaMetadatumById(
     """
@@ -3326,6 +4019,22 @@ type Query implements Node {
     """
     id: ID!
   ): Repository
+
+  """Reads a single \`FederatedSource\` using its globally unique \`ID\`."""
+  federatedSourceById(
+    """
+    The globally unique \`ID\` to be used in selecting a single \`FederatedSource\`.
+    """
+    id: ID!
+  ): FederatedSource
+
+  """Reads a single \`FederatedSkillCache\` using its globally unique \`ID\`."""
+  federatedSkillCacheById(
+    """
+    The globally unique \`ID\` to be used in selecting a single \`FederatedSkillCache\`.
+    """
+    id: ID!
+  ): FederatedSkillCache
 
   """Reads a single \`ApiToken\` using its globally unique \`ID\`."""
   apiTokenById(
@@ -3366,40 +4075,6 @@ type Query implements Node {
     """The method to use when ordering \`ContainerMetadatum\`."""
     orderBy: [ContainerMetadatumOrderBy!] = [PRIMARY_KEY_ASC]
   ): ContainerMetadatumConnection
-
-  """Reads and enables pagination through a set of \`Artifact\`."""
-  artifacts(
-    """Only read the first \`n\` values of the set."""
-    first: Int
-
-    """Only read the last \`n\` values of the set."""
-    last: Int
-
-    """
-    Skip the first \`n\` values from our \`after\` cursor, an alternative to cursor
-    based pagination. May not be used with \`last\`.
-    """
-    offset: Int
-
-    """Read all values in the set before (above) this cursor."""
-    before: Cursor
-
-    """Read all values in the set after (below) this cursor."""
-    after: Cursor
-
-    """
-    A condition to be used in determining which values should be returned by the collection.
-    """
-    condition: ArtifactCondition
-
-    """
-    A filter to be used in determining which values should be returned by the collection.
-    """
-    filter: ArtifactFilter
-
-    """The method to use when ordering \`Artifact\`."""
-    orderBy: [ArtifactOrderBy!] = [PRIMARY_KEY_ASC]
-  ): ArtifactConnection
 
   """Reads and enables pagination through a set of \`WasmMetadatum\`."""
   wasmMetadata(
@@ -3503,6 +4178,40 @@ type Query implements Node {
     orderBy: [UploadSessionOrderBy!] = [PRIMARY_KEY_ASC]
   ): UploadSessionConnection
 
+  """Reads and enables pagination through a set of \`Artifact\`."""
+  artifacts(
+    """Only read the first \`n\` values of the set."""
+    first: Int
+
+    """Only read the last \`n\` values of the set."""
+    last: Int
+
+    """
+    Skip the first \`n\` values from our \`after\` cursor, an alternative to cursor
+    based pagination. May not be used with \`last\`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: ArtifactCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: ArtifactFilter
+
+    """The method to use when ordering \`Artifact\`."""
+    orderBy: [ArtifactOrderBy!] = [PRIMARY_KEY_ASC]
+  ): ArtifactConnection
+
   """Reads and enables pagination through a set of \`SchemaMetadatum\`."""
   schemaMetadata(
     """Only read the first \`n\` values of the set."""
@@ -3605,6 +4314,74 @@ type Query implements Node {
     orderBy: [RepositoryOrderBy!] = [PRIMARY_KEY_ASC]
   ): RepositoryConnection
 
+  """Reads and enables pagination through a set of \`FederatedSource\`."""
+  federatedSources(
+    """Only read the first \`n\` values of the set."""
+    first: Int
+
+    """Only read the last \`n\` values of the set."""
+    last: Int
+
+    """
+    Skip the first \`n\` values from our \`after\` cursor, an alternative to cursor
+    based pagination. May not be used with \`last\`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: FederatedSourceCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: FederatedSourceFilter
+
+    """The method to use when ordering \`FederatedSource\`."""
+    orderBy: [FederatedSourceOrderBy!] = [PRIMARY_KEY_ASC]
+  ): FederatedSourceConnection
+
+  """Reads and enables pagination through a set of \`FederatedSkillCache\`."""
+  federatedSkillCaches(
+    """Only read the first \`n\` values of the set."""
+    first: Int
+
+    """Only read the last \`n\` values of the set."""
+    last: Int
+
+    """
+    Skip the first \`n\` values from our \`after\` cursor, an alternative to cursor
+    based pagination. May not be used with \`last\`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: FederatedSkillCacheCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: FederatedSkillCacheFilter
+
+    """The method to use when ordering \`FederatedSkillCache\`."""
+    orderBy: [FederatedSkillCacheOrderBy!] = [PRIMARY_KEY_ASC]
+  ): FederatedSkillCacheConnection
+
   """Reads and enables pagination through a set of \`ApiToken\`."""
   apiTokens(
     """Only read the first \`n\` values of the set."""
@@ -3688,6 +4465,7 @@ type Artifact implements Node {
   mediaType: String!
   content: String
   createdAt: Datetime
+  storagePath: String
 
   """Reads a single \`Repository\` that is related to this \`Artifact\`."""
   repository: Repository
@@ -5094,6 +5872,230 @@ type WasmMetadatum implements Node {
   artifact: Artifact
 }
 
+type FederatedSource implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  id: ID!
+  rowId: UUID!
+  namespace: String!
+  upstreamBaseUrl: String!
+  upstreamType: String!
+  enabled: Boolean!
+  rateLimitRpm: Int!
+  cacheTtlSeconds: Int!
+  tagListCacheTtlSeconds: Int!
+  requireVetting: Boolean!
+  createdAt: Datetime
+  updatedAt: Datetime
+
+  """Reads and enables pagination through a set of \`FederatedSkillCache\`."""
+  federatedSkillCachesBySourceId(
+    """Only read the first \`n\` values of the set."""
+    first: Int
+
+    """Only read the last \`n\` values of the set."""
+    last: Int
+
+    """
+    Skip the first \`n\` values from our \`after\` cursor, an alternative to cursor
+    based pagination. May not be used with \`last\`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: FederatedSkillCacheCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: FederatedSkillCacheFilter
+
+    """The method to use when ordering \`FederatedSkillCache\`."""
+    orderBy: [FederatedSkillCacheOrderBy!] = [PRIMARY_KEY_ASC]
+  ): FederatedSkillCacheConnection!
+}
+
+"""A connection to a list of \`FederatedSkillCache\` values."""
+type FederatedSkillCacheConnection {
+  """A list of \`FederatedSkillCache\` objects."""
+  nodes: [FederatedSkillCache]!
+
+  """
+  A list of edges which contains the \`FederatedSkillCache\` and cursor to aid in pagination.
+  """
+  edges: [FederatedSkillCacheEdge]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """
+  The count of *all* \`FederatedSkillCache\` you could get from the connection.
+  """
+  totalCount: Int!
+}
+
+type FederatedSkillCache implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  id: ID!
+  rowId: UUID!
+  sourceId: UUID!
+  slug: String!
+  content: String
+  contentDigest: String
+  fetchedAt: Datetime
+  expiresAt: Datetime
+  vetStatus: String!
+  vetReason: String
+  vettedBy: String
+  vettedAt: Datetime
+  upstreamMeta: JSON
+  createdAt: Datetime
+
+  """
+  Reads a single \`FederatedSource\` that is related to this \`FederatedSkillCache\`.
+  """
+  source: FederatedSource
+}
+
+"""A \`FederatedSkillCache\` edge in the connection."""
+type FederatedSkillCacheEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The \`FederatedSkillCache\` at the end of the edge."""
+  node: FederatedSkillCache
+}
+
+"""
+A condition to be used against \`FederatedSkillCache\` object types. All fields
+are tested for equality and combined with a logical ‘and.’
+"""
+input FederatedSkillCacheCondition {
+  """Checks for equality with the object’s \`rowId\` field."""
+  rowId: UUID
+
+  """Checks for equality with the object’s \`sourceId\` field."""
+  sourceId: UUID
+
+  """Checks for equality with the object’s \`slug\` field."""
+  slug: String
+
+  """Checks for equality with the object’s \`expiresAt\` field."""
+  expiresAt: Datetime
+
+  """Checks for equality with the object’s \`vetStatus\` field."""
+  vetStatus: String
+}
+
+"""
+A filter to be used against \`FederatedSkillCache\` object types. All fields are combined with a logical ‘and.’
+"""
+input FederatedSkillCacheFilter {
+  """Filter by the object’s \`rowId\` field."""
+  rowId: UUIDFilter
+
+  """Filter by the object’s \`sourceId\` field."""
+  sourceId: UUIDFilter
+
+  """Filter by the object’s \`slug\` field."""
+  slug: StringFilter
+
+  """Filter by the object’s \`expiresAt\` field."""
+  expiresAt: DatetimeFilter
+
+  """Filter by the object’s \`vetStatus\` field."""
+  vetStatus: StringFilter
+
+  """Filter by the object’s \`source\` relation."""
+  source: FederatedSourceFilter
+
+  """Checks for all expressions in this list."""
+  and: [FederatedSkillCacheFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [FederatedSkillCacheFilter!]
+
+  """Negates the expression."""
+  not: FederatedSkillCacheFilter
+}
+
+"""
+A filter to be used against \`FederatedSource\` object types. All fields are combined with a logical ‘and.’
+"""
+input FederatedSourceFilter {
+  """Filter by the object’s \`rowId\` field."""
+  rowId: UUIDFilter
+
+  """Filter by the object’s \`namespace\` field."""
+  namespace: StringFilter
+
+  """Filter by the object’s \`upstreamType\` field."""
+  upstreamType: StringFilter
+
+  """Filter by the object’s \`federatedSkillCachesBySourceId\` relation."""
+  federatedSkillCachesBySourceId: FederatedSourceToManyFederatedSkillCacheFilter
+
+  """Some related \`federatedSkillCachesBySourceId\` exist."""
+  federatedSkillCachesBySourceIdExist: Boolean
+
+  """Checks for all expressions in this list."""
+  and: [FederatedSourceFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [FederatedSourceFilter!]
+
+  """Negates the expression."""
+  not: FederatedSourceFilter
+}
+
+"""
+A filter to be used against many \`FederatedSkillCache\` object types. All fields are combined with a logical ‘and.’
+"""
+input FederatedSourceToManyFederatedSkillCacheFilter {
+  """
+  Every related \`FederatedSkillCache\` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  every: FederatedSkillCacheFilter
+
+  """
+  Some related \`FederatedSkillCache\` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  some: FederatedSkillCacheFilter
+
+  """
+  No related \`FederatedSkillCache\` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  none: FederatedSkillCacheFilter
+}
+
+"""Methods to use when ordering \`FederatedSkillCache\`."""
+enum FederatedSkillCacheOrderBy {
+  NATURAL
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+  ROW_ID_ASC
+  ROW_ID_DESC
+  SOURCE_ID_ASC
+  SOURCE_ID_DESC
+  SLUG_ASC
+  SLUG_DESC
+  EXPIRES_AT_ASC
+  EXPIRES_AT_DESC
+  VET_STATUS_ASC
+  VET_STATUS_DESC
+}
+
 """A connection to a list of \`ContainerMetadatum\` values."""
 type ContainerMetadatumConnection {
   """A list of \`ContainerMetadatum\` objects."""
@@ -5284,6 +6286,62 @@ enum NamespaceOrderBy {
   ORGANIZATION_ID_DESC
 }
 
+"""A connection to a list of \`FederatedSource\` values."""
+type FederatedSourceConnection {
+  """A list of \`FederatedSource\` objects."""
+  nodes: [FederatedSource]!
+
+  """
+  A list of edges which contains the \`FederatedSource\` and cursor to aid in pagination.
+  """
+  edges: [FederatedSourceEdge]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """
+  The count of *all* \`FederatedSource\` you could get from the connection.
+  """
+  totalCount: Int!
+}
+
+"""A \`FederatedSource\` edge in the connection."""
+type FederatedSourceEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The \`FederatedSource\` at the end of the edge."""
+  node: FederatedSource
+}
+
+"""
+A condition to be used against \`FederatedSource\` object types. All fields are
+tested for equality and combined with a logical ‘and.’
+"""
+input FederatedSourceCondition {
+  """Checks for equality with the object’s \`rowId\` field."""
+  rowId: UUID
+
+  """Checks for equality with the object’s \`namespace\` field."""
+  namespace: String
+
+  """Checks for equality with the object’s \`upstreamType\` field."""
+  upstreamType: String
+}
+
+"""Methods to use when ordering \`FederatedSource\`."""
+enum FederatedSourceOrderBy {
+  NATURAL
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+  ROW_ID_ASC
+  ROW_ID_DESC
+  NAMESPACE_ASC
+  NAMESPACE_DESC
+  UPSTREAM_TYPE_ASC
+  UPSTREAM_TYPE_DESC
+}
+
 """
 The root mutation type which contains root level fields which mutate data.
 """
@@ -5295,14 +6353,6 @@ type Mutation {
     """
     input: CreateContainerMetadatumInput!
   ): CreateContainerMetadatumPayload
-
-  """Creates a single \`Artifact\`."""
-  createArtifact(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: CreateArtifactInput!
-  ): CreateArtifactPayload
 
   """Creates a single \`WasmMetadatum\`."""
   createWasmMetadatum(
@@ -5328,6 +6378,14 @@ type Mutation {
     input: CreateUploadSessionInput!
   ): CreateUploadSessionPayload
 
+  """Creates a single \`Artifact\`."""
+  createArtifact(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateArtifactInput!
+  ): CreateArtifactPayload
+
   """Creates a single \`SchemaMetadatum\`."""
   createSchemaMetadatum(
     """
@@ -5351,6 +6409,22 @@ type Mutation {
     """
     input: CreateRepositoryInput!
   ): CreateRepositoryPayload
+
+  """Creates a single \`FederatedSource\`."""
+  createFederatedSource(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateFederatedSourceInput!
+  ): CreateFederatedSourcePayload
+
+  """Creates a single \`FederatedSkillCache\`."""
+  createFederatedSkillCache(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateFederatedSkillCacheInput!
+  ): CreateFederatedSkillCachePayload
 
   """Creates a single \`ApiToken\`."""
   createApiToken(
@@ -5377,22 +6451,6 @@ type Mutation {
     """
     input: UpdateContainerMetadatumInput!
   ): UpdateContainerMetadatumPayload
-
-  """Updates a single \`Artifact\` using its globally unique id and a patch."""
-  updateArtifactById(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdateArtifactByIdInput!
-  ): UpdateArtifactPayload
-
-  """Updates a single \`Artifact\` using a unique key and a patch."""
-  updateArtifact(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdateArtifactInput!
-  ): UpdateArtifactPayload
 
   """
   Updates a single \`WasmMetadatum\` using its globally unique id and a patch.
@@ -5445,6 +6503,22 @@ type Mutation {
     """
     input: UpdateUploadSessionInput!
   ): UpdateUploadSessionPayload
+
+  """Updates a single \`Artifact\` using its globally unique id and a patch."""
+  updateArtifactById(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateArtifactByIdInput!
+  ): UpdateArtifactPayload
+
+  """Updates a single \`Artifact\` using a unique key and a patch."""
+  updateArtifact(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateArtifactInput!
+  ): UpdateArtifactPayload
 
   """
   Updates a single \`SchemaMetadatum\` using its globally unique id and a patch.
@@ -5506,6 +6580,50 @@ type Mutation {
     input: UpdateRepositoryInput!
   ): UpdateRepositoryPayload
 
+  """
+  Updates a single \`FederatedSource\` using its globally unique id and a patch.
+  """
+  updateFederatedSourceById(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateFederatedSourceByIdInput!
+  ): UpdateFederatedSourcePayload
+
+  """Updates a single \`FederatedSource\` using a unique key and a patch."""
+  updateFederatedSource(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateFederatedSourceInput!
+  ): UpdateFederatedSourcePayload
+
+  """Updates a single \`FederatedSource\` using a unique key and a patch."""
+  updateFederatedSourceByNamespace(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateFederatedSourceByNamespaceInput!
+  ): UpdateFederatedSourcePayload
+
+  """
+  Updates a single \`FederatedSkillCache\` using its globally unique id and a patch.
+  """
+  updateFederatedSkillCacheById(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateFederatedSkillCacheByIdInput!
+  ): UpdateFederatedSkillCachePayload
+
+  """Updates a single \`FederatedSkillCache\` using a unique key and a patch."""
+  updateFederatedSkillCache(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateFederatedSkillCacheInput!
+  ): UpdateFederatedSkillCachePayload
+
   """Updates a single \`ApiToken\` using its globally unique id and a patch."""
   updateApiTokenById(
     """
@@ -5537,22 +6655,6 @@ type Mutation {
     """
     input: DeleteContainerMetadatumInput!
   ): DeleteContainerMetadatumPayload
-
-  """Deletes a single \`Artifact\` using its globally unique id."""
-  deleteArtifactById(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteArtifactByIdInput!
-  ): DeleteArtifactPayload
-
-  """Deletes a single \`Artifact\` using a unique key."""
-  deleteArtifact(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteArtifactInput!
-  ): DeleteArtifactPayload
 
   """Deletes a single \`WasmMetadatum\` using its globally unique id."""
   deleteWasmMetadatumById(
@@ -5601,6 +6703,22 @@ type Mutation {
     """
     input: DeleteUploadSessionInput!
   ): DeleteUploadSessionPayload
+
+  """Deletes a single \`Artifact\` using its globally unique id."""
+  deleteArtifactById(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteArtifactByIdInput!
+  ): DeleteArtifactPayload
+
+  """Deletes a single \`Artifact\` using a unique key."""
+  deleteArtifact(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteArtifactInput!
+  ): DeleteArtifactPayload
 
   """Deletes a single \`SchemaMetadatum\` using its globally unique id."""
   deleteSchemaMetadatumById(
@@ -5657,6 +6775,46 @@ type Mutation {
     """
     input: DeleteRepositoryInput!
   ): DeleteRepositoryPayload
+
+  """Deletes a single \`FederatedSource\` using its globally unique id."""
+  deleteFederatedSourceById(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteFederatedSourceByIdInput!
+  ): DeleteFederatedSourcePayload
+
+  """Deletes a single \`FederatedSource\` using a unique key."""
+  deleteFederatedSource(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteFederatedSourceInput!
+  ): DeleteFederatedSourcePayload
+
+  """Deletes a single \`FederatedSource\` using a unique key."""
+  deleteFederatedSourceByNamespace(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteFederatedSourceByNamespaceInput!
+  ): DeleteFederatedSourcePayload
+
+  """Deletes a single \`FederatedSkillCache\` using its globally unique id."""
+  deleteFederatedSkillCacheById(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteFederatedSkillCacheByIdInput!
+  ): DeleteFederatedSkillCachePayload
+
+  """Deletes a single \`FederatedSkillCache\` using a unique key."""
+  deleteFederatedSkillCache(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteFederatedSkillCacheInput!
+  ): DeleteFederatedSkillCachePayload
 
   """Deletes a single \`ApiToken\` using its globally unique id."""
   deleteApiTokenById(
@@ -5718,52 +6876,6 @@ input ContainerMetadatumInput {
   os: String
   configDigest: String
   layerDigests: JSON
-}
-
-"""The output of our create \`Artifact\` mutation."""
-type CreateArtifactPayload {
-  """
-  The exact same \`clientMutationId\` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """The \`Artifact\` that was created by this mutation."""
-  artifact: Artifact
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-
-  """An edge for our \`Artifact\`. May be used by Relay 1."""
-  artifactEdge(
-    """The method to use when ordering \`Artifact\`."""
-    orderBy: [ArtifactOrderBy!]! = [PRIMARY_KEY_ASC]
-  ): ArtifactEdge
-}
-
-"""All input for the create \`Artifact\` mutation."""
-input CreateArtifactInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-
-  """The \`Artifact\` to be created by this mutation."""
-  artifact: ArtifactInput!
-}
-
-"""An input for mutations affecting \`Artifact\`"""
-input ArtifactInput {
-  rowId: UUID
-  repositoryId: UUID!
-  digest: String!
-  size: BigInt!
-  mediaType: String!
-  content: String
-  createdAt: Datetime
 }
 
 """The output of our create \`WasmMetadatum\` mutation."""
@@ -5896,6 +7008,53 @@ input UploadSessionInput {
   offset: BigInt
   createdAt: Datetime
   expiresAt: Datetime!
+}
+
+"""The output of our create \`Artifact\` mutation."""
+type CreateArtifactPayload {
+  """
+  The exact same \`clientMutationId\` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The \`Artifact\` that was created by this mutation."""
+  artifact: Artifact
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our \`Artifact\`. May be used by Relay 1."""
+  artifactEdge(
+    """The method to use when ordering \`Artifact\`."""
+    orderBy: [ArtifactOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): ArtifactEdge
+}
+
+"""All input for the create \`Artifact\` mutation."""
+input CreateArtifactInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The \`Artifact\` to be created by this mutation."""
+  artifact: ArtifactInput!
+}
+
+"""An input for mutations affecting \`Artifact\`"""
+input ArtifactInput {
+  rowId: UUID
+  repositoryId: UUID!
+  digest: String!
+  size: BigInt!
+  mediaType: String!
+  content: String
+  createdAt: Datetime
+  storagePath: String
 }
 
 """The output of our create \`SchemaMetadatum\` mutation."""
@@ -6034,6 +7193,108 @@ input RepositoryInput {
   updatedAt: Datetime
 }
 
+"""The output of our create \`FederatedSource\` mutation."""
+type CreateFederatedSourcePayload {
+  """
+  The exact same \`clientMutationId\` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The \`FederatedSource\` that was created by this mutation."""
+  federatedSource: FederatedSource
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our \`FederatedSource\`. May be used by Relay 1."""
+  federatedSourceEdge(
+    """The method to use when ordering \`FederatedSource\`."""
+    orderBy: [FederatedSourceOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): FederatedSourceEdge
+}
+
+"""All input for the create \`FederatedSource\` mutation."""
+input CreateFederatedSourceInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The \`FederatedSource\` to be created by this mutation."""
+  federatedSource: FederatedSourceInput!
+}
+
+"""An input for mutations affecting \`FederatedSource\`"""
+input FederatedSourceInput {
+  rowId: UUID
+  namespace: String!
+  upstreamBaseUrl: String!
+  upstreamType: String!
+  enabled: Boolean
+  rateLimitRpm: Int
+  cacheTtlSeconds: Int
+  tagListCacheTtlSeconds: Int
+  requireVetting: Boolean
+  createdAt: Datetime
+  updatedAt: Datetime
+}
+
+"""The output of our create \`FederatedSkillCache\` mutation."""
+type CreateFederatedSkillCachePayload {
+  """
+  The exact same \`clientMutationId\` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The \`FederatedSkillCache\` that was created by this mutation."""
+  federatedSkillCache: FederatedSkillCache
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our \`FederatedSkillCache\`. May be used by Relay 1."""
+  federatedSkillCacheEdge(
+    """The method to use when ordering \`FederatedSkillCache\`."""
+    orderBy: [FederatedSkillCacheOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): FederatedSkillCacheEdge
+}
+
+"""All input for the create \`FederatedSkillCache\` mutation."""
+input CreateFederatedSkillCacheInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The \`FederatedSkillCache\` to be created by this mutation."""
+  federatedSkillCache: FederatedSkillCacheInput!
+}
+
+"""An input for mutations affecting \`FederatedSkillCache\`"""
+input FederatedSkillCacheInput {
+  rowId: UUID
+  sourceId: UUID!
+  slug: String!
+  content: String
+  contentDigest: String
+  fetchedAt: Datetime
+  expiresAt: Datetime
+  vetStatus: String
+  vetReason: String
+  vettedBy: String
+  vettedAt: Datetime
+  upstreamMeta: JSON
+  createdAt: Datetime
+}
+
 """The output of our create \`ApiToken\` mutation."""
 type CreateApiTokenPayload {
   """
@@ -6154,76 +7415,6 @@ input UpdateContainerMetadatumInput {
   An object where the defined keys will be set on the \`ContainerMetadatum\` being updated.
   """
   patch: ContainerMetadatumPatch!
-}
-
-"""The output of our update \`Artifact\` mutation."""
-type UpdateArtifactPayload {
-  """
-  The exact same \`clientMutationId\` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """The \`Artifact\` that was updated by this mutation."""
-  artifact: Artifact
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-
-  """An edge for our \`Artifact\`. May be used by Relay 1."""
-  artifactEdge(
-    """The method to use when ordering \`Artifact\`."""
-    orderBy: [ArtifactOrderBy!]! = [PRIMARY_KEY_ASC]
-  ): ArtifactEdge
-}
-
-"""All input for the \`updateArtifactById\` mutation."""
-input UpdateArtifactByIdInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-
-  """
-  The globally unique \`ID\` which will identify a single \`Artifact\` to be updated.
-  """
-  id: ID!
-
-  """
-  An object where the defined keys will be set on the \`Artifact\` being updated.
-  """
-  patch: ArtifactPatch!
-}
-
-"""
-Represents an update to a \`Artifact\`. Fields that are set will be updated.
-"""
-input ArtifactPatch {
-  rowId: UUID
-  repositoryId: UUID
-  digest: String
-  size: BigInt
-  mediaType: String
-  content: String
-  createdAt: Datetime
-}
-
-"""All input for the \`updateArtifact\` mutation."""
-input UpdateArtifactInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-  rowId: UUID!
-
-  """
-  An object where the defined keys will be set on the \`Artifact\` being updated.
-  """
-  patch: ArtifactPatch!
 }
 
 """The output of our update \`WasmMetadatum\` mutation."""
@@ -6426,6 +7617,77 @@ input UpdateUploadSessionInput {
   An object where the defined keys will be set on the \`UploadSession\` being updated.
   """
   patch: UploadSessionPatch!
+}
+
+"""The output of our update \`Artifact\` mutation."""
+type UpdateArtifactPayload {
+  """
+  The exact same \`clientMutationId\` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The \`Artifact\` that was updated by this mutation."""
+  artifact: Artifact
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our \`Artifact\`. May be used by Relay 1."""
+  artifactEdge(
+    """The method to use when ordering \`Artifact\`."""
+    orderBy: [ArtifactOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): ArtifactEdge
+}
+
+"""All input for the \`updateArtifactById\` mutation."""
+input UpdateArtifactByIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique \`ID\` which will identify a single \`Artifact\` to be updated.
+  """
+  id: ID!
+
+  """
+  An object where the defined keys will be set on the \`Artifact\` being updated.
+  """
+  patch: ArtifactPatch!
+}
+
+"""
+Represents an update to a \`Artifact\`. Fields that are set will be updated.
+"""
+input ArtifactPatch {
+  rowId: UUID
+  repositoryId: UUID
+  digest: String
+  size: BigInt
+  mediaType: String
+  content: String
+  createdAt: Datetime
+  storagePath: String
+}
+
+"""All input for the \`updateArtifact\` mutation."""
+input UpdateArtifactInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  rowId: UUID!
+
+  """
+  An object where the defined keys will be set on the \`Artifact\` being updated.
+  """
+  patch: ArtifactPatch!
 }
 
 """The output of our update \`SchemaMetadatum\` mutation."""
@@ -6651,6 +7913,171 @@ input UpdateRepositoryInput {
   patch: RepositoryPatch!
 }
 
+"""The output of our update \`FederatedSource\` mutation."""
+type UpdateFederatedSourcePayload {
+  """
+  The exact same \`clientMutationId\` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The \`FederatedSource\` that was updated by this mutation."""
+  federatedSource: FederatedSource
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our \`FederatedSource\`. May be used by Relay 1."""
+  federatedSourceEdge(
+    """The method to use when ordering \`FederatedSource\`."""
+    orderBy: [FederatedSourceOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): FederatedSourceEdge
+}
+
+"""All input for the \`updateFederatedSourceById\` mutation."""
+input UpdateFederatedSourceByIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique \`ID\` which will identify a single \`FederatedSource\` to be updated.
+  """
+  id: ID!
+
+  """
+  An object where the defined keys will be set on the \`FederatedSource\` being updated.
+  """
+  patch: FederatedSourcePatch!
+}
+
+"""
+Represents an update to a \`FederatedSource\`. Fields that are set will be updated.
+"""
+input FederatedSourcePatch {
+  rowId: UUID
+  namespace: String
+  upstreamBaseUrl: String
+  upstreamType: String
+  enabled: Boolean
+  rateLimitRpm: Int
+  cacheTtlSeconds: Int
+  tagListCacheTtlSeconds: Int
+  requireVetting: Boolean
+  createdAt: Datetime
+  updatedAt: Datetime
+}
+
+"""All input for the \`updateFederatedSource\` mutation."""
+input UpdateFederatedSourceInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  rowId: UUID!
+
+  """
+  An object where the defined keys will be set on the \`FederatedSource\` being updated.
+  """
+  patch: FederatedSourcePatch!
+}
+
+"""All input for the \`updateFederatedSourceByNamespace\` mutation."""
+input UpdateFederatedSourceByNamespaceInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  namespace: String!
+
+  """
+  An object where the defined keys will be set on the \`FederatedSource\` being updated.
+  """
+  patch: FederatedSourcePatch!
+}
+
+"""The output of our update \`FederatedSkillCache\` mutation."""
+type UpdateFederatedSkillCachePayload {
+  """
+  The exact same \`clientMutationId\` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The \`FederatedSkillCache\` that was updated by this mutation."""
+  federatedSkillCache: FederatedSkillCache
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our \`FederatedSkillCache\`. May be used by Relay 1."""
+  federatedSkillCacheEdge(
+    """The method to use when ordering \`FederatedSkillCache\`."""
+    orderBy: [FederatedSkillCacheOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): FederatedSkillCacheEdge
+}
+
+"""All input for the \`updateFederatedSkillCacheById\` mutation."""
+input UpdateFederatedSkillCacheByIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique \`ID\` which will identify a single \`FederatedSkillCache\` to be updated.
+  """
+  id: ID!
+
+  """
+  An object where the defined keys will be set on the \`FederatedSkillCache\` being updated.
+  """
+  patch: FederatedSkillCachePatch!
+}
+
+"""
+Represents an update to a \`FederatedSkillCache\`. Fields that are set will be updated.
+"""
+input FederatedSkillCachePatch {
+  rowId: UUID
+  sourceId: UUID
+  slug: String
+  content: String
+  contentDigest: String
+  fetchedAt: Datetime
+  expiresAt: Datetime
+  vetStatus: String
+  vetReason: String
+  vettedBy: String
+  vettedAt: Datetime
+  upstreamMeta: JSON
+  createdAt: Datetime
+}
+
+"""All input for the \`updateFederatedSkillCache\` mutation."""
+input UpdateFederatedSkillCacheInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  rowId: UUID!
+
+  """
+  An object where the defined keys will be set on the \`FederatedSkillCache\` being updated.
+  """
+  patch: FederatedSkillCachePatch!
+}
+
 """The output of our update \`ApiToken\` mutation."""
 type UpdateApiTokenPayload {
   """
@@ -6774,54 +8201,6 @@ input DeleteContainerMetadatumInput {
   """
   clientMutationId: String
   artifactId: UUID!
-}
-
-"""The output of our delete \`Artifact\` mutation."""
-type DeleteArtifactPayload {
-  """
-  The exact same \`clientMutationId\` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """The \`Artifact\` that was deleted by this mutation."""
-  artifact: Artifact
-  deletedArtifactId: ID
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-
-  """An edge for our \`Artifact\`. May be used by Relay 1."""
-  artifactEdge(
-    """The method to use when ordering \`Artifact\`."""
-    orderBy: [ArtifactOrderBy!]! = [PRIMARY_KEY_ASC]
-  ): ArtifactEdge
-}
-
-"""All input for the \`deleteArtifactById\` mutation."""
-input DeleteArtifactByIdInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-
-  """
-  The globally unique \`ID\` which will identify a single \`Artifact\` to be deleted.
-  """
-  id: ID!
-}
-
-"""All input for the \`deleteArtifact\` mutation."""
-input DeleteArtifactInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-  rowId: UUID!
 }
 
 """The output of our delete \`WasmMetadatum\` mutation."""
@@ -6960,6 +8339,54 @@ input DeleteUploadSessionByIdInput {
 
 """All input for the \`deleteUploadSession\` mutation."""
 input DeleteUploadSessionInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  rowId: UUID!
+}
+
+"""The output of our delete \`Artifact\` mutation."""
+type DeleteArtifactPayload {
+  """
+  The exact same \`clientMutationId\` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The \`Artifact\` that was deleted by this mutation."""
+  artifact: Artifact
+  deletedArtifactId: ID
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our \`Artifact\`. May be used by Relay 1."""
+  artifactEdge(
+    """The method to use when ordering \`Artifact\`."""
+    orderBy: [ArtifactOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): ArtifactEdge
+}
+
+"""All input for the \`deleteArtifactById\` mutation."""
+input DeleteArtifactByIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique \`ID\` which will identify a single \`Artifact\` to be deleted.
+  """
+  id: ID!
+}
+
+"""All input for the \`deleteArtifact\` mutation."""
+input DeleteArtifactInput {
   """
   An arbitrary string value with no semantic meaning. Will be included in the
   payload verbatim. May be used to track mutations by the client.
@@ -7122,6 +8549,112 @@ input DeleteRepositoryInput {
   rowId: UUID!
 }
 
+"""The output of our delete \`FederatedSource\` mutation."""
+type DeleteFederatedSourcePayload {
+  """
+  The exact same \`clientMutationId\` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The \`FederatedSource\` that was deleted by this mutation."""
+  federatedSource: FederatedSource
+  deletedFederatedSourceId: ID
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our \`FederatedSource\`. May be used by Relay 1."""
+  federatedSourceEdge(
+    """The method to use when ordering \`FederatedSource\`."""
+    orderBy: [FederatedSourceOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): FederatedSourceEdge
+}
+
+"""All input for the \`deleteFederatedSourceById\` mutation."""
+input DeleteFederatedSourceByIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique \`ID\` which will identify a single \`FederatedSource\` to be deleted.
+  """
+  id: ID!
+}
+
+"""All input for the \`deleteFederatedSource\` mutation."""
+input DeleteFederatedSourceInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  rowId: UUID!
+}
+
+"""All input for the \`deleteFederatedSourceByNamespace\` mutation."""
+input DeleteFederatedSourceByNamespaceInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  namespace: String!
+}
+
+"""The output of our delete \`FederatedSkillCache\` mutation."""
+type DeleteFederatedSkillCachePayload {
+  """
+  The exact same \`clientMutationId\` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The \`FederatedSkillCache\` that was deleted by this mutation."""
+  federatedSkillCache: FederatedSkillCache
+  deletedFederatedSkillCacheId: ID
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our \`FederatedSkillCache\`. May be used by Relay 1."""
+  federatedSkillCacheEdge(
+    """The method to use when ordering \`FederatedSkillCache\`."""
+    orderBy: [FederatedSkillCacheOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): FederatedSkillCacheEdge
+}
+
+"""All input for the \`deleteFederatedSkillCacheById\` mutation."""
+input DeleteFederatedSkillCacheByIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique \`ID\` which will identify a single \`FederatedSkillCache\` to be deleted.
+  """
+  id: ID!
+}
+
+"""All input for the \`deleteFederatedSkillCache\` mutation."""
+input DeleteFederatedSkillCacheInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  rowId: UUID!
+}
+
 """The output of our delete \`ApiToken\` mutation."""
 type DeleteApiTokenPayload {
   """
@@ -7213,7 +8746,7 @@ export const objects = {
           filter(_, $connection, fieldArg) {
             const $pgSelect = $connection.getSubplan();
             fieldArg.apply($pgSelect, (queryBuilder, value) => {
-              assertAllowed9(value, "object");
+              assertAllowed11(value, "object");
               if (value == null) return;
               const condition = new PgCondition(queryBuilder);
               return condition;
@@ -7263,7 +8796,7 @@ export const objects = {
           filter(_, $connection, fieldArg) {
             const $pgSelect = $connection.getSubplan();
             fieldArg.apply($pgSelect, (queryBuilder, value) => {
-              assertAllowed2(value, "object");
+              assertAllowed5(value, "object");
               if (value == null) return;
               const condition = new PgCondition(queryBuilder);
               return condition;
@@ -7324,6 +8857,113 @@ export const objects = {
       containerMetadatumById(_$parent, args) {
         const $nodeId = args.getRaw("id");
         return nodeFetcher_ContainerMetadatum($nodeId);
+      },
+      federatedSkillCache(_$root, {
+        $rowId
+      }) {
+        return resource_federated_skill_cachePgResource.get({
+          id: $rowId
+        });
+      },
+      federatedSkillCacheById(_$parent, args) {
+        const $nodeId = args.getRaw("id");
+        return nodeFetcher_FederatedSkillCache($nodeId);
+      },
+      federatedSkillCaches: {
+        plan() {
+          return connection(resource_federated_skill_cachePgResource.find());
+        },
+        args: {
+          first(_, $connection, arg) {
+            $connection.setFirst(arg.getRaw());
+          },
+          last(_, $connection, val) {
+            $connection.setLast(val.getRaw());
+          },
+          offset(_, $connection, val) {
+            $connection.setOffset(val.getRaw());
+          },
+          before(_, $connection, val) {
+            $connection.setBefore(val.getRaw());
+          },
+          after(_, $connection, val) {
+            $connection.setAfter(val.getRaw());
+          },
+          condition(_condition, $connection, arg) {
+            const $select = $connection.getSubplan();
+            arg.apply($select, qbWhereBuilder);
+          },
+          filter(_, $connection, fieldArg) {
+            const $pgSelect = $connection.getSubplan();
+            fieldArg.apply($pgSelect, (queryBuilder, value) => {
+              assertAllowed10(value, "object");
+              if (value == null) return;
+              const condition = new PgCondition(queryBuilder);
+              return condition;
+            });
+          },
+          orderBy(parent, $connection, value) {
+            const $select = $connection.getSubplan();
+            value.apply($select);
+          }
+        }
+      },
+      federatedSource(_$root, {
+        $rowId
+      }) {
+        return resource_federated_sourcePgResource.get({
+          id: $rowId
+        });
+      },
+      federatedSourceById(_$parent, args) {
+        const $nodeId = args.getRaw("id");
+        return nodeFetcher_FederatedSource($nodeId);
+      },
+      federatedSourceByNamespace(_$root, {
+        $namespace
+      }) {
+        return resource_federated_sourcePgResource.get({
+          namespace: $namespace
+        });
+      },
+      federatedSources: {
+        plan() {
+          return connection(resource_federated_sourcePgResource.find());
+        },
+        args: {
+          first(_, $connection, arg) {
+            $connection.setFirst(arg.getRaw());
+          },
+          last(_, $connection, val) {
+            $connection.setLast(val.getRaw());
+          },
+          offset(_, $connection, val) {
+            $connection.setOffset(val.getRaw());
+          },
+          before(_, $connection, val) {
+            $connection.setBefore(val.getRaw());
+          },
+          after(_, $connection, val) {
+            $connection.setAfter(val.getRaw());
+          },
+          condition(_condition, $connection, arg) {
+            const $select = $connection.getSubplan();
+            arg.apply($select, qbWhereBuilder);
+          },
+          filter(_, $connection, fieldArg) {
+            const $pgSelect = $connection.getSubplan();
+            fieldArg.apply($pgSelect, (queryBuilder, value) => {
+              assertAllowed9(value, "object");
+              if (value == null) return;
+              const condition = new PgCondition(queryBuilder);
+              return condition;
+            });
+          },
+          orderBy(parent, $connection, value) {
+            const $select = $connection.getSubplan();
+            value.apply($select);
+          }
+        }
       },
       id($parent) {
         const specifier = nodeIdHandler_Query.plan($parent);
@@ -7530,7 +9170,7 @@ export const objects = {
           filter(_, $connection, fieldArg) {
             const $pgSelect = $connection.getSubplan();
             fieldArg.apply($pgSelect, (queryBuilder, value) => {
-              assertAllowed4(value, "object");
+              assertAllowed3(value, "object");
               if (value == null) return;
               const condition = new PgCondition(queryBuilder);
               return condition;
@@ -7580,7 +9220,7 @@ export const objects = {
           filter(_, $connection, fieldArg) {
             const $pgSelect = $connection.getSubplan();
             fieldArg.apply($pgSelect, (queryBuilder, value) => {
-              assertAllowed5(value, "object");
+              assertAllowed4(value, "object");
               if (value == null) return;
               const condition = new PgCondition(queryBuilder);
               return condition;
@@ -7619,7 +9259,7 @@ export const objects = {
           filter(_, $connection, fieldArg) {
             const $pgSelect = $connection.getSubplan();
             fieldArg.apply($pgSelect, (queryBuilder, value) => {
-              assertAllowed3(value, "object");
+              assertAllowed2(value, "object");
               if (value == null) return;
               const condition = new PgCondition(queryBuilder);
               return condition;
@@ -7678,6 +9318,34 @@ export const objects = {
       createContainerMetadatum: {
         plan(_, args) {
           const $insert = pgInsertSingle(resource_container_metadataPgResource, Object.create(null));
+          args.apply($insert);
+          return object({
+            result: $insert
+          });
+        },
+        args: {
+          input(_, $object) {
+            return $object;
+          }
+        }
+      },
+      createFederatedSkillCache: {
+        plan(_, args) {
+          const $insert = pgInsertSingle(resource_federated_skill_cachePgResource, Object.create(null));
+          args.apply($insert);
+          return object({
+            result: $insert
+          });
+        },
+        args: {
+          input(_, $object) {
+            return $object;
+          }
+        }
+      },
+      createFederatedSource: {
+        plan(_, args) {
+          const $insert = pgInsertSingle(resource_federated_sourcePgResource, Object.create(null));
           args.apply($insert);
           return object({
             result: $insert
@@ -7852,6 +9520,82 @@ export const objects = {
       deleteContainerMetadatumById: {
         plan(_$root, args) {
           const $delete = pgDeleteSingle(resource_container_metadataPgResource, specFromArgs_ContainerMetadatum2(args));
+          args.apply($delete);
+          return object({
+            result: $delete
+          });
+        },
+        args: {
+          input(_, $object) {
+            return $object;
+          }
+        }
+      },
+      deleteFederatedSkillCache: {
+        plan(_$root, args) {
+          const $delete = pgDeleteSingle(resource_federated_skill_cachePgResource, {
+            id: args.getRaw(['input', "rowId"])
+          });
+          args.apply($delete);
+          return object({
+            result: $delete
+          });
+        },
+        args: {
+          input(_, $object) {
+            return $object;
+          }
+        }
+      },
+      deleteFederatedSkillCacheById: {
+        plan(_$root, args) {
+          const $delete = pgDeleteSingle(resource_federated_skill_cachePgResource, specFromArgs_FederatedSkillCache2(args));
+          args.apply($delete);
+          return object({
+            result: $delete
+          });
+        },
+        args: {
+          input(_, $object) {
+            return $object;
+          }
+        }
+      },
+      deleteFederatedSource: {
+        plan(_$root, args) {
+          const $delete = pgDeleteSingle(resource_federated_sourcePgResource, {
+            id: args.getRaw(['input', "rowId"])
+          });
+          args.apply($delete);
+          return object({
+            result: $delete
+          });
+        },
+        args: {
+          input(_, $object) {
+            return $object;
+          }
+        }
+      },
+      deleteFederatedSourceById: {
+        plan(_$root, args) {
+          const $delete = pgDeleteSingle(resource_federated_sourcePgResource, specFromArgs_FederatedSource2(args));
+          args.apply($delete);
+          return object({
+            result: $delete
+          });
+        },
+        args: {
+          input(_, $object) {
+            return $object;
+          }
+        }
+      },
+      deleteFederatedSourceByNamespace: {
+        plan(_$root, args) {
+          const $delete = pgDeleteSingle(resource_federated_sourcePgResource, {
+            namespace: args.getRaw(['input', "namespace"])
+          });
           args.apply($delete);
           return object({
             result: $delete
@@ -8138,6 +9882,82 @@ export const objects = {
       updateContainerMetadatumById: {
         plan(_$root, args) {
           const $update = pgUpdateSingle(resource_container_metadataPgResource, specFromArgs_ContainerMetadatum(args));
+          args.apply($update);
+          return object({
+            result: $update
+          });
+        },
+        args: {
+          input(_, $object) {
+            return $object;
+          }
+        }
+      },
+      updateFederatedSkillCache: {
+        plan(_$root, args) {
+          const $update = pgUpdateSingle(resource_federated_skill_cachePgResource, {
+            id: args.getRaw(['input', "rowId"])
+          });
+          args.apply($update);
+          return object({
+            result: $update
+          });
+        },
+        args: {
+          input(_, $object) {
+            return $object;
+          }
+        }
+      },
+      updateFederatedSkillCacheById: {
+        plan(_$root, args) {
+          const $update = pgUpdateSingle(resource_federated_skill_cachePgResource, specFromArgs_FederatedSkillCache(args));
+          args.apply($update);
+          return object({
+            result: $update
+          });
+        },
+        args: {
+          input(_, $object) {
+            return $object;
+          }
+        }
+      },
+      updateFederatedSource: {
+        plan(_$root, args) {
+          const $update = pgUpdateSingle(resource_federated_sourcePgResource, {
+            id: args.getRaw(['input', "rowId"])
+          });
+          args.apply($update);
+          return object({
+            result: $update
+          });
+        },
+        args: {
+          input(_, $object) {
+            return $object;
+          }
+        }
+      },
+      updateFederatedSourceById: {
+        plan(_$root, args) {
+          const $update = pgUpdateSingle(resource_federated_sourcePgResource, specFromArgs_FederatedSource(args));
+          args.apply($update);
+          return object({
+            result: $update
+          });
+        },
+        args: {
+          input(_, $object) {
+            return $object;
+          }
+        }
+      },
+      updateFederatedSourceByNamespace: {
+        plan(_$root, args) {
+          const $update = pgUpdateSingle(resource_federated_sourcePgResource, {
+            namespace: args.getRaw(['input', "namespace"])
+          });
           args.apply($update);
           return object({
             result: $update
@@ -8446,6 +10266,9 @@ export const objects = {
           artifact_id: $record.get("id")
         });
       },
+      storagePath($record) {
+        return $record.get("storage_path");
+      },
       tags: {
         plan($record) {
           const $records = resource_tagPgResource.find({
@@ -8476,7 +10299,7 @@ export const objects = {
           filter(_, $connection, fieldArg) {
             const $pgSelect = $connection.getSubplan();
             fieldArg.apply($pgSelect, (queryBuilder, value) => {
-              assertAllowed10(value, "object");
+              assertAllowed12(value, "object");
               if (value == null) return;
               const condition = new PgCondition(queryBuilder);
               return condition;
@@ -8592,6 +10415,40 @@ export const objects = {
       },
       containerMetadatumEdge($mutation, fieldArgs) {
         return pgMutationPayloadEdge(resource_container_metadataPgResource, container_metadataUniques[0].attributes, $mutation, fieldArgs);
+      },
+      query() {
+        return rootValue();
+      }
+    }
+  },
+  CreateFederatedSkillCachePayload: {
+    assertStep: assertExecutableStep,
+    plans: {
+      clientMutationId($mutation) {
+        return $mutation.getStepForKey("result").getMeta("clientMutationId");
+      },
+      federatedSkillCache($object) {
+        return $object.get("result");
+      },
+      federatedSkillCacheEdge($mutation, fieldArgs) {
+        return pgMutationPayloadEdge(resource_federated_skill_cachePgResource, federated_skill_cacheUniques[0].attributes, $mutation, fieldArgs);
+      },
+      query() {
+        return rootValue();
+      }
+    }
+  },
+  CreateFederatedSourcePayload: {
+    assertStep: assertExecutableStep,
+    plans: {
+      clientMutationId($mutation) {
+        return $mutation.getStepForKey("result").getMeta("clientMutationId");
+      },
+      federatedSource($object) {
+        return $object.get("result");
+      },
+      federatedSourceEdge($mutation, fieldArgs) {
+        return pgMutationPayloadEdge(resource_federated_sourcePgResource, federated_sourceUniques[0].attributes, $mutation, fieldArgs);
       },
       query() {
         return rootValue();
@@ -8766,6 +10623,50 @@ export const objects = {
       }
     }
   },
+  DeleteFederatedSkillCachePayload: {
+    assertStep: ObjectStep,
+    plans: {
+      clientMutationId($mutation) {
+        return $mutation.getStepForKey("result").getMeta("clientMutationId");
+      },
+      deletedFederatedSkillCacheId($object) {
+        const $record = $object.getStepForKey("result"),
+          specifier = nodeIdHandler_FederatedSkillCache.plan($record);
+        return lambda(specifier, nodeIdCodecs_base64JSON_base64JSON.encode);
+      },
+      federatedSkillCache($object) {
+        return $object.get("result");
+      },
+      federatedSkillCacheEdge($mutation, fieldArgs) {
+        return pgMutationPayloadEdge(resource_federated_skill_cachePgResource, federated_skill_cacheUniques[0].attributes, $mutation, fieldArgs);
+      },
+      query() {
+        return rootValue();
+      }
+    }
+  },
+  DeleteFederatedSourcePayload: {
+    assertStep: ObjectStep,
+    plans: {
+      clientMutationId($mutation) {
+        return $mutation.getStepForKey("result").getMeta("clientMutationId");
+      },
+      deletedFederatedSourceId($object) {
+        const $record = $object.getStepForKey("result"),
+          specifier = nodeIdHandler_FederatedSource.plan($record);
+        return lambda(specifier, nodeIdCodecs_base64JSON_base64JSON.encode);
+      },
+      federatedSource($object) {
+        return $object.get("result");
+      },
+      federatedSourceEdge($mutation, fieldArgs) {
+        return pgMutationPayloadEdge(resource_federated_sourcePgResource, federated_sourceUniques[0].attributes, $mutation, fieldArgs);
+      },
+      query() {
+        return rootValue();
+      }
+    }
+  },
   DeleteNamespacePayload: {
     assertStep: ObjectStep,
     plans: {
@@ -8898,6 +10799,157 @@ export const objects = {
       }
     }
   },
+  FederatedSkillCache: {
+    assertStep: assertPgClassSingleStep,
+    plans: {
+      contentDigest($record) {
+        return $record.get("content_digest");
+      },
+      createdAt($record) {
+        return $record.get("created_at");
+      },
+      expiresAt($record) {
+        return $record.get("expires_at");
+      },
+      fetchedAt($record) {
+        return $record.get("fetched_at");
+      },
+      id($parent) {
+        const specifier = nodeIdHandler_FederatedSkillCache.plan($parent);
+        return lambda(specifier, nodeIdCodecs[nodeIdHandler_FederatedSkillCache.codec.name].encode);
+      },
+      rowId($record) {
+        return $record.get("id");
+      },
+      source($record) {
+        return resource_federated_sourcePgResource.get({
+          id: $record.get("source_id")
+        });
+      },
+      sourceId($record) {
+        return $record.get("source_id");
+      },
+      upstreamMeta($record) {
+        return $record.get("upstream_meta");
+      },
+      vetReason($record) {
+        return $record.get("vet_reason");
+      },
+      vetStatus($record) {
+        return $record.get("vet_status");
+      },
+      vettedAt($record) {
+        return $record.get("vetted_at");
+      },
+      vettedBy($record) {
+        return $record.get("vetted_by");
+      }
+    },
+    planType($specifier) {
+      const spec = Object.create(null);
+      for (const pkCol of federated_skill_cacheUniques[0].attributes) spec[pkCol] = get2($specifier, pkCol);
+      return resource_federated_skill_cachePgResource.get(spec);
+    }
+  },
+  FederatedSkillCacheConnection: {
+    assertStep: ConnectionStep,
+    plans: {
+      totalCount($connection) {
+        return $connection.cloneSubplanWithoutPagination("aggregate").singleAsRecord().select(sql`count(*)`, TYPES.bigint, !1);
+      }
+    }
+  },
+  FederatedSource: {
+    assertStep: assertPgClassSingleStep,
+    plans: {
+      cacheTtlSeconds($record) {
+        return $record.get("cache_ttl_seconds");
+      },
+      createdAt($record) {
+        return $record.get("created_at");
+      },
+      federatedSkillCachesBySourceId: {
+        plan($record) {
+          const $records = resource_federated_skill_cachePgResource.find({
+            source_id: $record.get("id")
+          });
+          return connection($records);
+        },
+        args: {
+          first(_, $connection, arg) {
+            $connection.setFirst(arg.getRaw());
+          },
+          last(_, $connection, val) {
+            $connection.setLast(val.getRaw());
+          },
+          offset(_, $connection, val) {
+            $connection.setOffset(val.getRaw());
+          },
+          before(_, $connection, val) {
+            $connection.setBefore(val.getRaw());
+          },
+          after(_, $connection, val) {
+            $connection.setAfter(val.getRaw());
+          },
+          condition(_condition, $connection, arg) {
+            const $select = $connection.getSubplan();
+            arg.apply($select, qbWhereBuilder);
+          },
+          filter(_, $connection, fieldArg) {
+            const $pgSelect = $connection.getSubplan();
+            fieldArg.apply($pgSelect, (queryBuilder, value) => {
+              assertAllowed46(value, "object");
+              if (value == null) return;
+              const condition = new PgCondition(queryBuilder);
+              return condition;
+            });
+          },
+          orderBy(parent, $connection, value) {
+            const $select = $connection.getSubplan();
+            value.apply($select);
+          }
+        }
+      },
+      id($parent) {
+        const specifier = nodeIdHandler_FederatedSource.plan($parent);
+        return lambda(specifier, nodeIdCodecs[nodeIdHandler_FederatedSource.codec.name].encode);
+      },
+      rateLimitRpm($record) {
+        return $record.get("rate_limit_rpm");
+      },
+      requireVetting($record) {
+        return $record.get("require_vetting");
+      },
+      rowId($record) {
+        return $record.get("id");
+      },
+      tagListCacheTtlSeconds($record) {
+        return $record.get("tag_list_cache_ttl_seconds");
+      },
+      updatedAt($record) {
+        return $record.get("updated_at");
+      },
+      upstreamBaseUrl($record) {
+        return $record.get("upstream_base_url");
+      },
+      upstreamType($record) {
+        return $record.get("upstream_type");
+      }
+    },
+    planType($specifier) {
+      const spec = Object.create(null);
+      for (const pkCol of federated_sourceUniques[0].attributes) spec[pkCol] = get2($specifier, pkCol);
+      return resource_federated_sourcePgResource.get(spec);
+    }
+  },
+  FederatedSourceConnection: {
+    assertStep: ConnectionStep,
+    plans: {
+      totalCount($connection) {
+        return $connection.cloneSubplanWithoutPagination("aggregate").singleAsRecord().select(sql`count(*)`, TYPES.bigint, !1);
+      }
+    }
+  },
   Namespace: {
     assertStep: assertPgClassSingleStep,
     plans: {
@@ -8931,7 +10983,7 @@ export const objects = {
           filter(_, $connection, fieldArg) {
             const $pgSelect = $connection.getSubplan();
             fieldArg.apply($pgSelect, (queryBuilder, value) => {
-              assertAllowed16(value, "object");
+              assertAllowed18(value, "object");
               if (value == null) return;
               const condition = new PgCondition(queryBuilder);
               return condition;
@@ -8983,7 +11035,7 @@ export const objects = {
           filter(_, $connection, fieldArg) {
             const $pgSelect = $connection.getSubplan();
             fieldArg.apply($pgSelect, (queryBuilder, value) => {
-              assertAllowed15(value, "object");
+              assertAllowed17(value, "object");
               if (value == null) return;
               const condition = new PgCondition(queryBuilder);
               return condition;
@@ -9049,7 +11101,7 @@ export const objects = {
           filter(_, $connection, fieldArg) {
             const $pgSelect = $connection.getSubplan();
             fieldArg.apply($pgSelect, (queryBuilder, value) => {
-              assertAllowed14(value, "object");
+              assertAllowed16(value, "object");
               if (value == null) return;
               const condition = new PgCondition(queryBuilder);
               return condition;
@@ -9091,7 +11143,7 @@ export const objects = {
           filter(_, $connection, fieldArg) {
             const $pgSelect = $connection.getSubplan();
             fieldArg.apply($pgSelect, (queryBuilder, value) => {
-              assertAllowed11(value, "object");
+              assertAllowed13(value, "object");
               if (value == null) return;
               const condition = new PgCondition(queryBuilder);
               return condition;
@@ -9157,7 +11209,7 @@ export const objects = {
           filter(_, $connection, fieldArg) {
             const $pgSelect = $connection.getSubplan();
             fieldArg.apply($pgSelect, (queryBuilder, value) => {
-              assertAllowed12(value, "object");
+              assertAllowed14(value, "object");
               if (value == null) return;
               const condition = new PgCondition(queryBuilder);
               return condition;
@@ -9202,7 +11254,7 @@ export const objects = {
           filter(_, $connection, fieldArg) {
             const $pgSelect = $connection.getSubplan();
             fieldArg.apply($pgSelect, (queryBuilder, value) => {
-              assertAllowed13(value, "object");
+              assertAllowed15(value, "object");
               if (value == null) return;
               const condition = new PgCondition(queryBuilder);
               return condition;
@@ -9357,6 +11409,40 @@ export const objects = {
       },
       containerMetadatumEdge($mutation, fieldArgs) {
         return pgMutationPayloadEdge(resource_container_metadataPgResource, container_metadataUniques[0].attributes, $mutation, fieldArgs);
+      },
+      query() {
+        return rootValue();
+      }
+    }
+  },
+  UpdateFederatedSkillCachePayload: {
+    assertStep: ObjectStep,
+    plans: {
+      clientMutationId($mutation) {
+        return $mutation.getStepForKey("result").getMeta("clientMutationId");
+      },
+      federatedSkillCache($object) {
+        return $object.get("result");
+      },
+      federatedSkillCacheEdge($mutation, fieldArgs) {
+        return pgMutationPayloadEdge(resource_federated_skill_cachePgResource, federated_skill_cacheUniques[0].attributes, $mutation, fieldArgs);
+      },
+      query() {
+        return rootValue();
+      }
+    }
+  },
+  UpdateFederatedSourcePayload: {
+    assertStep: ObjectStep,
+    plans: {
+      clientMutationId($mutation) {
+        return $mutation.getStepForKey("result").getMeta("clientMutationId");
+      },
+      federatedSource($object) {
+        return $object.get("result");
+      },
+      federatedSourceEdge($mutation, fieldArgs) {
+        return pgMutationPayloadEdge(resource_federated_sourcePgResource, federated_sourceUniques[0].attributes, $mutation, fieldArgs);
       },
       query() {
         return rootValue();
@@ -9620,7 +11706,7 @@ export const inputObjects = {
   ApiTokenFilter: {
     plans: {
       and($where, value) {
-        assertAllowed39(value, "list");
+        assertAllowed41(value, "list");
         if (value == null) return;
         return $where.andPlan();
       },
@@ -9641,7 +11727,7 @@ export const inputObjects = {
         return condition;
       },
       namespace($where, value) {
-        assertAllowed38(value, "object");
+        assertAllowed40(value, "object");
         if (value == null) return;
         const $subQuery = $where.existsPlan({
           tableExpression: namespaceIdentifier,
@@ -9662,18 +11748,18 @@ export const inputObjects = {
         return condition;
       },
       not($where, value) {
-        assertAllowed39(value, "object");
+        assertAllowed41(value, "object");
         if (value == null) return;
         return $where.notPlan().andPlan();
       },
       or($where, value) {
-        assertAllowed39(value, "list");
+        assertAllowed41(value, "list");
         if (value == null) return;
         const $or = $where.orPlan();
         return () => $or.andPlan();
       },
       repository($where, value) {
-        assertAllowed38(value, "object");
+        assertAllowed40(value, "object");
         if (value == null) return;
         const $subQuery = $where.existsPlan({
           tableExpression: repositoryIdentifier,
@@ -9686,7 +11772,7 @@ export const inputObjects = {
         return $subQuery;
       },
       repositoryExists($where, value) {
-        assertAllowed38(value, "scalar");
+        assertAllowed40(value, "scalar");
         if (value == null) return;
         const $subQuery = $where.existsPlan({
           tableExpression: repositoryIdentifier,
@@ -9944,12 +12030,12 @@ export const inputObjects = {
   ArtifactFilter: {
     plans: {
       and($where, value) {
-        assertAllowed23(value, "list");
+        assertAllowed25(value, "list");
         if (value == null) return;
         return $where.andPlan();
       },
       containerMetadatum($where, value) {
-        assertAllowed21(value, "object");
+        assertAllowed23(value, "object");
         const $subQuery = $where.existsPlan({
           tableExpression: containerMetadataIdentifier,
           alias: resource_container_metadataPgResource.name
@@ -9961,7 +12047,7 @@ export const inputObjects = {
         return $subQuery;
       },
       containerMetadatumExists($where, value) {
-        assertAllowed21(value, "scalar");
+        assertAllowed23(value, "scalar");
         if (value == null) return;
         const $subQuery = $where.existsPlan({
           tableExpression: containerMetadataIdentifier,
@@ -9982,18 +12068,18 @@ export const inputObjects = {
         return condition;
       },
       not($where, value) {
-        assertAllowed23(value, "object");
+        assertAllowed25(value, "object");
         if (value == null) return;
         return $where.notPlan().andPlan();
       },
       or($where, value) {
-        assertAllowed23(value, "list");
+        assertAllowed25(value, "list");
         if (value == null) return;
         const $or = $where.orPlan();
         return () => $or.andPlan();
       },
       repository($where, value) {
-        assertAllowed22(value, "object");
+        assertAllowed24(value, "object");
         if (value == null) return;
         const $subQuery = $where.existsPlan({
           tableExpression: repositoryIdentifier,
@@ -10022,7 +12108,7 @@ export const inputObjects = {
         return condition;
       },
       schemaMetadatum($where, value) {
-        assertAllowed21(value, "object");
+        assertAllowed23(value, "object");
         const $subQuery = $where.existsPlan({
           tableExpression: schemaMetadataIdentifier,
           alias: resource_schema_metadataPgResource.name
@@ -10034,7 +12120,7 @@ export const inputObjects = {
         return $subQuery;
       },
       schemaMetadatumExists($where, value) {
-        assertAllowed21(value, "scalar");
+        assertAllowed23(value, "scalar");
         if (value == null) return;
         const $subQuery = $where.existsPlan({
           tableExpression: schemaMetadataIdentifier,
@@ -10047,7 +12133,7 @@ export const inputObjects = {
         });
       },
       tags($where, value) {
-        assertAllowed21(value, "object");
+        assertAllowed23(value, "object");
         const $rel = $where.andPlan();
         $rel.extensions.pgFilterRelation = {
           tableExpression: tagIdentifier,
@@ -10058,7 +12144,7 @@ export const inputObjects = {
         return $rel;
       },
       tagsExist($where, value) {
-        assertAllowed21(value, "scalar");
+        assertAllowed23(value, "scalar");
         if (value == null) return;
         const $subQuery = $where.existsPlan({
           tableExpression: tagIdentifier,
@@ -10071,7 +12157,7 @@ export const inputObjects = {
         });
       },
       wasmMetadatum($where, value) {
-        assertAllowed21(value, "object");
+        assertAllowed23(value, "object");
         const $subQuery = $where.existsPlan({
           tableExpression: wasmMetadataIdentifier,
           alias: resource_wasm_metadataPgResource.name
@@ -10083,7 +12169,7 @@ export const inputObjects = {
         return $subQuery;
       },
       wasmMetadatumExists($where, value) {
-        assertAllowed21(value, "scalar");
+        assertAllowed23(value, "scalar");
         if (value == null) return;
         const $subQuery = $where.existsPlan({
           tableExpression: wasmMetadataIdentifier,
@@ -10141,6 +12227,12 @@ export const inputObjects = {
         schema
       }) {
         obj.set("size", bakedInputRuntime(schema, field.type, val));
+      },
+      storagePath(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("storage_path", bakedInputRuntime(schema, field.type, val));
       }
     }
   },
@@ -10188,13 +12280,19 @@ export const inputObjects = {
         schema
       }) {
         obj.set("size", bakedInputRuntime(schema, field.type, val));
+      },
+      storagePath(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("storage_path", bakedInputRuntime(schema, field.type, val));
       }
     }
   },
   ArtifactToManyTagFilter: {
     plans: {
       every($where, value) {
-        assertAllowed28(value, "object");
+        assertAllowed30(value, "object");
         if (value == null) return;
         if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
         const {
@@ -10214,7 +12312,7 @@ export const inputObjects = {
         return $subQuery.notPlan().andPlan();
       },
       none($where, value) {
-        assertAllowed28(value, "object");
+        assertAllowed30(value, "object");
         if (value == null) return;
         if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
         const {
@@ -10234,7 +12332,7 @@ export const inputObjects = {
         return $subQuery;
       },
       some($where, value) {
-        assertAllowed28(value, "object");
+        assertAllowed30(value, "object");
         if (value == null) return;
         if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
         const {
@@ -10539,12 +12637,12 @@ export const inputObjects = {
   ContainerMetadatumFilter: {
     plans: {
       and($where, value) {
-        assertAllowed25(value, "list");
+        assertAllowed27(value, "list");
         if (value == null) return;
         return $where.andPlan();
       },
       artifact($where, value) {
-        assertAllowed24(value, "object");
+        assertAllowed26(value, "object");
         if (value == null) return;
         const $subQuery = $where.existsPlan({
           tableExpression: artifactIdentifier,
@@ -10565,12 +12663,12 @@ export const inputObjects = {
         return condition;
       },
       not($where, value) {
-        assertAllowed25(value, "object");
+        assertAllowed27(value, "object");
         if (value == null) return;
         return $where.notPlan().andPlan();
       },
       or($where, value) {
-        assertAllowed25(value, "list");
+        assertAllowed27(value, "list");
         if (value == null) return;
         const $or = $where.orPlan();
         return () => $or.andPlan();
@@ -10685,6 +12783,26 @@ export const inputObjects = {
         qb.setMeta("clientMutationId", val);
       },
       containerMetadatum(qb, arg) {
+        if (arg != null) return qb.setBuilder();
+      }
+    }
+  },
+  CreateFederatedSkillCacheInput: {
+    plans: {
+      clientMutationId(qb, val) {
+        qb.setMeta("clientMutationId", val);
+      },
+      federatedSkillCache(qb, arg) {
+        if (arg != null) return qb.setBuilder();
+      }
+    }
+  },
+  CreateFederatedSourceInput: {
+    plans: {
+      clientMutationId(qb, val) {
+        qb.setMeta("clientMutationId", val);
+      },
+      federatedSource(qb, arg) {
         if (arg != null) return qb.setBuilder();
       }
     }
@@ -11059,6 +13177,41 @@ export const inputObjects = {
       }
     }
   },
+  DeleteFederatedSkillCacheByIdInput: {
+    plans: {
+      clientMutationId(qb, val) {
+        qb.setMeta("clientMutationId", val);
+      }
+    }
+  },
+  DeleteFederatedSkillCacheInput: {
+    plans: {
+      clientMutationId(qb, val) {
+        qb.setMeta("clientMutationId", val);
+      }
+    }
+  },
+  DeleteFederatedSourceByIdInput: {
+    plans: {
+      clientMutationId(qb, val) {
+        qb.setMeta("clientMutationId", val);
+      }
+    }
+  },
+  DeleteFederatedSourceByNamespaceInput: {
+    plans: {
+      clientMutationId(qb, val) {
+        qb.setMeta("clientMutationId", val);
+      }
+    }
+  },
+  DeleteFederatedSourceInput: {
+    plans: {
+      clientMutationId(qb, val) {
+        qb.setMeta("clientMutationId", val);
+      }
+    }
+  },
   DeleteNamespaceByIdInput: {
     plans: {
       clientMutationId(qb, val) {
@@ -11150,6 +13303,599 @@ export const inputObjects = {
       }
     }
   },
+  FederatedSkillCacheCondition: {
+    plans: {
+      expiresAt($condition, val) {
+        $condition.where({
+          type: "attribute",
+          attribute: "expires_at",
+          callback(expression) {
+            return val === null ? sql`${expression} is null` : sql`${expression} = ${sqlValueWithCodec(val, TYPES.timestamptz)}`;
+          }
+        });
+      },
+      rowId($condition, val) {
+        $condition.where({
+          type: "attribute",
+          attribute: "id",
+          callback(expression) {
+            return val === null ? sql`${expression} is null` : sql`${expression} = ${sqlValueWithCodec(val, TYPES.uuid)}`;
+          }
+        });
+      },
+      slug($condition, val) {
+        $condition.where({
+          type: "attribute",
+          attribute: "slug",
+          callback(expression) {
+            return val === null ? sql`${expression} is null` : sql`${expression} = ${sqlValueWithCodec(val, TYPES.text)}`;
+          }
+        });
+      },
+      sourceId($condition, val) {
+        $condition.where({
+          type: "attribute",
+          attribute: "source_id",
+          callback(expression) {
+            return val === null ? sql`${expression} is null` : sql`${expression} = ${sqlValueWithCodec(val, TYPES.uuid)}`;
+          }
+        });
+      },
+      vetStatus($condition, val) {
+        $condition.where({
+          type: "attribute",
+          attribute: "vet_status",
+          callback(expression) {
+            return val === null ? sql`${expression} is null` : sql`${expression} = ${sqlValueWithCodec(val, TYPES.text)}`;
+          }
+        });
+      }
+    }
+  },
+  FederatedSkillCacheFilter: {
+    plans: {
+      and($where, value) {
+        assertAllowed48(value, "list");
+        if (value == null) return;
+        return $where.andPlan();
+      },
+      expiresAt(queryBuilder, value) {
+        if (value === void 0) return;
+        if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+        if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+        const condition = new PgCondition(queryBuilder);
+        condition.extensions.pgFilterAttribute = colSpec31;
+        return condition;
+      },
+      not($where, value) {
+        assertAllowed48(value, "object");
+        if (value == null) return;
+        return $where.notPlan().andPlan();
+      },
+      or($where, value) {
+        assertAllowed48(value, "list");
+        if (value == null) return;
+        const $or = $where.orPlan();
+        return () => $or.andPlan();
+      },
+      rowId(queryBuilder, value) {
+        if (value === void 0) return;
+        if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+        if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+        const condition = new PgCondition(queryBuilder);
+        condition.extensions.pgFilterAttribute = colSpec28;
+        return condition;
+      },
+      slug(queryBuilder, value) {
+        if (value === void 0) return;
+        if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+        if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+        const condition = new PgCondition(queryBuilder);
+        condition.extensions.pgFilterAttribute = colSpec30;
+        return condition;
+      },
+      source($where, value) {
+        assertAllowed47(value, "object");
+        if (value == null) return;
+        const $subQuery = $where.existsPlan({
+          tableExpression: federatedSourceIdentifier,
+          alias: resource_federated_sourcePgResource.name
+        });
+        registryConfig.pgRelations.federatedSkillCache.federatedSourceByMySourceId.localAttributes.forEach((localAttribute, i) => {
+          const remoteAttribute = registryConfig.pgRelations.federatedSkillCache.federatedSourceByMySourceId.remoteAttributes[i];
+          $subQuery.where(sql`${$where.alias}.${sql.identifier(localAttribute)} = ${$subQuery.alias}.${sql.identifier(remoteAttribute)}`);
+        });
+        return $subQuery;
+      },
+      sourceId(queryBuilder, value) {
+        if (value === void 0) return;
+        if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+        if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+        const condition = new PgCondition(queryBuilder);
+        condition.extensions.pgFilterAttribute = colSpec29;
+        return condition;
+      },
+      vetStatus(queryBuilder, value) {
+        if (value === void 0) return;
+        if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+        if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+        const condition = new PgCondition(queryBuilder);
+        condition.extensions.pgFilterAttribute = colSpec32;
+        return condition;
+      }
+    }
+  },
+  FederatedSkillCacheInput: {
+    baked: createObjectAndApplyChildren,
+    plans: {
+      content(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("content", bakedInputRuntime(schema, field.type, val));
+      },
+      contentDigest(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("content_digest", bakedInputRuntime(schema, field.type, val));
+      },
+      createdAt(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("created_at", bakedInputRuntime(schema, field.type, val));
+      },
+      expiresAt(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("expires_at", bakedInputRuntime(schema, field.type, val));
+      },
+      fetchedAt(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("fetched_at", bakedInputRuntime(schema, field.type, val));
+      },
+      rowId(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("id", bakedInputRuntime(schema, field.type, val));
+      },
+      slug(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("slug", bakedInputRuntime(schema, field.type, val));
+      },
+      sourceId(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("source_id", bakedInputRuntime(schema, field.type, val));
+      },
+      upstreamMeta(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("upstream_meta", bakedInputRuntime(schema, field.type, val));
+      },
+      vetReason(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("vet_reason", bakedInputRuntime(schema, field.type, val));
+      },
+      vetStatus(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("vet_status", bakedInputRuntime(schema, field.type, val));
+      },
+      vettedAt(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("vetted_at", bakedInputRuntime(schema, field.type, val));
+      },
+      vettedBy(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("vetted_by", bakedInputRuntime(schema, field.type, val));
+      }
+    }
+  },
+  FederatedSkillCachePatch: {
+    baked: createObjectAndApplyChildren,
+    plans: {
+      content(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("content", bakedInputRuntime(schema, field.type, val));
+      },
+      contentDigest(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("content_digest", bakedInputRuntime(schema, field.type, val));
+      },
+      createdAt(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("created_at", bakedInputRuntime(schema, field.type, val));
+      },
+      expiresAt(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("expires_at", bakedInputRuntime(schema, field.type, val));
+      },
+      fetchedAt(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("fetched_at", bakedInputRuntime(schema, field.type, val));
+      },
+      rowId(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("id", bakedInputRuntime(schema, field.type, val));
+      },
+      slug(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("slug", bakedInputRuntime(schema, field.type, val));
+      },
+      sourceId(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("source_id", bakedInputRuntime(schema, field.type, val));
+      },
+      upstreamMeta(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("upstream_meta", bakedInputRuntime(schema, field.type, val));
+      },
+      vetReason(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("vet_reason", bakedInputRuntime(schema, field.type, val));
+      },
+      vetStatus(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("vet_status", bakedInputRuntime(schema, field.type, val));
+      },
+      vettedAt(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("vetted_at", bakedInputRuntime(schema, field.type, val));
+      },
+      vettedBy(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("vetted_by", bakedInputRuntime(schema, field.type, val));
+      }
+    }
+  },
+  FederatedSourceCondition: {
+    plans: {
+      namespace($condition, val) {
+        $condition.where({
+          type: "attribute",
+          attribute: "namespace",
+          callback(expression) {
+            return val === null ? sql`${expression} is null` : sql`${expression} = ${sqlValueWithCodec(val, TYPES.text)}`;
+          }
+        });
+      },
+      rowId($condition, val) {
+        $condition.where({
+          type: "attribute",
+          attribute: "id",
+          callback(expression) {
+            return val === null ? sql`${expression} is null` : sql`${expression} = ${sqlValueWithCodec(val, TYPES.uuid)}`;
+          }
+        });
+      },
+      upstreamType($condition, val) {
+        $condition.where({
+          type: "attribute",
+          attribute: "upstream_type",
+          callback(expression) {
+            return val === null ? sql`${expression} is null` : sql`${expression} = ${sqlValueWithCodec(val, TYPES.text)}`;
+          }
+        });
+      }
+    }
+  },
+  FederatedSourceFilter: {
+    plans: {
+      and($where, value) {
+        assertAllowed50(value, "list");
+        if (value == null) return;
+        return $where.andPlan();
+      },
+      federatedSkillCachesBySourceId($where, value) {
+        assertAllowed49(value, "object");
+        const $rel = $where.andPlan();
+        $rel.extensions.pgFilterRelation = {
+          tableExpression: federatedSkillCacheIdentifier,
+          alias: resource_federated_skill_cachePgResource.name,
+          localAttributes: registryConfig.pgRelations.federatedSource.federatedSkillCachesByTheirSourceId.localAttributes,
+          remoteAttributes: registryConfig.pgRelations.federatedSource.federatedSkillCachesByTheirSourceId.remoteAttributes
+        };
+        return $rel;
+      },
+      federatedSkillCachesBySourceIdExist($where, value) {
+        assertAllowed49(value, "scalar");
+        if (value == null) return;
+        const $subQuery = $where.existsPlan({
+          tableExpression: federatedSkillCacheIdentifier,
+          alias: resource_federated_skill_cachePgResource.name,
+          equals: value
+        });
+        registryConfig.pgRelations.federatedSource.federatedSkillCachesByTheirSourceId.localAttributes.forEach((localAttribute, i) => {
+          const remoteAttribute = registryConfig.pgRelations.federatedSource.federatedSkillCachesByTheirSourceId.remoteAttributes[i];
+          $subQuery.where(sql`${$where.alias}.${sql.identifier(localAttribute)} = ${$subQuery.alias}.${sql.identifier(remoteAttribute)}`);
+        });
+      },
+      namespace(queryBuilder, value) {
+        if (value === void 0) return;
+        if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+        if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+        const condition = new PgCondition(queryBuilder);
+        condition.extensions.pgFilterAttribute = colSpec34;
+        return condition;
+      },
+      not($where, value) {
+        assertAllowed50(value, "object");
+        if (value == null) return;
+        return $where.notPlan().andPlan();
+      },
+      or($where, value) {
+        assertAllowed50(value, "list");
+        if (value == null) return;
+        const $or = $where.orPlan();
+        return () => $or.andPlan();
+      },
+      rowId(queryBuilder, value) {
+        if (value === void 0) return;
+        if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+        if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+        const condition = new PgCondition(queryBuilder);
+        condition.extensions.pgFilterAttribute = colSpec33;
+        return condition;
+      },
+      upstreamType(queryBuilder, value) {
+        if (value === void 0) return;
+        if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+        if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+        const condition = new PgCondition(queryBuilder);
+        condition.extensions.pgFilterAttribute = colSpec35;
+        return condition;
+      }
+    }
+  },
+  FederatedSourceInput: {
+    baked: createObjectAndApplyChildren,
+    plans: {
+      cacheTtlSeconds(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("cache_ttl_seconds", bakedInputRuntime(schema, field.type, val));
+      },
+      createdAt(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("created_at", bakedInputRuntime(schema, field.type, val));
+      },
+      enabled(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("enabled", bakedInputRuntime(schema, field.type, val));
+      },
+      namespace(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("namespace", bakedInputRuntime(schema, field.type, val));
+      },
+      rateLimitRpm(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("rate_limit_rpm", bakedInputRuntime(schema, field.type, val));
+      },
+      requireVetting(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("require_vetting", bakedInputRuntime(schema, field.type, val));
+      },
+      rowId(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("id", bakedInputRuntime(schema, field.type, val));
+      },
+      tagListCacheTtlSeconds(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("tag_list_cache_ttl_seconds", bakedInputRuntime(schema, field.type, val));
+      },
+      updatedAt(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("updated_at", bakedInputRuntime(schema, field.type, val));
+      },
+      upstreamBaseUrl(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("upstream_base_url", bakedInputRuntime(schema, field.type, val));
+      },
+      upstreamType(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("upstream_type", bakedInputRuntime(schema, field.type, val));
+      }
+    }
+  },
+  FederatedSourcePatch: {
+    baked: createObjectAndApplyChildren,
+    plans: {
+      cacheTtlSeconds(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("cache_ttl_seconds", bakedInputRuntime(schema, field.type, val));
+      },
+      createdAt(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("created_at", bakedInputRuntime(schema, field.type, val));
+      },
+      enabled(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("enabled", bakedInputRuntime(schema, field.type, val));
+      },
+      namespace(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("namespace", bakedInputRuntime(schema, field.type, val));
+      },
+      rateLimitRpm(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("rate_limit_rpm", bakedInputRuntime(schema, field.type, val));
+      },
+      requireVetting(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("require_vetting", bakedInputRuntime(schema, field.type, val));
+      },
+      rowId(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("id", bakedInputRuntime(schema, field.type, val));
+      },
+      tagListCacheTtlSeconds(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("tag_list_cache_ttl_seconds", bakedInputRuntime(schema, field.type, val));
+      },
+      updatedAt(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("updated_at", bakedInputRuntime(schema, field.type, val));
+      },
+      upstreamBaseUrl(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("upstream_base_url", bakedInputRuntime(schema, field.type, val));
+      },
+      upstreamType(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("upstream_type", bakedInputRuntime(schema, field.type, val));
+      }
+    }
+  },
+  FederatedSourceToManyFederatedSkillCacheFilter: {
+    plans: {
+      every($where, value) {
+        assertAllowed51(value, "object");
+        if (value == null) return;
+        if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
+        const {
+            localAttributes,
+            remoteAttributes,
+            tableExpression,
+            alias
+          } = $where.extensions.pgFilterRelation,
+          $subQuery = $where.notPlan().existsPlan({
+            tableExpression,
+            alias
+          });
+        localAttributes.forEach((localAttribute, i) => {
+          const remoteAttribute = remoteAttributes[i];
+          $subQuery.where(sql`${$where.alias}.${sql.identifier(localAttribute)} = ${$subQuery.alias}.${sql.identifier(remoteAttribute)}`);
+        });
+        return $subQuery.notPlan().andPlan();
+      },
+      none($where, value) {
+        assertAllowed51(value, "object");
+        if (value == null) return;
+        if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
+        const {
+            localAttributes,
+            remoteAttributes,
+            tableExpression,
+            alias
+          } = $where.extensions.pgFilterRelation,
+          $subQuery = $where.notPlan().existsPlan({
+            tableExpression,
+            alias
+          });
+        localAttributes.forEach((localAttribute, i) => {
+          const remoteAttribute = remoteAttributes[i];
+          $subQuery.where(sql`${$where.alias}.${sql.identifier(localAttribute)} = ${$subQuery.alias}.${sql.identifier(remoteAttribute)}`);
+        });
+        return $subQuery;
+      },
+      some($where, value) {
+        assertAllowed51(value, "object");
+        if (value == null) return;
+        if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
+        const {
+            localAttributes,
+            remoteAttributes,
+            tableExpression,
+            alias
+          } = $where.extensions.pgFilterRelation,
+          $subQuery = $where.existsPlan({
+            tableExpression,
+            alias
+          });
+        localAttributes.forEach((localAttribute, i) => {
+          const remoteAttribute = remoteAttributes[i];
+          $subQuery.where(sql`${$where.alias}.${sql.identifier(localAttribute)} = ${$subQuery.alias}.${sql.identifier(remoteAttribute)}`);
+        });
+        return $subQuery;
+      }
+    }
+  },
   NamespaceCondition: {
     plans: {
       name($condition, val) {
@@ -11184,12 +13930,12 @@ export const inputObjects = {
   NamespaceFilter: {
     plans: {
       and($where, value) {
-        assertAllowed41(value, "list");
+        assertAllowed43(value, "list");
         if (value == null) return;
         return $where.andPlan();
       },
       apiTokens($where, value) {
-        assertAllowed40(value, "object");
+        assertAllowed42(value, "object");
         const $rel = $where.andPlan();
         $rel.extensions.pgFilterRelation = {
           tableExpression: apiTokenIdentifier,
@@ -11200,7 +13946,7 @@ export const inputObjects = {
         return $rel;
       },
       apiTokensExist($where, value) {
-        assertAllowed40(value, "scalar");
+        assertAllowed42(value, "scalar");
         if (value == null) return;
         const $subQuery = $where.existsPlan({
           tableExpression: apiTokenIdentifier,
@@ -11221,12 +13967,12 @@ export const inputObjects = {
         return condition;
       },
       not($where, value) {
-        assertAllowed41(value, "object");
+        assertAllowed43(value, "object");
         if (value == null) return;
         return $where.notPlan().andPlan();
       },
       or($where, value) {
-        assertAllowed41(value, "list");
+        assertAllowed43(value, "list");
         if (value == null) return;
         const $or = $where.orPlan();
         return () => $or.andPlan();
@@ -11240,7 +13986,7 @@ export const inputObjects = {
         return condition;
       },
       repositories($where, value) {
-        assertAllowed40(value, "object");
+        assertAllowed42(value, "object");
         const $rel = $where.andPlan();
         $rel.extensions.pgFilterRelation = {
           tableExpression: repositoryIdentifier,
@@ -11251,7 +13997,7 @@ export const inputObjects = {
         return $rel;
       },
       repositoriesExist($where, value) {
-        assertAllowed40(value, "scalar");
+        assertAllowed42(value, "scalar");
         if (value == null) return;
         const $subQuery = $where.existsPlan({
           tableExpression: repositoryIdentifier,
@@ -11358,7 +14104,7 @@ export const inputObjects = {
   NamespaceToManyApiTokenFilter: {
     plans: {
       every($where, value) {
-        assertAllowed43(value, "object");
+        assertAllowed45(value, "object");
         if (value == null) return;
         if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
         const {
@@ -11378,7 +14124,7 @@ export const inputObjects = {
         return $subQuery.notPlan().andPlan();
       },
       none($where, value) {
-        assertAllowed43(value, "object");
+        assertAllowed45(value, "object");
         if (value == null) return;
         if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
         const {
@@ -11398,7 +14144,7 @@ export const inputObjects = {
         return $subQuery;
       },
       some($where, value) {
-        assertAllowed43(value, "object");
+        assertAllowed45(value, "object");
         if (value == null) return;
         if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
         const {
@@ -11422,7 +14168,7 @@ export const inputObjects = {
   NamespaceToManyRepositoryFilter: {
     plans: {
       every($where, value) {
-        assertAllowed42(value, "object");
+        assertAllowed44(value, "object");
         if (value == null) return;
         if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
         const {
@@ -11442,7 +14188,7 @@ export const inputObjects = {
         return $subQuery.notPlan().andPlan();
       },
       none($where, value) {
-        assertAllowed42(value, "object");
+        assertAllowed44(value, "object");
         if (value == null) return;
         if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
         const {
@@ -11462,7 +14208,7 @@ export const inputObjects = {
         return $subQuery;
       },
       some($where, value) {
-        assertAllowed42(value, "object");
+        assertAllowed44(value, "object");
         if (value == null) return;
         if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
         const {
@@ -11526,12 +14272,12 @@ export const inputObjects = {
   RepositoryFilter: {
     plans: {
       and($where, value) {
-        assertAllowed19(value, "list");
+        assertAllowed21(value, "list");
         if (value == null) return;
         return $where.andPlan();
       },
       apiTokens($where, value) {
-        assertAllowed17(value, "object");
+        assertAllowed19(value, "object");
         const $rel = $where.andPlan();
         $rel.extensions.pgFilterRelation = {
           tableExpression: apiTokenIdentifier,
@@ -11542,7 +14288,7 @@ export const inputObjects = {
         return $rel;
       },
       apiTokensExist($where, value) {
-        assertAllowed17(value, "scalar");
+        assertAllowed19(value, "scalar");
         if (value == null) return;
         const $subQuery = $where.existsPlan({
           tableExpression: apiTokenIdentifier,
@@ -11555,7 +14301,7 @@ export const inputObjects = {
         });
       },
       artifacts($where, value) {
-        assertAllowed17(value, "object");
+        assertAllowed19(value, "object");
         const $rel = $where.andPlan();
         $rel.extensions.pgFilterRelation = {
           tableExpression: artifactIdentifier,
@@ -11566,7 +14312,7 @@ export const inputObjects = {
         return $rel;
       },
       artifactsExist($where, value) {
-        assertAllowed17(value, "scalar");
+        assertAllowed19(value, "scalar");
         if (value == null) return;
         const $subQuery = $where.existsPlan({
           tableExpression: artifactIdentifier,
@@ -11595,7 +14341,7 @@ export const inputObjects = {
         return condition;
       },
       namespace($where, value) {
-        assertAllowed18(value, "object");
+        assertAllowed20(value, "object");
         if (value == null) return;
         const $subQuery = $where.existsPlan({
           tableExpression: namespaceIdentifier,
@@ -11616,12 +14362,12 @@ export const inputObjects = {
         return condition;
       },
       not($where, value) {
-        assertAllowed19(value, "object");
+        assertAllowed21(value, "object");
         if (value == null) return;
         return $where.notPlan().andPlan();
       },
       or($where, value) {
-        assertAllowed19(value, "list");
+        assertAllowed21(value, "list");
         if (value == null) return;
         const $or = $where.orPlan();
         return () => $or.andPlan();
@@ -11635,7 +14381,7 @@ export const inputObjects = {
         return condition;
       },
       tags($where, value) {
-        assertAllowed17(value, "object");
+        assertAllowed19(value, "object");
         const $rel = $where.andPlan();
         $rel.extensions.pgFilterRelation = {
           tableExpression: tagIdentifier,
@@ -11646,7 +14392,7 @@ export const inputObjects = {
         return $rel;
       },
       tagsExist($where, value) {
-        assertAllowed17(value, "scalar");
+        assertAllowed19(value, "scalar");
         if (value == null) return;
         const $subQuery = $where.existsPlan({
           tableExpression: tagIdentifier,
@@ -11659,7 +14405,7 @@ export const inputObjects = {
         });
       },
       uploadSessions($where, value) {
-        assertAllowed17(value, "object");
+        assertAllowed19(value, "object");
         const $rel = $where.andPlan();
         $rel.extensions.pgFilterRelation = {
           tableExpression: uploadSessionIdentifier,
@@ -11670,7 +14416,7 @@ export const inputObjects = {
         return $rel;
       },
       uploadSessionsExist($where, value) {
-        assertAllowed17(value, "scalar");
+        assertAllowed19(value, "scalar");
         if (value == null) return;
         const $subQuery = $where.existsPlan({
           tableExpression: uploadSessionIdentifier,
@@ -11793,7 +14539,7 @@ export const inputObjects = {
   RepositoryToManyApiTokenFilter: {
     plans: {
       every($where, value) {
-        assertAllowed37(value, "object");
+        assertAllowed39(value, "object");
         if (value == null) return;
         if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
         const {
@@ -11813,7 +14559,7 @@ export const inputObjects = {
         return $subQuery.notPlan().andPlan();
       },
       none($where, value) {
-        assertAllowed37(value, "object");
+        assertAllowed39(value, "object");
         if (value == null) return;
         if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
         const {
@@ -11833,7 +14579,7 @@ export const inputObjects = {
         return $subQuery;
       },
       some($where, value) {
-        assertAllowed37(value, "object");
+        assertAllowed39(value, "object");
         if (value == null) return;
         if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
         const {
@@ -11857,7 +14603,7 @@ export const inputObjects = {
   RepositoryToManyArtifactFilter: {
     plans: {
       every($where, value) {
-        assertAllowed20(value, "object");
+        assertAllowed22(value, "object");
         if (value == null) return;
         if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
         const {
@@ -11877,7 +14623,7 @@ export const inputObjects = {
         return $subQuery.notPlan().andPlan();
       },
       none($where, value) {
-        assertAllowed20(value, "object");
+        assertAllowed22(value, "object");
         if (value == null) return;
         if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
         const {
@@ -11897,7 +14643,7 @@ export const inputObjects = {
         return $subQuery;
       },
       some($where, value) {
-        assertAllowed20(value, "object");
+        assertAllowed22(value, "object");
         if (value == null) return;
         if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
         const {
@@ -11921,7 +14667,7 @@ export const inputObjects = {
   RepositoryToManyTagFilter: {
     plans: {
       every($where, value) {
-        assertAllowed33(value, "object");
+        assertAllowed35(value, "object");
         if (value == null) return;
         if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
         const {
@@ -11941,7 +14687,7 @@ export const inputObjects = {
         return $subQuery.notPlan().andPlan();
       },
       none($where, value) {
-        assertAllowed33(value, "object");
+        assertAllowed35(value, "object");
         if (value == null) return;
         if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
         const {
@@ -11961,7 +14707,7 @@ export const inputObjects = {
         return $subQuery;
       },
       some($where, value) {
-        assertAllowed33(value, "object");
+        assertAllowed35(value, "object");
         if (value == null) return;
         if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
         const {
@@ -11985,7 +14731,7 @@ export const inputObjects = {
   RepositoryToManyUploadSessionFilter: {
     plans: {
       every($where, value) {
-        assertAllowed34(value, "object");
+        assertAllowed36(value, "object");
         if (value == null) return;
         if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
         const {
@@ -12005,7 +14751,7 @@ export const inputObjects = {
         return $subQuery.notPlan().andPlan();
       },
       none($where, value) {
-        assertAllowed34(value, "object");
+        assertAllowed36(value, "object");
         if (value == null) return;
         if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
         const {
@@ -12025,7 +14771,7 @@ export const inputObjects = {
         return $subQuery;
       },
       some($where, value) {
-        assertAllowed34(value, "object");
+        assertAllowed36(value, "object");
         if (value == null) return;
         if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
         const {
@@ -12062,12 +14808,12 @@ export const inputObjects = {
   SchemaMetadatumFilter: {
     plans: {
       and($where, value) {
-        assertAllowed27(value, "list");
+        assertAllowed29(value, "list");
         if (value == null) return;
         return $where.andPlan();
       },
       artifact($where, value) {
-        assertAllowed26(value, "object");
+        assertAllowed28(value, "object");
         if (value == null) return;
         const $subQuery = $where.existsPlan({
           tableExpression: artifactIdentifier,
@@ -12088,12 +14834,12 @@ export const inputObjects = {
         return condition;
       },
       not($where, value) {
-        assertAllowed27(value, "object");
+        assertAllowed29(value, "object");
         if (value == null) return;
         return $where.notPlan().andPlan();
       },
       or($where, value) {
-        assertAllowed27(value, "list");
+        assertAllowed29(value, "list");
         if (value == null) return;
         const $or = $where.orPlan();
         return () => $or.andPlan();
@@ -13105,12 +15851,12 @@ export const inputObjects = {
   TagFilter: {
     plans: {
       and($where, value) {
-        assertAllowed30(value, "list");
+        assertAllowed32(value, "list");
         if (value == null) return;
         return $where.andPlan();
       },
       artifact($where, value) {
-        assertAllowed29(value, "object");
+        assertAllowed31(value, "object");
         if (value == null) return;
         const $subQuery = $where.existsPlan({
           tableExpression: artifactIdentifier,
@@ -13139,18 +15885,18 @@ export const inputObjects = {
         return condition;
       },
       not($where, value) {
-        assertAllowed30(value, "object");
+        assertAllowed32(value, "object");
         if (value == null) return;
         return $where.notPlan().andPlan();
       },
       or($where, value) {
-        assertAllowed30(value, "list");
+        assertAllowed32(value, "list");
         if (value == null) return;
         const $or = $where.orPlan();
         return () => $or.andPlan();
       },
       repository($where, value) {
-        assertAllowed29(value, "object");
+        assertAllowed31(value, "object");
         if (value == null) return;
         const $subQuery = $where.existsPlan({
           tableExpression: repositoryIdentifier,
@@ -13313,6 +16059,56 @@ export const inputObjects = {
     }
   },
   UpdateContainerMetadatumInput: {
+    plans: {
+      clientMutationId(qb, val) {
+        qb.setMeta("clientMutationId", val);
+      },
+      patch(qb, arg) {
+        if (arg != null) return qb.setBuilder();
+      }
+    }
+  },
+  UpdateFederatedSkillCacheByIdInput: {
+    plans: {
+      clientMutationId(qb, val) {
+        qb.setMeta("clientMutationId", val);
+      },
+      patch(qb, arg) {
+        if (arg != null) return qb.setBuilder();
+      }
+    }
+  },
+  UpdateFederatedSkillCacheInput: {
+    plans: {
+      clientMutationId(qb, val) {
+        qb.setMeta("clientMutationId", val);
+      },
+      patch(qb, arg) {
+        if (arg != null) return qb.setBuilder();
+      }
+    }
+  },
+  UpdateFederatedSourceByIdInput: {
+    plans: {
+      clientMutationId(qb, val) {
+        qb.setMeta("clientMutationId", val);
+      },
+      patch(qb, arg) {
+        if (arg != null) return qb.setBuilder();
+      }
+    }
+  },
+  UpdateFederatedSourceByNamespaceInput: {
+    plans: {
+      clientMutationId(qb, val) {
+        qb.setMeta("clientMutationId", val);
+      },
+      patch(qb, arg) {
+        if (arg != null) return qb.setBuilder();
+      }
+    }
+  },
+  UpdateFederatedSourceInput: {
     plans: {
       clientMutationId(qb, val) {
         qb.setMeta("clientMutationId", val);
@@ -13486,7 +16282,7 @@ export const inputObjects = {
   UploadSessionFilter: {
     plans: {
       and($where, value) {
-        assertAllowed36(value, "list");
+        assertAllowed38(value, "list");
         if (value == null) return;
         return $where.andPlan();
       },
@@ -13499,18 +16295,18 @@ export const inputObjects = {
         return condition;
       },
       not($where, value) {
-        assertAllowed36(value, "object");
+        assertAllowed38(value, "object");
         if (value == null) return;
         return $where.notPlan().andPlan();
       },
       or($where, value) {
-        assertAllowed36(value, "list");
+        assertAllowed38(value, "list");
         if (value == null) return;
         const $or = $where.orPlan();
         return () => $or.andPlan();
       },
       repository($where, value) {
-        assertAllowed35(value, "object");
+        assertAllowed37(value, "object");
         if (value == null) return;
         const $subQuery = $where.existsPlan({
           tableExpression: repositoryIdentifier,
@@ -13894,12 +16690,12 @@ export const inputObjects = {
   WasmMetadatumFilter: {
     plans: {
       and($where, value) {
-        assertAllowed32(value, "list");
+        assertAllowed34(value, "list");
         if (value == null) return;
         return $where.andPlan();
       },
       artifact($where, value) {
-        assertAllowed31(value, "object");
+        assertAllowed33(value, "object");
         if (value == null) return;
         const $subQuery = $where.existsPlan({
           tableExpression: artifactIdentifier,
@@ -13920,12 +16716,12 @@ export const inputObjects = {
         return condition;
       },
       not($where, value) {
-        assertAllowed32(value, "object");
+        assertAllowed34(value, "object");
         if (value == null) return;
         return $where.notPlan().andPlan();
       },
       or($where, value) {
-        assertAllowed32(value, "list");
+        assertAllowed34(value, "list");
         if (value == null) return;
         const $or = $where.orPlan();
         return () => $or.andPlan();
@@ -14269,6 +17065,152 @@ export const enums = {
           });
         });
         queryBuilder.setOrderIsUnique();
+      }
+    }
+  },
+  FederatedSkillCacheOrderBy: {
+    values: {
+      EXPIRES_AT_ASC(queryBuilder) {
+        queryBuilder.orderBy({
+          attribute: "expires_at",
+          direction: "ASC"
+        });
+      },
+      EXPIRES_AT_DESC(queryBuilder) {
+        queryBuilder.orderBy({
+          attribute: "expires_at",
+          direction: "DESC"
+        });
+      },
+      PRIMARY_KEY_ASC(queryBuilder) {
+        federated_skill_cacheUniques[0].attributes.forEach(attributeName => {
+          queryBuilder.orderBy({
+            attribute: attributeName,
+            direction: "ASC"
+          });
+        });
+        queryBuilder.setOrderIsUnique();
+      },
+      PRIMARY_KEY_DESC(queryBuilder) {
+        federated_skill_cacheUniques[0].attributes.forEach(attributeName => {
+          queryBuilder.orderBy({
+            attribute: attributeName,
+            direction: "DESC"
+          });
+        });
+        queryBuilder.setOrderIsUnique();
+      },
+      ROW_ID_ASC(queryBuilder) {
+        queryBuilder.orderBy({
+          attribute: "id",
+          direction: "ASC"
+        });
+        queryBuilder.setOrderIsUnique();
+      },
+      ROW_ID_DESC(queryBuilder) {
+        queryBuilder.orderBy({
+          attribute: "id",
+          direction: "DESC"
+        });
+        queryBuilder.setOrderIsUnique();
+      },
+      SLUG_ASC(queryBuilder) {
+        queryBuilder.orderBy({
+          attribute: "slug",
+          direction: "ASC"
+        });
+      },
+      SLUG_DESC(queryBuilder) {
+        queryBuilder.orderBy({
+          attribute: "slug",
+          direction: "DESC"
+        });
+      },
+      SOURCE_ID_ASC(queryBuilder) {
+        queryBuilder.orderBy({
+          attribute: "source_id",
+          direction: "ASC"
+        });
+      },
+      SOURCE_ID_DESC(queryBuilder) {
+        queryBuilder.orderBy({
+          attribute: "source_id",
+          direction: "DESC"
+        });
+      },
+      VET_STATUS_ASC(queryBuilder) {
+        queryBuilder.orderBy({
+          attribute: "vet_status",
+          direction: "ASC"
+        });
+      },
+      VET_STATUS_DESC(queryBuilder) {
+        queryBuilder.orderBy({
+          attribute: "vet_status",
+          direction: "DESC"
+        });
+      }
+    }
+  },
+  FederatedSourceOrderBy: {
+    values: {
+      NAMESPACE_ASC(queryBuilder) {
+        queryBuilder.orderBy({
+          attribute: "namespace",
+          direction: "ASC"
+        });
+        queryBuilder.setOrderIsUnique();
+      },
+      NAMESPACE_DESC(queryBuilder) {
+        queryBuilder.orderBy({
+          attribute: "namespace",
+          direction: "DESC"
+        });
+        queryBuilder.setOrderIsUnique();
+      },
+      PRIMARY_KEY_ASC(queryBuilder) {
+        federated_sourceUniques[0].attributes.forEach(attributeName => {
+          queryBuilder.orderBy({
+            attribute: attributeName,
+            direction: "ASC"
+          });
+        });
+        queryBuilder.setOrderIsUnique();
+      },
+      PRIMARY_KEY_DESC(queryBuilder) {
+        federated_sourceUniques[0].attributes.forEach(attributeName => {
+          queryBuilder.orderBy({
+            attribute: attributeName,
+            direction: "DESC"
+          });
+        });
+        queryBuilder.setOrderIsUnique();
+      },
+      ROW_ID_ASC(queryBuilder) {
+        queryBuilder.orderBy({
+          attribute: "id",
+          direction: "ASC"
+        });
+        queryBuilder.setOrderIsUnique();
+      },
+      ROW_ID_DESC(queryBuilder) {
+        queryBuilder.orderBy({
+          attribute: "id",
+          direction: "DESC"
+        });
+        queryBuilder.setOrderIsUnique();
+      },
+      UPSTREAM_TYPE_ASC(queryBuilder) {
+        queryBuilder.orderBy({
+          attribute: "upstream_type",
+          direction: "ASC"
+        });
+      },
+      UPSTREAM_TYPE_DESC(queryBuilder) {
+        queryBuilder.orderBy({
+          attribute: "upstream_type",
+          direction: "DESC"
+        });
       }
     }
   },
