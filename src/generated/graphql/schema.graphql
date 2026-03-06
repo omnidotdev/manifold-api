@@ -20,9 +20,6 @@ type Query implements Node {
   """Get a single `ContainerMetadatum`."""
   containerMetadatum(artifactId: UUID!): ContainerMetadatum
 
-  """Get a single `Artifact`."""
-  artifact(rowId: UUID!): Artifact
-
   """Get a single `WasmMetadatum`."""
   wasmMetadatum(artifactId: UUID!): WasmMetadatum
 
@@ -31,6 +28,9 @@ type Query implements Node {
 
   """Get a single `UploadSession`."""
   uploadSession(rowId: UUID!): UploadSession
+
+  """Get a single `Artifact`."""
+  artifact(rowId: UUID!): Artifact
 
   """Get a single `SchemaMetadatum`."""
   schemaMetadatum(artifactId: UUID!): SchemaMetadatum
@@ -44,6 +44,15 @@ type Query implements Node {
   """Get a single `Repository`."""
   repository(rowId: UUID!): Repository
 
+  """Get a single `FederatedSource`."""
+  federatedSource(rowId: UUID!): FederatedSource
+
+  """Get a single `FederatedSource`."""
+  federatedSourceByNamespace(namespace: String!): FederatedSource
+
+  """Get a single `FederatedSkillCache`."""
+  federatedSkillCache(rowId: UUID!): FederatedSkillCache
+
   """Get a single `ApiToken`."""
   apiToken(rowId: UUID!): ApiToken
 
@@ -54,12 +63,6 @@ type Query implements Node {
     """
     id: ID!
   ): ContainerMetadatum
-
-  """Reads a single `Artifact` using its globally unique `ID`."""
-  artifactById(
-    """The globally unique `ID` to be used in selecting a single `Artifact`."""
-    id: ID!
-  ): Artifact
 
   """Reads a single `WasmMetadatum` using its globally unique `ID`."""
   wasmMetadatumById(
@@ -83,6 +86,12 @@ type Query implements Node {
     id: ID!
   ): UploadSession
 
+  """Reads a single `Artifact` using its globally unique `ID`."""
+  artifactById(
+    """The globally unique `ID` to be used in selecting a single `Artifact`."""
+    id: ID!
+  ): Artifact
+
   """Reads a single `SchemaMetadatum` using its globally unique `ID`."""
   schemaMetadatumById(
     """
@@ -104,6 +113,22 @@ type Query implements Node {
     """
     id: ID!
   ): Repository
+
+  """Reads a single `FederatedSource` using its globally unique `ID`."""
+  federatedSourceById(
+    """
+    The globally unique `ID` to be used in selecting a single `FederatedSource`.
+    """
+    id: ID!
+  ): FederatedSource
+
+  """Reads a single `FederatedSkillCache` using its globally unique `ID`."""
+  federatedSkillCacheById(
+    """
+    The globally unique `ID` to be used in selecting a single `FederatedSkillCache`.
+    """
+    id: ID!
+  ): FederatedSkillCache
 
   """Reads a single `ApiToken` using its globally unique `ID`."""
   apiTokenById(
@@ -144,40 +169,6 @@ type Query implements Node {
     """The method to use when ordering `ContainerMetadatum`."""
     orderBy: [ContainerMetadatumOrderBy!] = [PRIMARY_KEY_ASC]
   ): ContainerMetadatumConnection
-
-  """Reads and enables pagination through a set of `Artifact`."""
-  artifacts(
-    """Only read the first `n` values of the set."""
-    first: Int
-
-    """Only read the last `n` values of the set."""
-    last: Int
-
-    """
-    Skip the first `n` values from our `after` cursor, an alternative to cursor
-    based pagination. May not be used with `last`.
-    """
-    offset: Int
-
-    """Read all values in the set before (above) this cursor."""
-    before: Cursor
-
-    """Read all values in the set after (below) this cursor."""
-    after: Cursor
-
-    """
-    A condition to be used in determining which values should be returned by the collection.
-    """
-    condition: ArtifactCondition
-
-    """
-    A filter to be used in determining which values should be returned by the collection.
-    """
-    filter: ArtifactFilter
-
-    """The method to use when ordering `Artifact`."""
-    orderBy: [ArtifactOrderBy!] = [PRIMARY_KEY_ASC]
-  ): ArtifactConnection
 
   """Reads and enables pagination through a set of `WasmMetadatum`."""
   wasmMetadata(
@@ -281,6 +272,40 @@ type Query implements Node {
     orderBy: [UploadSessionOrderBy!] = [PRIMARY_KEY_ASC]
   ): UploadSessionConnection
 
+  """Reads and enables pagination through a set of `Artifact`."""
+  artifacts(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: ArtifactCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: ArtifactFilter
+
+    """The method to use when ordering `Artifact`."""
+    orderBy: [ArtifactOrderBy!] = [PRIMARY_KEY_ASC]
+  ): ArtifactConnection
+
   """Reads and enables pagination through a set of `SchemaMetadatum`."""
   schemaMetadata(
     """Only read the first `n` values of the set."""
@@ -383,6 +408,74 @@ type Query implements Node {
     orderBy: [RepositoryOrderBy!] = [PRIMARY_KEY_ASC]
   ): RepositoryConnection
 
+  """Reads and enables pagination through a set of `FederatedSource`."""
+  federatedSources(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: FederatedSourceCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: FederatedSourceFilter
+
+    """The method to use when ordering `FederatedSource`."""
+    orderBy: [FederatedSourceOrderBy!] = [PRIMARY_KEY_ASC]
+  ): FederatedSourceConnection
+
+  """Reads and enables pagination through a set of `FederatedSkillCache`."""
+  federatedSkillCaches(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: FederatedSkillCacheCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: FederatedSkillCacheFilter
+
+    """The method to use when ordering `FederatedSkillCache`."""
+    orderBy: [FederatedSkillCacheOrderBy!] = [PRIMARY_KEY_ASC]
+  ): FederatedSkillCacheConnection
+
   """Reads and enables pagination through a set of `ApiToken`."""
   apiTokens(
     """Only read the first `n` values of the set."""
@@ -466,6 +559,7 @@ type Artifact implements Node {
   mediaType: String!
   content: String
   createdAt: Datetime
+  storagePath: String
 
   """Reads a single `Repository` that is related to this `Artifact`."""
   repository: Repository
@@ -1872,6 +1966,230 @@ type WasmMetadatum implements Node {
   artifact: Artifact
 }
 
+type FederatedSource implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  id: ID!
+  rowId: UUID!
+  namespace: String!
+  upstreamBaseUrl: String!
+  upstreamType: String!
+  enabled: Boolean!
+  rateLimitRpm: Int!
+  cacheTtlSeconds: Int!
+  tagListCacheTtlSeconds: Int!
+  requireVetting: Boolean!
+  createdAt: Datetime
+  updatedAt: Datetime
+
+  """Reads and enables pagination through a set of `FederatedSkillCache`."""
+  federatedSkillCachesBySourceId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: FederatedSkillCacheCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: FederatedSkillCacheFilter
+
+    """The method to use when ordering `FederatedSkillCache`."""
+    orderBy: [FederatedSkillCacheOrderBy!] = [PRIMARY_KEY_ASC]
+  ): FederatedSkillCacheConnection!
+}
+
+"""A connection to a list of `FederatedSkillCache` values."""
+type FederatedSkillCacheConnection {
+  """A list of `FederatedSkillCache` objects."""
+  nodes: [FederatedSkillCache]!
+
+  """
+  A list of edges which contains the `FederatedSkillCache` and cursor to aid in pagination.
+  """
+  edges: [FederatedSkillCacheEdge]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """
+  The count of *all* `FederatedSkillCache` you could get from the connection.
+  """
+  totalCount: Int!
+}
+
+type FederatedSkillCache implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  id: ID!
+  rowId: UUID!
+  sourceId: UUID!
+  slug: String!
+  content: String
+  contentDigest: String
+  fetchedAt: Datetime
+  expiresAt: Datetime
+  vetStatus: String!
+  vetReason: String
+  vettedBy: String
+  vettedAt: Datetime
+  upstreamMeta: JSON
+  createdAt: Datetime
+
+  """
+  Reads a single `FederatedSource` that is related to this `FederatedSkillCache`.
+  """
+  source: FederatedSource
+}
+
+"""A `FederatedSkillCache` edge in the connection."""
+type FederatedSkillCacheEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `FederatedSkillCache` at the end of the edge."""
+  node: FederatedSkillCache
+}
+
+"""
+A condition to be used against `FederatedSkillCache` object types. All fields
+are tested for equality and combined with a logical ‘and.’
+"""
+input FederatedSkillCacheCondition {
+  """Checks for equality with the object’s `rowId` field."""
+  rowId: UUID
+
+  """Checks for equality with the object’s `sourceId` field."""
+  sourceId: UUID
+
+  """Checks for equality with the object’s `slug` field."""
+  slug: String
+
+  """Checks for equality with the object’s `expiresAt` field."""
+  expiresAt: Datetime
+
+  """Checks for equality with the object’s `vetStatus` field."""
+  vetStatus: String
+}
+
+"""
+A filter to be used against `FederatedSkillCache` object types. All fields are combined with a logical ‘and.’
+"""
+input FederatedSkillCacheFilter {
+  """Filter by the object’s `rowId` field."""
+  rowId: UUIDFilter
+
+  """Filter by the object’s `sourceId` field."""
+  sourceId: UUIDFilter
+
+  """Filter by the object’s `slug` field."""
+  slug: StringFilter
+
+  """Filter by the object’s `expiresAt` field."""
+  expiresAt: DatetimeFilter
+
+  """Filter by the object’s `vetStatus` field."""
+  vetStatus: StringFilter
+
+  """Filter by the object’s `source` relation."""
+  source: FederatedSourceFilter
+
+  """Checks for all expressions in this list."""
+  and: [FederatedSkillCacheFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [FederatedSkillCacheFilter!]
+
+  """Negates the expression."""
+  not: FederatedSkillCacheFilter
+}
+
+"""
+A filter to be used against `FederatedSource` object types. All fields are combined with a logical ‘and.’
+"""
+input FederatedSourceFilter {
+  """Filter by the object’s `rowId` field."""
+  rowId: UUIDFilter
+
+  """Filter by the object’s `namespace` field."""
+  namespace: StringFilter
+
+  """Filter by the object’s `upstreamType` field."""
+  upstreamType: StringFilter
+
+  """Filter by the object’s `federatedSkillCachesBySourceId` relation."""
+  federatedSkillCachesBySourceId: FederatedSourceToManyFederatedSkillCacheFilter
+
+  """Some related `federatedSkillCachesBySourceId` exist."""
+  federatedSkillCachesBySourceIdExist: Boolean
+
+  """Checks for all expressions in this list."""
+  and: [FederatedSourceFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [FederatedSourceFilter!]
+
+  """Negates the expression."""
+  not: FederatedSourceFilter
+}
+
+"""
+A filter to be used against many `FederatedSkillCache` object types. All fields are combined with a logical ‘and.’
+"""
+input FederatedSourceToManyFederatedSkillCacheFilter {
+  """
+  Every related `FederatedSkillCache` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  every: FederatedSkillCacheFilter
+
+  """
+  Some related `FederatedSkillCache` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  some: FederatedSkillCacheFilter
+
+  """
+  No related `FederatedSkillCache` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  none: FederatedSkillCacheFilter
+}
+
+"""Methods to use when ordering `FederatedSkillCache`."""
+enum FederatedSkillCacheOrderBy {
+  NATURAL
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+  ROW_ID_ASC
+  ROW_ID_DESC
+  SOURCE_ID_ASC
+  SOURCE_ID_DESC
+  SLUG_ASC
+  SLUG_DESC
+  EXPIRES_AT_ASC
+  EXPIRES_AT_DESC
+  VET_STATUS_ASC
+  VET_STATUS_DESC
+}
+
 """A connection to a list of `ContainerMetadatum` values."""
 type ContainerMetadatumConnection {
   """A list of `ContainerMetadatum` objects."""
@@ -2062,6 +2380,62 @@ enum NamespaceOrderBy {
   ORGANIZATION_ID_DESC
 }
 
+"""A connection to a list of `FederatedSource` values."""
+type FederatedSourceConnection {
+  """A list of `FederatedSource` objects."""
+  nodes: [FederatedSource]!
+
+  """
+  A list of edges which contains the `FederatedSource` and cursor to aid in pagination.
+  """
+  edges: [FederatedSourceEdge]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """
+  The count of *all* `FederatedSource` you could get from the connection.
+  """
+  totalCount: Int!
+}
+
+"""A `FederatedSource` edge in the connection."""
+type FederatedSourceEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `FederatedSource` at the end of the edge."""
+  node: FederatedSource
+}
+
+"""
+A condition to be used against `FederatedSource` object types. All fields are
+tested for equality and combined with a logical ‘and.’
+"""
+input FederatedSourceCondition {
+  """Checks for equality with the object’s `rowId` field."""
+  rowId: UUID
+
+  """Checks for equality with the object’s `namespace` field."""
+  namespace: String
+
+  """Checks for equality with the object’s `upstreamType` field."""
+  upstreamType: String
+}
+
+"""Methods to use when ordering `FederatedSource`."""
+enum FederatedSourceOrderBy {
+  NATURAL
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+  ROW_ID_ASC
+  ROW_ID_DESC
+  NAMESPACE_ASC
+  NAMESPACE_DESC
+  UPSTREAM_TYPE_ASC
+  UPSTREAM_TYPE_DESC
+}
+
 """
 The root mutation type which contains root level fields which mutate data.
 """
@@ -2073,14 +2447,6 @@ type Mutation {
     """
     input: CreateContainerMetadatumInput!
   ): CreateContainerMetadatumPayload
-
-  """Creates a single `Artifact`."""
-  createArtifact(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: CreateArtifactInput!
-  ): CreateArtifactPayload
 
   """Creates a single `WasmMetadatum`."""
   createWasmMetadatum(
@@ -2106,6 +2472,14 @@ type Mutation {
     input: CreateUploadSessionInput!
   ): CreateUploadSessionPayload
 
+  """Creates a single `Artifact`."""
+  createArtifact(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateArtifactInput!
+  ): CreateArtifactPayload
+
   """Creates a single `SchemaMetadatum`."""
   createSchemaMetadatum(
     """
@@ -2129,6 +2503,22 @@ type Mutation {
     """
     input: CreateRepositoryInput!
   ): CreateRepositoryPayload
+
+  """Creates a single `FederatedSource`."""
+  createFederatedSource(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateFederatedSourceInput!
+  ): CreateFederatedSourcePayload
+
+  """Creates a single `FederatedSkillCache`."""
+  createFederatedSkillCache(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateFederatedSkillCacheInput!
+  ): CreateFederatedSkillCachePayload
 
   """Creates a single `ApiToken`."""
   createApiToken(
@@ -2155,22 +2545,6 @@ type Mutation {
     """
     input: UpdateContainerMetadatumInput!
   ): UpdateContainerMetadatumPayload
-
-  """Updates a single `Artifact` using its globally unique id and a patch."""
-  updateArtifactById(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdateArtifactByIdInput!
-  ): UpdateArtifactPayload
-
-  """Updates a single `Artifact` using a unique key and a patch."""
-  updateArtifact(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdateArtifactInput!
-  ): UpdateArtifactPayload
 
   """
   Updates a single `WasmMetadatum` using its globally unique id and a patch.
@@ -2223,6 +2597,22 @@ type Mutation {
     """
     input: UpdateUploadSessionInput!
   ): UpdateUploadSessionPayload
+
+  """Updates a single `Artifact` using its globally unique id and a patch."""
+  updateArtifactById(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateArtifactByIdInput!
+  ): UpdateArtifactPayload
+
+  """Updates a single `Artifact` using a unique key and a patch."""
+  updateArtifact(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateArtifactInput!
+  ): UpdateArtifactPayload
 
   """
   Updates a single `SchemaMetadatum` using its globally unique id and a patch.
@@ -2284,6 +2674,50 @@ type Mutation {
     input: UpdateRepositoryInput!
   ): UpdateRepositoryPayload
 
+  """
+  Updates a single `FederatedSource` using its globally unique id and a patch.
+  """
+  updateFederatedSourceById(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateFederatedSourceByIdInput!
+  ): UpdateFederatedSourcePayload
+
+  """Updates a single `FederatedSource` using a unique key and a patch."""
+  updateFederatedSource(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateFederatedSourceInput!
+  ): UpdateFederatedSourcePayload
+
+  """Updates a single `FederatedSource` using a unique key and a patch."""
+  updateFederatedSourceByNamespace(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateFederatedSourceByNamespaceInput!
+  ): UpdateFederatedSourcePayload
+
+  """
+  Updates a single `FederatedSkillCache` using its globally unique id and a patch.
+  """
+  updateFederatedSkillCacheById(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateFederatedSkillCacheByIdInput!
+  ): UpdateFederatedSkillCachePayload
+
+  """Updates a single `FederatedSkillCache` using a unique key and a patch."""
+  updateFederatedSkillCache(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateFederatedSkillCacheInput!
+  ): UpdateFederatedSkillCachePayload
+
   """Updates a single `ApiToken` using its globally unique id and a patch."""
   updateApiTokenById(
     """
@@ -2315,22 +2749,6 @@ type Mutation {
     """
     input: DeleteContainerMetadatumInput!
   ): DeleteContainerMetadatumPayload
-
-  """Deletes a single `Artifact` using its globally unique id."""
-  deleteArtifactById(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteArtifactByIdInput!
-  ): DeleteArtifactPayload
-
-  """Deletes a single `Artifact` using a unique key."""
-  deleteArtifact(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteArtifactInput!
-  ): DeleteArtifactPayload
 
   """Deletes a single `WasmMetadatum` using its globally unique id."""
   deleteWasmMetadatumById(
@@ -2379,6 +2797,22 @@ type Mutation {
     """
     input: DeleteUploadSessionInput!
   ): DeleteUploadSessionPayload
+
+  """Deletes a single `Artifact` using its globally unique id."""
+  deleteArtifactById(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteArtifactByIdInput!
+  ): DeleteArtifactPayload
+
+  """Deletes a single `Artifact` using a unique key."""
+  deleteArtifact(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteArtifactInput!
+  ): DeleteArtifactPayload
 
   """Deletes a single `SchemaMetadatum` using its globally unique id."""
   deleteSchemaMetadatumById(
@@ -2435,6 +2869,46 @@ type Mutation {
     """
     input: DeleteRepositoryInput!
   ): DeleteRepositoryPayload
+
+  """Deletes a single `FederatedSource` using its globally unique id."""
+  deleteFederatedSourceById(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteFederatedSourceByIdInput!
+  ): DeleteFederatedSourcePayload
+
+  """Deletes a single `FederatedSource` using a unique key."""
+  deleteFederatedSource(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteFederatedSourceInput!
+  ): DeleteFederatedSourcePayload
+
+  """Deletes a single `FederatedSource` using a unique key."""
+  deleteFederatedSourceByNamespace(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteFederatedSourceByNamespaceInput!
+  ): DeleteFederatedSourcePayload
+
+  """Deletes a single `FederatedSkillCache` using its globally unique id."""
+  deleteFederatedSkillCacheById(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteFederatedSkillCacheByIdInput!
+  ): DeleteFederatedSkillCachePayload
+
+  """Deletes a single `FederatedSkillCache` using a unique key."""
+  deleteFederatedSkillCache(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteFederatedSkillCacheInput!
+  ): DeleteFederatedSkillCachePayload
 
   """Deletes a single `ApiToken` using its globally unique id."""
   deleteApiTokenById(
@@ -2496,52 +2970,6 @@ input ContainerMetadatumInput {
   os: String
   configDigest: String
   layerDigests: JSON
-}
-
-"""The output of our create `Artifact` mutation."""
-type CreateArtifactPayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """The `Artifact` that was created by this mutation."""
-  artifact: Artifact
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-
-  """An edge for our `Artifact`. May be used by Relay 1."""
-  artifactEdge(
-    """The method to use when ordering `Artifact`."""
-    orderBy: [ArtifactOrderBy!]! = [PRIMARY_KEY_ASC]
-  ): ArtifactEdge
-}
-
-"""All input for the create `Artifact` mutation."""
-input CreateArtifactInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-
-  """The `Artifact` to be created by this mutation."""
-  artifact: ArtifactInput!
-}
-
-"""An input for mutations affecting `Artifact`"""
-input ArtifactInput {
-  rowId: UUID
-  repositoryId: UUID!
-  digest: String!
-  size: BigInt!
-  mediaType: String!
-  content: String
-  createdAt: Datetime
 }
 
 """The output of our create `WasmMetadatum` mutation."""
@@ -2674,6 +3102,53 @@ input UploadSessionInput {
   offset: BigInt
   createdAt: Datetime
   expiresAt: Datetime!
+}
+
+"""The output of our create `Artifact` mutation."""
+type CreateArtifactPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `Artifact` that was created by this mutation."""
+  artifact: Artifact
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `Artifact`. May be used by Relay 1."""
+  artifactEdge(
+    """The method to use when ordering `Artifact`."""
+    orderBy: [ArtifactOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): ArtifactEdge
+}
+
+"""All input for the create `Artifact` mutation."""
+input CreateArtifactInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `Artifact` to be created by this mutation."""
+  artifact: ArtifactInput!
+}
+
+"""An input for mutations affecting `Artifact`"""
+input ArtifactInput {
+  rowId: UUID
+  repositoryId: UUID!
+  digest: String!
+  size: BigInt!
+  mediaType: String!
+  content: String
+  createdAt: Datetime
+  storagePath: String
 }
 
 """The output of our create `SchemaMetadatum` mutation."""
@@ -2812,6 +3287,108 @@ input RepositoryInput {
   updatedAt: Datetime
 }
 
+"""The output of our create `FederatedSource` mutation."""
+type CreateFederatedSourcePayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `FederatedSource` that was created by this mutation."""
+  federatedSource: FederatedSource
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `FederatedSource`. May be used by Relay 1."""
+  federatedSourceEdge(
+    """The method to use when ordering `FederatedSource`."""
+    orderBy: [FederatedSourceOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): FederatedSourceEdge
+}
+
+"""All input for the create `FederatedSource` mutation."""
+input CreateFederatedSourceInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `FederatedSource` to be created by this mutation."""
+  federatedSource: FederatedSourceInput!
+}
+
+"""An input for mutations affecting `FederatedSource`"""
+input FederatedSourceInput {
+  rowId: UUID
+  namespace: String!
+  upstreamBaseUrl: String!
+  upstreamType: String!
+  enabled: Boolean
+  rateLimitRpm: Int
+  cacheTtlSeconds: Int
+  tagListCacheTtlSeconds: Int
+  requireVetting: Boolean
+  createdAt: Datetime
+  updatedAt: Datetime
+}
+
+"""The output of our create `FederatedSkillCache` mutation."""
+type CreateFederatedSkillCachePayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `FederatedSkillCache` that was created by this mutation."""
+  federatedSkillCache: FederatedSkillCache
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `FederatedSkillCache`. May be used by Relay 1."""
+  federatedSkillCacheEdge(
+    """The method to use when ordering `FederatedSkillCache`."""
+    orderBy: [FederatedSkillCacheOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): FederatedSkillCacheEdge
+}
+
+"""All input for the create `FederatedSkillCache` mutation."""
+input CreateFederatedSkillCacheInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `FederatedSkillCache` to be created by this mutation."""
+  federatedSkillCache: FederatedSkillCacheInput!
+}
+
+"""An input for mutations affecting `FederatedSkillCache`"""
+input FederatedSkillCacheInput {
+  rowId: UUID
+  sourceId: UUID!
+  slug: String!
+  content: String
+  contentDigest: String
+  fetchedAt: Datetime
+  expiresAt: Datetime
+  vetStatus: String
+  vetReason: String
+  vettedBy: String
+  vettedAt: Datetime
+  upstreamMeta: JSON
+  createdAt: Datetime
+}
+
 """The output of our create `ApiToken` mutation."""
 type CreateApiTokenPayload {
   """
@@ -2932,76 +3509,6 @@ input UpdateContainerMetadatumInput {
   An object where the defined keys will be set on the `ContainerMetadatum` being updated.
   """
   patch: ContainerMetadatumPatch!
-}
-
-"""The output of our update `Artifact` mutation."""
-type UpdateArtifactPayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """The `Artifact` that was updated by this mutation."""
-  artifact: Artifact
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-
-  """An edge for our `Artifact`. May be used by Relay 1."""
-  artifactEdge(
-    """The method to use when ordering `Artifact`."""
-    orderBy: [ArtifactOrderBy!]! = [PRIMARY_KEY_ASC]
-  ): ArtifactEdge
-}
-
-"""All input for the `updateArtifactById` mutation."""
-input UpdateArtifactByIdInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-
-  """
-  The globally unique `ID` which will identify a single `Artifact` to be updated.
-  """
-  id: ID!
-
-  """
-  An object where the defined keys will be set on the `Artifact` being updated.
-  """
-  patch: ArtifactPatch!
-}
-
-"""
-Represents an update to a `Artifact`. Fields that are set will be updated.
-"""
-input ArtifactPatch {
-  rowId: UUID
-  repositoryId: UUID
-  digest: String
-  size: BigInt
-  mediaType: String
-  content: String
-  createdAt: Datetime
-}
-
-"""All input for the `updateArtifact` mutation."""
-input UpdateArtifactInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-  rowId: UUID!
-
-  """
-  An object where the defined keys will be set on the `Artifact` being updated.
-  """
-  patch: ArtifactPatch!
 }
 
 """The output of our update `WasmMetadatum` mutation."""
@@ -3204,6 +3711,77 @@ input UpdateUploadSessionInput {
   An object where the defined keys will be set on the `UploadSession` being updated.
   """
   patch: UploadSessionPatch!
+}
+
+"""The output of our update `Artifact` mutation."""
+type UpdateArtifactPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `Artifact` that was updated by this mutation."""
+  artifact: Artifact
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `Artifact`. May be used by Relay 1."""
+  artifactEdge(
+    """The method to use when ordering `Artifact`."""
+    orderBy: [ArtifactOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): ArtifactEdge
+}
+
+"""All input for the `updateArtifactById` mutation."""
+input UpdateArtifactByIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `Artifact` to be updated.
+  """
+  id: ID!
+
+  """
+  An object where the defined keys will be set on the `Artifact` being updated.
+  """
+  patch: ArtifactPatch!
+}
+
+"""
+Represents an update to a `Artifact`. Fields that are set will be updated.
+"""
+input ArtifactPatch {
+  rowId: UUID
+  repositoryId: UUID
+  digest: String
+  size: BigInt
+  mediaType: String
+  content: String
+  createdAt: Datetime
+  storagePath: String
+}
+
+"""All input for the `updateArtifact` mutation."""
+input UpdateArtifactInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  rowId: UUID!
+
+  """
+  An object where the defined keys will be set on the `Artifact` being updated.
+  """
+  patch: ArtifactPatch!
 }
 
 """The output of our update `SchemaMetadatum` mutation."""
@@ -3429,6 +4007,171 @@ input UpdateRepositoryInput {
   patch: RepositoryPatch!
 }
 
+"""The output of our update `FederatedSource` mutation."""
+type UpdateFederatedSourcePayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `FederatedSource` that was updated by this mutation."""
+  federatedSource: FederatedSource
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `FederatedSource`. May be used by Relay 1."""
+  federatedSourceEdge(
+    """The method to use when ordering `FederatedSource`."""
+    orderBy: [FederatedSourceOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): FederatedSourceEdge
+}
+
+"""All input for the `updateFederatedSourceById` mutation."""
+input UpdateFederatedSourceByIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `FederatedSource` to be updated.
+  """
+  id: ID!
+
+  """
+  An object where the defined keys will be set on the `FederatedSource` being updated.
+  """
+  patch: FederatedSourcePatch!
+}
+
+"""
+Represents an update to a `FederatedSource`. Fields that are set will be updated.
+"""
+input FederatedSourcePatch {
+  rowId: UUID
+  namespace: String
+  upstreamBaseUrl: String
+  upstreamType: String
+  enabled: Boolean
+  rateLimitRpm: Int
+  cacheTtlSeconds: Int
+  tagListCacheTtlSeconds: Int
+  requireVetting: Boolean
+  createdAt: Datetime
+  updatedAt: Datetime
+}
+
+"""All input for the `updateFederatedSource` mutation."""
+input UpdateFederatedSourceInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  rowId: UUID!
+
+  """
+  An object where the defined keys will be set on the `FederatedSource` being updated.
+  """
+  patch: FederatedSourcePatch!
+}
+
+"""All input for the `updateFederatedSourceByNamespace` mutation."""
+input UpdateFederatedSourceByNamespaceInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  namespace: String!
+
+  """
+  An object where the defined keys will be set on the `FederatedSource` being updated.
+  """
+  patch: FederatedSourcePatch!
+}
+
+"""The output of our update `FederatedSkillCache` mutation."""
+type UpdateFederatedSkillCachePayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `FederatedSkillCache` that was updated by this mutation."""
+  federatedSkillCache: FederatedSkillCache
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `FederatedSkillCache`. May be used by Relay 1."""
+  federatedSkillCacheEdge(
+    """The method to use when ordering `FederatedSkillCache`."""
+    orderBy: [FederatedSkillCacheOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): FederatedSkillCacheEdge
+}
+
+"""All input for the `updateFederatedSkillCacheById` mutation."""
+input UpdateFederatedSkillCacheByIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `FederatedSkillCache` to be updated.
+  """
+  id: ID!
+
+  """
+  An object where the defined keys will be set on the `FederatedSkillCache` being updated.
+  """
+  patch: FederatedSkillCachePatch!
+}
+
+"""
+Represents an update to a `FederatedSkillCache`. Fields that are set will be updated.
+"""
+input FederatedSkillCachePatch {
+  rowId: UUID
+  sourceId: UUID
+  slug: String
+  content: String
+  contentDigest: String
+  fetchedAt: Datetime
+  expiresAt: Datetime
+  vetStatus: String
+  vetReason: String
+  vettedBy: String
+  vettedAt: Datetime
+  upstreamMeta: JSON
+  createdAt: Datetime
+}
+
+"""All input for the `updateFederatedSkillCache` mutation."""
+input UpdateFederatedSkillCacheInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  rowId: UUID!
+
+  """
+  An object where the defined keys will be set on the `FederatedSkillCache` being updated.
+  """
+  patch: FederatedSkillCachePatch!
+}
+
 """The output of our update `ApiToken` mutation."""
 type UpdateApiTokenPayload {
   """
@@ -3552,54 +4295,6 @@ input DeleteContainerMetadatumInput {
   """
   clientMutationId: String
   artifactId: UUID!
-}
-
-"""The output of our delete `Artifact` mutation."""
-type DeleteArtifactPayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """The `Artifact` that was deleted by this mutation."""
-  artifact: Artifact
-  deletedArtifactId: ID
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-
-  """An edge for our `Artifact`. May be used by Relay 1."""
-  artifactEdge(
-    """The method to use when ordering `Artifact`."""
-    orderBy: [ArtifactOrderBy!]! = [PRIMARY_KEY_ASC]
-  ): ArtifactEdge
-}
-
-"""All input for the `deleteArtifactById` mutation."""
-input DeleteArtifactByIdInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-
-  """
-  The globally unique `ID` which will identify a single `Artifact` to be deleted.
-  """
-  id: ID!
-}
-
-"""All input for the `deleteArtifact` mutation."""
-input DeleteArtifactInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-  rowId: UUID!
 }
 
 """The output of our delete `WasmMetadatum` mutation."""
@@ -3738,6 +4433,54 @@ input DeleteUploadSessionByIdInput {
 
 """All input for the `deleteUploadSession` mutation."""
 input DeleteUploadSessionInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  rowId: UUID!
+}
+
+"""The output of our delete `Artifact` mutation."""
+type DeleteArtifactPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `Artifact` that was deleted by this mutation."""
+  artifact: Artifact
+  deletedArtifactId: ID
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `Artifact`. May be used by Relay 1."""
+  artifactEdge(
+    """The method to use when ordering `Artifact`."""
+    orderBy: [ArtifactOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): ArtifactEdge
+}
+
+"""All input for the `deleteArtifactById` mutation."""
+input DeleteArtifactByIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `Artifact` to be deleted.
+  """
+  id: ID!
+}
+
+"""All input for the `deleteArtifact` mutation."""
+input DeleteArtifactInput {
   """
   An arbitrary string value with no semantic meaning. Will be included in the
   payload verbatim. May be used to track mutations by the client.
@@ -3892,6 +4635,112 @@ input DeleteRepositoryByIdInput {
 
 """All input for the `deleteRepository` mutation."""
 input DeleteRepositoryInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  rowId: UUID!
+}
+
+"""The output of our delete `FederatedSource` mutation."""
+type DeleteFederatedSourcePayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `FederatedSource` that was deleted by this mutation."""
+  federatedSource: FederatedSource
+  deletedFederatedSourceId: ID
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `FederatedSource`. May be used by Relay 1."""
+  federatedSourceEdge(
+    """The method to use when ordering `FederatedSource`."""
+    orderBy: [FederatedSourceOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): FederatedSourceEdge
+}
+
+"""All input for the `deleteFederatedSourceById` mutation."""
+input DeleteFederatedSourceByIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `FederatedSource` to be deleted.
+  """
+  id: ID!
+}
+
+"""All input for the `deleteFederatedSource` mutation."""
+input DeleteFederatedSourceInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  rowId: UUID!
+}
+
+"""All input for the `deleteFederatedSourceByNamespace` mutation."""
+input DeleteFederatedSourceByNamespaceInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  namespace: String!
+}
+
+"""The output of our delete `FederatedSkillCache` mutation."""
+type DeleteFederatedSkillCachePayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `FederatedSkillCache` that was deleted by this mutation."""
+  federatedSkillCache: FederatedSkillCache
+  deletedFederatedSkillCacheId: ID
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `FederatedSkillCache`. May be used by Relay 1."""
+  federatedSkillCacheEdge(
+    """The method to use when ordering `FederatedSkillCache`."""
+    orderBy: [FederatedSkillCacheOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): FederatedSkillCacheEdge
+}
+
+"""All input for the `deleteFederatedSkillCacheById` mutation."""
+input DeleteFederatedSkillCacheByIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `FederatedSkillCache` to be deleted.
+  """
+  id: ID!
+}
+
+"""All input for the `deleteFederatedSkillCache` mutation."""
+input DeleteFederatedSkillCacheInput {
   """
   An arbitrary string value with no semantic meaning. Will be included in the
   payload verbatim. May be used to track mutations by the client.

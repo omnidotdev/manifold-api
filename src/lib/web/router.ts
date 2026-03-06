@@ -17,6 +17,7 @@ import {
   repositoryTable,
   tagTable,
 } from "lib/db/schema";
+import { tryFederatedArtifact } from "lib/federation/proxy";
 import { flags } from "lib/providers";
 
 const FLAGS = {
@@ -94,6 +95,13 @@ const webRouter = new Elysia().get(
         set.status = 503;
         return { error: "Registry is in maintenance mode" };
       }
+    }
+
+    // Check federated sources before local DB lookup
+    const federated = await tryFederatedArtifact(namespace, repo, reference);
+    if (federated) {
+      set.headers["Content-Type"] = federated.mediaType;
+      return federated.content;
     }
 
     // Look up repository

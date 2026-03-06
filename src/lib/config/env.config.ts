@@ -52,6 +52,12 @@ export const {
   BLOB_S3_ENDPOINT,
   /** S3 key prefix for blob storage */
   BLOB_S3_PREFIX,
+  /** Enable federation proxy (default "false") */
+  FEDERATION_ENABLED = "false",
+  /** Auto-approve vetted skills (default "true") */
+  FEDERATION_AUTO_APPROVE = "true",
+  /** Federation sync interval in ms (default 21600000 / 6h) */
+  FEDERATION_SYNC_INTERVAL_MS = "21600000",
 } = process.env;
 
 export const isDevEnv = NODE_ENV === "development",

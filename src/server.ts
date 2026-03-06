@@ -15,6 +15,7 @@ import { tokensApi } from "lib/api";
 import appConfig from "lib/config/app.config";
 import {
   CORS_ALLOWED_ORIGINS,
+  FEDERATION_ENABLED,
   PORT,
   isDevEnv,
   isProdEnv,
@@ -22,6 +23,8 @@ import {
 } from "lib/config/env.config";
 import { dbPool, pgPool } from "lib/db";
 import ensureDatabase from "lib/db/ensureDatabase";
+import federationRouter from "lib/federation/router";
+import { startFederationSync } from "lib/federation/sync";
 import createGraphqlContext from "lib/graphql/createGraphqlContext";
 import {
   armorPlugin,
@@ -40,6 +43,10 @@ await ensureDatabase();
 
 // Start background cleanup of expired upload sessions
 const cleanupTimer = startSessionCleanup();
+
+// Start federation sync if enabled
+const federationSyncTimer =
+  FEDERATION_ENABLED === "true" ? startFederationSync() : null;
 
 /**
  * Elysia server.
@@ -107,6 +114,8 @@ const app = new Elysia({
   .use(webhooks)
   // API tokens REST endpoints
   .use(tokensApi)
+  // Federation admin routes
+  .use(federationRouter)
   // Web content routes (/@namespace/repo/reference)
   .use(webRouter)
   // OCI Distribution API v2
@@ -166,8 +175,9 @@ const shutdown = async (signal: string) => {
   // biome-ignore lint/suspicious/noConsole: shutdown logging
   console.log(`[Server] Received ${signal}, shutting down gracefully...`);
 
-  // Stop background cleanup timer
+  // Stop background timers
   clearInterval(cleanupTimer);
+  if (federationSyncTimer) clearInterval(federationSyncTimer);
 
   // Stop accepting new connections
   app.stop();

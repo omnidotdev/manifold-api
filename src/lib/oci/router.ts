@@ -34,6 +34,7 @@ import {
   tagTable,
   uploadSessionTable,
 } from "lib/db/schema";
+import { tryFederatedTagList } from "lib/federation/proxy";
 import logAuditEvent from "lib/logging/logAuditEvent";
 import {
   appendChunk,
@@ -707,6 +708,11 @@ const ociRouter = new Elysia({ prefix: "/v2" })
     "/:name/tags/list",
     async ({ params, query, set }) => {
       const { namespace, repo } = parseRepoName(params.name);
+
+      // Check federated sources before local DB lookup
+      const federated = await tryFederatedTagList(namespace, repo);
+      if (federated) return federated;
+
       const repoData = await getRepository(namespace, repo);
 
       if (!repoData) {
