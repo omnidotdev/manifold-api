@@ -1,5 +1,6 @@
 // src/lib/cargo/router.ts
 import { Elysia, t } from "elysia";
+import { rateLimit } from "elysia-rate-limit";
 
 import { downloadHandler } from "lib/cargo/download";
 import { configHandler, indexLookup } from "lib/cargo/index";
@@ -98,14 +99,6 @@ const cargoRouter = new Elysia({ prefix: "/cargo/:namespace" })
     },
   )
 
-  // Publish
-  .put(
-    "/api/v1/crates/new",
-    ({ params, request, set }) =>
-      publishHandler(params.namespace, request, set as HandlerSet),
-    { params: t.Object({ namespace: t.String() }) },
-  )
-
   // Download
   .get(
     "/api/v1/crates/:crate/:version/download",
@@ -124,6 +117,24 @@ const cargoRouter = new Elysia({ prefix: "/cargo/:namespace" })
         version: t.String(),
       }),
     },
+  )
+
+  // Write operations with per-token rate limiting (10 req/min)
+  .use(
+    rateLimit({
+      max: 10,
+      duration: 60_000,
+      scoping: "scoped",
+      generator: (req) => req.headers.get("Authorization") ?? "anonymous",
+    }),
+  )
+
+  // Publish
+  .put(
+    "/api/v1/crates/new",
+    ({ params, request, set }) =>
+      publishHandler(params.namespace, request, set as HandlerSet),
+    { params: t.Object({ namespace: t.String() }) },
   )
 
   // Yank
