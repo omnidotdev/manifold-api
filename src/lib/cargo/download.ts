@@ -3,6 +3,7 @@ import { and, eq } from "drizzle-orm";
 import { recordUsage } from "lib/billing";
 import { authenticateCargoToken } from "lib/cargo/auth";
 import { cargoError } from "lib/cargo/errors";
+import { isValidCrateName } from "lib/cargo/prefix";
 import { dbPool } from "lib/db";
 import {
   artifactTable,
@@ -22,6 +23,12 @@ export const downloadHandler = async (
   set: { status?: number; headers: Record<string, string> },
   request?: Request,
 ) => {
+  // Validate crate name
+  if (!isValidCrateName(crateName)) {
+    set.status = 400;
+    return cargoError(`invalid crate name: ${crateName}`);
+  }
+
   // Find namespace
   const [ns] = await dbPool
     .select()

@@ -86,7 +86,7 @@ describe("Cargo registry", () => {
   })();
 
   const publishMeta = {
-    name: "my-crate",
+    name: "mycrate",
     vers: "0.1.0",
     deps: [],
     features: {},
@@ -110,7 +110,7 @@ describe("Cargo registry", () => {
 
     // Index lookup
     const indexRes = await app.handle(
-      new Request(`${BASE}/cargo/${namespaceName}/index/my/cr/my-crate`),
+      new Request(`${BASE}/cargo/${namespaceName}/index/my/cr/mycrate`),
     );
     expect(indexRes.status).toBe(200);
     const indexText = await indexRes.text();
@@ -122,7 +122,7 @@ describe("Cargo registry", () => {
     // Download
     const dlRes = await app.handle(
       new Request(
-        `${BASE}/cargo/${namespaceName}/api/v1/crates/my-crate/0.1.0/download`,
+        `${BASE}/cargo/${namespaceName}/api/v1/crates/mycrate/0.1.0/download`,
       ),
     );
     expect(dlRes.status).toBe(200);
@@ -132,7 +132,7 @@ describe("Cargo registry", () => {
     // Yank
     const yankRes = await app.handle(
       new Request(
-        `${BASE}/cargo/${namespaceName}/api/v1/crates/my-crate/0.1.0/yank`,
+        `${BASE}/cargo/${namespaceName}/api/v1/crates/mycrate/0.1.0/yank`,
         {
           method: "DELETE",
           headers: { Authorization: token },
@@ -143,7 +143,7 @@ describe("Cargo registry", () => {
 
     // Verify yanked in index
     const indexRes2 = await app.handle(
-      new Request(`${BASE}/cargo/${namespaceName}/index/my/cr/my-crate`),
+      new Request(`${BASE}/cargo/${namespaceName}/index/my/cr/mycrate`),
     );
     const entry2 = JSON.parse(await indexRes2.text());
     expect(entry2.yanked).toBe(true);
@@ -151,7 +151,7 @@ describe("Cargo registry", () => {
     // Unyank
     const unyankRes = await app.handle(
       new Request(
-        `${BASE}/cargo/${namespaceName}/api/v1/crates/my-crate/0.1.0/unyank`,
+        `${BASE}/cargo/${namespaceName}/api/v1/crates/mycrate/0.1.0/unyank`,
         {
           method: "PUT",
           headers: { Authorization: token },
