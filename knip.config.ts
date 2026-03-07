@@ -29,6 +29,7 @@ const knipConfig: KnipConfig = {
     "src/lib/providers/**",
     "src/lib/auth/**",
     "src/lib/billing/**",
+    "src/lib/cargo/**",
   ],
   ignoreDependencies: [
     "@changesets/changelog-github",
