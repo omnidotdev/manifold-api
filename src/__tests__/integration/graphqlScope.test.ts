@@ -1,4 +1,5 @@
-import { describe, expect, test } from "bun:test";
+import { beforeEach, describe, expect, test } from "bun:test";
+import { sql } from "drizzle-orm";
 
 import createScopeEnforcementPlugin from "lib/graphql/plugins/scopeEnforcement.plugin";
 import { createTestGraphQLClient } from "test/util/graphqlClient";
@@ -89,6 +90,13 @@ const DELETE_NAMESPACE_MUTATION = /* GraphQL */ `
 `;
 
 describe("GraphQL scope enforcement", () => {
+  beforeEach(async () => {
+    const { db } = getTestDb();
+    await db.execute(
+      sql`TRUNCATE TABLE upload_session, artifact, tag, repository, api_token, namespace CASCADE`,
+    );
+  });
+
   describe("read-scoped token", () => {
     test("can run queries", async () => {
       const client = makeClient(makeTokenObserver("read"));
