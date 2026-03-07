@@ -1,6 +1,7 @@
 import { and, eq } from "drizzle-orm";
 
 import { recordUsage } from "lib/billing";
+import { authenticateCargoToken } from "lib/cargo/auth";
 import { cargoError } from "lib/cargo/errors";
 import { dbPool } from "lib/db";
 import {
@@ -19,6 +20,7 @@ export const downloadHandler = async (
   crateName: string,
   version: string,
   set: { status?: number; headers: Record<string, string> },
+  request?: Request,
 ) => {
   // Find namespace
   const [ns] = await dbPool
@@ -47,6 +49,17 @@ export const downloadHandler = async (
   if (!repo) {
     set.status = 404;
     return cargoError(`crate not found: ${crateName}`);
+  }
+
+  // Auth check for private namespaces
+  if (!repo.isPublic) {
+    const auth = await authenticateCargoToken(
+      request?.headers.get("Authorization") ?? null,
+    );
+    if (!auth || auth.namespaceId !== ns.id) {
+      set.status = 403;
+      return cargoError("authentication required for private crates");
+    }
   }
 
   // Find artifact via tag

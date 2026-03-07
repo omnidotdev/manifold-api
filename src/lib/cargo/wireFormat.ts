@@ -3,7 +3,6 @@
  *
  * @see https://doc.rust-lang.org/cargo/reference/registry-web-api.html#publish
  */
-/** @knipignore */
 export interface CargoPublishMetadata {
   name: string;
   vers: string;
@@ -15,7 +14,6 @@ export interface CargoPublishMetadata {
   [key: string]: unknown;
 }
 
-/** @knipignore */
 export interface CargoDependency {
   name: string;
   version_req: string;

@@ -4,13 +4,18 @@ import { and, eq } from "drizzle-orm";
 import { requireCargoWrite } from "lib/cargo/auth";
 import { cargoError } from "lib/cargo/errors";
 import { dbPool } from "lib/db";
-import { cargoMetadataTable } from "lib/db/schema";
+import {
+  cargoMetadataTable,
+  namespaceTable,
+  repositoryTable,
+} from "lib/db/schema";
 import logAuditEvent from "lib/logging/logAuditEvent";
 
 /**
  * Handle yank/unyank operations.
  */
 export const yankHandler = async (
+  namespace: string,
   crateName: string,
   version: string,
   yanked: boolean,
@@ -18,11 +23,41 @@ export const yankHandler = async (
   set: { status?: number },
 ) => {
   // Authenticate
+  let auth: Awaited<ReturnType<typeof requireCargoWrite>>;
   try {
-    await requireCargoWrite(request.headers.get("Authorization"));
+    auth = await requireCargoWrite(request.headers.get("Authorization"));
   } catch (e: unknown) {
     set.status = 403;
     return cargoError((e as Error).message);
+  }
+
+  // Verify token namespace matches URL namespace
+  const [ns] = await dbPool
+    .select()
+    .from(namespaceTable)
+    .where(eq(namespaceTable.id, auth.namespaceId))
+    .limit(1);
+
+  if (!ns || ns.name !== namespace) {
+    set.status = 403;
+    return cargoError("token not authorized for this namespace");
+  }
+
+  // Verify crate belongs to this namespace
+  const [repo] = await dbPool
+    .select()
+    .from(repositoryTable)
+    .where(
+      and(
+        eq(repositoryTable.namespaceId, ns.id),
+        eq(repositoryTable.name, crateName),
+      ),
+    )
+    .limit(1);
+
+  if (!repo) {
+    set.status = 404;
+    return cargoError(`crate not found: ${crateName}`);
   }
 
   // Find the cargo metadata row

@@ -24,6 +24,7 @@ const CARGO_MEDIA_TYPE = "application/vnd.omni.cargo.crate";
  * Handle `PUT /api/v1/crates/new`.
  */
 export const publishHandler = async (
+  namespace: string,
   request: Request,
   set: { status?: number; headers: Record<string, string> },
 ) => {
@@ -54,8 +55,10 @@ export const publishHandler = async (
     return cargoError(`invalid crate name: ${metadata.name}`);
   }
 
-  // Validate semver (basic check)
-  if (!/^\d+\.\d+\.\d+/.test(metadata.vers)) {
+  // Validate semver
+  if (
+    !/^\d+\.\d+\.\d+(-[a-zA-Z0-9.]+)?(\+[a-zA-Z0-9.]+)?$/.test(metadata.vers)
+  ) {
     set.status = 400;
     return cargoError(`invalid version: ${metadata.vers}`);
   }
@@ -84,6 +87,12 @@ export const publishHandler = async (
     return cargoError("namespace not found for token");
   }
 
+  // Verify token namespace matches URL namespace
+  if (ns.name !== namespace) {
+    set.status = 403;
+    return cargoError("token not authorized for this namespace");
+  }
+
   // Check for duplicate version
   const [existing] = await dbPool
     .select({ id: cargoMetadataTable.id })
@@ -103,80 +112,83 @@ export const publishHandler = async (
     );
   }
 
-  // Upsert repository
-  const [repo] = await dbPool
-    .insert(repositoryTable)
-    .values({
-      namespaceId: ns.id,
-      name: metadata.name,
-      artifactType: "cargo",
-      isPublic: false,
-    })
-    .onConflictDoNothing({
-      target: [repositoryTable.namespaceId, repositoryTable.name],
-    })
-    .returning();
-
-  // If conflict, fetch existing
-  const repoRow =
-    repo ??
-    (
-      await dbPool
-        .select()
-        .from(repositoryTable)
-        .where(
-          and(
-            eq(repositoryTable.namespaceId, ns.id),
-            eq(repositoryTable.name, metadata.name),
-          ),
-        )
-        .limit(1)
-    )[0];
-
   // Store .crate tarball in blob storage
   const digest = await computeDigest(crateBytes);
   const storagePath = await storage.put(digest, crateBytes);
 
-  // Insert artifact
-  const [artifact] = await dbPool
-    .insert(artifactTable)
-    .values({
-      repositoryId: repoRow.id,
-      digest,
-      size: crateBytes.byteLength,
-      mediaType: CARGO_MEDIA_TYPE,
-      storagePath,
-    })
-    .onConflictDoUpdate({
-      target: [artifactTable.repositoryId, artifactTable.digest],
-      set: {
+  // Create all records in a single transaction
+  await dbPool.transaction(async (tx) => {
+    // Upsert repository
+    const [repo] = await tx
+      .insert(repositoryTable)
+      .values({
+        namespaceId: ns.id,
+        name: metadata.name,
+        artifactType: "cargo",
+        isPublic: false,
+      })
+      .onConflictDoNothing({
+        target: [repositoryTable.namespaceId, repositoryTable.name],
+      })
+      .returning();
+
+    // If conflict, fetch existing
+    const txRepoRow =
+      repo ??
+      (
+        await tx
+          .select()
+          .from(repositoryTable)
+          .where(
+            and(
+              eq(repositoryTable.namespaceId, ns.id),
+              eq(repositoryTable.name, metadata.name),
+            ),
+          )
+          .limit(1)
+      )[0];
+
+    // Insert artifact
+    const [artifact] = await tx
+      .insert(artifactTable)
+      .values({
+        repositoryId: txRepoRow.id,
+        digest,
         size: crateBytes.byteLength,
         mediaType: CARGO_MEDIA_TYPE,
         storagePath,
-      },
-    })
-    .returning();
+      })
+      .onConflictDoUpdate({
+        target: [artifactTable.repositoryId, artifactTable.digest],
+        set: {
+          size: crateBytes.byteLength,
+          mediaType: CARGO_MEDIA_TYPE,
+          storagePath,
+        },
+      })
+      .returning();
 
-  // Insert tag (version string)
-  await dbPool
-    .insert(tagTable)
-    .values({
-      repositoryId: repoRow.id,
+    // Insert tag (version string)
+    await tx
+      .insert(tagTable)
+      .values({
+        repositoryId: txRepoRow.id,
+        artifactId: artifact.id,
+        name: metadata.vers,
+      })
+      .onConflictDoNothing();
+
+    // Insert cargo metadata
+    await tx.insert(cargoMetadataTable).values({
       artifactId: artifact.id,
-      name: metadata.vers,
-    })
-    .onConflictDoNothing();
-
-  // Insert cargo metadata
-  await dbPool.insert(cargoMetadataTable).values({
-    artifactId: artifact.id,
-    name: metadata.name,
-    vers: metadata.vers,
-    deps: metadata.deps ?? [],
-    features: metadata.features ?? {},
-    cksum: actualCksum,
-    links: metadata.links ?? null,
-    rustVersion: metadata.rust_version ?? null,
+      name: metadata.name,
+      vers: metadata.vers,
+      deps: metadata.deps ?? [],
+      features: metadata.features ?? {},
+      cksum: actualCksum,
+      links: metadata.links ?? null,
+      rustVersion: metadata.rust_version ?? null,
+    });
   });
 
   // Record billing

@@ -45,11 +45,11 @@ export const authenticateCargoToken = async (
   if (row.expiresAt && new Date(row.expiresAt) < new Date()) return null;
 
   // Update last used timestamp (fire and forget)
-  dbPool
+  void dbPool
     .update(apiTokenTable)
     .set({ lastUsedAt: new Date().toISOString() })
     .where(eq(apiTokenTable.id, row.id))
-    .then(() => {});
+    .catch(() => {});
 
   return {
     namespaceId: row.namespaceId,

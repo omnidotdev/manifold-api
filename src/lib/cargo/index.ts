@@ -4,9 +4,11 @@ import { cargoError } from "lib/cargo/errors";
 import { cratePrefix } from "lib/cargo/prefix";
 import { dbPool } from "lib/db";
 import {
+  artifactTable,
   cargoMetadataTable,
   namespaceTable,
   repositoryTable,
+  tagTable,
 } from "lib/db/schema";
 
 /**
@@ -30,6 +32,7 @@ export const indexLookup = async (
   prefix: string,
   crateName: string,
   set: { status?: number },
+  request?: Request,
 ) => {
   // Validate prefix matches the crate name
   const expectedPrefix = cratePrefix(crateName);
@@ -67,11 +70,16 @@ export const indexLookup = async (
     return "";
   }
 
-  // Fetch all versions
+  // Fetch all versions scoped to this repo (via tag → artifact join)
   const versions = await dbPool
-    .select()
+    .select({ meta: cargoMetadataTable })
     .from(cargoMetadataTable)
-    .where(eq(cargoMetadataTable.name, crateName));
+    .innerJoin(
+      artifactTable,
+      eq(cargoMetadataTable.artifactId, artifactTable.id),
+    )
+    .innerJoin(tagTable, eq(tagTable.artifactId, artifactTable.id))
+    .where(eq(tagTable.repositoryId, repo.id));
 
   if (versions.length === 0) {
     set.status = 404;
@@ -81,23 +89,32 @@ export const indexLookup = async (
   // Build ndjson response
   const lines = versions.map((v) =>
     JSON.stringify({
-      name: v.name,
-      vers: v.vers,
-      deps: v.deps,
-      features: v.features,
-      cksum: v.cksum,
-      yanked: v.yanked,
-      links: v.links,
-      rust_version: v.rustVersion,
-      v: v.v,
+      name: v.meta.name,
+      vers: v.meta.vers,
+      deps: v.meta.deps,
+      features: v.meta.features,
+      cksum: v.meta.cksum,
+      yanked: v.meta.yanked,
+      links: v.meta.links,
+      rust_version: v.meta.rustVersion,
+      v: v.meta.v,
     }),
   );
 
-  return new Response(lines.join("\n"), {
+  const body = lines.join("\n");
+  const etag = `"${Bun.hash(body).toString(16)}"`;
+
+  // Support conditional requests
+  const ifNoneMatch = request?.headers.get("If-None-Match");
+  if (ifNoneMatch === etag) {
+    return new Response(null, { status: 304 });
+  }
+
+  return new Response(body, {
     headers: {
       "Content-Type": "application/json",
       "Cache-Control": "max-age=60",
-      ETag: `"${Bun.hash(lines.join("\n")).toString(16)}"`,
+      ETag: etag,
     },
   });
 };
