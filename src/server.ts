@@ -12,6 +12,7 @@ import { useGrafast } from "grafast/envelop";
 import webhooks from "webhooks";
 
 import { tokensApi } from "lib/api";
+import cargoRouter from "lib/cargo/router";
 import appConfig from "lib/config/app.config";
 import {
   CORS_ALLOWED_ORIGINS,
@@ -118,6 +119,8 @@ const app = new Elysia({
   .use(federationRouter)
   // Web content routes (/@namespace/repo/reference)
   .use(webRouter)
+  // Cargo registry API
+  .use(cargoRouter)
   // OCI Distribution API v2
   .use(ociRouter)
   .use(
@@ -159,6 +162,11 @@ console.log(
 // biome-ignore lint/suspicious/noConsole: root logging
 console.log(
   `🧘 ${appConfig.name} GraphQL Yoga API running at ${app.server?.url}graphql`,
+);
+
+// biome-ignore lint/suspicious/noConsole: root logging
+console.log(
+  `📦 ${appConfig.name} Cargo registry running at ${app.server?.url}cargo/`,
 );
 
 if (await flags.isEnabled("manifold-api-maintenance-mode")) {
