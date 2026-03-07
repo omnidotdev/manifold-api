@@ -44,7 +44,7 @@ import {
 } from "lib/oci/chunkStore";
 import { computeDigest } from "lib/oci/digest";
 import * as ociErrors from "lib/oci/errors";
-import { flags } from "lib/providers";
+import { events, flags } from "lib/providers";
 import { storage } from "lib/storage";
 
 const FLAGS = {
@@ -338,6 +338,25 @@ const ociRouter = new Elysia({ prefix: "/v2" })
           "storage_bytes",
           contentBytes.length,
         );
+      }
+
+      try {
+        await events.emit({
+          type: "manifold.artifact.pushed",
+          data: {
+            repository: params.name,
+            tag: params.reference.startsWith("sha256:")
+              ? undefined
+              : params.reference,
+            digest,
+            namespace,
+            repo,
+          },
+          organizationId: orgId ?? "system",
+          subject: params.name,
+        });
+      } catch {
+        // Event emission is best-effort; do not fail the push
       }
 
       set.status = 201;

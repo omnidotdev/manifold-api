@@ -7,6 +7,7 @@ import { cargoError } from "lib/cargo/errors";
 import { isValidCrateName } from "lib/cargo/prefix";
 import { parsePublishBody } from "lib/cargo/wireFormat";
 import { dbPool } from "lib/db";
+import { events } from "lib/providers";
 import {
   artifactTable,
   cargoMetadataTable,
@@ -215,6 +216,22 @@ export const publishHandler = async (
       },
     },
   );
+
+  try {
+    await events.emit({
+      type: "manifold.artifact.published",
+      data: {
+        crateName: metadata.name,
+        version: metadata.vers,
+        namespace: ns.name,
+        size: crateBytes.byteLength,
+      },
+      organizationId: ns.organizationId ?? "system",
+      subject: metadata.name,
+    });
+  } catch {
+    // Event emission is best-effort; do not fail the publish
+  }
 
   return {
     warnings: {

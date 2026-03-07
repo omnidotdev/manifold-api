@@ -4,6 +4,7 @@ import { and, eq } from "drizzle-orm";
 import { requireCargoWrite } from "lib/cargo/auth";
 import { cargoError } from "lib/cargo/errors";
 import { dbPool } from "lib/db";
+import { events } from "lib/providers";
 import {
   cargoMetadataTable,
   namespaceTable,
@@ -92,6 +93,19 @@ export const yankHandler = async (
       details: { crate: crateName, version },
     },
   );
+
+  try {
+    await events.emit({
+      type: yanked
+        ? "manifold.artifact.yanked"
+        : "manifold.artifact.unyanked",
+      data: { crateName, version },
+      organizationId: "system",
+      subject: crateName,
+    });
+  } catch {
+    // Event emission is best-effort; do not fail the yank
+  }
 
   return { ok: true };
 };
