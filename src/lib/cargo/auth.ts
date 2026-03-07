@@ -35,10 +35,7 @@ export const authenticateCargoToken = async (
     .select()
     .from(apiTokenTable)
     .where(
-      and(
-        eq(apiTokenTable.tokenHash, hash),
-        eq(apiTokenTable.isActive, true),
-      ),
+      and(eq(apiTokenTable.tokenHash, hash), eq(apiTokenTable.isActive, true)),
     )
     .limit(1);
 
