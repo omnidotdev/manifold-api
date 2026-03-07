@@ -1,5 +1,6 @@
 export * from "./apiToken.table";
 export * from "./artifact.table";
+export * from "./cargoMetadata.table";
 export * from "./containerMetadata.table";
 export * from "./federatedSkillCache.table";
 export * from "./federatedSource.table";
