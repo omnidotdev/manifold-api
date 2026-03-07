@@ -8,6 +8,10 @@ import { DATABASE_URL } from "lib/config/env.config";
  */
 const pgPool = new Pool({
   connectionString: DATABASE_URL,
+  max: 20,
+  idleTimeoutMillis: 30_000,
+  connectionTimeoutMillis: 5_000,
+  statement_timeout: 30_000,
 });
 
 export default pgPool;
