@@ -53,6 +53,9 @@ type Query implements Node {
   """Get a single `FederatedSkillCache`."""
   federatedSkillCache(rowId: UUID!): FederatedSkillCache
 
+  """Get a single `CargoMetadatum`."""
+  cargoMetadatum(rowId: UUID!): CargoMetadatum
+
   """Get a single `ApiToken`."""
   apiToken(rowId: UUID!): ApiToken
 
@@ -129,6 +132,14 @@ type Query implements Node {
     """
     id: ID!
   ): FederatedSkillCache
+
+  """Reads a single `CargoMetadatum` using its globally unique `ID`."""
+  cargoMetadatumById(
+    """
+    The globally unique `ID` to be used in selecting a single `CargoMetadatum`.
+    """
+    id: ID!
+  ): CargoMetadatum
 
   """Reads a single `ApiToken` using its globally unique `ID`."""
   apiTokenById(
@@ -476,6 +487,40 @@ type Query implements Node {
     orderBy: [FederatedSkillCacheOrderBy!] = [PRIMARY_KEY_ASC]
   ): FederatedSkillCacheConnection
 
+  """Reads and enables pagination through a set of `CargoMetadatum`."""
+  cargoMetadata(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: CargoMetadatumCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: CargoMetadatumFilter
+
+    """The method to use when ordering `CargoMetadatum`."""
+    orderBy: [CargoMetadatumOrderBy!] = [PRIMARY_KEY_ASC]
+  ): CargoMetadatumConnection
+
   """Reads and enables pagination through a set of `ApiToken`."""
   apiTokens(
     """Only read the first `n` values of the set."""
@@ -608,6 +653,40 @@ type Artifact implements Node {
 
   """Reads a single `WasmMetadatum` that is related to this `Artifact`."""
   wasmMetadatum: WasmMetadatum
+
+  """Reads and enables pagination through a set of `CargoMetadatum`."""
+  cargoMetadata(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: CargoMetadatumCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: CargoMetadatumFilter
+
+    """The method to use when ordering `CargoMetadatum`."""
+    orderBy: [CargoMetadatumOrderBy!] = [PRIMARY_KEY_ASC]
+  ): CargoMetadatumConnection!
 }
 
 """
@@ -1207,6 +1286,12 @@ input ArtifactFilter {
   """A related `wasmMetadatum` exists."""
   wasmMetadatumExists: Boolean
 
+  """Filter by the object’s `cargoMetadata` relation."""
+  cargoMetadata: ArtifactToManyCargoMetadatumFilter
+
+  """Some related `cargoMetadata` exist."""
+  cargoMetadataExist: Boolean
+
   """Filter by the object’s `repository` relation."""
   repository: RepositoryFilter
 
@@ -1330,6 +1415,55 @@ input WasmMetadatumFilter {
 
   """Negates the expression."""
   not: WasmMetadatumFilter
+}
+
+"""
+A filter to be used against many `CargoMetadatum` object types. All fields are combined with a logical ‘and.’
+"""
+input ArtifactToManyCargoMetadatumFilter {
+  """
+  Every related `CargoMetadatum` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  every: CargoMetadatumFilter
+
+  """
+  Some related `CargoMetadatum` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  some: CargoMetadatumFilter
+
+  """
+  No related `CargoMetadatum` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  none: CargoMetadatumFilter
+}
+
+"""
+A filter to be used against `CargoMetadatum` object types. All fields are combined with a logical ‘and.’
+"""
+input CargoMetadatumFilter {
+  """Filter by the object’s `rowId` field."""
+  rowId: UUIDFilter
+
+  """Filter by the object’s `artifactId` field."""
+  artifactId: UUIDFilter
+
+  """Filter by the object’s `name` field."""
+  name: StringFilter
+
+  """Filter by the object’s `vers` field."""
+  vers: StringFilter
+
+  """Filter by the object’s `artifact` relation."""
+  artifact: ArtifactFilter
+
+  """Checks for all expressions in this list."""
+  and: [CargoMetadatumFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [CargoMetadatumFilter!]
+
+  """Negates the expression."""
+  not: CargoMetadatumFilter
 }
 
 """
@@ -1966,6 +2100,88 @@ type WasmMetadatum implements Node {
   artifact: Artifact
 }
 
+"""A connection to a list of `CargoMetadatum` values."""
+type CargoMetadatumConnection {
+  """A list of `CargoMetadatum` objects."""
+  nodes: [CargoMetadatum]!
+
+  """
+  A list of edges which contains the `CargoMetadatum` and cursor to aid in pagination.
+  """
+  edges: [CargoMetadatumEdge]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `CargoMetadatum` you could get from the connection."""
+  totalCount: Int!
+}
+
+type CargoMetadatum implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  id: ID!
+  rowId: UUID!
+  artifactId: UUID!
+  name: String!
+  vers: String!
+  deps: JSON!
+  features: JSON!
+  cksum: String!
+  yanked: Boolean!
+  links: String
+  rustVersion: String
+  v: Int!
+  createdAt: Datetime
+  updatedAt: Datetime
+
+  """Reads a single `Artifact` that is related to this `CargoMetadatum`."""
+  artifact: Artifact
+}
+
+"""A `CargoMetadatum` edge in the connection."""
+type CargoMetadatumEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `CargoMetadatum` at the end of the edge."""
+  node: CargoMetadatum
+}
+
+"""
+A condition to be used against `CargoMetadatum` object types. All fields are
+tested for equality and combined with a logical ‘and.’
+"""
+input CargoMetadatumCondition {
+  """Checks for equality with the object’s `rowId` field."""
+  rowId: UUID
+
+  """Checks for equality with the object’s `artifactId` field."""
+  artifactId: UUID
+
+  """Checks for equality with the object’s `name` field."""
+  name: String
+
+  """Checks for equality with the object’s `vers` field."""
+  vers: String
+}
+
+"""Methods to use when ordering `CargoMetadatum`."""
+enum CargoMetadatumOrderBy {
+  NATURAL
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+  ROW_ID_ASC
+  ROW_ID_DESC
+  ARTIFACT_ID_ASC
+  ARTIFACT_ID_DESC
+  NAME_ASC
+  NAME_DESC
+  VERS_ASC
+  VERS_DESC
+}
+
 type FederatedSource implements Node {
   """
   A globally unique identifier. Can be used in various places throughout the system to identify this single value.
@@ -2520,6 +2736,14 @@ type Mutation {
     input: CreateFederatedSkillCacheInput!
   ): CreateFederatedSkillCachePayload
 
+  """Creates a single `CargoMetadatum`."""
+  createCargoMetadatum(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateCargoMetadatumInput!
+  ): CreateCargoMetadatumPayload
+
   """Creates a single `ApiToken`."""
   createApiToken(
     """
@@ -2718,6 +2942,24 @@ type Mutation {
     input: UpdateFederatedSkillCacheInput!
   ): UpdateFederatedSkillCachePayload
 
+  """
+  Updates a single `CargoMetadatum` using its globally unique id and a patch.
+  """
+  updateCargoMetadatumById(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateCargoMetadatumByIdInput!
+  ): UpdateCargoMetadatumPayload
+
+  """Updates a single `CargoMetadatum` using a unique key and a patch."""
+  updateCargoMetadatum(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateCargoMetadatumInput!
+  ): UpdateCargoMetadatumPayload
+
   """Updates a single `ApiToken` using its globally unique id and a patch."""
   updateApiTokenById(
     """
@@ -2909,6 +3151,22 @@ type Mutation {
     """
     input: DeleteFederatedSkillCacheInput!
   ): DeleteFederatedSkillCachePayload
+
+  """Deletes a single `CargoMetadatum` using its globally unique id."""
+  deleteCargoMetadatumById(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteCargoMetadatumByIdInput!
+  ): DeleteCargoMetadatumPayload
+
+  """Deletes a single `CargoMetadatum` using a unique key."""
+  deleteCargoMetadatum(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteCargoMetadatumInput!
+  ): DeleteCargoMetadatumPayload
 
   """Deletes a single `ApiToken` using its globally unique id."""
   deleteApiTokenById(
@@ -3387,6 +3645,58 @@ input FederatedSkillCacheInput {
   vettedAt: Datetime
   upstreamMeta: JSON
   createdAt: Datetime
+}
+
+"""The output of our create `CargoMetadatum` mutation."""
+type CreateCargoMetadatumPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `CargoMetadatum` that was created by this mutation."""
+  cargoMetadatum: CargoMetadatum
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `CargoMetadatum`. May be used by Relay 1."""
+  cargoMetadatumEdge(
+    """The method to use when ordering `CargoMetadatum`."""
+    orderBy: [CargoMetadatumOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): CargoMetadatumEdge
+}
+
+"""All input for the create `CargoMetadatum` mutation."""
+input CreateCargoMetadatumInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `CargoMetadatum` to be created by this mutation."""
+  cargoMetadatum: CargoMetadatumInput!
+}
+
+"""An input for mutations affecting `CargoMetadatum`"""
+input CargoMetadatumInput {
+  rowId: UUID
+  artifactId: UUID!
+  name: String!
+  vers: String!
+  deps: JSON
+  features: JSON
+  cksum: String!
+  yanked: Boolean
+  links: String
+  rustVersion: String
+  v: Int
+  createdAt: Datetime
+  updatedAt: Datetime
 }
 
 """The output of our create `ApiToken` mutation."""
@@ -4172,6 +4482,82 @@ input UpdateFederatedSkillCacheInput {
   patch: FederatedSkillCachePatch!
 }
 
+"""The output of our update `CargoMetadatum` mutation."""
+type UpdateCargoMetadatumPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `CargoMetadatum` that was updated by this mutation."""
+  cargoMetadatum: CargoMetadatum
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `CargoMetadatum`. May be used by Relay 1."""
+  cargoMetadatumEdge(
+    """The method to use when ordering `CargoMetadatum`."""
+    orderBy: [CargoMetadatumOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): CargoMetadatumEdge
+}
+
+"""All input for the `updateCargoMetadatumById` mutation."""
+input UpdateCargoMetadatumByIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `CargoMetadatum` to be updated.
+  """
+  id: ID!
+
+  """
+  An object where the defined keys will be set on the `CargoMetadatum` being updated.
+  """
+  patch: CargoMetadatumPatch!
+}
+
+"""
+Represents an update to a `CargoMetadatum`. Fields that are set will be updated.
+"""
+input CargoMetadatumPatch {
+  rowId: UUID
+  artifactId: UUID
+  name: String
+  vers: String
+  deps: JSON
+  features: JSON
+  cksum: String
+  yanked: Boolean
+  links: String
+  rustVersion: String
+  v: Int
+  createdAt: Datetime
+  updatedAt: Datetime
+}
+
+"""All input for the `updateCargoMetadatum` mutation."""
+input UpdateCargoMetadatumInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  rowId: UUID!
+
+  """
+  An object where the defined keys will be set on the `CargoMetadatum` being updated.
+  """
+  patch: CargoMetadatumPatch!
+}
+
 """The output of our update `ApiToken` mutation."""
 type UpdateApiTokenPayload {
   """
@@ -4741,6 +5127,54 @@ input DeleteFederatedSkillCacheByIdInput {
 
 """All input for the `deleteFederatedSkillCache` mutation."""
 input DeleteFederatedSkillCacheInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  rowId: UUID!
+}
+
+"""The output of our delete `CargoMetadatum` mutation."""
+type DeleteCargoMetadatumPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `CargoMetadatum` that was deleted by this mutation."""
+  cargoMetadatum: CargoMetadatum
+  deletedCargoMetadatumId: ID
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `CargoMetadatum`. May be used by Relay 1."""
+  cargoMetadatumEdge(
+    """The method to use when ordering `CargoMetadatum`."""
+    orderBy: [CargoMetadatumOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): CargoMetadatumEdge
+}
+
+"""All input for the `deleteCargoMetadatumById` mutation."""
+input DeleteCargoMetadatumByIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `CargoMetadatum` to be deleted.
+  """
+  id: ID!
+}
+
+"""All input for the `deleteCargoMetadatum` mutation."""
+input DeleteCargoMetadatumInput {
   """
   An arbitrary string value with no semantic meaning. Will be included in the
   payload verbatim. May be used to track mutations by the client.

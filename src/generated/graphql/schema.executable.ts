@@ -1416,6 +1416,194 @@ const spec_apiToken = {
   executor: executor
 };
 const apiTokenCodec = recordCodec(spec_apiToken);
+const cargoMetadataIdentifier = sql.identifier("public", "cargo_metadata");
+const spec_cargoMetadata = {
+  name: "cargoMetadata",
+  identifier: cargoMetadataIdentifier,
+  attributes: {
+    __proto__: null,
+    id: {
+      description: undefined,
+      codec: TYPES.uuid,
+      notNull: true,
+      hasDefault: true,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true
+      }
+    },
+    artifact_id: {
+      description: undefined,
+      codec: TYPES.uuid,
+      notNull: true,
+      hasDefault: false,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true
+      }
+    },
+    name: {
+      description: undefined,
+      codec: TYPES.text,
+      notNull: true,
+      hasDefault: false,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true
+      }
+    },
+    vers: {
+      description: undefined,
+      codec: TYPES.text,
+      notNull: true,
+      hasDefault: false,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true
+      }
+    },
+    deps: {
+      description: undefined,
+      codec: TYPES.jsonb,
+      notNull: true,
+      hasDefault: true,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    },
+    features: {
+      description: undefined,
+      codec: TYPES.jsonb,
+      notNull: true,
+      hasDefault: true,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    },
+    cksum: {
+      description: undefined,
+      codec: TYPES.text,
+      notNull: true,
+      hasDefault: false,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    },
+    yanked: {
+      description: undefined,
+      codec: TYPES.boolean,
+      notNull: true,
+      hasDefault: true,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    },
+    links: {
+      description: undefined,
+      codec: TYPES.text,
+      notNull: false,
+      hasDefault: false,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    },
+    rust_version: {
+      description: undefined,
+      codec: TYPES.text,
+      notNull: false,
+      hasDefault: false,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    },
+    v: {
+      description: undefined,
+      codec: TYPES.int,
+      notNull: true,
+      hasDefault: true,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    },
+    created_at: {
+      description: undefined,
+      codec: TYPES.timestamptz,
+      notNull: false,
+      hasDefault: true,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    },
+    updated_at: {
+      description: undefined,
+      codec: TYPES.timestamptz,
+      notNull: false,
+      hasDefault: true,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    }
+  },
+  description: undefined,
+  extensions: {
+    oid: "495542",
+    isTableLike: true,
+    pg: {
+      serviceName: "main",
+      schemaName: "public",
+      name: "cargo_metadata"
+    },
+    tags: {
+      __proto__: null
+    }
+  },
+  executor: executor
+};
+const cargoMetadataCodec = recordCodec(spec_cargoMetadata);
 const container_metadataUniques = [{
   isPrimary: true,
   attributes: ["artifact_id"],
@@ -1794,6 +1982,42 @@ const registryConfig_pgResources_federated_skill_cache_federated_skill_cache = {
     canDelete: true
   }
 };
+const cargo_metadataUniques = [{
+  isPrimary: true,
+  attributes: ["id"],
+  description: undefined,
+  extensions: {
+    tags: {
+      __proto__: null
+    }
+  }
+}];
+const registryConfig_pgResources_cargo_metadata_cargo_metadata = {
+  executor: executor,
+  name: "cargo_metadata",
+  identifier: "main.public.cargo_metadata",
+  from: cargoMetadataIdentifier,
+  codec: cargoMetadataCodec,
+  uniques: cargo_metadataUniques,
+  isVirtual: false,
+  description: undefined,
+  extensions: {
+    description: undefined,
+    pg: {
+      serviceName: "main",
+      schemaName: "public",
+      name: "cargo_metadata"
+    },
+    isInsertable: true,
+    isUpdatable: true,
+    isDeletable: true,
+    tags: {},
+    canSelect: true,
+    canInsert: true,
+    canUpdate: true,
+    canDelete: true
+  }
+};
 const api_tokenUniques = [{
   isPrimary: true,
   attributes: ["id"],
@@ -1854,7 +2078,8 @@ const registryConfig = {
     repository: repositoryCodec,
     federatedSource: federatedSourceCodec,
     federatedSkillCache: federatedSkillCacheCodec,
-    apiToken: apiTokenCodec
+    apiToken: apiTokenCodec,
+    cargoMetadata: cargoMetadataCodec
   },
   pgResources: {
     __proto__: null,
@@ -1868,6 +2093,7 @@ const registryConfig = {
     repository: registryConfig_pgResources_repository_repository,
     federated_source: registryConfig_pgResources_federated_source_federated_source,
     federated_skill_cache: registryConfig_pgResources_federated_skill_cache_federated_skill_cache,
+    cargo_metadata: registryConfig_pgResources_cargo_metadata_cargo_metadata,
     api_token: registryConfig_pgResources_api_token_api_token
   },
   pgRelations: {
@@ -1975,6 +2201,39 @@ const registryConfig = {
         remoteAttributes: ["artifact_id"],
         isUnique: true,
         isReferencee: true,
+        description: undefined,
+        extensions: {
+          tags: {
+            behavior: []
+          }
+        }
+      },
+      cargoMetadataByTheirArtifactId: {
+        localCodec: artifactCodec,
+        remoteResourceOptions: registryConfig_pgResources_cargo_metadata_cargo_metadata,
+        localCodecPolymorphicTypes: undefined,
+        localAttributes: ["id"],
+        remoteAttributes: ["artifact_id"],
+        isUnique: false,
+        isReferencee: true,
+        description: undefined,
+        extensions: {
+          tags: {
+            behavior: []
+          }
+        }
+      }
+    },
+    cargoMetadata: {
+      __proto__: null,
+      artifactByMyArtifactId: {
+        localCodec: cargoMetadataCodec,
+        remoteResourceOptions: registryConfig_pgResources_artifact_artifact,
+        localCodecPolymorphicTypes: undefined,
+        localAttributes: ["artifact_id"],
+        remoteAttributes: ["id"],
+        isUnique: true,
+        isReferencee: false,
         description: undefined,
         extensions: {
           tags: {
@@ -2248,6 +2507,7 @@ const resource_namespacePgResource = registry.pgResources["namespace"];
 const resource_repositoryPgResource = registry.pgResources["repository"];
 const resource_federated_sourcePgResource = registry.pgResources["federated_source"];
 const resource_federated_skill_cachePgResource = registry.pgResources["federated_skill_cache"];
+const resource_cargo_metadataPgResource = registry.pgResources["cargo_metadata"];
 const resource_api_tokenPgResource = registry.pgResources["api_token"];
 const nodeIdHandler_ContainerMetadatum = {
   typeName: "ContainerMetadatum",
@@ -2526,6 +2786,32 @@ const nodeFetcher_FederatedSkillCache = $nodeId => {
   const $decoded = lambda($nodeId, specForHandler(nodeIdHandler_FederatedSkillCache));
   return nodeIdHandler_FederatedSkillCache.get(nodeIdHandler_FederatedSkillCache.getSpec($decoded));
 };
+const nodeIdHandler_CargoMetadatum = {
+  typeName: "CargoMetadatum",
+  codec: nodeIdCodecs_base64JSON_base64JSON,
+  deprecationReason: undefined,
+  plan($record) {
+    return list([constant("CargoMetadatum", false), $record.get("id")]);
+  },
+  getSpec($list) {
+    return {
+      id: inhibitOnNull(access($list, [1]))
+    };
+  },
+  getIdentifiers(value) {
+    return value.slice(1);
+  },
+  get(spec) {
+    return resource_cargo_metadataPgResource.get(spec);
+  },
+  match(obj) {
+    return obj[0] === "CargoMetadatum";
+  }
+};
+const nodeFetcher_CargoMetadatum = $nodeId => {
+  const $decoded = lambda($nodeId, specForHandler(nodeIdHandler_CargoMetadatum));
+  return nodeIdHandler_CargoMetadatum.get(nodeIdHandler_CargoMetadatum.getSpec($decoded));
+};
 const nodeIdHandler_ApiToken = {
   typeName: "ApiToken",
   codec: nodeIdCodecs_base64JSON_base64JSON,
@@ -2679,6 +2965,17 @@ function assertAllowed11(value, mode) {
   }
   if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
 }
+function assertAllowed12(value, mode) {
+  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+  if (mode === "list" && !false) {
+    const arr = value;
+    if (arr) {
+      const l = arr.length;
+      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+    }
+  }
+  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+}
 const nodeIdHandlerByTypeName = {
   __proto__: null,
   Query: nodeIdHandler_Query,
@@ -2692,6 +2989,7 @@ const nodeIdHandlerByTypeName = {
   Repository: nodeIdHandler_Repository,
   FederatedSource: nodeIdHandler_FederatedSource,
   FederatedSkillCache: nodeIdHandler_FederatedSkillCache,
+  CargoMetadatum: nodeIdHandler_CargoMetadatum,
   ApiToken: nodeIdHandler_ApiToken
 };
 const decodeNodeId = makeDecodeNodeId(Object.values(nodeIdHandlerByTypeName));
@@ -2711,17 +3009,6 @@ const coerce = string => {
   if (!/^[0-9a-f]{8}-?[0-9a-f]{4}-?[0-9a-f]{4}-?[0-9a-f]{4}-?[0-9a-f]{12}$/i.test(string)) throw new GraphQLError("Invalid UUID, expected 32 hexadecimal characters, optionally with hyphens");
   return string;
 };
-function assertAllowed12(value, mode) {
-  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
-  if (mode === "list" && !false) {
-    const arr = value;
-    if (arr) {
-      const l = arr.length;
-      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
-    }
-  }
-  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
-}
 function assertAllowed13(value, mode) {
   if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
   if (mode === "list" && !false) {
@@ -2788,26 +3075,6 @@ function assertAllowed18(value, mode) {
   }
   if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
 }
-const colSpec = {
-  fieldName: "rowId",
-  attributeName: "id",
-  attribute: spec_repository.attributes.id
-};
-const colSpec2 = {
-  fieldName: "namespaceId",
-  attributeName: "namespace_id",
-  attribute: spec_repository.attributes.namespace_id
-};
-const colSpec3 = {
-  fieldName: "name",
-  attributeName: "name",
-  attribute: spec_repository.attributes.name
-};
-const colSpec4 = {
-  fieldName: "artifactType",
-  attributeName: "artifact_type",
-  attribute: spec_repository.attributes.artifact_type
-};
 function assertAllowed19(value, mode) {
   if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
   if (mode === "list" && !false) {
@@ -2830,7 +3097,49 @@ function assertAllowed20(value, mode) {
   }
   if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
 }
+const colSpec = {
+  fieldName: "rowId",
+  attributeName: "id",
+  attribute: spec_repository.attributes.id
+};
+const colSpec2 = {
+  fieldName: "namespaceId",
+  attributeName: "namespace_id",
+  attribute: spec_repository.attributes.namespace_id
+};
+const colSpec3 = {
+  fieldName: "name",
+  attributeName: "name",
+  attribute: spec_repository.attributes.name
+};
+const colSpec4 = {
+  fieldName: "artifactType",
+  attributeName: "artifact_type",
+  attribute: spec_repository.attributes.artifact_type
+};
 function assertAllowed21(value, mode) {
+  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+  if (mode === "list" && !false) {
+    const arr = value;
+    if (arr) {
+      const l = arr.length;
+      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+    }
+  }
+  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+}
+function assertAllowed22(value, mode) {
+  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+  if (mode === "list" && !false) {
+    const arr = value;
+    if (arr) {
+      const l = arr.length;
+      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+    }
+  }
+  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+}
+function assertAllowed23(value, mode) {
   if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
   if (mode === "list" && !false) {
     const arr = value;
@@ -3213,7 +3522,7 @@ function resolveSqlValue12(_unused, input, inputCodec) {
     if (inputCodec === TYPES.citext) return sqlValue;else return sql`lower(${sqlValue})`;
   }
 }
-function assertAllowed22(value, mode) {
+function assertAllowed24(value, mode) {
   if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
   if (mode === "list" && !false) {
     const arr = value;
@@ -3239,28 +3548,6 @@ const colSpec7 = {
   attributeName: "digest",
   attribute: spec_artifact.attributes.digest
 };
-function assertAllowed23(value, mode) {
-  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
-  if (mode === "list" && !false) {
-    const arr = value;
-    if (arr) {
-      const l = arr.length;
-      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
-    }
-  }
-  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
-}
-function assertAllowed24(value, mode) {
-  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
-  if (mode === "list" && !false) {
-    const arr = value;
-    if (arr) {
-      const l = arr.length;
-      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
-    }
-  }
-  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
-}
 function assertAllowed25(value, mode) {
   if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
   if (mode === "list" && !false) {
@@ -3272,11 +3559,6 @@ function assertAllowed25(value, mode) {
   }
   if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
 }
-const colSpec8 = {
-  fieldName: "artifactId",
-  attributeName: "artifact_id",
-  attribute: spec_containerMetadata.attributes.artifact_id
-};
 function assertAllowed26(value, mode) {
   if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
   if (mode === "list" && !false) {
@@ -3299,10 +3581,10 @@ function assertAllowed27(value, mode) {
   }
   if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
 }
-const colSpec9 = {
+const colSpec8 = {
   fieldName: "artifactId",
   attributeName: "artifact_id",
-  attribute: spec_schemaMetadata.attributes.artifact_id
+  attribute: spec_containerMetadata.attributes.artifact_id
 };
 function assertAllowed28(value, mode) {
   if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
@@ -3326,7 +3608,34 @@ function assertAllowed29(value, mode) {
   }
   if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
 }
+const colSpec9 = {
+  fieldName: "artifactId",
+  attributeName: "artifact_id",
+  attribute: spec_schemaMetadata.attributes.artifact_id
+};
 function assertAllowed30(value, mode) {
+  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+  if (mode === "list" && !false) {
+    const arr = value;
+    if (arr) {
+      const l = arr.length;
+      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+    }
+  }
+  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+}
+function assertAllowed31(value, mode) {
+  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+  if (mode === "list" && !false) {
+    const arr = value;
+    if (arr) {
+      const l = arr.length;
+      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+    }
+  }
+  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+}
+function assertAllowed32(value, mode) {
   if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
   if (mode === "list" && !false) {
     const arr = value;
@@ -3357,33 +3666,6 @@ const colSpec13 = {
   attributeName: "name",
   attribute: spec_tag.attributes.name
 };
-function assertAllowed31(value, mode) {
-  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
-  if (mode === "list" && !false) {
-    const arr = value;
-    if (arr) {
-      const l = arr.length;
-      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
-    }
-  }
-  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
-}
-function assertAllowed32(value, mode) {
-  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
-  if (mode === "list" && !false) {
-    const arr = value;
-    if (arr) {
-      const l = arr.length;
-      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
-    }
-  }
-  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
-}
-const colSpec14 = {
-  fieldName: "artifactId",
-  attributeName: "artifact_id",
-  attribute: spec_wasmMetadata.attributes.artifact_id
-};
 function assertAllowed33(value, mode) {
   if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
   if (mode === "list" && !false) {
@@ -3406,6 +3688,11 @@ function assertAllowed34(value, mode) {
   }
   if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
 }
+const colSpec14 = {
+  fieldName: "artifactId",
+  attributeName: "artifact_id",
+  attribute: spec_wasmMetadata.attributes.artifact_id
+};
 function assertAllowed35(value, mode) {
   if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
   if (mode === "list" && !false) {
@@ -3428,21 +3715,6 @@ function assertAllowed36(value, mode) {
   }
   if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
 }
-const colSpec15 = {
-  fieldName: "rowId",
-  attributeName: "id",
-  attribute: spec_uploadSession.attributes.id
-};
-const colSpec16 = {
-  fieldName: "repositoryId",
-  attributeName: "repository_id",
-  attribute: spec_uploadSession.attributes.repository_id
-};
-const colSpec17 = {
-  fieldName: "expiresAt",
-  attributeName: "expires_at",
-  attribute: spec_uploadSession.attributes.expires_at
-};
 function assertAllowed37(value, mode) {
   if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
   if (mode === "list" && !false) {
@@ -3454,7 +3726,97 @@ function assertAllowed37(value, mode) {
   }
   if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
 }
+const colSpec15 = {
+  fieldName: "rowId",
+  attributeName: "id",
+  attribute: spec_cargoMetadata.attributes.id
+};
+const colSpec16 = {
+  fieldName: "artifactId",
+  attributeName: "artifact_id",
+  attribute: spec_cargoMetadata.attributes.artifact_id
+};
+const colSpec17 = {
+  fieldName: "name",
+  attributeName: "name",
+  attribute: spec_cargoMetadata.attributes.name
+};
+const colSpec18 = {
+  fieldName: "vers",
+  attributeName: "vers",
+  attribute: spec_cargoMetadata.attributes.vers
+};
 function assertAllowed38(value, mode) {
+  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+  if (mode === "list" && !false) {
+    const arr = value;
+    if (arr) {
+      const l = arr.length;
+      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+    }
+  }
+  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+}
+function assertAllowed39(value, mode) {
+  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+  if (mode === "list" && !false) {
+    const arr = value;
+    if (arr) {
+      const l = arr.length;
+      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+    }
+  }
+  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+}
+function assertAllowed40(value, mode) {
+  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+  if (mode === "list" && !false) {
+    const arr = value;
+    if (arr) {
+      const l = arr.length;
+      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+    }
+  }
+  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+}
+function assertAllowed41(value, mode) {
+  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+  if (mode === "list" && !false) {
+    const arr = value;
+    if (arr) {
+      const l = arr.length;
+      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+    }
+  }
+  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+}
+const colSpec19 = {
+  fieldName: "rowId",
+  attributeName: "id",
+  attribute: spec_uploadSession.attributes.id
+};
+const colSpec20 = {
+  fieldName: "repositoryId",
+  attributeName: "repository_id",
+  attribute: spec_uploadSession.attributes.repository_id
+};
+const colSpec21 = {
+  fieldName: "expiresAt",
+  attributeName: "expires_at",
+  attribute: spec_uploadSession.attributes.expires_at
+};
+function assertAllowed42(value, mode) {
+  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+  if (mode === "list" && !false) {
+    const arr = value;
+    if (arr) {
+      const l = arr.length;
+      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+    }
+  }
+  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+}
+function assertAllowed43(value, mode) {
   if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
   if (mode === "list" && !false) {
     const arr = value;
@@ -3515,7 +3877,7 @@ const resolve46 = (i, v) => sql`${i} < ${v}`;
 const resolve47 = (i, v) => sql`${i} <= ${v}`;
 const resolve48 = (i, v) => sql`${i} > ${v}`;
 const resolve49 = (i, v) => sql`${i} >= ${v}`;
-function assertAllowed39(value, mode) {
+function assertAllowed44(value, mode) {
   if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
   if (mode === "list" && !false) {
     const arr = value;
@@ -3526,42 +3888,42 @@ function assertAllowed39(value, mode) {
   }
   if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
 }
-const colSpec18 = {
+const colSpec22 = {
   fieldName: "rowId",
   attributeName: "id",
   attribute: spec_apiToken.attributes.id
 };
-const colSpec19 = {
+const colSpec23 = {
   fieldName: "tokenHash",
   attributeName: "token_hash",
   attribute: spec_apiToken.attributes.token_hash
 };
-const colSpec20 = {
+const colSpec24 = {
   fieldName: "tokenPrefix",
   attributeName: "token_prefix",
   attribute: spec_apiToken.attributes.token_prefix
 };
-const colSpec21 = {
+const colSpec25 = {
   fieldName: "namespaceId",
   attributeName: "namespace_id",
   attribute: spec_apiToken.attributes.namespace_id
 };
-const colSpec22 = {
+const colSpec26 = {
   fieldName: "repositoryId",
   attributeName: "repository_id",
   attribute: spec_apiToken.attributes.repository_id
 };
-const colSpec23 = {
+const colSpec27 = {
   fieldName: "createdBy",
   attributeName: "created_by",
   attribute: spec_apiToken.attributes.created_by
 };
-const colSpec24 = {
+const colSpec28 = {
   fieldName: "isActive",
   attributeName: "is_active",
   attribute: spec_apiToken.attributes.is_active
 };
-function assertAllowed40(value, mode) {
+function assertAllowed45(value, mode) {
   if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
   if (mode === "list" && !false) {
     const arr = value;
@@ -3572,7 +3934,7 @@ function assertAllowed40(value, mode) {
   }
   if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
 }
-function assertAllowed41(value, mode) {
+function assertAllowed46(value, mode) {
   if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
   if (mode === "list" && !false) {
     const arr = value;
@@ -3633,100 +3995,20 @@ const resolve57 = (i, v) => sql`${i} < ${v}`;
 const resolve58 = (i, v) => sql`${i} <= ${v}`;
 const resolve59 = (i, v) => sql`${i} > ${v}`;
 const resolve60 = (i, v) => sql`${i} >= ${v}`;
-const colSpec25 = {
+const colSpec29 = {
   fieldName: "rowId",
   attributeName: "id",
   attribute: spec_namespace.attributes.id
 };
-const colSpec26 = {
+const colSpec30 = {
   fieldName: "name",
   attributeName: "name",
   attribute: spec_namespace.attributes.name
 };
-const colSpec27 = {
+const colSpec31 = {
   fieldName: "organizationId",
   attributeName: "organization_id",
   attribute: spec_namespace.attributes.organization_id
-};
-function assertAllowed42(value, mode) {
-  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
-  if (mode === "list" && !false) {
-    const arr = value;
-    if (arr) {
-      const l = arr.length;
-      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
-    }
-  }
-  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
-}
-function assertAllowed43(value, mode) {
-  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
-  if (mode === "list" && !false) {
-    const arr = value;
-    if (arr) {
-      const l = arr.length;
-      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
-    }
-  }
-  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
-}
-function assertAllowed44(value, mode) {
-  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
-  if (mode === "list" && !false) {
-    const arr = value;
-    if (arr) {
-      const l = arr.length;
-      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
-    }
-  }
-  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
-}
-function assertAllowed45(value, mode) {
-  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
-  if (mode === "list" && !false) {
-    const arr = value;
-    if (arr) {
-      const l = arr.length;
-      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
-    }
-  }
-  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
-}
-function assertAllowed46(value, mode) {
-  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
-  if (mode === "list" && !false) {
-    const arr = value;
-    if (arr) {
-      const l = arr.length;
-      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
-    }
-  }
-  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
-}
-const colSpec28 = {
-  fieldName: "rowId",
-  attributeName: "id",
-  attribute: spec_federatedSkillCache.attributes.id
-};
-const colSpec29 = {
-  fieldName: "sourceId",
-  attributeName: "source_id",
-  attribute: spec_federatedSkillCache.attributes.source_id
-};
-const colSpec30 = {
-  fieldName: "slug",
-  attributeName: "slug",
-  attribute: spec_federatedSkillCache.attributes.slug
-};
-const colSpec31 = {
-  fieldName: "expiresAt",
-  attributeName: "expires_at",
-  attribute: spec_federatedSkillCache.attributes.expires_at
-};
-const colSpec32 = {
-  fieldName: "vetStatus",
-  attributeName: "vet_status",
-  attribute: spec_federatedSkillCache.attributes.vet_status
 };
 function assertAllowed47(value, mode) {
   if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
@@ -3750,21 +4032,6 @@ function assertAllowed48(value, mode) {
   }
   if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
 }
-const colSpec33 = {
-  fieldName: "rowId",
-  attributeName: "id",
-  attribute: spec_federatedSource.attributes.id
-};
-const colSpec34 = {
-  fieldName: "namespace",
-  attributeName: "namespace",
-  attribute: spec_federatedSource.attributes.namespace
-};
-const colSpec35 = {
-  fieldName: "upstreamType",
-  attributeName: "upstream_type",
-  attribute: spec_federatedSource.attributes.upstream_type
-};
 function assertAllowed49(value, mode) {
   if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
   if (mode === "list" && !false) {
@@ -3788,6 +4055,101 @@ function assertAllowed50(value, mode) {
   if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
 }
 function assertAllowed51(value, mode) {
+  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+  if (mode === "list" && !false) {
+    const arr = value;
+    if (arr) {
+      const l = arr.length;
+      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+    }
+  }
+  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+}
+const colSpec32 = {
+  fieldName: "rowId",
+  attributeName: "id",
+  attribute: spec_federatedSkillCache.attributes.id
+};
+const colSpec33 = {
+  fieldName: "sourceId",
+  attributeName: "source_id",
+  attribute: spec_federatedSkillCache.attributes.source_id
+};
+const colSpec34 = {
+  fieldName: "slug",
+  attributeName: "slug",
+  attribute: spec_federatedSkillCache.attributes.slug
+};
+const colSpec35 = {
+  fieldName: "expiresAt",
+  attributeName: "expires_at",
+  attribute: spec_federatedSkillCache.attributes.expires_at
+};
+const colSpec36 = {
+  fieldName: "vetStatus",
+  attributeName: "vet_status",
+  attribute: spec_federatedSkillCache.attributes.vet_status
+};
+function assertAllowed52(value, mode) {
+  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+  if (mode === "list" && !false) {
+    const arr = value;
+    if (arr) {
+      const l = arr.length;
+      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+    }
+  }
+  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+}
+function assertAllowed53(value, mode) {
+  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+  if (mode === "list" && !false) {
+    const arr = value;
+    if (arr) {
+      const l = arr.length;
+      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+    }
+  }
+  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+}
+const colSpec37 = {
+  fieldName: "rowId",
+  attributeName: "id",
+  attribute: spec_federatedSource.attributes.id
+};
+const colSpec38 = {
+  fieldName: "namespace",
+  attributeName: "namespace",
+  attribute: spec_federatedSource.attributes.namespace
+};
+const colSpec39 = {
+  fieldName: "upstreamType",
+  attributeName: "upstream_type",
+  attribute: spec_federatedSource.attributes.upstream_type
+};
+function assertAllowed54(value, mode) {
+  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+  if (mode === "list" && !false) {
+    const arr = value;
+    if (arr) {
+      const l = arr.length;
+      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+    }
+  }
+  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+}
+function assertAllowed55(value, mode) {
+  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+  if (mode === "list" && !false) {
+    const arr = value;
+    if (arr) {
+      const l = arr.length;
+      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+    }
+  }
+  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+}
+function assertAllowed56(value, mode) {
   if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
   if (mode === "list" && !false) {
     const arr = value;
@@ -3838,6 +4200,10 @@ const specFromArgs_FederatedSkillCache = args => {
   const $nodeId = args.getRaw(["input", "id"]);
   return specFromNodeId(nodeIdHandler_FederatedSkillCache, $nodeId);
 };
+const specFromArgs_CargoMetadatum = args => {
+  const $nodeId = args.getRaw(["input", "id"]);
+  return specFromNodeId(nodeIdHandler_CargoMetadatum, $nodeId);
+};
 const specFromArgs_ApiToken = args => {
   const $nodeId = args.getRaw(["input", "id"]);
   return specFromNodeId(nodeIdHandler_ApiToken, $nodeId);
@@ -3881,6 +4247,10 @@ const specFromArgs_FederatedSource2 = args => {
 const specFromArgs_FederatedSkillCache2 = args => {
   const $nodeId = args.getRaw(["input", "id"]);
   return specFromNodeId(nodeIdHandler_FederatedSkillCache, $nodeId);
+};
+const specFromArgs_CargoMetadatum2 = args => {
+  const $nodeId = args.getRaw(["input", "id"]);
+  return specFromNodeId(nodeIdHandler_CargoMetadatum, $nodeId);
 };
 const specFromArgs_ApiToken2 = args => {
   const $nodeId = args.getRaw(["input", "id"]);
@@ -3959,6 +4329,9 @@ type Query implements Node {
   """Get a single \`FederatedSkillCache\`."""
   federatedSkillCache(rowId: UUID!): FederatedSkillCache
 
+  """Get a single \`CargoMetadatum\`."""
+  cargoMetadatum(rowId: UUID!): CargoMetadatum
+
   """Get a single \`ApiToken\`."""
   apiToken(rowId: UUID!): ApiToken
 
@@ -4035,6 +4408,14 @@ type Query implements Node {
     """
     id: ID!
   ): FederatedSkillCache
+
+  """Reads a single \`CargoMetadatum\` using its globally unique \`ID\`."""
+  cargoMetadatumById(
+    """
+    The globally unique \`ID\` to be used in selecting a single \`CargoMetadatum\`.
+    """
+    id: ID!
+  ): CargoMetadatum
 
   """Reads a single \`ApiToken\` using its globally unique \`ID\`."""
   apiTokenById(
@@ -4382,6 +4763,40 @@ type Query implements Node {
     orderBy: [FederatedSkillCacheOrderBy!] = [PRIMARY_KEY_ASC]
   ): FederatedSkillCacheConnection
 
+  """Reads and enables pagination through a set of \`CargoMetadatum\`."""
+  cargoMetadata(
+    """Only read the first \`n\` values of the set."""
+    first: Int
+
+    """Only read the last \`n\` values of the set."""
+    last: Int
+
+    """
+    Skip the first \`n\` values from our \`after\` cursor, an alternative to cursor
+    based pagination. May not be used with \`last\`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: CargoMetadatumCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: CargoMetadatumFilter
+
+    """The method to use when ordering \`CargoMetadatum\`."""
+    orderBy: [CargoMetadatumOrderBy!] = [PRIMARY_KEY_ASC]
+  ): CargoMetadatumConnection
+
   """Reads and enables pagination through a set of \`ApiToken\`."""
   apiTokens(
     """Only read the first \`n\` values of the set."""
@@ -4514,6 +4929,40 @@ type Artifact implements Node {
 
   """Reads a single \`WasmMetadatum\` that is related to this \`Artifact\`."""
   wasmMetadatum: WasmMetadatum
+
+  """Reads and enables pagination through a set of \`CargoMetadatum\`."""
+  cargoMetadata(
+    """Only read the first \`n\` values of the set."""
+    first: Int
+
+    """Only read the last \`n\` values of the set."""
+    last: Int
+
+    """
+    Skip the first \`n\` values from our \`after\` cursor, an alternative to cursor
+    based pagination. May not be used with \`last\`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: CargoMetadatumCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: CargoMetadatumFilter
+
+    """The method to use when ordering \`CargoMetadatum\`."""
+    orderBy: [CargoMetadatumOrderBy!] = [PRIMARY_KEY_ASC]
+  ): CargoMetadatumConnection!
 }
 
 """
@@ -5113,6 +5562,12 @@ input ArtifactFilter {
   """A related \`wasmMetadatum\` exists."""
   wasmMetadatumExists: Boolean
 
+  """Filter by the object’s \`cargoMetadata\` relation."""
+  cargoMetadata: ArtifactToManyCargoMetadatumFilter
+
+  """Some related \`cargoMetadata\` exist."""
+  cargoMetadataExist: Boolean
+
   """Filter by the object’s \`repository\` relation."""
   repository: RepositoryFilter
 
@@ -5236,6 +5691,55 @@ input WasmMetadatumFilter {
 
   """Negates the expression."""
   not: WasmMetadatumFilter
+}
+
+"""
+A filter to be used against many \`CargoMetadatum\` object types. All fields are combined with a logical ‘and.’
+"""
+input ArtifactToManyCargoMetadatumFilter {
+  """
+  Every related \`CargoMetadatum\` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  every: CargoMetadatumFilter
+
+  """
+  Some related \`CargoMetadatum\` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  some: CargoMetadatumFilter
+
+  """
+  No related \`CargoMetadatum\` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  none: CargoMetadatumFilter
+}
+
+"""
+A filter to be used against \`CargoMetadatum\` object types. All fields are combined with a logical ‘and.’
+"""
+input CargoMetadatumFilter {
+  """Filter by the object’s \`rowId\` field."""
+  rowId: UUIDFilter
+
+  """Filter by the object’s \`artifactId\` field."""
+  artifactId: UUIDFilter
+
+  """Filter by the object’s \`name\` field."""
+  name: StringFilter
+
+  """Filter by the object’s \`vers\` field."""
+  vers: StringFilter
+
+  """Filter by the object’s \`artifact\` relation."""
+  artifact: ArtifactFilter
+
+  """Checks for all expressions in this list."""
+  and: [CargoMetadatumFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [CargoMetadatumFilter!]
+
+  """Negates the expression."""
+  not: CargoMetadatumFilter
 }
 
 """
@@ -5872,6 +6376,88 @@ type WasmMetadatum implements Node {
   artifact: Artifact
 }
 
+"""A connection to a list of \`CargoMetadatum\` values."""
+type CargoMetadatumConnection {
+  """A list of \`CargoMetadatum\` objects."""
+  nodes: [CargoMetadatum]!
+
+  """
+  A list of edges which contains the \`CargoMetadatum\` and cursor to aid in pagination.
+  """
+  edges: [CargoMetadatumEdge]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* \`CargoMetadatum\` you could get from the connection."""
+  totalCount: Int!
+}
+
+type CargoMetadatum implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  id: ID!
+  rowId: UUID!
+  artifactId: UUID!
+  name: String!
+  vers: String!
+  deps: JSON!
+  features: JSON!
+  cksum: String!
+  yanked: Boolean!
+  links: String
+  rustVersion: String
+  v: Int!
+  createdAt: Datetime
+  updatedAt: Datetime
+
+  """Reads a single \`Artifact\` that is related to this \`CargoMetadatum\`."""
+  artifact: Artifact
+}
+
+"""A \`CargoMetadatum\` edge in the connection."""
+type CargoMetadatumEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The \`CargoMetadatum\` at the end of the edge."""
+  node: CargoMetadatum
+}
+
+"""
+A condition to be used against \`CargoMetadatum\` object types. All fields are
+tested for equality and combined with a logical ‘and.’
+"""
+input CargoMetadatumCondition {
+  """Checks for equality with the object’s \`rowId\` field."""
+  rowId: UUID
+
+  """Checks for equality with the object’s \`artifactId\` field."""
+  artifactId: UUID
+
+  """Checks for equality with the object’s \`name\` field."""
+  name: String
+
+  """Checks for equality with the object’s \`vers\` field."""
+  vers: String
+}
+
+"""Methods to use when ordering \`CargoMetadatum\`."""
+enum CargoMetadatumOrderBy {
+  NATURAL
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+  ROW_ID_ASC
+  ROW_ID_DESC
+  ARTIFACT_ID_ASC
+  ARTIFACT_ID_DESC
+  NAME_ASC
+  NAME_DESC
+  VERS_ASC
+  VERS_DESC
+}
+
 type FederatedSource implements Node {
   """
   A globally unique identifier. Can be used in various places throughout the system to identify this single value.
@@ -6426,6 +7012,14 @@ type Mutation {
     input: CreateFederatedSkillCacheInput!
   ): CreateFederatedSkillCachePayload
 
+  """Creates a single \`CargoMetadatum\`."""
+  createCargoMetadatum(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateCargoMetadatumInput!
+  ): CreateCargoMetadatumPayload
+
   """Creates a single \`ApiToken\`."""
   createApiToken(
     """
@@ -6624,6 +7218,24 @@ type Mutation {
     input: UpdateFederatedSkillCacheInput!
   ): UpdateFederatedSkillCachePayload
 
+  """
+  Updates a single \`CargoMetadatum\` using its globally unique id and a patch.
+  """
+  updateCargoMetadatumById(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateCargoMetadatumByIdInput!
+  ): UpdateCargoMetadatumPayload
+
+  """Updates a single \`CargoMetadatum\` using a unique key and a patch."""
+  updateCargoMetadatum(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateCargoMetadatumInput!
+  ): UpdateCargoMetadatumPayload
+
   """Updates a single \`ApiToken\` using its globally unique id and a patch."""
   updateApiTokenById(
     """
@@ -6815,6 +7427,22 @@ type Mutation {
     """
     input: DeleteFederatedSkillCacheInput!
   ): DeleteFederatedSkillCachePayload
+
+  """Deletes a single \`CargoMetadatum\` using its globally unique id."""
+  deleteCargoMetadatumById(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteCargoMetadatumByIdInput!
+  ): DeleteCargoMetadatumPayload
+
+  """Deletes a single \`CargoMetadatum\` using a unique key."""
+  deleteCargoMetadatum(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteCargoMetadatumInput!
+  ): DeleteCargoMetadatumPayload
 
   """Deletes a single \`ApiToken\` using its globally unique id."""
   deleteApiTokenById(
@@ -7293,6 +7921,58 @@ input FederatedSkillCacheInput {
   vettedAt: Datetime
   upstreamMeta: JSON
   createdAt: Datetime
+}
+
+"""The output of our create \`CargoMetadatum\` mutation."""
+type CreateCargoMetadatumPayload {
+  """
+  The exact same \`clientMutationId\` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The \`CargoMetadatum\` that was created by this mutation."""
+  cargoMetadatum: CargoMetadatum
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our \`CargoMetadatum\`. May be used by Relay 1."""
+  cargoMetadatumEdge(
+    """The method to use when ordering \`CargoMetadatum\`."""
+    orderBy: [CargoMetadatumOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): CargoMetadatumEdge
+}
+
+"""All input for the create \`CargoMetadatum\` mutation."""
+input CreateCargoMetadatumInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The \`CargoMetadatum\` to be created by this mutation."""
+  cargoMetadatum: CargoMetadatumInput!
+}
+
+"""An input for mutations affecting \`CargoMetadatum\`"""
+input CargoMetadatumInput {
+  rowId: UUID
+  artifactId: UUID!
+  name: String!
+  vers: String!
+  deps: JSON
+  features: JSON
+  cksum: String!
+  yanked: Boolean
+  links: String
+  rustVersion: String
+  v: Int
+  createdAt: Datetime
+  updatedAt: Datetime
 }
 
 """The output of our create \`ApiToken\` mutation."""
@@ -8078,6 +8758,82 @@ input UpdateFederatedSkillCacheInput {
   patch: FederatedSkillCachePatch!
 }
 
+"""The output of our update \`CargoMetadatum\` mutation."""
+type UpdateCargoMetadatumPayload {
+  """
+  The exact same \`clientMutationId\` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The \`CargoMetadatum\` that was updated by this mutation."""
+  cargoMetadatum: CargoMetadatum
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our \`CargoMetadatum\`. May be used by Relay 1."""
+  cargoMetadatumEdge(
+    """The method to use when ordering \`CargoMetadatum\`."""
+    orderBy: [CargoMetadatumOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): CargoMetadatumEdge
+}
+
+"""All input for the \`updateCargoMetadatumById\` mutation."""
+input UpdateCargoMetadatumByIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique \`ID\` which will identify a single \`CargoMetadatum\` to be updated.
+  """
+  id: ID!
+
+  """
+  An object where the defined keys will be set on the \`CargoMetadatum\` being updated.
+  """
+  patch: CargoMetadatumPatch!
+}
+
+"""
+Represents an update to a \`CargoMetadatum\`. Fields that are set will be updated.
+"""
+input CargoMetadatumPatch {
+  rowId: UUID
+  artifactId: UUID
+  name: String
+  vers: String
+  deps: JSON
+  features: JSON
+  cksum: String
+  yanked: Boolean
+  links: String
+  rustVersion: String
+  v: Int
+  createdAt: Datetime
+  updatedAt: Datetime
+}
+
+"""All input for the \`updateCargoMetadatum\` mutation."""
+input UpdateCargoMetadatumInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  rowId: UUID!
+
+  """
+  An object where the defined keys will be set on the \`CargoMetadatum\` being updated.
+  """
+  patch: CargoMetadatumPatch!
+}
+
 """The output of our update \`ApiToken\` mutation."""
 type UpdateApiTokenPayload {
   """
@@ -8655,6 +9411,54 @@ input DeleteFederatedSkillCacheInput {
   rowId: UUID!
 }
 
+"""The output of our delete \`CargoMetadatum\` mutation."""
+type DeleteCargoMetadatumPayload {
+  """
+  The exact same \`clientMutationId\` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The \`CargoMetadatum\` that was deleted by this mutation."""
+  cargoMetadatum: CargoMetadatum
+  deletedCargoMetadatumId: ID
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our \`CargoMetadatum\`. May be used by Relay 1."""
+  cargoMetadatumEdge(
+    """The method to use when ordering \`CargoMetadatum\`."""
+    orderBy: [CargoMetadatumOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): CargoMetadatumEdge
+}
+
+"""All input for the \`deleteCargoMetadatumById\` mutation."""
+input DeleteCargoMetadatumByIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique \`ID\` which will identify a single \`CargoMetadatum\` to be deleted.
+  """
+  id: ID!
+}
+
+"""All input for the \`deleteCargoMetadatum\` mutation."""
+input DeleteCargoMetadatumInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  rowId: UUID!
+}
+
 """The output of our delete \`ApiToken\` mutation."""
 type DeleteApiTokenPayload {
   """
@@ -8746,7 +9550,7 @@ export const objects = {
           filter(_, $connection, fieldArg) {
             const $pgSelect = $connection.getSubplan();
             fieldArg.apply($pgSelect, (queryBuilder, value) => {
-              assertAllowed11(value, "object");
+              assertAllowed12(value, "object");
               if (value == null) return;
               const condition = new PgCondition(queryBuilder);
               return condition;
@@ -8807,6 +9611,56 @@ export const objects = {
             value.apply($select);
           }
         }
+      },
+      cargoMetadata: {
+        plan() {
+          return connection(resource_cargo_metadataPgResource.find());
+        },
+        args: {
+          first(_, $connection, arg) {
+            $connection.setFirst(arg.getRaw());
+          },
+          last(_, $connection, val) {
+            $connection.setLast(val.getRaw());
+          },
+          offset(_, $connection, val) {
+            $connection.setOffset(val.getRaw());
+          },
+          before(_, $connection, val) {
+            $connection.setBefore(val.getRaw());
+          },
+          after(_, $connection, val) {
+            $connection.setAfter(val.getRaw());
+          },
+          condition(_condition, $connection, arg) {
+            const $select = $connection.getSubplan();
+            arg.apply($select, qbWhereBuilder);
+          },
+          filter(_, $connection, fieldArg) {
+            const $pgSelect = $connection.getSubplan();
+            fieldArg.apply($pgSelect, (queryBuilder, value) => {
+              assertAllowed11(value, "object");
+              if (value == null) return;
+              const condition = new PgCondition(queryBuilder);
+              return condition;
+            });
+          },
+          orderBy(parent, $connection, value) {
+            const $select = $connection.getSubplan();
+            value.apply($select);
+          }
+        }
+      },
+      cargoMetadatum(_$root, {
+        $rowId
+      }) {
+        return resource_cargo_metadataPgResource.get({
+          id: $rowId
+        });
+      },
+      cargoMetadatumById(_$parent, args) {
+        const $nodeId = args.getRaw("id");
+        return nodeFetcher_CargoMetadatum($nodeId);
       },
       containerMetadata: {
         plan() {
@@ -9315,6 +10169,20 @@ export const objects = {
           }
         }
       },
+      createCargoMetadatum: {
+        plan(_, args) {
+          const $insert = pgInsertSingle(resource_cargo_metadataPgResource, Object.create(null));
+          args.apply($insert);
+          return object({
+            result: $insert
+          });
+        },
+        args: {
+          input(_, $object) {
+            return $object;
+          }
+        }
+      },
       createContainerMetadatum: {
         plan(_, args) {
           const $insert = pgInsertSingle(resource_container_metadataPgResource, Object.create(null));
@@ -9490,6 +10358,36 @@ export const objects = {
       deleteArtifactById: {
         plan(_$root, args) {
           const $delete = pgDeleteSingle(resource_artifactPgResource, specFromArgs_Artifact2(args));
+          args.apply($delete);
+          return object({
+            result: $delete
+          });
+        },
+        args: {
+          input(_, $object) {
+            return $object;
+          }
+        }
+      },
+      deleteCargoMetadatum: {
+        plan(_$root, args) {
+          const $delete = pgDeleteSingle(resource_cargo_metadataPgResource, {
+            id: args.getRaw(['input', "rowId"])
+          });
+          args.apply($delete);
+          return object({
+            result: $delete
+          });
+        },
+        args: {
+          input(_, $object) {
+            return $object;
+          }
+        }
+      },
+      deleteCargoMetadatumById: {
+        plan(_$root, args) {
+          const $delete = pgDeleteSingle(resource_cargo_metadataPgResource, specFromArgs_CargoMetadatum2(args));
           args.apply($delete);
           return object({
             result: $delete
@@ -9852,6 +10750,36 @@ export const objects = {
       updateArtifactById: {
         plan(_$root, args) {
           const $update = pgUpdateSingle(resource_artifactPgResource, specFromArgs_Artifact(args));
+          args.apply($update);
+          return object({
+            result: $update
+          });
+        },
+        args: {
+          input(_, $object) {
+            return $object;
+          }
+        }
+      },
+      updateCargoMetadatum: {
+        plan(_$root, args) {
+          const $update = pgUpdateSingle(resource_cargo_metadataPgResource, {
+            id: args.getRaw(['input', "rowId"])
+          });
+          args.apply($update);
+          return object({
+            result: $update
+          });
+        },
+        args: {
+          input(_, $object) {
+            return $object;
+          }
+        }
+      },
+      updateCargoMetadatumById: {
+        plan(_$root, args) {
+          const $update = pgUpdateSingle(resource_cargo_metadataPgResource, specFromArgs_CargoMetadatum(args));
           args.apply($update);
           return object({
             result: $update
@@ -10235,6 +11163,48 @@ export const objects = {
   Artifact: {
     assertStep: assertPgClassSingleStep,
     plans: {
+      cargoMetadata: {
+        plan($record) {
+          const $records = resource_cargo_metadataPgResource.find({
+            artifact_id: $record.get("id")
+          });
+          return connection($records);
+        },
+        args: {
+          first(_, $connection, arg) {
+            $connection.setFirst(arg.getRaw());
+          },
+          last(_, $connection, val) {
+            $connection.setLast(val.getRaw());
+          },
+          offset(_, $connection, val) {
+            $connection.setOffset(val.getRaw());
+          },
+          before(_, $connection, val) {
+            $connection.setBefore(val.getRaw());
+          },
+          after(_, $connection, val) {
+            $connection.setAfter(val.getRaw());
+          },
+          condition(_condition, $connection, arg) {
+            const $select = $connection.getSubplan();
+            arg.apply($select, qbWhereBuilder);
+          },
+          filter(_, $connection, fieldArg) {
+            const $pgSelect = $connection.getSubplan();
+            fieldArg.apply($pgSelect, (queryBuilder, value) => {
+              assertAllowed14(value, "object");
+              if (value == null) return;
+              const condition = new PgCondition(queryBuilder);
+              return condition;
+            });
+          },
+          orderBy(parent, $connection, value) {
+            const $select = $connection.getSubplan();
+            value.apply($select);
+          }
+        }
+      },
       containerMetadatum($record) {
         return resource_container_metadataPgResource.get({
           artifact_id: $record.get("id")
@@ -10299,7 +11269,7 @@ export const objects = {
           filter(_, $connection, fieldArg) {
             const $pgSelect = $connection.getSubplan();
             fieldArg.apply($pgSelect, (queryBuilder, value) => {
-              assertAllowed12(value, "object");
+              assertAllowed13(value, "object");
               if (value == null) return;
               const condition = new PgCondition(queryBuilder);
               return condition;
@@ -10324,6 +11294,48 @@ export const objects = {
     }
   },
   ArtifactConnection: {
+    assertStep: ConnectionStep,
+    plans: {
+      totalCount($connection) {
+        return $connection.cloneSubplanWithoutPagination("aggregate").singleAsRecord().select(sql`count(*)`, TYPES.bigint, !1);
+      }
+    }
+  },
+  CargoMetadatum: {
+    assertStep: assertPgClassSingleStep,
+    plans: {
+      artifact($record) {
+        return resource_artifactPgResource.get({
+          id: $record.get("artifact_id")
+        });
+      },
+      artifactId($record) {
+        return $record.get("artifact_id");
+      },
+      createdAt($record) {
+        return $record.get("created_at");
+      },
+      id($parent) {
+        const specifier = nodeIdHandler_CargoMetadatum.plan($parent);
+        return lambda(specifier, nodeIdCodecs[nodeIdHandler_CargoMetadatum.codec.name].encode);
+      },
+      rowId($record) {
+        return $record.get("id");
+      },
+      rustVersion($record) {
+        return $record.get("rust_version");
+      },
+      updatedAt($record) {
+        return $record.get("updated_at");
+      }
+    },
+    planType($specifier) {
+      const spec = Object.create(null);
+      for (const pkCol of cargo_metadataUniques[0].attributes) spec[pkCol] = get2($specifier, pkCol);
+      return resource_cargo_metadataPgResource.get(spec);
+    }
+  },
+  CargoMetadatumConnection: {
     assertStep: ConnectionStep,
     plans: {
       totalCount($connection) {
@@ -10395,6 +11407,23 @@ export const objects = {
       },
       artifactEdge($mutation, fieldArgs) {
         return pgMutationPayloadEdge(resource_artifactPgResource, artifactUniques[0].attributes, $mutation, fieldArgs);
+      },
+      clientMutationId($mutation) {
+        return $mutation.getStepForKey("result").getMeta("clientMutationId");
+      },
+      query() {
+        return rootValue();
+      }
+    }
+  },
+  CreateCargoMetadatumPayload: {
+    assertStep: assertExecutableStep,
+    plans: {
+      cargoMetadatum($object) {
+        return $object.get("result");
+      },
+      cargoMetadatumEdge($mutation, fieldArgs) {
+        return pgMutationPayloadEdge(resource_cargo_metadataPgResource, cargo_metadataUniques[0].attributes, $mutation, fieldArgs);
       },
       clientMutationId($mutation) {
         return $mutation.getStepForKey("result").getMeta("clientMutationId");
@@ -10594,6 +11623,28 @@ export const objects = {
       deletedArtifactId($object) {
         const $record = $object.getStepForKey("result"),
           specifier = nodeIdHandler_Artifact.plan($record);
+        return lambda(specifier, nodeIdCodecs_base64JSON_base64JSON.encode);
+      },
+      query() {
+        return rootValue();
+      }
+    }
+  },
+  DeleteCargoMetadatumPayload: {
+    assertStep: ObjectStep,
+    plans: {
+      cargoMetadatum($object) {
+        return $object.get("result");
+      },
+      cargoMetadatumEdge($mutation, fieldArgs) {
+        return pgMutationPayloadEdge(resource_cargo_metadataPgResource, cargo_metadataUniques[0].attributes, $mutation, fieldArgs);
+      },
+      clientMutationId($mutation) {
+        return $mutation.getStepForKey("result").getMeta("clientMutationId");
+      },
+      deletedCargoMetadatumId($object) {
+        const $record = $object.getStepForKey("result"),
+          specifier = nodeIdHandler_CargoMetadatum.plan($record);
         return lambda(specifier, nodeIdCodecs_base64JSON_base64JSON.encode);
       },
       query() {
@@ -10898,7 +11949,7 @@ export const objects = {
           filter(_, $connection, fieldArg) {
             const $pgSelect = $connection.getSubplan();
             fieldArg.apply($pgSelect, (queryBuilder, value) => {
-              assertAllowed46(value, "object");
+              assertAllowed51(value, "object");
               if (value == null) return;
               const condition = new PgCondition(queryBuilder);
               return condition;
@@ -10983,7 +12034,7 @@ export const objects = {
           filter(_, $connection, fieldArg) {
             const $pgSelect = $connection.getSubplan();
             fieldArg.apply($pgSelect, (queryBuilder, value) => {
-              assertAllowed18(value, "object");
+              assertAllowed20(value, "object");
               if (value == null) return;
               const condition = new PgCondition(queryBuilder);
               return condition;
@@ -11035,7 +12086,7 @@ export const objects = {
           filter(_, $connection, fieldArg) {
             const $pgSelect = $connection.getSubplan();
             fieldArg.apply($pgSelect, (queryBuilder, value) => {
-              assertAllowed17(value, "object");
+              assertAllowed19(value, "object");
               if (value == null) return;
               const condition = new PgCondition(queryBuilder);
               return condition;
@@ -11101,7 +12152,7 @@ export const objects = {
           filter(_, $connection, fieldArg) {
             const $pgSelect = $connection.getSubplan();
             fieldArg.apply($pgSelect, (queryBuilder, value) => {
-              assertAllowed16(value, "object");
+              assertAllowed18(value, "object");
               if (value == null) return;
               const condition = new PgCondition(queryBuilder);
               return condition;
@@ -11143,7 +12194,7 @@ export const objects = {
           filter(_, $connection, fieldArg) {
             const $pgSelect = $connection.getSubplan();
             fieldArg.apply($pgSelect, (queryBuilder, value) => {
-              assertAllowed13(value, "object");
+              assertAllowed15(value, "object");
               if (value == null) return;
               const condition = new PgCondition(queryBuilder);
               return condition;
@@ -11209,7 +12260,7 @@ export const objects = {
           filter(_, $connection, fieldArg) {
             const $pgSelect = $connection.getSubplan();
             fieldArg.apply($pgSelect, (queryBuilder, value) => {
-              assertAllowed14(value, "object");
+              assertAllowed16(value, "object");
               if (value == null) return;
               const condition = new PgCondition(queryBuilder);
               return condition;
@@ -11254,7 +12305,7 @@ export const objects = {
           filter(_, $connection, fieldArg) {
             const $pgSelect = $connection.getSubplan();
             fieldArg.apply($pgSelect, (queryBuilder, value) => {
-              assertAllowed15(value, "object");
+              assertAllowed17(value, "object");
               if (value == null) return;
               const condition = new PgCondition(queryBuilder);
               return condition;
@@ -11389,6 +12440,23 @@ export const objects = {
       },
       artifactEdge($mutation, fieldArgs) {
         return pgMutationPayloadEdge(resource_artifactPgResource, artifactUniques[0].attributes, $mutation, fieldArgs);
+      },
+      clientMutationId($mutation) {
+        return $mutation.getStepForKey("result").getMeta("clientMutationId");
+      },
+      query() {
+        return rootValue();
+      }
+    }
+  },
+  UpdateCargoMetadatumPayload: {
+    assertStep: ObjectStep,
+    plans: {
+      cargoMetadatum($object) {
+        return $object.get("result");
+      },
+      cargoMetadatumEdge($mutation, fieldArgs) {
+        return pgMutationPayloadEdge(resource_cargo_metadataPgResource, cargo_metadataUniques[0].attributes, $mutation, fieldArgs);
       },
       clientMutationId($mutation) {
         return $mutation.getStepForKey("result").getMeta("clientMutationId");
@@ -11706,7 +12774,7 @@ export const inputObjects = {
   ApiTokenFilter: {
     plans: {
       and($where, value) {
-        assertAllowed41(value, "list");
+        assertAllowed46(value, "list");
         if (value == null) return;
         return $where.andPlan();
       },
@@ -11715,7 +12783,7 @@ export const inputObjects = {
         if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
         if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
         const condition = new PgCondition(queryBuilder);
-        condition.extensions.pgFilterAttribute = colSpec23;
+        condition.extensions.pgFilterAttribute = colSpec27;
         return condition;
       },
       isActive(queryBuilder, value) {
@@ -11723,11 +12791,11 @@ export const inputObjects = {
         if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
         if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
         const condition = new PgCondition(queryBuilder);
-        condition.extensions.pgFilterAttribute = colSpec24;
+        condition.extensions.pgFilterAttribute = colSpec28;
         return condition;
       },
       namespace($where, value) {
-        assertAllowed40(value, "object");
+        assertAllowed45(value, "object");
         if (value == null) return;
         const $subQuery = $where.existsPlan({
           tableExpression: namespaceIdentifier,
@@ -11744,22 +12812,22 @@ export const inputObjects = {
         if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
         if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
         const condition = new PgCondition(queryBuilder);
-        condition.extensions.pgFilterAttribute = colSpec21;
+        condition.extensions.pgFilterAttribute = colSpec25;
         return condition;
       },
       not($where, value) {
-        assertAllowed41(value, "object");
+        assertAllowed46(value, "object");
         if (value == null) return;
         return $where.notPlan().andPlan();
       },
       or($where, value) {
-        assertAllowed41(value, "list");
+        assertAllowed46(value, "list");
         if (value == null) return;
         const $or = $where.orPlan();
         return () => $or.andPlan();
       },
       repository($where, value) {
-        assertAllowed40(value, "object");
+        assertAllowed45(value, "object");
         if (value == null) return;
         const $subQuery = $where.existsPlan({
           tableExpression: repositoryIdentifier,
@@ -11772,7 +12840,7 @@ export const inputObjects = {
         return $subQuery;
       },
       repositoryExists($where, value) {
-        assertAllowed40(value, "scalar");
+        assertAllowed45(value, "scalar");
         if (value == null) return;
         const $subQuery = $where.existsPlan({
           tableExpression: repositoryIdentifier,
@@ -11789,7 +12857,7 @@ export const inputObjects = {
         if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
         if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
         const condition = new PgCondition(queryBuilder);
-        condition.extensions.pgFilterAttribute = colSpec22;
+        condition.extensions.pgFilterAttribute = colSpec26;
         return condition;
       },
       rowId(queryBuilder, value) {
@@ -11797,7 +12865,7 @@ export const inputObjects = {
         if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
         if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
         const condition = new PgCondition(queryBuilder);
-        condition.extensions.pgFilterAttribute = colSpec18;
+        condition.extensions.pgFilterAttribute = colSpec22;
         return condition;
       },
       tokenHash(queryBuilder, value) {
@@ -11805,7 +12873,7 @@ export const inputObjects = {
         if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
         if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
         const condition = new PgCondition(queryBuilder);
-        condition.extensions.pgFilterAttribute = colSpec19;
+        condition.extensions.pgFilterAttribute = colSpec23;
         return condition;
       },
       tokenPrefix(queryBuilder, value) {
@@ -11813,7 +12881,7 @@ export const inputObjects = {
         if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
         if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
         const condition = new PgCondition(queryBuilder);
-        condition.extensions.pgFilterAttribute = colSpec20;
+        condition.extensions.pgFilterAttribute = colSpec24;
         return condition;
       }
     }
@@ -12030,12 +13098,36 @@ export const inputObjects = {
   ArtifactFilter: {
     plans: {
       and($where, value) {
-        assertAllowed25(value, "list");
+        assertAllowed27(value, "list");
         if (value == null) return;
         return $where.andPlan();
       },
+      cargoMetadata($where, value) {
+        assertAllowed25(value, "object");
+        const $rel = $where.andPlan();
+        $rel.extensions.pgFilterRelation = {
+          tableExpression: cargoMetadataIdentifier,
+          alias: resource_cargo_metadataPgResource.name,
+          localAttributes: registryConfig.pgRelations.artifact.cargoMetadataByTheirArtifactId.localAttributes,
+          remoteAttributes: registryConfig.pgRelations.artifact.cargoMetadataByTheirArtifactId.remoteAttributes
+        };
+        return $rel;
+      },
+      cargoMetadataExist($where, value) {
+        assertAllowed25(value, "scalar");
+        if (value == null) return;
+        const $subQuery = $where.existsPlan({
+          tableExpression: cargoMetadataIdentifier,
+          alias: resource_cargo_metadataPgResource.name,
+          equals: value
+        });
+        registryConfig.pgRelations.artifact.cargoMetadataByTheirArtifactId.localAttributes.forEach((localAttribute, i) => {
+          const remoteAttribute = registryConfig.pgRelations.artifact.cargoMetadataByTheirArtifactId.remoteAttributes[i];
+          $subQuery.where(sql`${$where.alias}.${sql.identifier(localAttribute)} = ${$subQuery.alias}.${sql.identifier(remoteAttribute)}`);
+        });
+      },
       containerMetadatum($where, value) {
-        assertAllowed23(value, "object");
+        assertAllowed25(value, "object");
         const $subQuery = $where.existsPlan({
           tableExpression: containerMetadataIdentifier,
           alias: resource_container_metadataPgResource.name
@@ -12047,7 +13139,7 @@ export const inputObjects = {
         return $subQuery;
       },
       containerMetadatumExists($where, value) {
-        assertAllowed23(value, "scalar");
+        assertAllowed25(value, "scalar");
         if (value == null) return;
         const $subQuery = $where.existsPlan({
           tableExpression: containerMetadataIdentifier,
@@ -12068,18 +13160,18 @@ export const inputObjects = {
         return condition;
       },
       not($where, value) {
-        assertAllowed25(value, "object");
+        assertAllowed27(value, "object");
         if (value == null) return;
         return $where.notPlan().andPlan();
       },
       or($where, value) {
-        assertAllowed25(value, "list");
+        assertAllowed27(value, "list");
         if (value == null) return;
         const $or = $where.orPlan();
         return () => $or.andPlan();
       },
       repository($where, value) {
-        assertAllowed24(value, "object");
+        assertAllowed26(value, "object");
         if (value == null) return;
         const $subQuery = $where.existsPlan({
           tableExpression: repositoryIdentifier,
@@ -12108,7 +13200,7 @@ export const inputObjects = {
         return condition;
       },
       schemaMetadatum($where, value) {
-        assertAllowed23(value, "object");
+        assertAllowed25(value, "object");
         const $subQuery = $where.existsPlan({
           tableExpression: schemaMetadataIdentifier,
           alias: resource_schema_metadataPgResource.name
@@ -12120,7 +13212,7 @@ export const inputObjects = {
         return $subQuery;
       },
       schemaMetadatumExists($where, value) {
-        assertAllowed23(value, "scalar");
+        assertAllowed25(value, "scalar");
         if (value == null) return;
         const $subQuery = $where.existsPlan({
           tableExpression: schemaMetadataIdentifier,
@@ -12133,7 +13225,7 @@ export const inputObjects = {
         });
       },
       tags($where, value) {
-        assertAllowed23(value, "object");
+        assertAllowed25(value, "object");
         const $rel = $where.andPlan();
         $rel.extensions.pgFilterRelation = {
           tableExpression: tagIdentifier,
@@ -12144,7 +13236,7 @@ export const inputObjects = {
         return $rel;
       },
       tagsExist($where, value) {
-        assertAllowed23(value, "scalar");
+        assertAllowed25(value, "scalar");
         if (value == null) return;
         const $subQuery = $where.existsPlan({
           tableExpression: tagIdentifier,
@@ -12157,7 +13249,7 @@ export const inputObjects = {
         });
       },
       wasmMetadatum($where, value) {
-        assertAllowed23(value, "object");
+        assertAllowed25(value, "object");
         const $subQuery = $where.existsPlan({
           tableExpression: wasmMetadataIdentifier,
           alias: resource_wasm_metadataPgResource.name
@@ -12169,7 +13261,7 @@ export const inputObjects = {
         return $subQuery;
       },
       wasmMetadatumExists($where, value) {
-        assertAllowed23(value, "scalar");
+        assertAllowed25(value, "scalar");
         if (value == null) return;
         const $subQuery = $where.existsPlan({
           tableExpression: wasmMetadataIdentifier,
@@ -12289,10 +13381,10 @@ export const inputObjects = {
       }
     }
   },
-  ArtifactToManyTagFilter: {
+  ArtifactToManyCargoMetadatumFilter: {
     plans: {
       every($where, value) {
-        assertAllowed30(value, "object");
+        assertAllowed37(value, "object");
         if (value == null) return;
         if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
         const {
@@ -12312,7 +13404,7 @@ export const inputObjects = {
         return $subQuery.notPlan().andPlan();
       },
       none($where, value) {
-        assertAllowed30(value, "object");
+        assertAllowed37(value, "object");
         if (value == null) return;
         if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
         const {
@@ -12332,7 +13424,71 @@ export const inputObjects = {
         return $subQuery;
       },
       some($where, value) {
-        assertAllowed30(value, "object");
+        assertAllowed37(value, "object");
+        if (value == null) return;
+        if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
+        const {
+            localAttributes,
+            remoteAttributes,
+            tableExpression,
+            alias
+          } = $where.extensions.pgFilterRelation,
+          $subQuery = $where.existsPlan({
+            tableExpression,
+            alias
+          });
+        localAttributes.forEach((localAttribute, i) => {
+          const remoteAttribute = remoteAttributes[i];
+          $subQuery.where(sql`${$where.alias}.${sql.identifier(localAttribute)} = ${$subQuery.alias}.${sql.identifier(remoteAttribute)}`);
+        });
+        return $subQuery;
+      }
+    }
+  },
+  ArtifactToManyTagFilter: {
+    plans: {
+      every($where, value) {
+        assertAllowed32(value, "object");
+        if (value == null) return;
+        if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
+        const {
+            localAttributes,
+            remoteAttributes,
+            tableExpression,
+            alias
+          } = $where.extensions.pgFilterRelation,
+          $subQuery = $where.notPlan().existsPlan({
+            tableExpression,
+            alias
+          });
+        localAttributes.forEach((localAttribute, i) => {
+          const remoteAttribute = remoteAttributes[i];
+          $subQuery.where(sql`${$where.alias}.${sql.identifier(localAttribute)} = ${$subQuery.alias}.${sql.identifier(remoteAttribute)}`);
+        });
+        return $subQuery.notPlan().andPlan();
+      },
+      none($where, value) {
+        assertAllowed32(value, "object");
+        if (value == null) return;
+        if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
+        const {
+            localAttributes,
+            remoteAttributes,
+            tableExpression,
+            alias
+          } = $where.extensions.pgFilterRelation,
+          $subQuery = $where.notPlan().existsPlan({
+            tableExpression,
+            alias
+          });
+        localAttributes.forEach((localAttribute, i) => {
+          const remoteAttribute = remoteAttributes[i];
+          $subQuery.where(sql`${$where.alias}.${sql.identifier(localAttribute)} = ${$subQuery.alias}.${sql.identifier(remoteAttribute)}`);
+        });
+        return $subQuery;
+      },
+      some($where, value) {
+        assertAllowed32(value, "object");
         if (value == null) return;
         if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
         const {
@@ -12621,6 +13777,277 @@ export const inputObjects = {
       }
     }
   },
+  CargoMetadatumCondition: {
+    plans: {
+      artifactId($condition, val) {
+        $condition.where({
+          type: "attribute",
+          attribute: "artifact_id",
+          callback(expression) {
+            return val === null ? sql`${expression} is null` : sql`${expression} = ${sqlValueWithCodec(val, TYPES.uuid)}`;
+          }
+        });
+      },
+      name($condition, val) {
+        $condition.where({
+          type: "attribute",
+          attribute: "name",
+          callback(expression) {
+            return val === null ? sql`${expression} is null` : sql`${expression} = ${sqlValueWithCodec(val, TYPES.text)}`;
+          }
+        });
+      },
+      rowId($condition, val) {
+        $condition.where({
+          type: "attribute",
+          attribute: "id",
+          callback(expression) {
+            return val === null ? sql`${expression} is null` : sql`${expression} = ${sqlValueWithCodec(val, TYPES.uuid)}`;
+          }
+        });
+      },
+      vers($condition, val) {
+        $condition.where({
+          type: "attribute",
+          attribute: "vers",
+          callback(expression) {
+            return val === null ? sql`${expression} is null` : sql`${expression} = ${sqlValueWithCodec(val, TYPES.text)}`;
+          }
+        });
+      }
+    }
+  },
+  CargoMetadatumFilter: {
+    plans: {
+      and($where, value) {
+        assertAllowed39(value, "list");
+        if (value == null) return;
+        return $where.andPlan();
+      },
+      artifact($where, value) {
+        assertAllowed38(value, "object");
+        if (value == null) return;
+        const $subQuery = $where.existsPlan({
+          tableExpression: artifactIdentifier,
+          alias: resource_artifactPgResource.name
+        });
+        registryConfig.pgRelations.cargoMetadata.artifactByMyArtifactId.localAttributes.forEach((localAttribute, i) => {
+          const remoteAttribute = registryConfig.pgRelations.cargoMetadata.artifactByMyArtifactId.remoteAttributes[i];
+          $subQuery.where(sql`${$where.alias}.${sql.identifier(localAttribute)} = ${$subQuery.alias}.${sql.identifier(remoteAttribute)}`);
+        });
+        return $subQuery;
+      },
+      artifactId(queryBuilder, value) {
+        if (value === void 0) return;
+        if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+        if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+        const condition = new PgCondition(queryBuilder);
+        condition.extensions.pgFilterAttribute = colSpec16;
+        return condition;
+      },
+      name(queryBuilder, value) {
+        if (value === void 0) return;
+        if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+        if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+        const condition = new PgCondition(queryBuilder);
+        condition.extensions.pgFilterAttribute = colSpec17;
+        return condition;
+      },
+      not($where, value) {
+        assertAllowed39(value, "object");
+        if (value == null) return;
+        return $where.notPlan().andPlan();
+      },
+      or($where, value) {
+        assertAllowed39(value, "list");
+        if (value == null) return;
+        const $or = $where.orPlan();
+        return () => $or.andPlan();
+      },
+      rowId(queryBuilder, value) {
+        if (value === void 0) return;
+        if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+        if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+        const condition = new PgCondition(queryBuilder);
+        condition.extensions.pgFilterAttribute = colSpec15;
+        return condition;
+      },
+      vers(queryBuilder, value) {
+        if (value === void 0) return;
+        if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+        if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+        const condition = new PgCondition(queryBuilder);
+        condition.extensions.pgFilterAttribute = colSpec18;
+        return condition;
+      }
+    }
+  },
+  CargoMetadatumInput: {
+    baked: createObjectAndApplyChildren,
+    plans: {
+      artifactId(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("artifact_id", bakedInputRuntime(schema, field.type, val));
+      },
+      cksum(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("cksum", bakedInputRuntime(schema, field.type, val));
+      },
+      createdAt(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("created_at", bakedInputRuntime(schema, field.type, val));
+      },
+      deps(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("deps", bakedInputRuntime(schema, field.type, val));
+      },
+      features(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("features", bakedInputRuntime(schema, field.type, val));
+      },
+      links(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("links", bakedInputRuntime(schema, field.type, val));
+      },
+      name(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("name", bakedInputRuntime(schema, field.type, val));
+      },
+      rowId(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("id", bakedInputRuntime(schema, field.type, val));
+      },
+      rustVersion(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("rust_version", bakedInputRuntime(schema, field.type, val));
+      },
+      updatedAt(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("updated_at", bakedInputRuntime(schema, field.type, val));
+      },
+      v(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("v", bakedInputRuntime(schema, field.type, val));
+      },
+      vers(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("vers", bakedInputRuntime(schema, field.type, val));
+      },
+      yanked(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("yanked", bakedInputRuntime(schema, field.type, val));
+      }
+    }
+  },
+  CargoMetadatumPatch: {
+    baked: createObjectAndApplyChildren,
+    plans: {
+      artifactId(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("artifact_id", bakedInputRuntime(schema, field.type, val));
+      },
+      cksum(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("cksum", bakedInputRuntime(schema, field.type, val));
+      },
+      createdAt(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("created_at", bakedInputRuntime(schema, field.type, val));
+      },
+      deps(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("deps", bakedInputRuntime(schema, field.type, val));
+      },
+      features(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("features", bakedInputRuntime(schema, field.type, val));
+      },
+      links(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("links", bakedInputRuntime(schema, field.type, val));
+      },
+      name(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("name", bakedInputRuntime(schema, field.type, val));
+      },
+      rowId(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("id", bakedInputRuntime(schema, field.type, val));
+      },
+      rustVersion(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("rust_version", bakedInputRuntime(schema, field.type, val));
+      },
+      updatedAt(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("updated_at", bakedInputRuntime(schema, field.type, val));
+      },
+      v(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("v", bakedInputRuntime(schema, field.type, val));
+      },
+      vers(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("vers", bakedInputRuntime(schema, field.type, val));
+      },
+      yanked(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("yanked", bakedInputRuntime(schema, field.type, val));
+      }
+    }
+  },
   ContainerMetadatumCondition: {
     plans: {
       artifactId($condition, val) {
@@ -12637,12 +14064,12 @@ export const inputObjects = {
   ContainerMetadatumFilter: {
     plans: {
       and($where, value) {
-        assertAllowed27(value, "list");
+        assertAllowed29(value, "list");
         if (value == null) return;
         return $where.andPlan();
       },
       artifact($where, value) {
-        assertAllowed26(value, "object");
+        assertAllowed28(value, "object");
         if (value == null) return;
         const $subQuery = $where.existsPlan({
           tableExpression: artifactIdentifier,
@@ -12663,12 +14090,12 @@ export const inputObjects = {
         return condition;
       },
       not($where, value) {
-        assertAllowed27(value, "object");
+        assertAllowed29(value, "object");
         if (value == null) return;
         return $where.notPlan().andPlan();
       },
       or($where, value) {
-        assertAllowed27(value, "list");
+        assertAllowed29(value, "list");
         if (value == null) return;
         const $or = $where.orPlan();
         return () => $or.andPlan();
@@ -12770,6 +14197,16 @@ export const inputObjects = {
   CreateArtifactInput: {
     plans: {
       artifact(qb, arg) {
+        if (arg != null) return qb.setBuilder();
+      },
+      clientMutationId(qb, val) {
+        qb.setMeta("clientMutationId", val);
+      }
+    }
+  },
+  CreateCargoMetadatumInput: {
+    plans: {
+      cargoMetadatum(qb, arg) {
         if (arg != null) return qb.setBuilder();
       },
       clientMutationId(qb, val) {
@@ -13163,6 +14600,20 @@ export const inputObjects = {
       }
     }
   },
+  DeleteCargoMetadatumByIdInput: {
+    plans: {
+      clientMutationId(qb, val) {
+        qb.setMeta("clientMutationId", val);
+      }
+    }
+  },
+  DeleteCargoMetadatumInput: {
+    plans: {
+      clientMutationId(qb, val) {
+        qb.setMeta("clientMutationId", val);
+      }
+    }
+  },
   DeleteContainerMetadatumByIdInput: {
     plans: {
       clientMutationId(qb, val) {
@@ -13355,7 +14806,7 @@ export const inputObjects = {
   FederatedSkillCacheFilter: {
     plans: {
       and($where, value) {
-        assertAllowed48(value, "list");
+        assertAllowed53(value, "list");
         if (value == null) return;
         return $where.andPlan();
       },
@@ -13364,16 +14815,16 @@ export const inputObjects = {
         if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
         if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
         const condition = new PgCondition(queryBuilder);
-        condition.extensions.pgFilterAttribute = colSpec31;
+        condition.extensions.pgFilterAttribute = colSpec35;
         return condition;
       },
       not($where, value) {
-        assertAllowed48(value, "object");
+        assertAllowed53(value, "object");
         if (value == null) return;
         return $where.notPlan().andPlan();
       },
       or($where, value) {
-        assertAllowed48(value, "list");
+        assertAllowed53(value, "list");
         if (value == null) return;
         const $or = $where.orPlan();
         return () => $or.andPlan();
@@ -13383,7 +14834,7 @@ export const inputObjects = {
         if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
         if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
         const condition = new PgCondition(queryBuilder);
-        condition.extensions.pgFilterAttribute = colSpec28;
+        condition.extensions.pgFilterAttribute = colSpec32;
         return condition;
       },
       slug(queryBuilder, value) {
@@ -13391,11 +14842,11 @@ export const inputObjects = {
         if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
         if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
         const condition = new PgCondition(queryBuilder);
-        condition.extensions.pgFilterAttribute = colSpec30;
+        condition.extensions.pgFilterAttribute = colSpec34;
         return condition;
       },
       source($where, value) {
-        assertAllowed47(value, "object");
+        assertAllowed52(value, "object");
         if (value == null) return;
         const $subQuery = $where.existsPlan({
           tableExpression: federatedSourceIdentifier,
@@ -13412,7 +14863,7 @@ export const inputObjects = {
         if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
         if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
         const condition = new PgCondition(queryBuilder);
-        condition.extensions.pgFilterAttribute = colSpec29;
+        condition.extensions.pgFilterAttribute = colSpec33;
         return condition;
       },
       vetStatus(queryBuilder, value) {
@@ -13420,7 +14871,7 @@ export const inputObjects = {
         if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
         if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
         const condition = new PgCondition(queryBuilder);
-        condition.extensions.pgFilterAttribute = colSpec32;
+        condition.extensions.pgFilterAttribute = colSpec36;
         return condition;
       }
     }
@@ -13625,12 +15076,12 @@ export const inputObjects = {
   FederatedSourceFilter: {
     plans: {
       and($where, value) {
-        assertAllowed50(value, "list");
+        assertAllowed55(value, "list");
         if (value == null) return;
         return $where.andPlan();
       },
       federatedSkillCachesBySourceId($where, value) {
-        assertAllowed49(value, "object");
+        assertAllowed54(value, "object");
         const $rel = $where.andPlan();
         $rel.extensions.pgFilterRelation = {
           tableExpression: federatedSkillCacheIdentifier,
@@ -13641,7 +15092,7 @@ export const inputObjects = {
         return $rel;
       },
       federatedSkillCachesBySourceIdExist($where, value) {
-        assertAllowed49(value, "scalar");
+        assertAllowed54(value, "scalar");
         if (value == null) return;
         const $subQuery = $where.existsPlan({
           tableExpression: federatedSkillCacheIdentifier,
@@ -13658,16 +15109,16 @@ export const inputObjects = {
         if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
         if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
         const condition = new PgCondition(queryBuilder);
-        condition.extensions.pgFilterAttribute = colSpec34;
+        condition.extensions.pgFilterAttribute = colSpec38;
         return condition;
       },
       not($where, value) {
-        assertAllowed50(value, "object");
+        assertAllowed55(value, "object");
         if (value == null) return;
         return $where.notPlan().andPlan();
       },
       or($where, value) {
-        assertAllowed50(value, "list");
+        assertAllowed55(value, "list");
         if (value == null) return;
         const $or = $where.orPlan();
         return () => $or.andPlan();
@@ -13677,7 +15128,7 @@ export const inputObjects = {
         if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
         if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
         const condition = new PgCondition(queryBuilder);
-        condition.extensions.pgFilterAttribute = colSpec33;
+        condition.extensions.pgFilterAttribute = colSpec37;
         return condition;
       },
       upstreamType(queryBuilder, value) {
@@ -13685,7 +15136,7 @@ export const inputObjects = {
         if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
         if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
         const condition = new PgCondition(queryBuilder);
-        condition.extensions.pgFilterAttribute = colSpec35;
+        condition.extensions.pgFilterAttribute = colSpec39;
         return condition;
       }
     }
@@ -13835,7 +15286,7 @@ export const inputObjects = {
   FederatedSourceToManyFederatedSkillCacheFilter: {
     plans: {
       every($where, value) {
-        assertAllowed51(value, "object");
+        assertAllowed56(value, "object");
         if (value == null) return;
         if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
         const {
@@ -13855,7 +15306,7 @@ export const inputObjects = {
         return $subQuery.notPlan().andPlan();
       },
       none($where, value) {
-        assertAllowed51(value, "object");
+        assertAllowed56(value, "object");
         if (value == null) return;
         if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
         const {
@@ -13875,7 +15326,7 @@ export const inputObjects = {
         return $subQuery;
       },
       some($where, value) {
-        assertAllowed51(value, "object");
+        assertAllowed56(value, "object");
         if (value == null) return;
         if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
         const {
@@ -13930,12 +15381,12 @@ export const inputObjects = {
   NamespaceFilter: {
     plans: {
       and($where, value) {
-        assertAllowed43(value, "list");
+        assertAllowed48(value, "list");
         if (value == null) return;
         return $where.andPlan();
       },
       apiTokens($where, value) {
-        assertAllowed42(value, "object");
+        assertAllowed47(value, "object");
         const $rel = $where.andPlan();
         $rel.extensions.pgFilterRelation = {
           tableExpression: apiTokenIdentifier,
@@ -13946,7 +15397,7 @@ export const inputObjects = {
         return $rel;
       },
       apiTokensExist($where, value) {
-        assertAllowed42(value, "scalar");
+        assertAllowed47(value, "scalar");
         if (value == null) return;
         const $subQuery = $where.existsPlan({
           tableExpression: apiTokenIdentifier,
@@ -13963,16 +15414,16 @@ export const inputObjects = {
         if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
         if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
         const condition = new PgCondition(queryBuilder);
-        condition.extensions.pgFilterAttribute = colSpec26;
+        condition.extensions.pgFilterAttribute = colSpec30;
         return condition;
       },
       not($where, value) {
-        assertAllowed43(value, "object");
+        assertAllowed48(value, "object");
         if (value == null) return;
         return $where.notPlan().andPlan();
       },
       or($where, value) {
-        assertAllowed43(value, "list");
+        assertAllowed48(value, "list");
         if (value == null) return;
         const $or = $where.orPlan();
         return () => $or.andPlan();
@@ -13982,11 +15433,11 @@ export const inputObjects = {
         if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
         if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
         const condition = new PgCondition(queryBuilder);
-        condition.extensions.pgFilterAttribute = colSpec27;
+        condition.extensions.pgFilterAttribute = colSpec31;
         return condition;
       },
       repositories($where, value) {
-        assertAllowed42(value, "object");
+        assertAllowed47(value, "object");
         const $rel = $where.andPlan();
         $rel.extensions.pgFilterRelation = {
           tableExpression: repositoryIdentifier,
@@ -13997,7 +15448,7 @@ export const inputObjects = {
         return $rel;
       },
       repositoriesExist($where, value) {
-        assertAllowed42(value, "scalar");
+        assertAllowed47(value, "scalar");
         if (value == null) return;
         const $subQuery = $where.existsPlan({
           tableExpression: repositoryIdentifier,
@@ -14014,7 +15465,7 @@ export const inputObjects = {
         if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
         if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
         const condition = new PgCondition(queryBuilder);
-        condition.extensions.pgFilterAttribute = colSpec25;
+        condition.extensions.pgFilterAttribute = colSpec29;
         return condition;
       }
     }
@@ -14104,7 +15555,7 @@ export const inputObjects = {
   NamespaceToManyApiTokenFilter: {
     plans: {
       every($where, value) {
-        assertAllowed45(value, "object");
+        assertAllowed50(value, "object");
         if (value == null) return;
         if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
         const {
@@ -14124,7 +15575,7 @@ export const inputObjects = {
         return $subQuery.notPlan().andPlan();
       },
       none($where, value) {
-        assertAllowed45(value, "object");
+        assertAllowed50(value, "object");
         if (value == null) return;
         if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
         const {
@@ -14144,7 +15595,7 @@ export const inputObjects = {
         return $subQuery;
       },
       some($where, value) {
-        assertAllowed45(value, "object");
+        assertAllowed50(value, "object");
         if (value == null) return;
         if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
         const {
@@ -14168,7 +15619,7 @@ export const inputObjects = {
   NamespaceToManyRepositoryFilter: {
     plans: {
       every($where, value) {
-        assertAllowed44(value, "object");
+        assertAllowed49(value, "object");
         if (value == null) return;
         if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
         const {
@@ -14188,7 +15639,7 @@ export const inputObjects = {
         return $subQuery.notPlan().andPlan();
       },
       none($where, value) {
-        assertAllowed44(value, "object");
+        assertAllowed49(value, "object");
         if (value == null) return;
         if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
         const {
@@ -14208,7 +15659,7 @@ export const inputObjects = {
         return $subQuery;
       },
       some($where, value) {
-        assertAllowed44(value, "object");
+        assertAllowed49(value, "object");
         if (value == null) return;
         if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
         const {
@@ -14272,12 +15723,12 @@ export const inputObjects = {
   RepositoryFilter: {
     plans: {
       and($where, value) {
-        assertAllowed21(value, "list");
+        assertAllowed23(value, "list");
         if (value == null) return;
         return $where.andPlan();
       },
       apiTokens($where, value) {
-        assertAllowed19(value, "object");
+        assertAllowed21(value, "object");
         const $rel = $where.andPlan();
         $rel.extensions.pgFilterRelation = {
           tableExpression: apiTokenIdentifier,
@@ -14288,7 +15739,7 @@ export const inputObjects = {
         return $rel;
       },
       apiTokensExist($where, value) {
-        assertAllowed19(value, "scalar");
+        assertAllowed21(value, "scalar");
         if (value == null) return;
         const $subQuery = $where.existsPlan({
           tableExpression: apiTokenIdentifier,
@@ -14301,7 +15752,7 @@ export const inputObjects = {
         });
       },
       artifacts($where, value) {
-        assertAllowed19(value, "object");
+        assertAllowed21(value, "object");
         const $rel = $where.andPlan();
         $rel.extensions.pgFilterRelation = {
           tableExpression: artifactIdentifier,
@@ -14312,7 +15763,7 @@ export const inputObjects = {
         return $rel;
       },
       artifactsExist($where, value) {
-        assertAllowed19(value, "scalar");
+        assertAllowed21(value, "scalar");
         if (value == null) return;
         const $subQuery = $where.existsPlan({
           tableExpression: artifactIdentifier,
@@ -14341,7 +15792,7 @@ export const inputObjects = {
         return condition;
       },
       namespace($where, value) {
-        assertAllowed20(value, "object");
+        assertAllowed22(value, "object");
         if (value == null) return;
         const $subQuery = $where.existsPlan({
           tableExpression: namespaceIdentifier,
@@ -14362,12 +15813,12 @@ export const inputObjects = {
         return condition;
       },
       not($where, value) {
-        assertAllowed21(value, "object");
+        assertAllowed23(value, "object");
         if (value == null) return;
         return $where.notPlan().andPlan();
       },
       or($where, value) {
-        assertAllowed21(value, "list");
+        assertAllowed23(value, "list");
         if (value == null) return;
         const $or = $where.orPlan();
         return () => $or.andPlan();
@@ -14381,7 +15832,7 @@ export const inputObjects = {
         return condition;
       },
       tags($where, value) {
-        assertAllowed19(value, "object");
+        assertAllowed21(value, "object");
         const $rel = $where.andPlan();
         $rel.extensions.pgFilterRelation = {
           tableExpression: tagIdentifier,
@@ -14392,7 +15843,7 @@ export const inputObjects = {
         return $rel;
       },
       tagsExist($where, value) {
-        assertAllowed19(value, "scalar");
+        assertAllowed21(value, "scalar");
         if (value == null) return;
         const $subQuery = $where.existsPlan({
           tableExpression: tagIdentifier,
@@ -14405,7 +15856,7 @@ export const inputObjects = {
         });
       },
       uploadSessions($where, value) {
-        assertAllowed19(value, "object");
+        assertAllowed21(value, "object");
         const $rel = $where.andPlan();
         $rel.extensions.pgFilterRelation = {
           tableExpression: uploadSessionIdentifier,
@@ -14416,7 +15867,7 @@ export const inputObjects = {
         return $rel;
       },
       uploadSessionsExist($where, value) {
-        assertAllowed19(value, "scalar");
+        assertAllowed21(value, "scalar");
         if (value == null) return;
         const $subQuery = $where.existsPlan({
           tableExpression: uploadSessionIdentifier,
@@ -14539,7 +15990,7 @@ export const inputObjects = {
   RepositoryToManyApiTokenFilter: {
     plans: {
       every($where, value) {
-        assertAllowed39(value, "object");
+        assertAllowed44(value, "object");
         if (value == null) return;
         if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
         const {
@@ -14559,7 +16010,7 @@ export const inputObjects = {
         return $subQuery.notPlan().andPlan();
       },
       none($where, value) {
-        assertAllowed39(value, "object");
+        assertAllowed44(value, "object");
         if (value == null) return;
         if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
         const {
@@ -14579,7 +16030,7 @@ export const inputObjects = {
         return $subQuery;
       },
       some($where, value) {
-        assertAllowed39(value, "object");
+        assertAllowed44(value, "object");
         if (value == null) return;
         if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
         const {
@@ -14603,7 +16054,7 @@ export const inputObjects = {
   RepositoryToManyArtifactFilter: {
     plans: {
       every($where, value) {
-        assertAllowed22(value, "object");
+        assertAllowed24(value, "object");
         if (value == null) return;
         if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
         const {
@@ -14623,7 +16074,7 @@ export const inputObjects = {
         return $subQuery.notPlan().andPlan();
       },
       none($where, value) {
-        assertAllowed22(value, "object");
+        assertAllowed24(value, "object");
         if (value == null) return;
         if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
         const {
@@ -14643,7 +16094,7 @@ export const inputObjects = {
         return $subQuery;
       },
       some($where, value) {
-        assertAllowed22(value, "object");
+        assertAllowed24(value, "object");
         if (value == null) return;
         if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
         const {
@@ -14667,7 +16118,7 @@ export const inputObjects = {
   RepositoryToManyTagFilter: {
     plans: {
       every($where, value) {
-        assertAllowed35(value, "object");
+        assertAllowed40(value, "object");
         if (value == null) return;
         if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
         const {
@@ -14687,7 +16138,7 @@ export const inputObjects = {
         return $subQuery.notPlan().andPlan();
       },
       none($where, value) {
-        assertAllowed35(value, "object");
+        assertAllowed40(value, "object");
         if (value == null) return;
         if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
         const {
@@ -14707,7 +16158,7 @@ export const inputObjects = {
         return $subQuery;
       },
       some($where, value) {
-        assertAllowed35(value, "object");
+        assertAllowed40(value, "object");
         if (value == null) return;
         if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
         const {
@@ -14731,7 +16182,7 @@ export const inputObjects = {
   RepositoryToManyUploadSessionFilter: {
     plans: {
       every($where, value) {
-        assertAllowed36(value, "object");
+        assertAllowed41(value, "object");
         if (value == null) return;
         if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
         const {
@@ -14751,7 +16202,7 @@ export const inputObjects = {
         return $subQuery.notPlan().andPlan();
       },
       none($where, value) {
-        assertAllowed36(value, "object");
+        assertAllowed41(value, "object");
         if (value == null) return;
         if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
         const {
@@ -14771,7 +16222,7 @@ export const inputObjects = {
         return $subQuery;
       },
       some($where, value) {
-        assertAllowed36(value, "object");
+        assertAllowed41(value, "object");
         if (value == null) return;
         if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
         const {
@@ -14808,12 +16259,12 @@ export const inputObjects = {
   SchemaMetadatumFilter: {
     plans: {
       and($where, value) {
-        assertAllowed29(value, "list");
+        assertAllowed31(value, "list");
         if (value == null) return;
         return $where.andPlan();
       },
       artifact($where, value) {
-        assertAllowed28(value, "object");
+        assertAllowed30(value, "object");
         if (value == null) return;
         const $subQuery = $where.existsPlan({
           tableExpression: artifactIdentifier,
@@ -14834,12 +16285,12 @@ export const inputObjects = {
         return condition;
       },
       not($where, value) {
-        assertAllowed29(value, "object");
+        assertAllowed31(value, "object");
         if (value == null) return;
         return $where.notPlan().andPlan();
       },
       or($where, value) {
-        assertAllowed29(value, "list");
+        assertAllowed31(value, "list");
         if (value == null) return;
         const $or = $where.orPlan();
         return () => $or.andPlan();
@@ -15851,12 +17302,12 @@ export const inputObjects = {
   TagFilter: {
     plans: {
       and($where, value) {
-        assertAllowed32(value, "list");
+        assertAllowed34(value, "list");
         if (value == null) return;
         return $where.andPlan();
       },
       artifact($where, value) {
-        assertAllowed31(value, "object");
+        assertAllowed33(value, "object");
         if (value == null) return;
         const $subQuery = $where.existsPlan({
           tableExpression: artifactIdentifier,
@@ -15885,18 +17336,18 @@ export const inputObjects = {
         return condition;
       },
       not($where, value) {
-        assertAllowed32(value, "object");
+        assertAllowed34(value, "object");
         if (value == null) return;
         return $where.notPlan().andPlan();
       },
       or($where, value) {
-        assertAllowed32(value, "list");
+        assertAllowed34(value, "list");
         if (value == null) return;
         const $or = $where.orPlan();
         return () => $or.andPlan();
       },
       repository($where, value) {
-        assertAllowed31(value, "object");
+        assertAllowed33(value, "object");
         if (value == null) return;
         const $subQuery = $where.existsPlan({
           tableExpression: repositoryIdentifier,
@@ -16039,6 +17490,26 @@ export const inputObjects = {
     }
   },
   UpdateArtifactInput: {
+    plans: {
+      clientMutationId(qb, val) {
+        qb.setMeta("clientMutationId", val);
+      },
+      patch(qb, arg) {
+        if (arg != null) return qb.setBuilder();
+      }
+    }
+  },
+  UpdateCargoMetadatumByIdInput: {
+    plans: {
+      clientMutationId(qb, val) {
+        qb.setMeta("clientMutationId", val);
+      },
+      patch(qb, arg) {
+        if (arg != null) return qb.setBuilder();
+      }
+    }
+  },
+  UpdateCargoMetadatumInput: {
     plans: {
       clientMutationId(qb, val) {
         qb.setMeta("clientMutationId", val);
@@ -16282,7 +17753,7 @@ export const inputObjects = {
   UploadSessionFilter: {
     plans: {
       and($where, value) {
-        assertAllowed38(value, "list");
+        assertAllowed43(value, "list");
         if (value == null) return;
         return $where.andPlan();
       },
@@ -16291,22 +17762,22 @@ export const inputObjects = {
         if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
         if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
         const condition = new PgCondition(queryBuilder);
-        condition.extensions.pgFilterAttribute = colSpec17;
+        condition.extensions.pgFilterAttribute = colSpec21;
         return condition;
       },
       not($where, value) {
-        assertAllowed38(value, "object");
+        assertAllowed43(value, "object");
         if (value == null) return;
         return $where.notPlan().andPlan();
       },
       or($where, value) {
-        assertAllowed38(value, "list");
+        assertAllowed43(value, "list");
         if (value == null) return;
         const $or = $where.orPlan();
         return () => $or.andPlan();
       },
       repository($where, value) {
-        assertAllowed37(value, "object");
+        assertAllowed42(value, "object");
         if (value == null) return;
         const $subQuery = $where.existsPlan({
           tableExpression: repositoryIdentifier,
@@ -16323,7 +17794,7 @@ export const inputObjects = {
         if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
         if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
         const condition = new PgCondition(queryBuilder);
-        condition.extensions.pgFilterAttribute = colSpec16;
+        condition.extensions.pgFilterAttribute = colSpec20;
         return condition;
       },
       rowId(queryBuilder, value) {
@@ -16331,7 +17802,7 @@ export const inputObjects = {
         if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
         if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
         const condition = new PgCondition(queryBuilder);
-        condition.extensions.pgFilterAttribute = colSpec15;
+        condition.extensions.pgFilterAttribute = colSpec19;
         return condition;
       }
     }
@@ -16690,12 +18161,12 @@ export const inputObjects = {
   WasmMetadatumFilter: {
     plans: {
       and($where, value) {
-        assertAllowed34(value, "list");
+        assertAllowed36(value, "list");
         if (value == null) return;
         return $where.andPlan();
       },
       artifact($where, value) {
-        assertAllowed33(value, "object");
+        assertAllowed35(value, "object");
         if (value == null) return;
         const $subQuery = $where.existsPlan({
           tableExpression: artifactIdentifier,
@@ -16716,12 +18187,12 @@ export const inputObjects = {
         return condition;
       },
       not($where, value) {
-        assertAllowed34(value, "object");
+        assertAllowed36(value, "object");
         if (value == null) return;
         return $where.notPlan().andPlan();
       },
       or($where, value) {
-        assertAllowed34(value, "list");
+        assertAllowed36(value, "list");
         if (value == null) return;
         const $or = $where.orPlan();
         return () => $or.andPlan();
@@ -17029,6 +18500,78 @@ export const enums = {
           direction: "DESC"
         });
         queryBuilder.setOrderIsUnique();
+      }
+    }
+  },
+  CargoMetadatumOrderBy: {
+    values: {
+      ARTIFACT_ID_ASC(queryBuilder) {
+        queryBuilder.orderBy({
+          attribute: "artifact_id",
+          direction: "ASC"
+        });
+      },
+      ARTIFACT_ID_DESC(queryBuilder) {
+        queryBuilder.orderBy({
+          attribute: "artifact_id",
+          direction: "DESC"
+        });
+      },
+      NAME_ASC(queryBuilder) {
+        queryBuilder.orderBy({
+          attribute: "name",
+          direction: "ASC"
+        });
+      },
+      NAME_DESC(queryBuilder) {
+        queryBuilder.orderBy({
+          attribute: "name",
+          direction: "DESC"
+        });
+      },
+      PRIMARY_KEY_ASC(queryBuilder) {
+        cargo_metadataUniques[0].attributes.forEach(attributeName => {
+          queryBuilder.orderBy({
+            attribute: attributeName,
+            direction: "ASC"
+          });
+        });
+        queryBuilder.setOrderIsUnique();
+      },
+      PRIMARY_KEY_DESC(queryBuilder) {
+        cargo_metadataUniques[0].attributes.forEach(attributeName => {
+          queryBuilder.orderBy({
+            attribute: attributeName,
+            direction: "DESC"
+          });
+        });
+        queryBuilder.setOrderIsUnique();
+      },
+      ROW_ID_ASC(queryBuilder) {
+        queryBuilder.orderBy({
+          attribute: "id",
+          direction: "ASC"
+        });
+        queryBuilder.setOrderIsUnique();
+      },
+      ROW_ID_DESC(queryBuilder) {
+        queryBuilder.orderBy({
+          attribute: "id",
+          direction: "DESC"
+        });
+        queryBuilder.setOrderIsUnique();
+      },
+      VERS_ASC(queryBuilder) {
+        queryBuilder.orderBy({
+          attribute: "vers",
+          direction: "ASC"
+        });
+      },
+      VERS_DESC(queryBuilder) {
+        queryBuilder.orderBy({
+          attribute: "vers",
+          direction: "DESC"
+        });
       }
     }
   },
