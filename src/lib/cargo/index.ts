@@ -1,13 +1,13 @@
 import { and, eq } from "drizzle-orm";
 
+import { cargoError } from "lib/cargo/errors";
+import { cratePrefix } from "lib/cargo/prefix";
 import { dbPool } from "lib/db";
 import {
   cargoMetadataTable,
   namespaceTable,
   repositoryTable,
 } from "lib/db/schema";
-import { cargoError } from "lib/cargo/errors";
-import { cratePrefix } from "lib/cargo/prefix";
 
 /**
  * Sparse index config endpoint.
