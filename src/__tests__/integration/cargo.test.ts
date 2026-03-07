@@ -115,14 +115,15 @@ describe("Cargo registry", () => {
     expect(indexRes.status).toBe(200);
     const indexText = await indexRes.text();
     const indexEntry = JSON.parse(indexText);
-    expect(indexEntry.name).toBe("my-crate");
+    expect(indexEntry.name).toBe("mycrate");
     expect(indexEntry.vers).toBe("0.1.0");
     expect(indexEntry.yanked).toBe(false);
 
-    // Download
+    // Download (private namespace requires auth)
     const dlRes = await app.handle(
       new Request(
         `${BASE}/cargo/${namespaceName}/api/v1/crates/mycrate/0.1.0/download`,
+        { headers: { Authorization: token } },
       ),
     );
     expect(dlRes.status).toBe(200);
