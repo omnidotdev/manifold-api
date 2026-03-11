@@ -7,6 +7,12 @@ on:
     branches: [master]
 
 jobs:
+      - name: Type check
+        run: bunx tsc --noEmit
+
+      - name: Knip
+        run: bun knip
+
   test:
     name: Test 🃏
     timeout-minutes: 5
