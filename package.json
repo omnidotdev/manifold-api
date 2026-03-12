@@ -2,7 +2,7 @@
   "name": "@omnidotdev/manifold-api",
   "description": "Manifold API - universal artifact registry for containers, schemas, and WASM",
   "private": true,
-  "license": "MIT",
+  "license": "Apache-2.0",
   "main": "build/server.js",
   "module": "build/server.js",
   "type": "module",
