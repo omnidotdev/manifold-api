@@ -7,7 +7,6 @@ import { cargoError } from "lib/cargo/errors";
 import { isValidCrateName } from "lib/cargo/prefix";
 import { parsePublishBody } from "lib/cargo/wireFormat";
 import { dbPool } from "lib/db";
-import { events } from "lib/providers";
 import {
   artifactTable,
   cargoMetadataTable,
@@ -17,6 +16,7 @@ import {
 } from "lib/db/schema";
 import logAuditEvent from "lib/logging/logAuditEvent";
 import { computeDigest } from "lib/oci/digest";
+import { events } from "lib/providers";
 import { storage } from "lib/storage";
 
 const CARGO_MEDIA_TYPE = "application/vnd.omni.cargo.crate";

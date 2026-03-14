@@ -4,13 +4,13 @@ import { and, eq } from "drizzle-orm";
 import { requireCargoWrite } from "lib/cargo/auth";
 import { cargoError } from "lib/cargo/errors";
 import { dbPool } from "lib/db";
-import { events } from "lib/providers";
 import {
   cargoMetadataTable,
   namespaceTable,
   repositoryTable,
 } from "lib/db/schema";
 import logAuditEvent from "lib/logging/logAuditEvent";
+import { events } from "lib/providers";
 
 /**
  * Handle yank/unyank operations.
@@ -96,9 +96,7 @@ export const yankHandler = async (
 
   try {
     await events.emit({
-      type: yanked
-        ? "manifold.artifact.yanked"
-        : "manifold.artifact.unyanked",
+      type: yanked ? "manifold.artifact.yanked" : "manifold.artifact.unyanked",
       data: { crateName, version },
       organizationId: "system",
       subject: crateName,
