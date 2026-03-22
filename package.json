@@ -22,7 +22,7 @@
     "db:check": "bun --env-file .env.local drizzle-kit check --config src/lib/config/drizzle.config.ts",
     "db:generate": "bun --env-file .env.local drizzle-kit generate --config src/lib/config/drizzle.config.ts",
     "db:migrate": "bun --env-file .env.local drizzle-kit migrate --config src/lib/config/drizzle.config.ts && GRAPHILE_ENV=development bun graphql:generate",
-    "db:migrate:prod": "drizzle-kit migrate --config src/lib/config/drizzle.config.ts",
+    "db:migrate:prod": "bun run src/scripts/db/migrate.ts",
     "db:migrate:drop": "bun --env-file .env.local drizzle-kit drop --config src/lib/config/drizzle.config.ts",
     "db:pull": "bun --env-file .env.local drizzle-kit introspect --config src/lib/config/drizzle.config.ts",
     "db:push": "bun --env-file .env.local drizzle-kit push --config src/lib/config/drizzle.config.ts",

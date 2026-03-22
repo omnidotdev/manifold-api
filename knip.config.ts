@@ -36,6 +36,8 @@ const knipConfig: KnipConfig = {
     "@changesets/cli",
     // GitHub dep not resolvable by knip
     "@omnidotdev/providers",
+    // CLI used by db:* scripts; knip can't resolve `bun --env-file … drizzle-kit` invocations
+    "drizzle-kit",
     // TODO switch to testcontainers (unstable behavior with Bun/Docker), then remove below
     "@testcontainers/postgresql",
     "testcontainers",
