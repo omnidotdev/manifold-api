@@ -11,7 +11,6 @@ import { Pool } from "pg";
 const DATABASE_URL = process.env.DATABASE_URL;
 
 if (!DATABASE_URL) {
-  // biome-ignore lint/suspicious/noConsole: script logging
   console.error("[Migrate] DATABASE_URL is not set");
   process.exit(1);
 }
@@ -27,7 +26,6 @@ try {
   // biome-ignore lint/suspicious/noConsole: script logging
   console.log("[Migrate] Migrations applied successfully");
 } catch (err) {
-  // biome-ignore lint/suspicious/noConsole: script logging
   console.error("[Migrate] Migration failed:", err);
   process.exit(1);
 } finally {
