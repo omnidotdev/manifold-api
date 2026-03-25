@@ -22,11 +22,9 @@ export const {
   AUTHZ_ENABLED,
   /** Protect GraphQL routes (require authentication) */
   PROTECT_ROUTES,
-  /** Self-hosted mode flag */
-  SELF_HOSTED,
-  /** Default organization ID for self-hosted mode */
+  /** Default organization ID when billing is not configured */
   DEFAULT_ORG_ID = "default-org",
-  /** Provider overrides (default based on SELF_HOSTED) */
+  /** Provider overrides */
   BILLING_PROVIDER,
   AUTHZ_PROVIDER,
   /** Billing service API key for service-to-service auth */
@@ -62,7 +60,7 @@ export const {
 
 export const isDevEnv = NODE_ENV === "development",
   isProdEnv = NODE_ENV === "production",
-  isSelfHosted = SELF_HOSTED === "true",
+  hasBilling = !!BILLING_BASE_URL,
   protectRoutes = PROTECT_ROUTES === "true",
   maintenanceAllowedNamespaces = MAINTENANCE_ALLOWED_NAMESPACES.split(",")
     .map((s) => s.trim())

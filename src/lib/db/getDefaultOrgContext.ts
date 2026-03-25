@@ -1,11 +1,11 @@
-import { DEFAULT_ORG_ID, isSelfHosted } from "lib/config/env.config";
+import { DEFAULT_ORG_ID, hasBilling } from "lib/config/env.config";
 
 /**
- * Get default organization context for self-hosted mode.
- * Used when org context is required but IDP is not available.
+ * Get default organization context when billing is not configured.
+ * Used when org context is required but multi-tenant infrastructure is not available.
  */
 const getDefaultOrgContext = () => {
-  if (!isSelfHosted) return null;
+  if (hasBilling) return null;
 
   return {
     id: DEFAULT_ORG_ID,
