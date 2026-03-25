@@ -53,8 +53,10 @@ const federationSyncTimer =
  * Elysia server.
  */
 const app = new Elysia({
-  ...(isDevEnv && {
-    serve: {
+  serve: {
+    // Allow large OCI blob uploads (container image layers, up to 2 GiB)
+    maxRequestBodySize: 2 * 1024 * 1024 * 1024,
+    ...(isDevEnv && {
       // https://elysiajs.com/patterns/configuration#serve-tls
       // https://bun.sh/guides/http/tls
       // NB: Elysia (and Bun) trust the well-known CA list curated by Mozilla (https://wiki.mozilla.org/CA/Included_Certificates), but they can be customized here if needed (`tls.ca` option)
@@ -62,8 +64,8 @@ const app = new Elysia({
         certFile: "cert.pem",
         keyFile: "key.pem",
       },
-    },
-  }),
+    }),
+  },
 })
   // security headers
   .onAfterHandle(({ set }) => {
@@ -79,10 +81,10 @@ const app = new Elysia({
       methods: ["GET", "POST", "PUT", "PATCH", "HEAD", "DELETE"],
     }),
   )
-  // rate limiting
+  // rate limiting (high limit to support concurrent OCI blob uploads)
   .use(
     rateLimit({
-      max: 60,
+      max: 300,
       duration: 60_000,
     }),
   )
