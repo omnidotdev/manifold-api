@@ -84,7 +84,7 @@ const app = new Elysia({
   // rate limiting (high limit to support concurrent OCI blob uploads)
   .use(
     rateLimit({
-      max: 300,
+      max: 1000,
       duration: 60_000,
     }),
   )
