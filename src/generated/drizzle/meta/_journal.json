@@ -43,6 +43,13 @@
       "when": 1772848848789,
       "tag": "0005_serious_doorman",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1774581312607,
+      "tag": "0006_thin_ronan",
+      "breakpoints": true
     }
   ]
 }

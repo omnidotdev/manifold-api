@@ -28,6 +28,7 @@
     "db:push": "bun --env-file .env.local drizzle-kit push --config src/lib/config/drizzle.config.ts",
     "db:seed": "NODE_ENV=development bun run --env-file .env.local src/scripts/db/seedDatabase.ts",
     "db:seed:federation": "NODE_ENV=development bun run --env-file .env.local src/scripts/db/seedFederation.ts",
+    "db:seed:plugins": "NODE_ENV=development bun run --env-file .env.local src/scripts/db/seedPlugins.ts",
     "db:studio": "bun --env-file .env.local drizzle-kit studio --config src/lib/config/drizzle.config.ts",
     "db:up": "bun --env-file .env.local drizzle-kit up --config src/lib/config/drizzle.config.ts",
     "graphql:generate": "GRAPHILE_ENV=development bun run --env-file .env.local src/scripts/generateGraphqlSchema.ts",

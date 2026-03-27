@@ -11,7 +11,7 @@ import { schema } from "generated/graphql/schema.executable";
 import { useGrafast } from "grafast/envelop";
 import webhooks from "webhooks";
 
-import { tokensApi } from "lib/api";
+import { pluginsApi, tokensApi } from "lib/api";
 import cargoRouter from "lib/cargo/router";
 import appConfig from "lib/config/app.config";
 import {
@@ -115,6 +115,8 @@ const app = new Elysia({
     }
   })
   .use(webhooks)
+  // Plugin registry REST endpoints
+  .use(pluginsApi)
   // API tokens REST endpoints
   .use(tokensApi)
   // Federation admin routes
