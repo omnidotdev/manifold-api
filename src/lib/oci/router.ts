@@ -4,11 +4,14 @@
  *
  * Endpoints:
  * - GET /v2/                                  - Check API version
+ * - GET /v2/_catalog                          - List repositories
  * - GET /v2/<name>/manifests/<reference>      - Pull manifest
  * - PUT /v2/<name>/manifests/<reference>      - Push manifest
  * - HEAD /v2/<name>/manifests/<reference>     - Check manifest exists
+ * - DELETE /v2/<name>/manifests/<reference>   - Delete manifest
  * - GET /v2/<name>/blobs/<digest>             - Pull blob
  * - HEAD /v2/<name>/blobs/<digest>            - Check blob exists
+ * - DELETE /v2/<name>/blobs/<digest>          - Delete blob
  * - POST /v2/<name>/blobs/uploads/            - Start upload
  * - PATCH /v2/<name>/blobs/uploads/<uuid>     - Upload chunk
  * - PUT /v2/<name>/blobs/uploads/<uuid>       - Complete upload
@@ -170,6 +173,7 @@ const getOrCreateRepository = async (
  */
 type OciRoute =
   | { kind: "version-check" }
+  | { kind: "catalog" }
   | { kind: "manifest"; name: string; reference: string }
   | { kind: "blob"; name: string; digest: string }
   | { kind: "blob-upload-start"; name: string }
@@ -184,6 +188,9 @@ const parseOciPath = (url: string): OciRoute | undefined => {
   const path = new URL(url).pathname.replace(/^\/v2\/?/, "");
 
   if (!path) return { kind: "version-check" };
+
+  // /_catalog
+  if (path === "_catalog") return { kind: "catalog" };
 
   // Match from the end: known suffixes identify the route type,
   // everything before them is the repository name.
@@ -600,9 +607,7 @@ const handleStartUpload = async (
     }
   }
 
-  const expiresAt = new Date(
-    Date.now() + 24 * 60 * 60 * 1000,
-  ).toISOString();
+  const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
   const [session] = await dbPool
     .insert(uploadSessionTable)
     .values({
@@ -766,6 +771,142 @@ const handleCompleteUpload = async (
   set.headers["Docker-Content-Digest"] = computedDigest;
 };
 
+const handleCatalog = async (
+  query: { n?: string; last?: string },
+) => {
+  const repos = await dbPool
+    .select({
+      namespace: namespaceTable.name,
+      repo: repositoryTable.name,
+    })
+    .from(repositoryTable)
+    .innerJoin(
+      namespaceTable,
+      eq(repositoryTable.namespaceId, namespaceTable.id),
+    )
+    .orderBy(namespaceTable.name, repositoryTable.name);
+
+  let names = repos.map((r) =>
+    r.namespace === "library" ? r.repo : `${r.namespace}/${r.repo}`,
+  );
+
+  if (query.last) {
+    const lastIdx = names.indexOf(query.last);
+    if (lastIdx >= 0) names = names.slice(lastIdx + 1);
+  }
+  if (query.n) {
+    const n = Number.parseInt(query.n, 10);
+    if (!Number.isNaN(n)) names = names.slice(0, n);
+  }
+
+  return { repositories: names };
+};
+
+const handleDeleteManifest = async (
+  name: string,
+  reference: string,
+  set: { status?: number | string; headers: Record<string, string | number> },
+) => {
+  const { namespace, repo } = parseRepoName(name);
+  const repoData = await getRepository(namespace, repo);
+
+  if (!repoData) {
+    set.status = 404;
+    return ociErrors.nameUnknown(name);
+  }
+
+  if (reference.startsWith("sha256:")) {
+    // Delete by digest: remove artifact and all tags pointing to it
+    const [artifact] = await dbPool
+      .select()
+      .from(artifactTable)
+      .where(
+        and(
+          eq(artifactTable.repositoryId, repoData.repository.id),
+          eq(artifactTable.digest, reference),
+        ),
+      )
+      .limit(1);
+
+    if (!artifact) {
+      set.status = 404;
+      return ociErrors.manifestUnknown(reference);
+    }
+
+    await dbPool
+      .delete(tagTable)
+      .where(eq(tagTable.artifactId, artifact.id));
+
+    if (artifact.storagePath) {
+      await storage.delete(artifact.storagePath);
+    }
+
+    await dbPool
+      .delete(artifactTable)
+      .where(eq(artifactTable.id, artifact.id));
+  } else {
+    // Delete by tag: remove the tag only
+    const result = await dbPool
+      .delete(tagTable)
+      .where(
+        and(
+          eq(tagTable.repositoryId, repoData.repository.id),
+          eq(tagTable.name, reference),
+        ),
+      )
+      .returning();
+
+    if (!result.length) {
+      set.status = 404;
+      return ociErrors.manifestUnknown(reference);
+    }
+  }
+
+  set.status = 202;
+  return "";
+};
+
+const handleDeleteBlob = async (
+  name: string,
+  digest: string,
+  set: { status?: number | string; headers: Record<string, string | number> },
+) => {
+  const { namespace, repo } = parseRepoName(name);
+  const repoData = await getRepository(namespace, repo);
+
+  if (!repoData) {
+    set.status = 404;
+    return ociErrors.nameUnknown(name);
+  }
+
+  const [artifact] = await dbPool
+    .select()
+    .from(artifactTable)
+    .where(
+      and(
+        eq(artifactTable.repositoryId, repoData.repository.id),
+        eq(artifactTable.digest, digest),
+      ),
+    )
+    .limit(1);
+
+  if (!artifact) {
+    set.status = 404;
+    return ociErrors.blobUnknown(digest);
+  }
+
+  if (artifact.storagePath) {
+    await storage.delete(artifact.storagePath);
+  }
+
+  await dbPool
+    .delete(artifactTable)
+    .where(eq(artifactTable.id, artifact.id));
+
+  set.status = 202;
+  return "";
+};
+
 const handleListTags = async (
   name: string,
   query: { n?: string; last?: string },
@@ -859,6 +1000,11 @@ const ociRouter = new Elysia({ prefix: "/v2" })
     const method = request.method;
 
     switch (route.kind) {
+      case "catalog":
+        if (method === "GET")
+          return handleCatalog(query as Record<string, string>);
+        break;
+
       case "manifest":
         if (method === "GET")
           return handleGetManifest(route.name, route.reference, set);
@@ -872,6 +1018,8 @@ const ociRouter = new Elysia({ prefix: "/v2" })
             body,
             set,
           );
+        if (method === "DELETE")
+          return handleDeleteManifest(route.name, route.reference, set);
         break;
 
       case "blob":
@@ -879,6 +1027,8 @@ const ociRouter = new Elysia({ prefix: "/v2" })
           return handleGetBlob(route.name, route.digest, set);
         if (method === "HEAD")
           return handleHeadBlob(route.name, route.digest, set);
+        if (method === "DELETE")
+          return handleDeleteBlob(route.name, route.digest, set);
         break;
 
       case "blob-upload-start":
