@@ -664,7 +664,7 @@ const handleUploadChunk = async (
   set.status = 202;
   set.headers.Location = `/v2/${name}/blobs/uploads/${uuid}`;
   set.headers["Docker-Upload-UUID"] = uuid;
-  set.headers.Range = `0-${newOffset}`;
+  set.headers.Range = `0-${newOffset - 1}`;
 };
 
 const handleCompleteUpload = async (
