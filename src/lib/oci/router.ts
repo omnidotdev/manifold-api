@@ -514,20 +514,29 @@ const handleGetBlob = async (
   if (artifact.storagePath) {
     const blob = await storage.get(artifact.digest);
 
-    if (blob) {
-      const body = blob.buffer.slice(
-        blob.byteOffset,
-        blob.byteOffset + blob.byteLength,
-      ) as ArrayBuffer;
-
-      return new Response(body, {
-        headers: {
-          "Content-Type": "application/octet-stream",
-          "Docker-Content-Digest": artifact.digest,
-          "Content-Length": String(artifact.size),
-        },
-      });
+    if (!blob) {
+      // Blob record exists in DB but the file is missing from storage.
+      // Return a proper error so containerd retries instead of getting
+      // a 200 with an empty body (which causes "short read" / EOF).
+      console.error(
+        `Blob missing from storage: ${artifact.digest} (path: ${artifact.storagePath})`,
+      );
+      set.status = 404;
+      return ociErrors.blobUnknown(digest);
     }
+
+    const body = blob.buffer.slice(
+      blob.byteOffset,
+      blob.byteOffset + blob.byteLength,
+    ) as ArrayBuffer;
+
+    return new Response(body, {
+      headers: {
+        "Content-Type": "application/octet-stream",
+        "Docker-Content-Digest": artifact.digest,
+        "Content-Length": String(artifact.size),
+      },
+    });
   }
 
   set.headers["Content-Type"] = "application/octet-stream";
@@ -771,9 +780,7 @@ const handleCompleteUpload = async (
   set.headers["Docker-Content-Digest"] = computedDigest;
 };
 
-const handleCatalog = async (
-  query: { n?: string; last?: string },
-) => {
+const handleCatalog = async (query: { n?: string; last?: string }) => {
   const repos = await dbPool
     .select({
       namespace: namespaceTable.name,
@@ -833,17 +840,13 @@ const handleDeleteManifest = async (
       return ociErrors.manifestUnknown(reference);
     }
 
-    await dbPool
-      .delete(tagTable)
-      .where(eq(tagTable.artifactId, artifact.id));
+    await dbPool.delete(tagTable).where(eq(tagTable.artifactId, artifact.id));
 
     if (artifact.storagePath) {
       await storage.delete(artifact.storagePath);
     }
 
-    await dbPool
-      .delete(artifactTable)
-      .where(eq(artifactTable.id, artifact.id));
+    await dbPool.delete(artifactTable).where(eq(artifactTable.id, artifact.id));
   } else {
     // Delete by tag: remove the tag only
     const result = await dbPool
@@ -899,9 +902,7 @@ const handleDeleteBlob = async (
     await storage.delete(artifact.storagePath);
   }
 
-  await dbPool
-    .delete(artifactTable)
-    .where(eq(artifactTable.id, artifact.id));
+  await dbPool.delete(artifactTable).where(eq(artifactTable.id, artifact.id));
 
   set.status = 202;
   return "";
