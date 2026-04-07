@@ -34,7 +34,7 @@ import {
   createBillingPlugin,
   createScopeEnforcementPlugin,
 } from "lib/graphql/plugins";
-import { startSessionCleanup } from "lib/jobs";
+import { startBlobGc, startSessionCleanup } from "lib/jobs";
 import { ociRouter } from "lib/oci";
 import { flags } from "lib/providers";
 import webRouter from "lib/web/router";
@@ -44,6 +44,9 @@ await ensureDatabase();
 
 // Start background cleanup of expired upload sessions
 const cleanupTimer = startSessionCleanup();
+
+// Start background garbage collection of orphaned blobs
+const gcTimer = startBlobGc();
 
 // Start federation sync if enabled
 const federationSyncTimer =
@@ -189,6 +192,7 @@ const shutdown = async (signal: string) => {
 
   // Stop background timers
   clearInterval(cleanupTimer);
+  clearInterval(gcTimer);
   if (federationSyncTimer) clearInterval(federationSyncTimer);
 
   // Stop accepting new connections
