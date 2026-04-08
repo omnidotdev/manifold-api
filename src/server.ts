@@ -96,26 +96,22 @@ const app = new Elysia({
     }),
   )
   // health check endpoint
-  .get("/health", async ({ set }) => {
+  .get("/health", async () => {
+    let storageStatus = "unknown";
+
     try {
       await storage.exists("sha256:healthcheck");
-
-      return {
-        status: "ok",
-        timestamp: Date.now(),
-        service: appConfig.name,
-        storage: "connected",
-      };
+      storageStatus = "connected";
     } catch {
-      set.status = 503;
-
-      return {
-        status: "degraded",
-        timestamp: Date.now(),
-        service: appConfig.name,
-        storage: "unreachable",
-      };
+      storageStatus = "unreachable";
     }
+
+    return {
+      status: storageStatus === "connected" ? "ok" : "degraded",
+      timestamp: Date.now(),
+      service: appConfig.name,
+      storage: storageStatus,
+    };
   })
   // readiness endpoint
   .get("/ready", async ({ set }) => {
