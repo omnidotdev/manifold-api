@@ -50,6 +50,8 @@ export const {
   BLOB_S3_ENDPOINT,
   /** S3 key prefix for blob storage */
   BLOB_S3_PREFIX,
+  /** Max tags to retain per repository (0 = unlimited) */
+  TAG_RETENTION_COUNT = "25",
   /** Enable federation proxy (default "false") */
   FEDERATION_ENABLED = "false",
   /** Auto-approve vetted skills (default "true") */
@@ -62,6 +64,7 @@ export const isDevEnv = NODE_ENV === "development",
   isProdEnv = NODE_ENV === "production",
   hasBilling = !!BILLING_BASE_URL,
   protectRoutes = PROTECT_ROUTES === "true",
+  tagRetentionCount = Number.parseInt(TAG_RETENTION_COUNT, 10) || 0,
   maintenanceAllowedNamespaces = MAINTENANCE_ALLOWED_NAMESPACES.split(",")
     .map((s) => s.trim())
     .filter(Boolean);

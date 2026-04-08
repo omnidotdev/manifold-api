@@ -34,7 +34,7 @@ import {
   createBillingPlugin,
   createScopeEnforcementPlugin,
 } from "lib/graphql/plugins";
-import { startBlobGc, startSessionCleanup } from "lib/jobs";
+import { startBlobGc, startSessionCleanup, startTagRetention } from "lib/jobs";
 import { ociRouter } from "lib/oci";
 import { flags } from "lib/providers";
 import webRouter from "lib/web/router";
@@ -47,6 +47,9 @@ const cleanupTimer = startSessionCleanup();
 
 // Start background garbage collection of orphaned blobs
 const gcTimer = startBlobGc();
+
+// Start tag retention enforcement (prunes old tags, GC cleans up the orphaned blobs)
+const retentionTimer = startTagRetention();
 
 // Start federation sync if enabled
 const federationSyncTimer =
@@ -193,6 +196,7 @@ const shutdown = async (signal: string) => {
   // Stop background timers
   clearInterval(cleanupTimer);
   clearInterval(gcTimer);
+  clearInterval(retentionTimer);
   if (federationSyncTimer) clearInterval(federationSyncTimer);
 
   // Stop accepting new connections
