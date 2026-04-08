@@ -37,6 +37,7 @@ import {
 import { startBlobGc, startSessionCleanup, startTagRetention } from "lib/jobs";
 import { ociRouter } from "lib/oci";
 import { flags } from "lib/providers";
+import { storage } from "lib/storage";
 import webRouter from "lib/web/router";
 
 // ensure database exists before starting
@@ -95,11 +96,27 @@ const app = new Elysia({
     }),
   )
   // health check endpoint
-  .get("/health", () => ({
-    status: "ok",
-    timestamp: Date.now(),
-    service: appConfig.name,
-  }))
+  .get("/health", async ({ set }) => {
+    try {
+      await storage.exists("sha256:healthcheck");
+
+      return {
+        status: "ok",
+        timestamp: Date.now(),
+        service: appConfig.name,
+        storage: "connected",
+      };
+    } catch {
+      set.status = 503;
+
+      return {
+        status: "degraded",
+        timestamp: Date.now(),
+        service: appConfig.name,
+        storage: "unreachable",
+      };
+    }
+  })
   // readiness endpoint
   .get("/ready", async ({ set }) => {
     try {
