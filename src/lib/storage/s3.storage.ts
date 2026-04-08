@@ -5,6 +5,7 @@ import {
   PutObjectCommand,
   S3Client,
 } from "@aws-sdk/client-s3";
+import { Upload } from "@aws-sdk/lib-storage";
 
 import { parseDigest } from "lib/storage/util";
 
@@ -70,6 +71,29 @@ class S3Storage implements BlobStorage {
     return key;
   }
 
+  async putStream(
+    digest: string,
+    stream: ReadableStream,
+    size?: number,
+  ): Promise<string> {
+    const key = this.resolveKey(digest);
+
+    const upload = new Upload({
+      client: this.client,
+      params: {
+        Bucket: this.bucket,
+        Key: key,
+        Body: stream,
+        ContentType: "application/octet-stream",
+        ...(size ? { ContentLength: size } : {}),
+      },
+    });
+
+    await upload.done();
+
+    return key;
+  }
+
   async get(digest: string): Promise<Uint8Array | null> {
     const key = this.resolveKey(digest);
 
@@ -88,6 +112,36 @@ class S3Storage implements BlobStorage {
       const bytes = await response.Body.transformToByteArray();
 
       return new Uint8Array(bytes);
+    } catch (err) {
+      if ((err as { name?: string }).name === "NoSuchKey") {
+        return null;
+      }
+
+      throw err;
+    }
+  }
+
+  async getStream(
+    digest: string,
+  ): Promise<{ stream: ReadableStream; size: number } | null> {
+    const key = this.resolveKey(digest);
+
+    try {
+      const response = await this.client.send(
+        new GetObjectCommand({
+          Bucket: this.bucket,
+          Key: key,
+        }),
+      );
+
+      if (!response.Body) {
+        return null;
+      }
+
+      return {
+        stream: response.Body.transformToWebStream() as ReadableStream,
+        size: response.ContentLength ?? 0,
+      };
     } catch (err) {
       if ((err as { name?: string }).name === "NoSuchKey") {
         return null;

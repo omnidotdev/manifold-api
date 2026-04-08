@@ -56,6 +56,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.998.0",
+    "@aws-sdk/lib-storage": "^3.1026.0",
     "@elysiajs/cors": "^1.4.1",
     "@elysiajs/graphql-yoga": "^1.4.0",
     "@envelop/generic-auth": "^11.1.0",

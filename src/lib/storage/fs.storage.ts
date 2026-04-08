@@ -37,6 +37,24 @@ class FsStorage implements BlobStorage {
     return filePath;
   }
 
+  async putStream(
+    digest: string,
+    stream: ReadableStream,
+    _size?: number,
+  ): Promise<string> {
+    const filePath = this.resolvePath(digest);
+
+    await mkdir(dirname(filePath), { recursive: true });
+
+    const writer = Bun.file(filePath).writer();
+    for await (const chunk of stream) {
+      writer.write(chunk);
+    }
+    await writer.end();
+
+    return filePath;
+  }
+
   async get(digest: string): Promise<Uint8Array | null> {
     const filePath = this.resolvePath(digest);
     const file = Bun.file(filePath);
@@ -48,6 +66,22 @@ class FsStorage implements BlobStorage {
     const buffer = await file.arrayBuffer();
 
     return new Uint8Array(buffer);
+  }
+
+  async getStream(
+    digest: string,
+  ): Promise<{ stream: ReadableStream; size: number } | null> {
+    const filePath = this.resolvePath(digest);
+    const file = Bun.file(filePath);
+
+    if (!(await file.exists())) {
+      return null;
+    }
+
+    return {
+      stream: file.stream(),
+      size: file.size,
+    };
   }
 
   async exists(digest: string): Promise<boolean> {

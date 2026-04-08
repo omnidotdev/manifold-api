@@ -5,7 +5,7 @@
  * then assembles the full blob when the upload completes.
  */
 
-import { mkdir, rm, stat } from "node:fs/promises";
+import { appendFile, mkdir, rm, stat } from "node:fs/promises";
 import { join } from "node:path";
 
 const CHUNK_DIR = process.env.CHUNK_STORAGE_DIR ?? "/tmp/manifold-chunks";
@@ -24,6 +24,7 @@ const initSession = async (sessionId: string) => {
 
 /**
  * Append binary data to a session's blob file.
+ * Uses append-only writes (O(1) per chunk, not O(n)).
  * @param sessionId - Unique upload session identifier
  * @param data - Binary chunk to append
  */
@@ -32,15 +33,8 @@ const appendChunk = async (
   data: Uint8Array | ArrayBuffer,
 ) => {
   const path = sessionPath(sessionId);
-  const file = Bun.file(path);
-  const existing = new Uint8Array(await file.arrayBuffer());
   const chunk = data instanceof ArrayBuffer ? new Uint8Array(data) : data;
-
-  const merged = new Uint8Array(existing.length + chunk.length);
-  merged.set(existing);
-  merged.set(chunk, existing.length);
-
-  await Bun.write(path, merged);
+  await appendFile(path, chunk);
 };
 
 /**
@@ -51,6 +45,33 @@ const appendChunk = async (
 const assembleBlob = async (sessionId: string): Promise<ArrayBuffer> => {
   const file = Bun.file(sessionPath(sessionId));
   return file.arrayBuffer();
+};
+
+/**
+ * Get a readable stream of the assembled blob.
+ * @param sessionId - Unique upload session identifier
+ * @returns Readable stream of blob content and its size
+ */
+const assembleBlobStream = (
+  sessionId: string,
+): { stream: ReadableStream; size: number } => {
+  const file = Bun.file(sessionPath(sessionId));
+  return { stream: file.stream(), size: file.size };
+};
+
+/**
+ * Compute SHA256 digest by streaming through a hasher.
+ * @param stream - Readable stream to hash
+ * @returns Digest in format "sha256:<hex>"
+ */
+const computeStreamDigest = async (
+  stream: ReadableStream<Uint8Array>,
+): Promise<string> => {
+  const hasher = new Bun.CryptoHasher("sha256");
+  for await (const chunk of stream) {
+    hasher.update(chunk);
+  }
+  return `sha256:${hasher.digest("hex")}`;
 };
 
 /**
@@ -82,7 +103,9 @@ const sessionExists = async (sessionId: string): Promise<boolean> => {
 export {
   appendChunk,
   assembleBlob,
+  assembleBlobStream,
   cleanupSession,
+  computeStreamDigest,
   initSession,
   sessionExists,
 };

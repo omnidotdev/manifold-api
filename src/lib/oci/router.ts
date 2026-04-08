@@ -46,8 +46,9 @@ import { tryFederatedTagList } from "lib/federation/proxy";
 import logAuditEvent from "lib/logging/logAuditEvent";
 import {
   appendChunk,
-  assembleBlob,
+  assembleBlobStream,
   cleanupSession,
+  computeStreamDigest,
   initSession,
 } from "lib/oci/chunkStore";
 import { computeDigest } from "lib/oci/digest";
@@ -512,12 +513,10 @@ const handleGetBlob = async (
   }
 
   if (artifact.storagePath) {
-    const blob = await storage.get(artifact.digest);
+    const result = await storage.getStream(artifact.digest);
 
-    if (!blob) {
-      // Blob record exists in DB but the file is missing from storage.
-      // Return a proper error so containerd retries instead of getting
-      // a 200 with an empty body (which causes "short read" / EOF).
+    if (!result) {
+      // Blob record exists in DB but the file is missing from storage
       console.error(
         `Blob missing from storage: ${artifact.digest} (path: ${artifact.storagePath})`,
       );
@@ -525,12 +524,7 @@ const handleGetBlob = async (
       return ociErrors.blobUnknown(digest);
     }
 
-    const body = blob.buffer.slice(
-      blob.byteOffset,
-      blob.byteOffset + blob.byteLength,
-    ) as ArrayBuffer;
-
-    return new Response(body, {
+    return new Response(result.stream, {
       headers: {
         "Content-Type": "application/octet-stream",
         "Docker-Content-Digest": artifact.digest,
@@ -702,8 +696,6 @@ const handleCompleteUpload = async (
     return ociErrors.blobUnknown(uuid);
   }
 
-  let content: Uint8Array;
-
   const inlineBody =
     body instanceof ArrayBuffer
       ? new Uint8Array(body)
@@ -711,11 +703,63 @@ const handleCompleteUpload = async (
         ? new TextEncoder().encode(body)
         : null;
 
+  // Small inline body (single PUT with content): use buffered path
   if (inlineBody && inlineBody.byteLength > 0) {
-    content = inlineBody;
-  } else if (session.offset > 0) {
-    content = new Uint8Array(await assembleBlob(uuid));
-  } else {
+    const computedDigest = await computeDigest(inlineBody);
+
+    if (expectedDigest && computedDigest !== expectedDigest) {
+      await cleanupSession(uuid);
+      set.status = 400;
+      return ociErrors.digestInvalid(expectedDigest, computedDigest);
+    }
+
+    const storagePath = await storage.put(computedDigest, inlineBody);
+
+    await dbPool
+      .insert(artifactTable)
+      .values({
+        repositoryId: repoData.repository.id,
+        digest: computedDigest,
+        size: inlineBody.byteLength,
+        mediaType: "application/octet-stream",
+        storagePath,
+      })
+      .onConflictDoNothing();
+
+    const orgId = repoData.namespace.organizationId;
+
+    if (orgId) {
+      await recordUsage(
+        "organization",
+        orgId,
+        "storage_bytes",
+        inlineBody.byteLength,
+      );
+    }
+
+    await dbPool
+      .delete(uploadSessionTable)
+      .where(eq(uploadSessionTable.id, uuid));
+
+    await cleanupSession(uuid);
+
+    logAuditEvent(
+      { organizationId: repoData.namespace.organizationId ?? undefined },
+      {
+        action: "blob.push",
+        resource: "blob",
+        resourceId: computedDigest,
+        details: { namespace, repo, uuid },
+      },
+    );
+
+    set.status = 201;
+    set.headers.Location = `/v2/${name}/blobs/${computedDigest}`;
+    set.headers["Docker-Content-Digest"] = computedDigest;
+    return;
+  }
+
+  if (session.offset === 0) {
     set.status = 400;
     return {
       errors: [
@@ -727,22 +771,33 @@ const handleCompleteUpload = async (
     };
   }
 
-  const computedDigest = await computeDigest(content);
+  // Streaming path: tee the file stream for concurrent digest + upload
+  const { stream: blobStream, size: blobSize } = assembleBlobStream(uuid);
+  const [digestStream, uploadStream] = blobStream.tee();
+
+  const [computedDigest, storagePath] = await Promise.all([
+    computeStreamDigest(digestStream),
+    storage.putStream(expectedDigest ?? "pending", uploadStream, blobSize),
+  ]);
 
   if (expectedDigest && computedDigest !== expectedDigest) {
+    // Clean up the incorrectly-keyed blob from storage
+    try {
+      await storage.delete(expectedDigest);
+    } catch {
+      // Best-effort cleanup
+    }
     await cleanupSession(uuid);
     set.status = 400;
     return ociErrors.digestInvalid(expectedDigest, computedDigest);
   }
-
-  const storagePath = await storage.put(computedDigest, content);
 
   await dbPool
     .insert(artifactTable)
     .values({
       repositoryId: repoData.repository.id,
       digest: computedDigest,
-      size: content.byteLength,
+      size: blobSize,
       mediaType: "application/octet-stream",
       storagePath,
     })
@@ -751,12 +806,7 @@ const handleCompleteUpload = async (
   const orgId = repoData.namespace.organizationId;
 
   if (orgId) {
-    await recordUsage(
-      "organization",
-      orgId,
-      "storage_bytes",
-      content.byteLength,
-    );
+    await recordUsage("organization", orgId, "storage_bytes", blobSize);
   }
 
   await dbPool

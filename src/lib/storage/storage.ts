@@ -14,11 +14,33 @@ interface BlobStorage {
   put(digest: string, content: Uint8Array): Promise<string>;
 
   /**
+   * Store blob content from a stream (multipart upload).
+   * @param digest - Content-addressed digest
+   * @param stream - Readable stream of binary content
+   * @param size - Optional content length hint
+   * @returns Storage path/key for the blob
+   */
+  putStream(
+    digest: string,
+    stream: ReadableStream,
+    size?: number,
+  ): Promise<string>;
+
+  /**
    * Retrieve blob content.
    * @param digest - Content-addressed digest
    * @returns Binary content, or null if not found
    */
   get(digest: string): Promise<Uint8Array | null>;
+
+  /**
+   * Retrieve blob content as a stream.
+   * @param digest - Content-addressed digest
+   * @returns Readable stream and size, or null if not found
+   */
+  getStream(
+    digest: string,
+  ): Promise<{ stream: ReadableStream; size: number } | null>;
 
   /**
    * Check whether a blob exists.
