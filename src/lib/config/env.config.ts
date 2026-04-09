@@ -19,7 +19,7 @@ export const {
   /** Authorization PDP API URL */
   AUTHZ_API_URL,
   /** Enable authorization checks */
-  AUTHZ_ENABLED,
+
   /** Protect GraphQL routes (require authentication) */
   PROTECT_ROUTES,
   /** Default organization ID when billing is not configured */
