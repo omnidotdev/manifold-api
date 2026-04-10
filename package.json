@@ -1,5 +1,6 @@
 {
   "name": "@omnidotdev/manifold-api",
+  "version": "0.0.0",
   "description": "Manifold API - universal artifact registry for containers, schemas, and WASM",
   "private": true,
   "license": "Apache-2.0",
