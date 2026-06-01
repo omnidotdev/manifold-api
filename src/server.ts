@@ -1,3 +1,5 @@
+import { readFileSync } from "node:fs";
+
 import { cors } from "@elysiajs/cors";
 import { yoga } from "@elysiajs/graphql-yoga";
 import { useOpenTelemetry } from "@envelop/opentelemetry";
@@ -39,6 +41,8 @@ import { ociRouter } from "lib/oci";
 import { flags } from "lib/providers";
 import { storage } from "lib/storage";
 import webRouter from "lib/web/router";
+
+const commit = (() => { try { return readFileSync("/app/.git-sha", "utf-8").trim(); } catch { return "unknown"; } })();
 
 // ensure database exists before starting
 await ensureDatabase();
@@ -111,6 +115,7 @@ const app = new Elysia({
       timestamp: Date.now(),
       service: appConfig.name,
       storage: storageStatus,
+      commit,
     };
   })
   // readiness endpoint
