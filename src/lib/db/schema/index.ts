@@ -5,6 +5,8 @@ export * from "./containerMetadata.table";
 export * from "./federatedSkillCache.table";
 export * from "./federatedSource.table";
 export * from "./namespace.table";
+export * from "./npmDistTag.table";
+export * from "./npmMetadata.table";
 export * from "./plugin.table";
 export * from "./repository.table";
 export * from "./schemaMetadata.table";

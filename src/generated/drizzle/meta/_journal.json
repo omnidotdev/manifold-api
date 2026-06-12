@@ -50,6 +50,13 @@
       "when": 1774581312607,
       "tag": "0006_thin_ronan",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1781250782846,
+      "tag": "0007_graceful_lightspeed",
+      "breakpoints": true
     }
   ]
 }
