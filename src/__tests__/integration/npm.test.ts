@@ -5,6 +5,7 @@ import { generateApiToken } from "lib/auth/token";
 import { apiTokenTable } from "lib/db/schema";
 import { authenticateNpmToken, requireNpmWrite } from "lib/npm/auth";
 import { computeIntegrity } from "lib/npm/integrity";
+import { packumentHandler } from "lib/npm/packument";
 import { publishHandler } from "lib/npm/publish";
 import { namespaceFactory } from "test/factories";
 
@@ -92,6 +93,23 @@ const callPublish = async (
   return { status: set.status, result };
 };
 
+/** Invoke the packument read handler directly. */
+const callPackument = async (
+  scope: string,
+  pkg: string,
+  token: string | null,
+) => {
+  const set = { headers: {} as Record<string, string> } as {
+    status?: number;
+    headers: Record<string, string>;
+  };
+  const headers: Record<string, string> = {};
+  if (token) headers.Authorization = `Bearer ${token}`;
+  const req = new Request(`http://test/npm/@${scope}/${pkg}`, { headers });
+  const result = await packumentHandler(scope, pkg, set, req);
+  return { status: set.status, headers: set.headers, result };
+};
+
 describe("npm registry auth", () => {
   beforeEach(async () => {
     await getDb().execute(
@@ -157,5 +175,30 @@ describe("npm registry publish", () => {
     const body = buildNpmPublishBody("@coopbri/astro", "1.0.0", tgz);
     const { status } = await callPublish("coopbri", "astro", token, body);
     expect(status).toBe(401);
+  });
+
+  test("serves a packument with dist-tags and an absolute tarball URL", async () => {
+    const { token } = await seedToken("write", "coopbri");
+    await callPublish(
+      "coopbri",
+      "astro",
+      token,
+      buildNpmPublishBody("@coopbri/astro", "1.0.0", tgz),
+    );
+
+    const { result } = await callPackument("coopbri", "astro", null);
+    const p = result as {
+      "dist-tags": Record<string, string>;
+      versions: Record<string, { dist: { tarball: string } }>;
+    };
+    expect(p["dist-tags"].latest).toBe("1.0.0");
+    expect(p.versions["1.0.0"].dist.tarball).toContain(
+      "/npm/@coopbri/astro/-/astro-1.0.0.tgz",
+    );
+  });
+
+  test("returns 404 for an unknown package", async () => {
+    const { status } = await callPackument("coopbri", "nope", null);
+    expect(status).toBe(404);
   });
 });
