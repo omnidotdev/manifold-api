@@ -7,6 +7,7 @@ import { authenticateNpmToken, requireNpmWrite } from "lib/npm/auth";
 import { computeIntegrity } from "lib/npm/integrity";
 import { packumentHandler } from "lib/npm/packument";
 import { publishHandler } from "lib/npm/publish";
+import { tarballHandler } from "lib/npm/tarball";
 import { namespaceFactory } from "test/factories";
 
 const connUrl = new URL(globalThis.__TEST_CONTAINER_CONNECTION_STRING__);
@@ -110,6 +111,26 @@ const callPackument = async (
   return { status: set.status, headers: set.headers, result };
 };
 
+/** Invoke the tarball download handler directly. */
+const callTarball = async (
+  scope: string,
+  pkg: string,
+  file: string,
+  token: string | null,
+) => {
+  const set = { headers: {} as Record<string, string> } as {
+    status?: number;
+    headers: Record<string, string>;
+  };
+  const headers: Record<string, string> = {};
+  if (token) headers.Authorization = `Bearer ${token}`;
+  const req = new Request(`http://test/npm/@${scope}/${pkg}/-/${file}`, {
+    headers,
+  });
+  const result = await tarballHandler(scope, pkg, file, set, req);
+  return { status: set.status, result };
+};
+
 describe("npm registry auth", () => {
   beforeEach(async () => {
     await getDb().execute(
@@ -200,5 +221,32 @@ describe("npm registry publish", () => {
   test("returns 404 for an unknown package", async () => {
     const { status } = await callPackument("coopbri", "nope", null);
     expect(status).toBe(404);
+  });
+
+  test("downloads the published tarball with matching bytes", async () => {
+    const { token } = await seedToken("write", "coopbri");
+    await callPublish(
+      "coopbri",
+      "astro",
+      token,
+      buildNpmPublishBody("@coopbri/astro", "1.0.0", tgz),
+    );
+
+    const { result: pack } = await callPackument("coopbri", "astro", null);
+    const tarballUrl = (
+      pack as { versions: Record<string, { dist: { tarball: string } }> }
+    ).versions["1.0.0"].dist.tarball;
+    const file = tarballUrl.split("/-/")[1];
+    expect(file).toBe("astro-1.0.0.tgz");
+
+    const { result } = await callTarball("coopbri", "astro", file, null);
+    expect(result).toBeInstanceOf(Response);
+    const res = result as Response;
+    expect(res.status).toBe(200);
+
+    const downloaded = new Uint8Array(await res.arrayBuffer());
+    expect(computeIntegrity(downloaded).shasum).toBe(
+      computeIntegrity(tgz).shasum,
+    );
   });
 });
