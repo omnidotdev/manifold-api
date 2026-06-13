@@ -4,6 +4,11 @@ import { sql } from "drizzle-orm";
 import { generateApiToken } from "lib/auth/token";
 import { apiTokenTable } from "lib/db/schema";
 import { authenticateNpmToken, requireNpmWrite } from "lib/npm/auth";
+import {
+  deleteDistTagHandler,
+  listDistTagsHandler,
+  setDistTagHandler,
+} from "lib/npm/distTags";
 import { computeIntegrity } from "lib/npm/integrity";
 import { packumentHandler } from "lib/npm/packument";
 import { publishHandler } from "lib/npm/publish";
@@ -131,6 +136,35 @@ const callTarball = async (
   return { status: set.status, result };
 };
 
+const makeSet = () =>
+  ({ headers: {} as Record<string, string> }) as {
+    status?: number;
+    headers: Record<string, string>;
+  };
+
+/** Invoke a dist-tag write/delete handler directly. */
+const callDistTagWrite = async (
+  method: "PUT" | "DELETE",
+  scope: string,
+  pkg: string,
+  tag: string,
+  version: string | null,
+  token: string | null,
+) => {
+  const set = makeSet();
+  const headers: Record<string, string> = {};
+  if (token) headers.Authorization = `Bearer ${token}`;
+  const req = new Request(
+    `http://test/npm/-/package/@${scope}/${pkg}/dist-tags/${tag}`,
+    { method, headers, body: version != null ? JSON.stringify(version) : null },
+  );
+  const result =
+    method === "PUT"
+      ? await setDistTagHandler(scope, pkg, tag, req, set)
+      : await deleteDistTagHandler(scope, pkg, tag, req, set);
+  return { status: set.status, result };
+};
+
 describe("npm registry auth", () => {
   beforeEach(async () => {
     await getDb().execute(
@@ -248,5 +282,49 @@ describe("npm registry publish", () => {
     expect(computeIntegrity(downloaded).shasum).toBe(
       computeIntegrity(tgz).shasum,
     );
+  });
+
+  test("sets, lists, and deletes a dist-tag; latest is protected", async () => {
+    const { token } = await seedToken("write", "coopbri");
+    await callPublish(
+      "coopbri",
+      "astro",
+      token,
+      buildNpmPublishBody("@coopbri/astro", "1.0.0", tgz),
+    );
+
+    const setRes = await callDistTagWrite(
+      "PUT",
+      "coopbri",
+      "astro",
+      "beta",
+      "1.0.0",
+      token,
+    );
+    expect((setRes.result as { ok?: boolean }).ok).toBe(true);
+
+    const listed = (await listDistTagsHandler("coopbri", "astro", makeSet())) as
+      | Record<string, string>
+      | { error: string };
+    expect(listed).toMatchObject({ latest: "1.0.0", beta: "1.0.0" });
+
+    await callDistTagWrite("DELETE", "coopbri", "astro", "beta", null, token);
+    const afterDelete = (await listDistTagsHandler(
+      "coopbri",
+      "astro",
+      makeSet(),
+    )) as Record<string, string>;
+    expect(afterDelete.beta).toBeUndefined();
+    expect(afterDelete.latest).toBe("1.0.0");
+
+    const delLatest = await callDistTagWrite(
+      "DELETE",
+      "coopbri",
+      "astro",
+      "latest",
+      null,
+      token,
+    );
+    expect(delLatest.status).toBe(400);
   });
 });
