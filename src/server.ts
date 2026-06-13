@@ -37,12 +37,19 @@ import {
   createScopeEnforcementPlugin,
 } from "lib/graphql/plugins";
 import { startBlobGc, startSessionCleanup, startTagRetention } from "lib/jobs";
+import npmRouter from "lib/npm/router";
 import { ociRouter } from "lib/oci";
 import { flags } from "lib/providers";
 import { storage } from "lib/storage";
 import webRouter from "lib/web/router";
 
-const commit = (() => { try { return readFileSync("/app/.git-sha", "utf-8").trim(); } catch { return "unknown"; } })();
+const commit = (() => {
+  try {
+    return readFileSync("/app/.git-sha", "utf-8").trim();
+  } catch {
+    return "unknown";
+  }
+})();
 
 // ensure database exists before starting
 await ensureDatabase();
@@ -149,6 +156,8 @@ const app = new Elysia({
   .use(webRouter)
   // Cargo registry API
   .use(cargoRouter)
+  // npm registry API
+  .use(npmRouter)
   // OCI Distribution API v2
   .use(ociRouter)
   .use(
@@ -195,6 +204,11 @@ console.log(
 // biome-ignore lint/suspicious/noConsole: root logging
 console.log(
   `📦 ${appConfig.name} Cargo registry running at ${app.server?.url}cargo/`,
+);
+
+// biome-ignore lint/suspicious/noConsole: root logging
+console.log(
+  `📦 ${appConfig.name} npm registry running at ${app.server?.url}npm/`,
 );
 
 if (await flags.isEnabled("manifold-api-maintenance-mode")) {

@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, test } from "bun:test";
 import { sql } from "drizzle-orm";
+import { Elysia } from "elysia";
 
 import { generateApiToken } from "lib/auth/token";
 import { apiTokenTable } from "lib/db/schema";
@@ -12,6 +13,7 @@ import {
 import { computeIntegrity } from "lib/npm/integrity";
 import { packumentHandler } from "lib/npm/packument";
 import { publishHandler } from "lib/npm/publish";
+import npmRouter from "lib/npm/router";
 import { tarballHandler } from "lib/npm/tarball";
 import { namespaceFactory } from "test/factories";
 
@@ -326,5 +328,50 @@ describe("npm registry publish", () => {
       token,
     );
     expect(delLatest.status).toBe(400);
+  });
+});
+
+describe("npm registry router", () => {
+  beforeEach(async () => {
+    await getDb().execute(
+      sql`TRUNCATE TABLE npm_dist_tag, npm_metadata, tag, artifact, repository, api_token, namespace CASCADE`,
+    );
+  });
+
+  const tgz = new TextEncoder().encode("router-round-trip-bytes");
+
+  test("publish + packument + tarball over HTTP through the router", async () => {
+    const { token } = await seedToken("write", "coopbri");
+    const app = new Elysia().use(npmRouter);
+
+    const pubRes = await app.handle(
+      new Request("http://test/npm/@coopbri/astro", {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: buildNpmPublishBody("@coopbri/astro", "1.0.0", tgz),
+      }),
+    );
+    expect(pubRes.status).toBe(201);
+
+    const packRes = await app.handle(
+      new Request("http://test/npm/@coopbri/astro"),
+    );
+    expect(packRes.status).toBe(200);
+    const pack = (await packRes.json()) as {
+      "dist-tags": Record<string, string>;
+      versions: Record<string, { dist: { tarball: string } }>;
+    };
+    expect(pack["dist-tags"].latest).toBe("1.0.0");
+    const file = pack.versions["1.0.0"].dist.tarball.split("/-/")[1];
+
+    const tarRes = await app.handle(
+      new Request(`http://test/npm/@coopbri/astro/-/${file}`),
+    );
+    expect(tarRes.status).toBe(200);
+    const bytes = new Uint8Array(await tarRes.arrayBuffer());
+    expect(computeIntegrity(bytes).shasum).toBe(computeIntegrity(tgz).shasum);
   });
 });
