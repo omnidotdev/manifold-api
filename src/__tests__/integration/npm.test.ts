@@ -374,4 +374,27 @@ describe("npm registry router", () => {
     const bytes = new Uint8Array(await tarRes.arrayBuffer());
     expect(computeIntegrity(bytes).shasum).toBe(computeIntegrity(tgz).shasum);
   });
+
+  test("serves the packument at the URL-encoded scoped path bun/npm use", async () => {
+    const { token } = await seedToken("write", "coopbri");
+    const app = new Elysia().use(npmRouter);
+    await app.handle(
+      new Request("http://test/npm/@coopbri/astro", {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: buildNpmPublishBody("@coopbri/astro", "1.0.0", tgz),
+      }),
+    );
+
+    // npm/bun request scoped packages as one `%2F`-encoded segment
+    const packRes = await app.handle(
+      new Request("http://test/npm/@coopbri%2fastro"),
+    );
+    expect(packRes.status).toBe(200);
+    const pack = (await packRes.json()) as { "dist-tags": Record<string, string> };
+    expect(pack["dist-tags"].latest).toBe("1.0.0");
+  });
 });

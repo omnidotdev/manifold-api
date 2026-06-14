@@ -14,6 +14,20 @@ import { tarballHandler } from "lib/npm/tarball";
 type HandlerSet = { status?: number; headers: Record<string, string> };
 
 const scopePkg = t.Object({ scope: t.String(), pkg: t.String() });
+const scopedParam = t.Object({ scope: t.String() });
+
+/**
+ * Parse a single URL-encoded scoped segment into scope + pkg. npm/bun address
+ * scoped packages as one segment `@scope%2Fpkg` (the slash percent-encoded), so
+ * the `@:scope` route captures `scope%2Fpkg`; decode it and split on the slash.
+ * Elysia's router requires the first-segment param to share a name across
+ * routes, so this one-segment route reuses `scope` and parses it here.
+ */
+const parseScopedParam = (raw: string) => {
+  const decoded = decodeURIComponent(raw);
+  const slash = decoded.indexOf("/");
+  return { scope: decoded.slice(0, slash), pkg: decoded.slice(slash + 1) };
+};
 
 /**
  * npm registry router.
@@ -53,12 +67,22 @@ const npmRouter = new Elysia({ prefix: "/npm" })
     },
   )
 
-  // Packument (public read)
+  // Packument (public read), unencoded `@scope/pkg` (two path segments)
   .get(
     "/@:scope/:pkg",
     ({ params, set, request }) =>
       packumentHandler(params.scope, params.pkg, set as HandlerSet, request),
     { params: scopePkg },
+  )
+
+  // Packument, URL-encoded `@scope%2Fpkg` (one segment, what bun/npm send)
+  .get(
+    "/@:scope",
+    ({ params, set, request }) => {
+      const { scope, pkg } = parseScopedParam(params.scope);
+      return packumentHandler(scope, pkg, set as HandlerSet, request);
+    },
+    { params: scopedParam },
   )
 
   // Write operations with per-token rate limiting (10 req/min)
@@ -78,6 +102,16 @@ const npmRouter = new Elysia({ prefix: "/npm" })
     ({ params, request, set }) =>
       publishHandler(params.scope, params.pkg, request, set as HandlerSet),
     { params: scopePkg, parse: "none" },
+  )
+
+  // Publish, URL-encoded `@scope%2Fpkg` (one segment, what bun/npm send)
+  .put(
+    "/@:scope",
+    ({ params, request, set }) => {
+      const { scope, pkg } = parseScopedParam(params.scope);
+      return publishHandler(scope, pkg, request, set as HandlerSet);
+    },
+    { params: scopedParam, parse: "none" },
   )
 
   // Set a dist-tag
