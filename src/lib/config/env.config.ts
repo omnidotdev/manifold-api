@@ -29,11 +29,6 @@ export const {
   AUTHZ_PROVIDER,
   /** Billing service API key for service-to-service auth */
   BILLING_SERVICE_API_KEY,
-  /** Feature flags */
-  FLAGS_API_HOST,
-  FLAGS_CLIENT_KEY,
-  /** Comma-separated namespaces allowed during maintenance */
-  MAINTENANCE_ALLOWED_NAMESPACES = "omni",
   /** Vortex event streaming API URL */
   VORTEX_API_URL,
   /** Vortex event streaming API key */
@@ -64,18 +59,13 @@ export const isDevEnv = NODE_ENV === "development",
   isProdEnv = NODE_ENV === "production",
   hasBilling = !!BILLING_BASE_URL,
   protectRoutes = PROTECT_ROUTES === "true",
-  tagRetentionCount = Number.parseInt(TAG_RETENTION_COUNT, 10) || 0,
-  maintenanceAllowedNamespaces = MAINTENANCE_ALLOWED_NAMESPACES.split(",")
-    .map((s) => s.trim())
-    .filter(Boolean);
+  tagRetentionCount = Number.parseInt(TAG_RETENTION_COUNT, 10) || 0;
 
 // Startup warnings for optional integrations
 if (!BILLING_BASE_URL)
   console.warn("BILLING_BASE_URL not set, billing disabled");
 if (!AUTHZ_API_URL)
   console.warn("AUTHZ_API_URL not set, authorization disabled");
-if (!FLAGS_API_HOST)
-  console.warn("FLAGS_API_HOST not set, feature flags disabled");
 if (!VORTEX_API_URL)
   console.warn("VORTEX_API_URL not set, event streaming disabled");
 if (!BLOB_S3_BUCKET)

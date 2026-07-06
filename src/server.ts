@@ -22,7 +22,6 @@ import {
   PORT,
   isDevEnv,
   isProdEnv,
-  maintenanceAllowedNamespaces,
 } from "lib/config/env.config";
 import { dbPool, pgPool } from "lib/db";
 import ensureDatabase from "lib/db/ensureDatabase";
@@ -39,7 +38,6 @@ import {
 import { startBlobGc, startSessionCleanup, startTagRetention } from "lib/jobs";
 import npmRouter from "lib/npm/router";
 import { ociRouter } from "lib/oci";
-import { flags } from "lib/providers";
 import { storage } from "lib/storage";
 import webRouter from "lib/web/router";
 
@@ -210,13 +208,6 @@ console.log(
 console.log(
   `📦 ${appConfig.name} npm registry running at ${app.server?.url}npm/`,
 );
-
-if (await flags.isEnabled("manifold-api-maintenance-mode")) {
-  // biome-ignore lint/suspicious/noConsole: root logging
-  console.log(
-    `🔒 Maintenance mode active — OCI access restricted to: ${maintenanceAllowedNamespaces.join(", ")}`,
-  );
-}
 
 /**
  * Graceful shutdown handler.

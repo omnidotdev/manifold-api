@@ -33,7 +33,6 @@ import {
   recordUsage,
   resolveEntitlements,
 } from "lib/billing";
-import { maintenanceAllowedNamespaces } from "lib/config/env.config";
 import { dbPool } from "lib/db";
 import {
   artifactTable,
@@ -53,12 +52,8 @@ import {
 } from "lib/oci/chunkStore";
 import { computeDigest } from "lib/oci/digest";
 import * as ociErrors from "lib/oci/errors";
-import { events, flags } from "lib/providers";
+import { events } from "lib/providers";
 import { storage } from "lib/storage";
-
-const FLAGS = {
-  MAINTENANCE: "manifold-api-maintenance-mode",
-} as const;
 
 // =============================================================================
 // Helpers
@@ -1013,21 +1008,6 @@ const handleListTags = async (
  * spec requirement that <name> may contain slashes.
  */
 const ociRouter = new Elysia({ prefix: "/v2" })
-  .onBeforeHandle(async ({ request, set }) => {
-    const path = new URL(request.url).pathname.replace(/^\/v2\/?/, "");
-
-    if (!path) return;
-
-    if (!(await flags.isEnabled(FLAGS.MAINTENANCE))) return;
-
-    const namespace = decodeURIComponent(path.split("/")[0]);
-
-    if (!maintenanceAllowedNamespaces.includes(namespace)) {
-      set.status = 503;
-      return ociErrors.denied("Registry is in maintenance mode");
-    }
-  })
-
   // Version check (exact match, not catch-all)
   .get("/", ({ set }) => {
     set.headers["Docker-Distribution-API-Version"] = "registry/2.0";

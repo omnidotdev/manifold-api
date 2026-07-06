@@ -9,7 +9,6 @@
 import { and, eq } from "drizzle-orm";
 import { Elysia, t } from "elysia";
 
-import { maintenanceAllowedNamespaces } from "lib/config/env.config";
 import { dbPool } from "lib/db";
 import {
   artifactTable,
@@ -18,11 +17,6 @@ import {
   tagTable,
 } from "lib/db/schema";
 import { tryFederatedArtifact } from "lib/federation/proxy";
-import { flags } from "lib/providers";
-
-const FLAGS = {
-  MAINTENANCE: "manifold-api-maintenance-mode",
-} as const;
 
 /** OCI manifest media types that require layer resolution */
 const OCI_MANIFEST_TYPES = new Set([
@@ -88,14 +82,6 @@ const webRouter = new Elysia().get(
   async ({ params, set }) => {
     const { namespace, repo } = params;
     const reference = params["*"];
-
-    // Maintenance mode: block non-allowed namespaces
-    if (await flags.isEnabled(FLAGS.MAINTENANCE)) {
-      if (!maintenanceAllowedNamespaces.includes(namespace)) {
-        set.status = 503;
-        return { error: "Registry is in maintenance mode" };
-      }
-    }
 
     // Check federated sources before local DB lookup
     const federated = await tryFederatedArtifact(namespace, repo, reference);
