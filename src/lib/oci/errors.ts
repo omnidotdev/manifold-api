@@ -41,3 +41,7 @@ export const digestInvalid = (
 
 export const denied = (message = "access denied"): OciErrorResponse =>
   createOciError("DENIED", message);
+
+export const unauthorized = (
+  message = "authentication required",
+): OciErrorResponse => createOciError("UNAUTHORIZED", message);

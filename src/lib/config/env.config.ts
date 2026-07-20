@@ -34,6 +34,17 @@ export const {
   FLAGS_CLIENT_KEY,
   /** Comma-separated namespaces allowed during maintenance */
   MAINTENANCE_ALLOWED_NAMESPACES = "omni",
+  /**
+   * Require auth on the OCI registry (`/v2/`). Default "false" preserves the
+   * current in-cluster behaviour (the registry is reachable only over the
+   * private NodePort). Set "true" ONLY once every pusher (buildkit/kiln) and
+   * puller (kubelet imagePullSecret) is configured with the token below --
+   * otherwise builds/deploys break. Required before any public registry
+   * hostname.
+   */
+  REGISTRY_REQUIRE_AUTH = "false",
+  /** Shared secret checked as the Basic-auth password when REGISTRY_REQUIRE_AUTH. */
+  REGISTRY_AUTH_TOKEN,
   /** Vortex event streaming API URL */
   VORTEX_API_URL,
   /** Vortex event streaming API key */
@@ -64,6 +75,8 @@ export const isDevEnv = NODE_ENV === "development",
   isProdEnv = NODE_ENV === "production",
   hasBilling = !!BILLING_BASE_URL,
   protectRoutes = PROTECT_ROUTES === "true",
+  registryRequireAuth = REGISTRY_REQUIRE_AUTH === "true",
+  registryAuthToken = REGISTRY_AUTH_TOKEN,
   tagRetentionCount = Number.parseInt(TAG_RETENTION_COUNT, 10) || 0,
   maintenanceAllowedNamespaces = MAINTENANCE_ALLOWED_NAMESPACES.split(",")
     .map((s) => s.trim())
@@ -80,3 +93,11 @@ if (!VORTEX_API_URL)
   console.warn("VORTEX_API_URL not set, event streaming disabled");
 if (!BLOB_S3_BUCKET)
   console.warn("BLOB_S3_BUCKET not set, S3 blob storage disabled");
+if (registryRequireAuth && !registryAuthToken)
+  console.warn(
+    "REGISTRY_REQUIRE_AUTH set but REGISTRY_AUTH_TOKEN missing, registry will reject all requests",
+  );
+if (!registryRequireAuth)
+  console.warn(
+    "REGISTRY_REQUIRE_AUTH not set, OCI registry (/v2) is unauthenticated (safe only behind a private network)",
+  );
