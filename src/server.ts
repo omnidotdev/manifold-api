@@ -37,6 +37,7 @@ import {
   createScopeEnforcementPlugin,
 } from "lib/graphql/plugins";
 import { startBlobGc, startSessionCleanup, startTagRetention } from "lib/jobs";
+import { clientRateLimitKey } from "lib/middleware/clientKey";
 import npmRouter from "lib/npm/router";
 import { ociRouter } from "lib/oci";
 import { flags } from "lib/providers";
@@ -99,11 +100,14 @@ const app = new Elysia({
       methods: ["GET", "POST", "PUT", "PATCH", "HEAD", "DELETE"],
     }),
   )
-  // rate limiting (high limit to support concurrent OCI blob uploads)
+  // rate limiting (high limit to support concurrent OCI blob uploads).
+  // Keyed on the REAL client IP so it is per-tenant, not one global bucket:
+  // behind Cloudflare + the gateway the socket IP is the proxy's.
   .use(
     rateLimit({
       max: 1000,
       duration: 60_000,
+      generator: (request, server) => clientRateLimitKey(request, server),
     }),
   )
   // health check endpoint
