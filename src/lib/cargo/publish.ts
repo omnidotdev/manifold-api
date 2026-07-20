@@ -1,7 +1,7 @@
 // src/lib/cargo/publish.ts
 import { and, eq } from "drizzle-orm";
 
-import { recordUsage } from "lib/billing";
+import { enforceUsageLimit, recordUsage } from "lib/billing";
 import { requireCargoWrite } from "lib/cargo/auth";
 import { cargoError } from "lib/cargo/errors";
 import { isValidCrateName } from "lib/cargo/prefix";
@@ -111,6 +111,20 @@ export const publishHandler = async (
     return cargoError(
       `crate \`${metadata.name}@${metadata.vers}\` already exists`,
     );
+  }
+
+  // Enforce the storage quota before consuming space.
+  if (ns.organizationId) {
+    const overLimit = await enforceUsageLimit(
+      ns.organizationId,
+      "storage_bytes",
+      "Storage",
+      crateBytes.byteLength,
+    );
+    if (overLimit) {
+      set.status = overLimit.status;
+      return overLimit.body;
+    }
   }
 
   // Store .crate tarball in blob storage

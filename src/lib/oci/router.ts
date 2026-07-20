@@ -28,6 +28,7 @@ import { Elysia } from "elysia";
 
 import {
   checkUsage,
+  enforceUsageLimit,
   getTier,
   limitExceeded,
   recordUsage,
@@ -312,6 +313,16 @@ const handleGetManifest = async (
   const orgId = repoData.namespace.organizationId;
 
   if (orgId) {
+    const overLimit = await enforceUsageLimit(
+      orgId,
+      "bandwidth_bytes",
+      "Bandwidth",
+      artifact.size,
+    );
+    if (overLimit) {
+      set.status = overLimit.status;
+      return overLimit.body;
+    }
     await recordUsage("organization", orgId, "bandwidth_bytes", artifact.size);
   }
 
@@ -526,6 +537,16 @@ const handleGetBlob = async (
   const orgId = repoData.namespace.organizationId;
 
   if (orgId) {
+    const overLimit = await enforceUsageLimit(
+      orgId,
+      "bandwidth_bytes",
+      "Bandwidth",
+      artifact.size,
+    );
+    if (overLimit) {
+      set.status = overLimit.status;
+      return overLimit.body;
+    }
     await recordUsage("organization", orgId, "bandwidth_bytes", artifact.size);
   }
 

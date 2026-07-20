@@ -1,6 +1,6 @@
 import { and, eq } from "drizzle-orm";
 
-import { recordUsage } from "lib/billing";
+import { enforceUsageLimit, recordUsage } from "lib/billing";
 import { dbPool } from "lib/db";
 import {
   artifactTable,
@@ -124,6 +124,20 @@ export const publishHandler = async (
   if (existing) {
     set.status = 409;
     return npmError(`${fullName}@${version} already exists`);
+  }
+
+  // Enforce the storage quota before consuming space.
+  if (ns.organizationId) {
+    const overLimit = await enforceUsageLimit(
+      ns.organizationId,
+      "storage_bytes",
+      "Storage",
+      bytes.byteLength,
+    );
+    if (overLimit) {
+      set.status = overLimit.status;
+      return overLimit.body;
+    }
   }
 
   // Store the tarball blob
