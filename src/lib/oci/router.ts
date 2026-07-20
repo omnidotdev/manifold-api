@@ -28,6 +28,7 @@ import { Elysia } from "elysia";
 
 import {
   checkUsage,
+  enforcePrivateRepoLimit,
   enforceUsageLimit,
   getTier,
   limitExceeded,
@@ -141,6 +142,13 @@ const getOrCreateRepository = async (
     )[0];
 
   if (!nsRow) return undefined;
+
+  // New repos are PRIVATE (below), so a first push consumes a private-repo slot;
+  // enforce the org's max_private_repos before creating it.
+  if (nsRow.organizationId) {
+    const limitError = await enforcePrivateRepoLimit(nsRow.organizationId);
+    if (limitError) return { limitError };
+  }
 
   // Ensure repository exists. New repos default PRIVATE: publishing is an
   // explicit opt-in (a public-by-default push would silently expose a tenant's
@@ -399,6 +407,10 @@ const handlePutManifest = async (
     set.status = 404;
     return ociErrors.nameUnknown(name);
   }
+  if ("limitError" in repoData) {
+    set.status = repoData.limitError.status;
+    return repoData.limitError.body;
+  }
 
   const contentType =
     request.headers.get("Content-Type") ??
@@ -623,6 +635,10 @@ const handleStartUpload = async (
     set.status = 404;
     return ociErrors.nameUnknown(name);
   }
+  if ("limitError" in repoData) {
+    set.status = repoData.limitError.status;
+    return repoData.limitError.body;
+  }
 
   const orgId = repoData.namespace.organizationId;
 
@@ -721,6 +737,10 @@ const handleCompleteUpload = async (
   if (!repoData) {
     set.status = 404;
     return ociErrors.nameUnknown(name);
+  }
+  if ("limitError" in repoData) {
+    set.status = repoData.limitError.status;
+    return repoData.limitError.body;
   }
 
   const [session] = await dbPool

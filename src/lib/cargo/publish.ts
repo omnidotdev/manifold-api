@@ -1,7 +1,11 @@
 // src/lib/cargo/publish.ts
 import { and, eq } from "drizzle-orm";
 
-import { enforceUsageLimit, recordUsage } from "lib/billing";
+import {
+  enforcePrivateRepoLimit,
+  enforceUsageLimit,
+  recordUsage,
+} from "lib/billing";
 import { requireCargoWrite } from "lib/cargo/auth";
 import { cargoError } from "lib/cargo/errors";
 import { isValidCrateName } from "lib/cargo/prefix";
@@ -111,6 +115,28 @@ export const publishHandler = async (
     return cargoError(
       `crate \`${metadata.name}@${metadata.vers}\` already exists`,
     );
+  }
+
+  // A brand-new crate creates a PRIVATE repo (an existing crate's new version
+  // does not), so enforce the org's private-repo limit only when it's new.
+  if (ns.organizationId) {
+    const [existingRepo] = await dbPool
+      .select({ id: repositoryTable.id })
+      .from(repositoryTable)
+      .where(
+        and(
+          eq(repositoryTable.namespaceId, ns.id),
+          eq(repositoryTable.name, metadata.name),
+        ),
+      )
+      .limit(1);
+    if (!existingRepo) {
+      const limitError = await enforcePrivateRepoLimit(ns.organizationId);
+      if (limitError) {
+        set.status = limitError.status;
+        return limitError.body;
+      }
+    }
   }
 
   // Enforce the storage quota before consuming space.
