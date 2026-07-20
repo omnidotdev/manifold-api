@@ -36,7 +36,12 @@ import {
   createBillingPlugin,
   createScopeEnforcementPlugin,
 } from "lib/graphql/plugins";
-import { startBlobGc, startSessionCleanup, startTagRetention } from "lib/jobs";
+import {
+  startBlobGc,
+  startSessionCleanup,
+  startTagRetention,
+  startVulnerabilityScans,
+} from "lib/jobs";
 import { clientRateLimitKey } from "lib/middleware/clientKey";
 import npmRouter from "lib/npm/router";
 import { ociRouter } from "lib/oci";
@@ -63,6 +68,9 @@ const gcTimer = startBlobGc();
 
 // Start tag retention enforcement (prunes old tags, GC cleans up the orphaned blobs)
 const retentionTimer = startTagRetention();
+
+// Start the vulnerability-scan worker (inert unless SCAN_ENABLED)
+const scanTimer = startVulnerabilityScans();
 
 // Start federation sync if enabled
 const federationSyncTimer =
@@ -233,6 +241,7 @@ const shutdown = async (signal: string) => {
   clearInterval(cleanupTimer);
   clearInterval(gcTimer);
   clearInterval(retentionTimer);
+  clearInterval(scanTimer);
   if (federationSyncTimer) clearInterval(federationSyncTimer);
 
   // Stop accepting new connections

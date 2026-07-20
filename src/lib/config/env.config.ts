@@ -45,6 +45,17 @@ export const {
    * before any public registry hostname.
    */
   REGISTRY_REQUIRE_AUTH = "false",
+  /**
+   * Enable vulnerability scanning. Default "false" (inert). When "true", a
+   * manifest push enqueues a scan and the background worker runs the scanner
+   * (Trivy) against the image. Requires the Trivy binary in the runtime and
+   * SCAN_REGISTRY_ENDPOINT set to the address Trivy pulls the image from.
+   */
+  SCAN_ENABLED = "false",
+  /** Registry endpoint Trivy pulls images from, e.g. "10.0.1.10:30501/omni". */
+  SCAN_REGISTRY_ENDPOINT,
+  /** Trivy `--insecure` (plaintext-HTTP registry, e.g. the NodePort). */
+  SCAN_REGISTRY_INSECURE = "false",
   /** Vortex event streaming API URL */
   VORTEX_API_URL,
   /** Vortex event streaming API key */
@@ -76,6 +87,9 @@ export const isDevEnv = NODE_ENV === "development",
   hasBilling = !!BILLING_BASE_URL,
   protectRoutes = PROTECT_ROUTES === "true",
   registryRequireAuth = REGISTRY_REQUIRE_AUTH === "true",
+  scanEnabled = SCAN_ENABLED === "true",
+  scanRegistryEndpoint = SCAN_REGISTRY_ENDPOINT,
+  scanRegistryInsecure = SCAN_REGISTRY_INSECURE === "true",
   tagRetentionCount = Number.parseInt(TAG_RETENTION_COUNT, 10) || 0,
   maintenanceAllowedNamespaces = MAINTENANCE_ALLOWED_NAMESPACES.split(",")
     .map((s) => s.trim())

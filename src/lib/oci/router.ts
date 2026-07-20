@@ -44,6 +44,7 @@ import {
   artifactTable,
   namespaceTable,
   repositoryTable,
+  scanResultTable,
   tagTable,
   uploadSessionTable,
 } from "lib/db/schema";
@@ -64,6 +65,7 @@ import {
 import { computeDigest } from "lib/oci/digest";
 import * as ociErrors from "lib/oci/errors";
 import { events, flags } from "lib/providers";
+import { scanningEnabled } from "lib/scan";
 import { storage } from "lib/storage";
 
 const FLAGS = {
@@ -449,6 +451,15 @@ const handlePutManifest = async (
       },
     })
     .returning();
+
+  // Enqueue a vulnerability scan for the pushed image (once per digest; inert
+  // unless SCAN_ENABLED). Manifests + indexes only, not raw blobs.
+  if (scanningEnabled() && contentType.includes("manifest")) {
+    await dbPool
+      .insert(scanResultTable)
+      .values({ artifactId: artifact.id })
+      .onConflictDoNothing({ target: scanResultTable.artifactId });
+  }
 
   if (!reference.startsWith("sha256:")) {
     await dbPool

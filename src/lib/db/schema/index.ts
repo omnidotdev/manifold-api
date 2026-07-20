@@ -9,6 +9,7 @@ export * from "./npmDistTag.table";
 export * from "./npmMetadata.table";
 export * from "./plugin.table";
 export * from "./repository.table";
+export * from "./scanResult.table";
 export * from "./schemaMetadata.table";
 export * from "./tag.table";
 export * from "./uploadSession.table";
