@@ -1,6 +1,6 @@
 import { and, eq } from "drizzle-orm";
 
-import { recordUsage } from "lib/billing";
+import { enforceUsageLimit, recordUsage } from "lib/billing";
 import { authenticateCargoToken } from "lib/cargo/auth";
 import { cargoError } from "lib/cargo/errors";
 import { isValidCrateName } from "lib/cargo/prefix";
@@ -84,8 +84,18 @@ export const downloadHandler = async (
 
   const { artifact } = tagRow;
 
-  // Record bandwidth for billing
+  // Cap + record bandwidth for billing
   if (ns.organizationId) {
+    const overLimit = await enforceUsageLimit(
+      ns.organizationId,
+      "bandwidth_bytes",
+      "Bandwidth",
+      artifact.size,
+    );
+    if (overLimit) {
+      set.status = overLimit.status;
+      return overLimit.body;
+    }
     await recordUsage(
       "organization",
       ns.organizationId,

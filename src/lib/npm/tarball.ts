@@ -1,6 +1,6 @@
 import { and, eq } from "drizzle-orm";
 
-import { recordUsage } from "lib/billing";
+import { enforceUsageLimit, recordUsage } from "lib/billing";
 import { dbPool } from "lib/db";
 import {
   artifactTable,
@@ -78,6 +78,16 @@ export const tarballHandler = async (
   const { artifact } = tagRow;
 
   if (ns.organizationId) {
+    const overLimit = await enforceUsageLimit(
+      ns.organizationId,
+      "bandwidth_bytes",
+      "Bandwidth",
+      artifact.size,
+    );
+    if (overLimit) {
+      set.status = overLimit.status;
+      return overLimit.body;
+    }
     await recordUsage(
       "organization",
       ns.organizationId,

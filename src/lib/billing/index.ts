@@ -1,3 +1,4 @@
+export { enforceUsageLimit } from "./enforce";
 export { featureUnavailable, limitExceeded } from "./errors";
 export {
   getLimit,
