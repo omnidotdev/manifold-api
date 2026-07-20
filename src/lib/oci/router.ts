@@ -402,6 +402,12 @@ const handlePutManifest = async (
   const contentBytes = new TextEncoder().encode(content);
   const digest = await computeDigest(contentBytes);
 
+  // Push-by-digest must match the content (spec: DIGEST_INVALID otherwise).
+  if (reference.startsWith("sha256:") && reference !== digest) {
+    set.status = 400;
+    return ociErrors.digestInvalid(reference, digest);
+  }
+
   const [artifact] = await dbPool
     .insert(artifactTable)
     .values({
@@ -886,6 +892,24 @@ const handleCatalog = async (
   return { repositories: names };
 };
 
+/**
+ * Remove a blob from storage only when no artifact (in ANY repo) still
+ * references its content-addressed digest. Blob storage is global +
+ * content-addressed, so the same digest is shared across repos; blindly
+ * deleting it would corrupt every other repo that references it. Call this
+ * AFTER the artifact row has been deleted, and only when the artifact actually
+ * had a stored blob (`storagePath`). `storage.delete` takes the DIGEST, not the
+ * storage path -- passing the path throws in `parseDigest`.
+ */
+const deleteBlobIfUnreferenced = async (digest: string) => {
+  const [stillUsed] = await dbPool
+    .select({ id: artifactTable.id })
+    .from(artifactTable)
+    .where(eq(artifactTable.digest, digest))
+    .limit(1);
+  if (!stillUsed) await storage.delete(digest);
+};
+
 const handleDeleteManifest = async (
   name: string,
   reference: string,
@@ -918,12 +942,11 @@ const handleDeleteManifest = async (
     }
 
     await dbPool.delete(tagTable).where(eq(tagTable.artifactId, artifact.id));
+    await dbPool.delete(artifactTable).where(eq(artifactTable.id, artifact.id));
 
     if (artifact.storagePath) {
-      await storage.delete(artifact.storagePath);
+      await deleteBlobIfUnreferenced(artifact.digest);
     }
-
-    await dbPool.delete(artifactTable).where(eq(artifactTable.id, artifact.id));
   } else {
     // Delete by tag: remove the tag only
     const result = await dbPool
@@ -975,11 +998,11 @@ const handleDeleteBlob = async (
     return ociErrors.blobUnknown(digest);
   }
 
-  if (artifact.storagePath) {
-    await storage.delete(artifact.storagePath);
-  }
-
   await dbPool.delete(artifactTable).where(eq(artifactTable.id, artifact.id));
+
+  if (artifact.storagePath) {
+    await deleteBlobIfUnreferenced(artifact.digest);
+  }
 
   set.status = 202;
   return "";

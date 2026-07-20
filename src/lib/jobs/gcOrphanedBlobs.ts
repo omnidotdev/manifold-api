@@ -8,6 +8,16 @@ import { storage } from "lib/storage";
 const DEFAULT_INTERVAL_MS = 6 * 60 * 60 * 1000;
 
 /**
+ * Grace window: never collect an artifact younger than this. A `docker push`
+ * uploads layer blobs (each becomes an artifact row) BEFORE it PUTs the manifest
+ * that references them, so a freshly-uploaded, not-yet-referenced blob looks like
+ * an orphan. Without a grace window, GC firing mid-push deletes those layers --
+ * silent data loss. 6h comfortably exceeds any realistic single push while still
+ * reclaiming genuinely-abandoned uploads on the next cycle.
+ */
+const GC_GRACE_MS = 6 * 60 * 60 * 1000;
+
+/**
  * Extract all digests referenced by an OCI manifest or index.
  *
  * Handles OCI Image Manifest (config + layers), OCI Index / Docker
@@ -42,6 +52,25 @@ const extractReferencedDigests = (content: string): string[] => {
 
   return digests;
 };
+
+/**
+ * Select artifacts safe to collect: digest not reachable from any tag AND older
+ * than the grace window (a known, non-null age past `cutoffMs`). Pure so the
+ * data-loss-critical grace behaviour is unit-testable without a database.
+ */
+export const selectOrphans = <
+  T extends { digest: string; createdAt: string | null },
+>(
+  artifacts: T[],
+  liveDigests: Set<string>,
+  cutoffMs: number,
+): T[] =>
+  artifacts.filter(
+    (a) =>
+      !liveDigests.has(a.digest) &&
+      a.createdAt !== null &&
+      new Date(a.createdAt).getTime() < cutoffMs,
+  );
 
 /**
  * Mark-and-sweep garbage collection for orphaned blobs.
@@ -118,17 +147,24 @@ const gcOrphanedBlobs = async (): Promise<{
     }
   }
 
-  // Step 4: Find orphaned artifacts (digest not in live set, has blob on disk)
+  // Step 4: Find orphaned artifacts (digest not in live set, has blob on disk).
+  // Skip anything younger than the grace window so an in-flight push's layers
+  // (uploaded before their manifest) are never collected.
   const allArtifacts = await dbPool
     .select({
       id: artifactTable.id,
       digest: artifactTable.digest,
       storagePath: artifactTable.storagePath,
       size: artifactTable.size,
+      createdAt: artifactTable.createdAt,
     })
     .from(artifactTable);
 
-  const orphans = allArtifacts.filter((a) => !liveDigests.has(a.digest));
+  const orphans = selectOrphans(
+    allArtifacts,
+    liveDigests,
+    Date.now() - GC_GRACE_MS,
+  );
 
   if (orphans.length === 0) return { deleted: 0, freedBytes: 0 };
 
