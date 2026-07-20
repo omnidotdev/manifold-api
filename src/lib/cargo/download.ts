@@ -5,6 +5,7 @@ import { authenticateCargoToken } from "lib/cargo/auth";
 import { cargoError } from "lib/cargo/errors";
 import { isValidCrateName } from "lib/cargo/prefix";
 import { dbPool } from "lib/db";
+import { recordDownload } from "lib/db/recordDownload";
 import {
   artifactTable,
   namespaceTable,
@@ -103,6 +104,8 @@ export const downloadHandler = async (
       artifact.size,
     );
   }
+
+  recordDownload(repo.id);
 
   // Stream from blob storage
   if (artifact.storagePath) {

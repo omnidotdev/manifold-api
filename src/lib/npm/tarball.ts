@@ -2,6 +2,7 @@ import { and, eq } from "drizzle-orm";
 
 import { enforceUsageLimit, recordUsage } from "lib/billing";
 import { dbPool } from "lib/db";
+import { recordDownload } from "lib/db/recordDownload";
 import {
   artifactTable,
   namespaceTable,
@@ -95,6 +96,8 @@ export const tarballHandler = async (
       artifact.size,
     );
   }
+
+  recordDownload(repo.id);
 
   const blob = artifact.storagePath ? await storage.get(artifact.digest) : null;
   if (!blob) {
