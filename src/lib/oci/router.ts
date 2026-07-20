@@ -35,7 +35,6 @@ import {
 } from "lib/billing";
 import {
   maintenanceAllowedNamespaces,
-  registryAuthToken,
   registryRequireAuth,
 } from "lib/config/env.config";
 import { dbPool } from "lib/db";
@@ -49,6 +48,11 @@ import {
 import { tryFederatedTagList } from "lib/federation/proxy";
 import logAuditEvent from "lib/logging/logAuditEvent";
 import {
+  authenticateOciToken,
+  authorizeOci,
+  registryAuthChallenge,
+} from "lib/oci/auth";
+import {
   appendChunk,
   assembleBlobStream,
   cleanupSession,
@@ -57,10 +61,6 @@ import {
 } from "lib/oci/chunkStore";
 import { computeDigest } from "lib/oci/digest";
 import * as ociErrors from "lib/oci/errors";
-import {
-  isRegistryAuthorized,
-  registryAuthChallenge,
-} from "lib/oci/registryAuth";
 import { events, flags } from "lib/providers";
 import { storage } from "lib/storage";
 
@@ -141,14 +141,17 @@ const getOrCreateRepository = async (
 
   if (!nsRow) return undefined;
 
-  // Ensure repository exists
+  // Ensure repository exists. New repos default PRIVATE: publishing is an
+  // explicit opt-in (a public-by-default push would silently expose a tenant's
+  // images). When auth is enforced, the namespace ownership was already checked
+  // by authorizeOci before this runs.
   const [repo] = await dbPool
     .insert(repositoryTable)
     .values({
       namespaceId: nsRow.id,
       name: repoName,
       artifactType,
-      isPublic: true,
+      isPublic: false,
     })
     .onConflictDoNothing()
     .returning();
@@ -838,11 +841,16 @@ const handleCompleteUpload = async (
   set.headers["Docker-Content-Digest"] = computedDigest;
 };
 
-const handleCatalog = async (query: { n?: string; last?: string }) => {
+const handleCatalog = async (
+  query: { n?: string; last?: string },
+  visibility?: { filter: boolean; namespaceId: string | null },
+) => {
   const repos = await dbPool
     .select({
       namespace: namespaceTable.name,
       repo: repositoryTable.name,
+      isPublic: repositoryTable.isPublic,
+      namespaceId: repositoryTable.namespaceId,
     })
     .from(repositoryTable)
     .innerJoin(
@@ -851,7 +859,18 @@ const handleCatalog = async (query: { n?: string; last?: string }) => {
     )
     .orderBy(namespaceTable.name, repositoryTable.name);
 
-  let names = repos.map((r) =>
+  // When auth is enforced, never leak private repos of other tenants: return
+  // public repos plus (for an authenticated caller) their own namespace.
+  const visible = visibility?.filter
+    ? repos.filter(
+        (r) =>
+          r.isPublic ||
+          (visibility.namespaceId !== null &&
+            r.namespaceId === visibility.namespaceId),
+      )
+    : repos;
+
+  let names = visible.map((r) =>
     r.namespace === "library" ? r.repo : `${r.namespace}/${r.repo}`,
   );
 
@@ -1022,25 +1041,6 @@ const handleListTags = async (
  */
 const ociRouter = new Elysia({ prefix: "/v2" })
   .onBeforeHandle(async ({ request, set }) => {
-    // Registry auth (flag-gated). Default OFF preserves the current in-cluster
-    // behaviour where the registry is reachable only over the private
-    // NodePort. When ON, every /v2 request (including the GET /v2/ version
-    // probe clients hit first) must carry a valid Basic-auth token, and an
-    // unauthenticated request gets a 401 + WWW-Authenticate challenge so the
-    // client knows to authenticate
-    if (
-      registryRequireAuth &&
-      !isRegistryAuthorized(
-        request.headers.get("authorization"),
-        registryAuthToken,
-      )
-    ) {
-      set.status = 401;
-      set.headers["WWW-Authenticate"] = registryAuthChallenge;
-      set.headers["Docker-Distribution-API-Version"] = "registry/2.0";
-      return ociErrors.unauthorized();
-    }
-
     const path = new URL(request.url).pathname.replace(/^\/v2\/?/, "");
 
     if (!path) return;
@@ -1077,10 +1077,46 @@ const ociRouter = new Elysia({ prefix: "/v2" })
 
     const method = request.method;
 
+    // Authorization (flag-gated). OFF = fully open (the in-cluster build
+    // pipeline relies on this). ON = per-namespace `mf_` token auth: public
+    // repos are anonymously readable, private reads and all writes require a
+    // token whose namespace owns the target and whose scope covers the op.
+    // The catalog is not gated here -- it filters its own results by visibility.
+    if (registryRequireAuth && route.kind !== "catalog") {
+      const isWrite =
+        method === "PUT" ||
+        method === "PATCH" ||
+        method === "POST" ||
+        method === "DELETE";
+      const { namespace, repo } = parseRepoName(route.name);
+      const decision = await authorizeOci(
+        namespace,
+        repo,
+        isWrite ? "write" : "read",
+        request.headers.get("authorization"),
+      );
+      if (!decision.ok) {
+        set.status = decision.status;
+        if (decision.challenge)
+          set.headers["WWW-Authenticate"] = registryAuthChallenge;
+        set.headers["Docker-Distribution-API-Version"] = "registry/2.0";
+        return decision.status === 401
+          ? ociErrors.unauthorized(decision.error)
+          : ociErrors.denied(decision.error);
+      }
+    }
+
     switch (route.kind) {
       case "catalog":
-        if (method === "GET")
-          return handleCatalog(query as Record<string, string>);
+        if (method === "GET") {
+          const catalogAuth = registryRequireAuth
+            ? await authenticateOciToken(request.headers.get("authorization"))
+            : null;
+          return handleCatalog(query as Record<string, string>, {
+            filter: registryRequireAuth,
+            namespaceId: catalogAuth?.namespaceId ?? null,
+          });
+        }
         break;
 
       case "manifest":
