@@ -40,6 +40,7 @@ import {
   registryRequireAuth,
 } from "lib/config/env.config";
 import { dbPool } from "lib/db";
+import { recordDownload } from "lib/db/recordDownload";
 import {
   artifactTable,
   namespaceTable,
@@ -335,6 +336,9 @@ const handleGetManifest = async (
     }
     await recordUsage("organization", orgId, "bandwidth_bytes", artifact.size);
   }
+
+  // Count one install/pull per image (manifest), not per blob.
+  recordDownload(repoData.repository.id);
 
   set.headers["Content-Type"] = artifact.mediaType;
   set.headers["Docker-Content-Digest"] = artifact.digest;

@@ -1,4 +1,5 @@
 import {
+  bigint,
   boolean,
   index,
   pgTable,
@@ -27,6 +28,9 @@ export const repositoryTable = pgTable(
     // openapi, graphql, jsonschema, oci, wasm
     artifactType: text().notNull(),
     isPublic: boolean().notNull().default(false),
+    // Total installs/pulls (manifest pulls for OCI, tarball/crate downloads for
+    // npm/cargo). Powers discovery ("popular packages") + download stats.
+    downloadCount: bigint({ mode: "number" }).notNull().default(0),
     createdAt: generateDefaultDate(),
     updatedAt: generateDefaultDate(),
   },
