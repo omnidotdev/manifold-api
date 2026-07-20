@@ -199,6 +199,7 @@ type OciRoute =
   | { kind: "version-check" }
   | { kind: "catalog" }
   | { kind: "manifest"; name: string; reference: string }
+  | { kind: "referrers"; name: string; digest: string }
   | { kind: "blob"; name: string; digest: string }
   | { kind: "blob-upload-start"; name: string }
   | { kind: "blob-upload-chunk"; name: string; uuid: string }
@@ -226,6 +227,16 @@ const parseOciPath = (url: string): OciRoute | undefined => {
       kind: "manifest",
       name: manifestMatch[1],
       reference: manifestMatch[2],
+    };
+  }
+
+  // /referrers/<digest>
+  const referrersMatch = path.match(/^(.+)\/referrers\/([^/]+)$/);
+  if (referrersMatch) {
+    return {
+      kind: "referrers",
+      name: referrersMatch[1],
+      digest: referrersMatch[2],
     };
   }
 
@@ -437,6 +448,17 @@ const handlePutManifest = async (
     return ociErrors.digestInvalid(reference, digest);
   }
 
+  // OCI referrers: a manifest carrying a `subject` refers to another manifest
+  // (a signature/SBOM/attestation on an image). Index the subject digest so
+  // GET /referrers/<digest> can list it.
+  let subject: string | null = null;
+  try {
+    const parsed = JSON.parse(content) as { subject?: { digest?: string } };
+    subject = parsed.subject?.digest ?? null;
+  } catch {
+    // Non-JSON manifest body -- no subject.
+  }
+
   const [artifact] = await dbPool
     .insert(artifactTable)
     .values({
@@ -445,6 +467,7 @@ const handlePutManifest = async (
       size: contentBytes.length,
       mediaType: contentType,
       content,
+      subject,
     })
     .onConflictDoUpdate({
       target: [artifactTable.repositoryId, artifactTable.digest],
@@ -452,6 +475,7 @@ const handlePutManifest = async (
         size: contentBytes.length,
         mediaType: contentType,
         content,
+        subject,
       },
     })
     .returning();
@@ -520,6 +544,79 @@ const handlePutManifest = async (
   set.status = 201;
   set.headers.Location = `/v2/${name}/manifests/${digest}`;
   set.headers["Docker-Content-Digest"] = digest;
+  // Echo the subject so clients know the registry accepted the referrer.
+  if (subject) set.headers["OCI-Subject"] = subject;
+};
+
+/**
+ * OCI referrers API: list every manifest in the repo whose `subject` is
+ * `digest` (signatures, SBOMs, attestations on an image), as an OCI image index.
+ * Optionally filtered to a single `artifactType`.
+ * @see https://github.com/opencontainers/distribution-spec/blob/main/spec.md#listing-referrers
+ */
+const handleReferrers = async (
+  name: string,
+  digest: string,
+  artifactTypeFilter: string | undefined,
+  set: { status?: number | string; headers: Record<string, string | number> },
+) => {
+  const { namespace, repo } = parseRepoName(name);
+  const repoData = await getRepository(namespace, repo);
+  if (!repoData) {
+    set.status = 404;
+    return ociErrors.nameUnknown(name);
+  }
+
+  const rows = await dbPool
+    .select({
+      digest: artifactTable.digest,
+      mediaType: artifactTable.mediaType,
+      size: artifactTable.size,
+      content: artifactTable.content,
+    })
+    .from(artifactTable)
+    .where(
+      and(
+        eq(artifactTable.repositoryId, repoData.repository.id),
+        eq(artifactTable.subject, digest),
+      ),
+    );
+
+  const manifests = rows
+    .map((row) => {
+      let artifactType: string | undefined;
+      let annotations: Record<string, string> | undefined;
+      try {
+        const parsed = JSON.parse(row.content ?? "{}") as {
+          artifactType?: string;
+          config?: { mediaType?: string };
+          annotations?: Record<string, string>;
+        };
+        artifactType = parsed.artifactType ?? parsed.config?.mediaType;
+        annotations = parsed.annotations;
+      } catch {
+        // Non-JSON referrer content; leave artifactType/annotations unset.
+      }
+      return {
+        mediaType: row.mediaType,
+        digest: row.digest,
+        size: row.size,
+        ...(artifactType ? { artifactType } : {}),
+        ...(annotations ? { annotations } : {}),
+      };
+    })
+    .filter(
+      (m) => !artifactTypeFilter || m.artifactType === artifactTypeFilter,
+    );
+
+  set.headers["Content-Type"] = "application/vnd.oci.image.index.v1+json";
+  if (artifactTypeFilter) set.headers["OCI-Filters-Applied"] = "artifactType";
+
+  return {
+    schemaVersion: 2,
+    mediaType: "application/vnd.oci.image.index.v1+json",
+    manifests,
+  };
 };
 
 const handleGetBlob = async (
@@ -1213,6 +1310,16 @@ const ociRouter = new Elysia({ prefix: "/v2" })
           );
         if (method === "DELETE")
           return handleDeleteManifest(route.name, route.reference, set);
+        break;
+
+      case "referrers":
+        if (method === "GET")
+          return handleReferrers(
+            route.name,
+            route.digest,
+            (query as Record<string, string>).artifactType,
+            set,
+          );
         break;
 
       case "blob":

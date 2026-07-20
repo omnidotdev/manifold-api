@@ -30,6 +30,10 @@ export const artifactTable = pgTable(
     content: text(),
     // Storage backend path/key (null = content is inline)
     storagePath: text(),
+    // OCI referrers: the `subject` manifest digest this artifact refers to
+    // (e.g. a signature/SBOM/attestation referring to an image). Null for
+    // ordinary manifests. Powers GET /v2/<name>/referrers/<digest>.
+    subject: text(),
     createdAt: generateDefaultDate(),
   },
   (table) => [
@@ -37,6 +41,8 @@ export const artifactTable = pgTable(
     uniqueIndex().on(table.repositoryId, table.digest),
     index().on(table.repositoryId),
     index().on(table.digest),
+    // Referrers lookups: all artifacts in a repo referring to a subject digest.
+    index().on(table.repositoryId, table.subject),
   ],
 );
 
