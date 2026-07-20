@@ -52,6 +52,11 @@ import {
 import { tryFederatedTagList } from "lib/federation/proxy";
 import logAuditEvent from "lib/logging/logAuditEvent";
 import {
+  fetchUpstreamBlob,
+  fetchUpstreamManifest,
+  resolveUpstream,
+} from "lib/mirror/upstream";
+import {
   authenticateOciToken,
   authorizeOci,
   registryAuthChallenge,
@@ -275,46 +280,176 @@ const parseOciPath = (url: string): OciRoute | undefined => {
 // Handlers
 // =============================================================================
 
+type RepoData = NonNullable<Awaited<ReturnType<typeof getRepository>>>;
+
+/**
+ * Pull-through cache: fetch a manifest from the namespace's upstream registry,
+ * store it locally, and return the cached artifact + its repo. Returns undefined
+ * when the namespace is not a configured mirror or the upstream fetch fails.
+ * The repo path sent upstream is the local repo name verbatim, so mirror a
+ * Docker Hub official image as e.g. `<mirror>/library/alpine` (not `<mirror>/alpine`).
+ */
+const cacheUpstreamManifest = async (
+  namespace: string,
+  repo: string,
+  reference: string,
+): Promise<
+  | { artifact: typeof artifactTable.$inferSelect; repoData: RepoData }
+  | undefined
+> => {
+  const upstream = resolveUpstream(namespace);
+  if (!upstream) return undefined;
+
+  const fetched = await fetchUpstreamManifest(upstream, repo, reference);
+  if (!fetched) return undefined;
+
+  const content = new TextDecoder().decode(fetched.content);
+  const digest = fetched.digest || (await computeDigest(fetched.content));
+
+  const repoData = await getOrCreateRepository(namespace, repo);
+  if (!repoData || "limitError" in repoData) return undefined;
+
+  let subject: string | null = null;
+  try {
+    subject =
+      (JSON.parse(content) as { subject?: { digest?: string } }).subject
+        ?.digest ?? null;
+  } catch {
+    // Non-JSON manifest body -- no subject.
+  }
+
+  const [artifact] = await dbPool
+    .insert(artifactTable)
+    .values({
+      repositoryId: repoData.repository.id,
+      digest,
+      size: fetched.content.length,
+      mediaType: fetched.mediaType,
+      content,
+      subject,
+    })
+    .onConflictDoUpdate({
+      target: [artifactTable.repositoryId, artifactTable.digest],
+      set: {
+        size: fetched.content.length,
+        mediaType: fetched.mediaType,
+        content,
+        subject,
+      },
+    })
+    .returning();
+
+  if (!reference.startsWith("sha256:")) {
+    await dbPool
+      .insert(tagTable)
+      .values({
+        repositoryId: repoData.repository.id,
+        artifactId: artifact.id,
+        name: reference,
+      })
+      .onConflictDoUpdate({
+        target: [tagTable.repositoryId, tagTable.name],
+        set: { artifactId: artifact.id },
+      });
+  }
+
+  return { artifact, repoData };
+};
+
+/**
+ * Pull-through cache: fetch a blob (by digest) from the namespace's upstream
+ * registry, store it, and return the cached artifact. Blobs are content-
+ * addressed and immutable, so a cached blob never needs revalidation.
+ */
+const cacheUpstreamBlob = async (
+  namespace: string,
+  repo: string,
+  digest: string,
+): Promise<
+  | { artifact: typeof artifactTable.$inferSelect; repoData: RepoData }
+  | undefined
+> => {
+  const upstream = resolveUpstream(namespace);
+  if (!upstream) return undefined;
+
+  const bytes = await fetchUpstreamBlob(upstream, repo, digest);
+  if (!bytes) return undefined;
+
+  const repoData = await getOrCreateRepository(namespace, repo);
+  if (!repoData || "limitError" in repoData) return undefined;
+
+  const storagePath = await storage.put(digest, bytes);
+
+  const [artifact] = await dbPool
+    .insert(artifactTable)
+    .values({
+      repositoryId: repoData.repository.id,
+      digest,
+      size: bytes.length,
+      mediaType: "application/octet-stream",
+      storagePath,
+    })
+    .onConflictDoUpdate({
+      target: [artifactTable.repositoryId, artifactTable.digest],
+      set: { size: bytes.length, storagePath },
+    })
+    .returning();
+
+  return { artifact, repoData };
+};
+
 const handleGetManifest = async (
   name: string,
   reference: string,
   set: { status?: number | string; headers: Record<string, string | number> },
 ) => {
   const { namespace, repo } = parseRepoName(name);
-  const repoData = await getRepository(namespace, repo);
+  let repoData = await getRepository(namespace, repo);
+
+  let artifact: typeof artifactTable.$inferSelect | undefined;
+
+  if (repoData) {
+    if (reference.startsWith("sha256:")) {
+      const result = await dbPool
+        .select()
+        .from(artifactTable)
+        .where(
+          and(
+            eq(artifactTable.repositoryId, repoData.repository.id),
+            eq(artifactTable.digest, reference),
+          ),
+        )
+        .limit(1);
+      artifact = result[0];
+    } else {
+      const result = await dbPool
+        .select({ artifact: artifactTable })
+        .from(tagTable)
+        .innerJoin(artifactTable, eq(tagTable.artifactId, artifactTable.id))
+        .where(
+          and(
+            eq(tagTable.repositoryId, repoData.repository.id),
+            eq(tagTable.name, reference),
+          ),
+        )
+        .limit(1);
+      artifact = result[0]?.artifact;
+    }
+  }
+
+  // Pull-through cache: on a local miss, fetch + cache from the upstream the
+  // namespace mirrors (inert unless PULL_THROUGH_UPSTREAMS maps the namespace).
+  if (!artifact) {
+    const cached = await cacheUpstreamManifest(namespace, repo, reference);
+    if (cached) {
+      artifact = cached.artifact;
+      repoData = cached.repoData;
+    }
+  }
 
   if (!repoData) {
     set.status = 404;
     return ociErrors.nameUnknown(name);
-  }
-
-  let artifact: typeof artifactTable.$inferSelect | undefined;
-
-  if (reference.startsWith("sha256:")) {
-    const result = await dbPool
-      .select()
-      .from(artifactTable)
-      .where(
-        and(
-          eq(artifactTable.repositoryId, repoData.repository.id),
-          eq(artifactTable.digest, reference),
-        ),
-      )
-      .limit(1);
-    artifact = result[0];
-  } else {
-    const result = await dbPool
-      .select({ artifact: artifactTable })
-      .from(tagTable)
-      .innerJoin(artifactTable, eq(tagTable.artifactId, artifactTable.id))
-      .where(
-        and(
-          eq(tagTable.repositoryId, repoData.repository.id),
-          eq(tagTable.name, reference),
-        ),
-      )
-      .limit(1);
-    artifact = result[0]?.artifact;
   }
 
   if (!artifact) {
@@ -366,38 +501,41 @@ const handleHeadManifest = async (
   const { namespace, repo } = parseRepoName(name);
   const repoData = await getRepository(namespace, repo);
 
-  if (!repoData) {
-    set.status = 404;
-    return;
-  }
-
   let artifact: typeof artifactTable.$inferSelect | undefined;
 
-  if (reference.startsWith("sha256:")) {
-    const result = await dbPool
-      .select()
-      .from(artifactTable)
-      .where(
-        and(
-          eq(artifactTable.repositoryId, repoData.repository.id),
-          eq(artifactTable.digest, reference),
-        ),
-      )
-      .limit(1);
-    artifact = result[0];
-  } else {
-    const result = await dbPool
-      .select({ artifact: artifactTable })
-      .from(tagTable)
-      .innerJoin(artifactTable, eq(tagTable.artifactId, artifactTable.id))
-      .where(
-        and(
-          eq(tagTable.repositoryId, repoData.repository.id),
-          eq(tagTable.name, reference),
-        ),
-      )
-      .limit(1);
-    artifact = result[0]?.artifact;
+  if (repoData) {
+    if (reference.startsWith("sha256:")) {
+      const result = await dbPool
+        .select()
+        .from(artifactTable)
+        .where(
+          and(
+            eq(artifactTable.repositoryId, repoData.repository.id),
+            eq(artifactTable.digest, reference),
+          ),
+        )
+        .limit(1);
+      artifact = result[0];
+    } else {
+      const result = await dbPool
+        .select({ artifact: artifactTable })
+        .from(tagTable)
+        .innerJoin(artifactTable, eq(tagTable.artifactId, artifactTable.id))
+        .where(
+          and(
+            eq(tagTable.repositoryId, repoData.repository.id),
+            eq(tagTable.name, reference),
+          ),
+        )
+        .limit(1);
+      artifact = result[0]?.artifact;
+    }
+  }
+
+  // Pull-through cache: a HEAD on a mirror populates the cache like a GET would.
+  if (!artifact) {
+    const cached = await cacheUpstreamManifest(namespace, repo, reference);
+    artifact = cached?.artifact;
   }
 
   if (!artifact) {
@@ -625,23 +763,37 @@ const handleGetBlob = async (
   set: { status?: number | string; headers: Record<string, string | number> },
 ) => {
   const { namespace, repo } = parseRepoName(name);
-  const repoData = await getRepository(namespace, repo);
+  let repoData = await getRepository(namespace, repo);
+
+  let artifact: typeof artifactTable.$inferSelect | undefined;
+
+  if (repoData) {
+    const [row] = await dbPool
+      .select()
+      .from(artifactTable)
+      .where(
+        and(
+          eq(artifactTable.repositoryId, repoData.repository.id),
+          eq(artifactTable.digest, digest),
+        ),
+      )
+      .limit(1);
+    artifact = row;
+  }
+
+  // Pull-through cache: fetch + cache the blob from the upstream on a local miss.
+  if (!artifact) {
+    const cached = await cacheUpstreamBlob(namespace, repo, digest);
+    if (cached) {
+      artifact = cached.artifact;
+      repoData = cached.repoData;
+    }
+  }
 
   if (!repoData) {
     set.status = 404;
     return ociErrors.nameUnknown(name);
   }
-
-  const [artifact] = await dbPool
-    .select()
-    .from(artifactTable)
-    .where(
-      and(
-        eq(artifactTable.repositoryId, repoData.repository.id),
-        eq(artifactTable.digest, digest),
-      ),
-    )
-    .limit(1);
 
   if (!artifact) {
     set.status = 404;
