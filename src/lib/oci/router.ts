@@ -33,7 +33,11 @@ import {
   recordUsage,
   resolveEntitlements,
 } from "lib/billing";
-import { maintenanceAllowedNamespaces } from "lib/config/env.config";
+import {
+  maintenanceAllowedNamespaces,
+  registryAuthToken,
+  registryRequireAuth,
+} from "lib/config/env.config";
 import { dbPool } from "lib/db";
 import {
   artifactTable,
@@ -53,6 +57,10 @@ import {
 } from "lib/oci/chunkStore";
 import { computeDigest } from "lib/oci/digest";
 import * as ociErrors from "lib/oci/errors";
+import {
+  isRegistryAuthorized,
+  registryAuthChallenge,
+} from "lib/oci/registryAuth";
 import { events, flags } from "lib/providers";
 import { storage } from "lib/storage";
 
@@ -1014,6 +1022,25 @@ const handleListTags = async (
  */
 const ociRouter = new Elysia({ prefix: "/v2" })
   .onBeforeHandle(async ({ request, set }) => {
+    // Registry auth (flag-gated). Default OFF preserves the current in-cluster
+    // behaviour where the registry is reachable only over the private
+    // NodePort. When ON, every /v2 request (including the GET /v2/ version
+    // probe clients hit first) must carry a valid Basic-auth token, and an
+    // unauthenticated request gets a 401 + WWW-Authenticate challenge so the
+    // client knows to authenticate
+    if (
+      registryRequireAuth &&
+      !isRegistryAuthorized(
+        request.headers.get("authorization"),
+        registryAuthToken,
+      )
+    ) {
+      set.status = 401;
+      set.headers["WWW-Authenticate"] = registryAuthChallenge;
+      set.headers["Docker-Distribution-API-Version"] = "registry/2.0";
+      return ociErrors.unauthorized();
+    }
+
     const path = new URL(request.url).pathname.replace(/^\/v2\/?/, "");
 
     if (!path) return;
