@@ -56,6 +56,14 @@ export const {
   SCAN_REGISTRY_ENDPOINT,
   /** Trivy `--insecure` (plaintext-HTTP registry, e.g. the NodePort). */
   SCAN_REGISTRY_INSECURE = "false",
+  /**
+   * Pull-through cache upstreams as JSON mapping a local namespace to an
+   * upstream registry base URL, e.g.
+   * `{"dockerhub":"https://registry-1.docker.io","ghcr":"https://ghcr.io"}`.
+   * A pull of `<namespace>/<repo>` that misses locally is fetched from the
+   * upstream, cached, and served. Empty (default) = no mirrors (inert).
+   */
+  PULL_THROUGH_UPSTREAMS = "{}",
   /** Vortex event streaming API URL */
   VORTEX_API_URL,
   /** Vortex event streaming API key */
@@ -82,6 +90,21 @@ export const {
   FEDERATION_SYNC_INTERVAL_MS = "21600000",
 } = process.env;
 
+/** Parse the PULL_THROUGH_UPSTREAMS JSON into a namespace -> upstream-URL map. */
+function parsePullThroughUpstreams(raw: string): Record<string, string> {
+  try {
+    const parsed: unknown = JSON.parse(raw);
+    if (!parsed || typeof parsed !== "object") return {};
+    const out: Record<string, string> = {};
+    for (const [ns, url] of Object.entries(parsed as Record<string, unknown>)) {
+      if (typeof url === "string" && url) out[ns] = url.replace(/\/+$/, "");
+    }
+    return out;
+  } catch {
+    return {};
+  }
+}
+
 export const isDevEnv = NODE_ENV === "development",
   isProdEnv = NODE_ENV === "production",
   hasBilling = !!BILLING_BASE_URL,
@@ -90,6 +113,7 @@ export const isDevEnv = NODE_ENV === "development",
   scanEnabled = SCAN_ENABLED === "true",
   scanRegistryEndpoint = SCAN_REGISTRY_ENDPOINT,
   scanRegistryInsecure = SCAN_REGISTRY_INSECURE === "true",
+  pullThroughUpstreams = parsePullThroughUpstreams(PULL_THROUGH_UPSTREAMS),
   tagRetentionCount = Number.parseInt(TAG_RETENTION_COUNT, 10) || 0,
   maintenanceAllowedNamespaces = MAINTENANCE_ALLOWED_NAMESPACES.split(",")
     .map((s) => s.trim())
