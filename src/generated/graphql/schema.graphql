@@ -26,11 +26,11 @@ type Query implements Node {
   """Get a single `Tag`."""
   tag(rowId: UUID!): Tag
 
+  """Get a single `NpmDistTag`."""
+  npmDistTag(rowId: UUID!): NpmDistTag
+
   """Get a single `UploadSession`."""
   uploadSession(rowId: UUID!): UploadSession
-
-  """Get a single `Artifact`."""
-  artifact(rowId: UUID!): Artifact
 
   """Get a single `SchemaMetadatum`."""
   schemaMetadatum(artifactId: UUID!): SchemaMetadatum
@@ -41,8 +41,23 @@ type Query implements Node {
   """Get a single `Namespace`."""
   namespaceByName(name: String!): Namespace
 
+  """Get a single `Artifact`."""
+  artifact(rowId: UUID!): Artifact
+
   """Get a single `Repository`."""
   repository(rowId: UUID!): Repository
+
+  """Get a single `NpmMetadatum`."""
+  npmMetadatum(rowId: UUID!): NpmMetadatum
+
+  """Get a single `Plugin`."""
+  plugin(rowId: UUID!): Plugin
+
+  """Get a single `Plugin`."""
+  pluginByName(name: String!): Plugin
+
+  """Get a single `ScanResult`."""
+  scanResult(rowId: UUID!): ScanResult
 
   """Get a single `FederatedSource`."""
   federatedSource(rowId: UUID!): FederatedSource
@@ -81,6 +96,14 @@ type Query implements Node {
     id: ID!
   ): Tag
 
+  """Reads a single `NpmDistTag` using its globally unique `ID`."""
+  npmDistTagById(
+    """
+    The globally unique `ID` to be used in selecting a single `NpmDistTag`.
+    """
+    id: ID!
+  ): NpmDistTag
+
   """Reads a single `UploadSession` using its globally unique `ID`."""
   uploadSessionById(
     """
@@ -88,12 +111,6 @@ type Query implements Node {
     """
     id: ID!
   ): UploadSession
-
-  """Reads a single `Artifact` using its globally unique `ID`."""
-  artifactById(
-    """The globally unique `ID` to be used in selecting a single `Artifact`."""
-    id: ID!
-  ): Artifact
 
   """Reads a single `SchemaMetadatum` using its globally unique `ID`."""
   schemaMetadatumById(
@@ -109,6 +126,12 @@ type Query implements Node {
     id: ID!
   ): Namespace
 
+  """Reads a single `Artifact` using its globally unique `ID`."""
+  artifactById(
+    """The globally unique `ID` to be used in selecting a single `Artifact`."""
+    id: ID!
+  ): Artifact
+
   """Reads a single `Repository` using its globally unique `ID`."""
   repositoryById(
     """
@@ -116,6 +139,28 @@ type Query implements Node {
     """
     id: ID!
   ): Repository
+
+  """Reads a single `NpmMetadatum` using its globally unique `ID`."""
+  npmMetadatumById(
+    """
+    The globally unique `ID` to be used in selecting a single `NpmMetadatum`.
+    """
+    id: ID!
+  ): NpmMetadatum
+
+  """Reads a single `Plugin` using its globally unique `ID`."""
+  pluginById(
+    """The globally unique `ID` to be used in selecting a single `Plugin`."""
+    id: ID!
+  ): Plugin
+
+  """Reads a single `ScanResult` using its globally unique `ID`."""
+  scanResultById(
+    """
+    The globally unique `ID` to be used in selecting a single `ScanResult`.
+    """
+    id: ID!
+  ): ScanResult
 
   """Reads a single `FederatedSource` using its globally unique `ID`."""
   federatedSourceById(
@@ -249,6 +294,40 @@ type Query implements Node {
     orderBy: [TagOrderBy!] = [PRIMARY_KEY_ASC]
   ): TagConnection
 
+  """Reads and enables pagination through a set of `NpmDistTag`."""
+  npmDistTags(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: NpmDistTagCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: NpmDistTagFilter
+
+    """The method to use when ordering `NpmDistTag`."""
+    orderBy: [NpmDistTagOrderBy!] = [PRIMARY_KEY_ASC]
+  ): NpmDistTagConnection
+
   """Reads and enables pagination through a set of `UploadSession`."""
   uploadSessions(
     """Only read the first `n` values of the set."""
@@ -282,40 +361,6 @@ type Query implements Node {
     """The method to use when ordering `UploadSession`."""
     orderBy: [UploadSessionOrderBy!] = [PRIMARY_KEY_ASC]
   ): UploadSessionConnection
-
-  """Reads and enables pagination through a set of `Artifact`."""
-  artifacts(
-    """Only read the first `n` values of the set."""
-    first: Int
-
-    """Only read the last `n` values of the set."""
-    last: Int
-
-    """
-    Skip the first `n` values from our `after` cursor, an alternative to cursor
-    based pagination. May not be used with `last`.
-    """
-    offset: Int
-
-    """Read all values in the set before (above) this cursor."""
-    before: Cursor
-
-    """Read all values in the set after (below) this cursor."""
-    after: Cursor
-
-    """
-    A condition to be used in determining which values should be returned by the collection.
-    """
-    condition: ArtifactCondition
-
-    """
-    A filter to be used in determining which values should be returned by the collection.
-    """
-    filter: ArtifactFilter
-
-    """The method to use when ordering `Artifact`."""
-    orderBy: [ArtifactOrderBy!] = [PRIMARY_KEY_ASC]
-  ): ArtifactConnection
 
   """Reads and enables pagination through a set of `SchemaMetadatum`."""
   schemaMetadata(
@@ -385,6 +430,40 @@ type Query implements Node {
     orderBy: [NamespaceOrderBy!] = [PRIMARY_KEY_ASC]
   ): NamespaceConnection
 
+  """Reads and enables pagination through a set of `Artifact`."""
+  artifacts(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: ArtifactCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: ArtifactFilter
+
+    """The method to use when ordering `Artifact`."""
+    orderBy: [ArtifactOrderBy!] = [PRIMARY_KEY_ASC]
+  ): ArtifactConnection
+
   """Reads and enables pagination through a set of `Repository`."""
   repositories(
     """Only read the first `n` values of the set."""
@@ -418,6 +497,108 @@ type Query implements Node {
     """The method to use when ordering `Repository`."""
     orderBy: [RepositoryOrderBy!] = [PRIMARY_KEY_ASC]
   ): RepositoryConnection
+
+  """Reads and enables pagination through a set of `NpmMetadatum`."""
+  npmMetadata(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: NpmMetadatumCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: NpmMetadatumFilter
+
+    """The method to use when ordering `NpmMetadatum`."""
+    orderBy: [NpmMetadatumOrderBy!] = [PRIMARY_KEY_ASC]
+  ): NpmMetadatumConnection
+
+  """Reads and enables pagination through a set of `Plugin`."""
+  plugins(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: PluginCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: PluginFilter
+
+    """The method to use when ordering `Plugin`."""
+    orderBy: [PluginOrderBy!] = [PRIMARY_KEY_ASC]
+  ): PluginConnection
+
+  """Reads and enables pagination through a set of `ScanResult`."""
+  scanResults(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: ScanResultCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: ScanResultFilter
+
+    """The method to use when ordering `ScanResult`."""
+    orderBy: [ScanResultOrderBy!] = [PRIMARY_KEY_ASC]
+  ): ScanResultConnection
 
   """Reads and enables pagination through a set of `FederatedSource`."""
   federatedSources(
@@ -605,6 +786,7 @@ type Artifact implements Node {
   content: String
   createdAt: Datetime
   storagePath: String
+  subject: String
 
   """Reads a single `Repository` that is related to this `Artifact`."""
   repository: Repository
@@ -687,6 +869,74 @@ type Artifact implements Node {
     """The method to use when ordering `CargoMetadatum`."""
     orderBy: [CargoMetadatumOrderBy!] = [PRIMARY_KEY_ASC]
   ): CargoMetadatumConnection!
+
+  """Reads and enables pagination through a set of `NpmMetadatum`."""
+  npmMetadata(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: NpmMetadatumCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: NpmMetadatumFilter
+
+    """The method to use when ordering `NpmMetadatum`."""
+    orderBy: [NpmMetadatumOrderBy!] = [PRIMARY_KEY_ASC]
+  ): NpmMetadatumConnection!
+
+  """Reads and enables pagination through a set of `ScanResult`."""
+  scanResults(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: ScanResultCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: ScanResultFilter
+
+    """The method to use when ordering `ScanResult`."""
+    orderBy: [ScanResultOrderBy!] = [PRIMARY_KEY_ASC]
+  ): ScanResultConnection!
 }
 
 """
@@ -718,6 +968,7 @@ type Repository implements Node {
   isPublic: Boolean!
   createdAt: Datetime
   updatedAt: Datetime
+  downloadCount: BigInt!
 
   """Reads a single `Namespace` that is related to this `Repository`."""
   namespace: Namespace
@@ -857,6 +1108,40 @@ type Repository implements Node {
     """The method to use when ordering `ApiToken`."""
     orderBy: [ApiTokenOrderBy!] = [PRIMARY_KEY_ASC]
   ): ApiTokenConnection!
+
+  """Reads and enables pagination through a set of `NpmDistTag`."""
+  npmDistTags(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: NpmDistTagCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: NpmDistTagFilter
+
+    """The method to use when ordering `NpmDistTag`."""
+    orderBy: [NpmDistTagOrderBy!] = [PRIMARY_KEY_ASC]
+  ): NpmDistTagConnection!
 }
 
 type Namespace implements Node {
@@ -1041,6 +1326,12 @@ input RepositoryFilter {
 
   """Some related `apiTokens` exist."""
   apiTokensExist: Boolean
+
+  """Filter by the object’s `npmDistTags` relation."""
+  npmDistTags: RepositoryToManyNpmDistTagFilter
+
+  """Some related `npmDistTags` exist."""
+  npmDistTagsExist: Boolean
 
   """Filter by the object’s `namespace` relation."""
   namespace: NamespaceFilter
@@ -1262,6 +1553,9 @@ input ArtifactFilter {
   """Filter by the object’s `digest` field."""
   digest: StringFilter
 
+  """Filter by the object’s `subject` field."""
+  subject: StringFilter
+
   """Filter by the object’s `containerMetadatum` relation."""
   containerMetadatum: ContainerMetadatumFilter
 
@@ -1291,6 +1585,18 @@ input ArtifactFilter {
 
   """Some related `cargoMetadata` exist."""
   cargoMetadataExist: Boolean
+
+  """Filter by the object’s `npmMetadata` relation."""
+  npmMetadata: ArtifactToManyNpmMetadatumFilter
+
+  """Some related `npmMetadata` exist."""
+  npmMetadataExist: Boolean
+
+  """Filter by the object’s `scanResults` relation."""
+  scanResults: ArtifactToManyScanResultFilter
+
+  """Some related `scanResults` exist."""
+  scanResultsExist: Boolean
 
   """Filter by the object’s `repository` relation."""
   repository: RepositoryFilter
@@ -1464,6 +1770,101 @@ input CargoMetadatumFilter {
 
   """Negates the expression."""
   not: CargoMetadatumFilter
+}
+
+"""
+A filter to be used against many `NpmMetadatum` object types. All fields are combined with a logical ‘and.’
+"""
+input ArtifactToManyNpmMetadatumFilter {
+  """
+  Every related `NpmMetadatum` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  every: NpmMetadatumFilter
+
+  """
+  Some related `NpmMetadatum` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  some: NpmMetadatumFilter
+
+  """
+  No related `NpmMetadatum` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  none: NpmMetadatumFilter
+}
+
+"""
+A filter to be used against `NpmMetadatum` object types. All fields are combined with a logical ‘and.’
+"""
+input NpmMetadatumFilter {
+  """Filter by the object’s `rowId` field."""
+  rowId: UUIDFilter
+
+  """Filter by the object’s `artifactId` field."""
+  artifactId: UUIDFilter
+
+  """Filter by the object’s `name` field."""
+  name: StringFilter
+
+  """Filter by the object’s `version` field."""
+  version: StringFilter
+
+  """Filter by the object’s `artifact` relation."""
+  artifact: ArtifactFilter
+
+  """Checks for all expressions in this list."""
+  and: [NpmMetadatumFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [NpmMetadatumFilter!]
+
+  """Negates the expression."""
+  not: NpmMetadatumFilter
+}
+
+"""
+A filter to be used against many `ScanResult` object types. All fields are combined with a logical ‘and.’
+"""
+input ArtifactToManyScanResultFilter {
+  """
+  Every related `ScanResult` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  every: ScanResultFilter
+
+  """
+  Some related `ScanResult` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  some: ScanResultFilter
+
+  """
+  No related `ScanResult` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  none: ScanResultFilter
+}
+
+"""
+A filter to be used against `ScanResult` object types. All fields are combined with a logical ‘and.’
+"""
+input ScanResultFilter {
+  """Filter by the object’s `rowId` field."""
+  rowId: UUIDFilter
+
+  """Filter by the object’s `artifactId` field."""
+  artifactId: UUIDFilter
+
+  """Filter by the object’s `status` field."""
+  status: StringFilter
+
+  """Filter by the object’s `artifact` relation."""
+  artifact: ArtifactFilter
+
+  """Checks for all expressions in this list."""
+  and: [ScanResultFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [ScanResultFilter!]
+
+  """Negates the expression."""
+  not: ScanResultFilter
 }
 
 """
@@ -1755,6 +2156,52 @@ input NamespaceToManyApiTokenFilter {
   none: ApiTokenFilter
 }
 
+"""
+A filter to be used against many `NpmDistTag` object types. All fields are combined with a logical ‘and.’
+"""
+input RepositoryToManyNpmDistTagFilter {
+  """
+  Every related `NpmDistTag` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  every: NpmDistTagFilter
+
+  """
+  Some related `NpmDistTag` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  some: NpmDistTagFilter
+
+  """
+  No related `NpmDistTag` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  none: NpmDistTagFilter
+}
+
+"""
+A filter to be used against `NpmDistTag` object types. All fields are combined with a logical ‘and.’
+"""
+input NpmDistTagFilter {
+  """Filter by the object’s `rowId` field."""
+  rowId: UUIDFilter
+
+  """Filter by the object’s `repositoryId` field."""
+  repositoryId: UUIDFilter
+
+  """Filter by the object’s `tag` field."""
+  tag: StringFilter
+
+  """Filter by the object’s `repository` relation."""
+  repository: RepositoryFilter
+
+  """Checks for all expressions in this list."""
+  and: [NpmDistTagFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [NpmDistTagFilter!]
+
+  """Negates the expression."""
+  not: NpmDistTagFilter
+}
+
 """Methods to use when ordering `Repository`."""
 enum RepositoryOrderBy {
   NATURAL
@@ -1910,6 +2357,9 @@ input ArtifactCondition {
 
   """Checks for equality with the object’s `digest` field."""
   digest: String
+
+  """Checks for equality with the object’s `subject` field."""
+  subject: String
 }
 
 """Methods to use when ordering `Artifact`."""
@@ -1923,6 +2373,8 @@ enum ArtifactOrderBy {
   REPOSITORY_ID_DESC
   DIGEST_ASC
   DIGEST_DESC
+  SUBJECT_ASC
+  SUBJECT_DESC
 }
 
 """A connection to a list of `Tag` values."""
@@ -2071,6 +2523,76 @@ enum UploadSessionOrderBy {
   EXPIRES_AT_DESC
 }
 
+"""A connection to a list of `NpmDistTag` values."""
+type NpmDistTagConnection {
+  """A list of `NpmDistTag` objects."""
+  nodes: [NpmDistTag]!
+
+  """
+  A list of edges which contains the `NpmDistTag` and cursor to aid in pagination.
+  """
+  edges: [NpmDistTagEdge]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `NpmDistTag` you could get from the connection."""
+  totalCount: Int!
+}
+
+type NpmDistTag implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  id: ID!
+  rowId: UUID!
+  repositoryId: UUID!
+  tag: String!
+  version: String!
+  createdAt: Datetime
+  updatedAt: Datetime
+
+  """Reads a single `Repository` that is related to this `NpmDistTag`."""
+  repository: Repository
+}
+
+"""A `NpmDistTag` edge in the connection."""
+type NpmDistTagEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `NpmDistTag` at the end of the edge."""
+  node: NpmDistTag
+}
+
+"""
+A condition to be used against `NpmDistTag` object types. All fields are tested
+for equality and combined with a logical ‘and.’
+"""
+input NpmDistTagCondition {
+  """Checks for equality with the object’s `rowId` field."""
+  rowId: UUID
+
+  """Checks for equality with the object’s `repositoryId` field."""
+  repositoryId: UUID
+
+  """Checks for equality with the object’s `tag` field."""
+  tag: String
+}
+
+"""Methods to use when ordering `NpmDistTag`."""
+enum NpmDistTagOrderBy {
+  NATURAL
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+  ROW_ID_ASC
+  ROW_ID_DESC
+  REPOSITORY_ID_ASC
+  REPOSITORY_ID_DESC
+  TAG_ASC
+  TAG_DESC
+}
+
 type SchemaMetadatum implements Node {
   """
   A globally unique identifier. Can be used in various places throughout the system to identify this single value.
@@ -2180,6 +2702,179 @@ enum CargoMetadatumOrderBy {
   NAME_DESC
   VERS_ASC
   VERS_DESC
+}
+
+"""A connection to a list of `NpmMetadatum` values."""
+type NpmMetadatumConnection {
+  """A list of `NpmMetadatum` objects."""
+  nodes: [NpmMetadatum]!
+
+  """
+  A list of edges which contains the `NpmMetadatum` and cursor to aid in pagination.
+  """
+  edges: [NpmMetadatumEdge]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `NpmMetadatum` you could get from the connection."""
+  totalCount: Int!
+}
+
+type NpmMetadatum implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  id: ID!
+  rowId: UUID!
+  artifactId: UUID!
+  name: String!
+  version: String!
+  manifest: JSON!
+  shasum: String!
+  integrity: String!
+  createdAt: Datetime
+  updatedAt: Datetime
+
+  """Reads a single `Artifact` that is related to this `NpmMetadatum`."""
+  artifact: Artifact
+}
+
+"""A `NpmMetadatum` edge in the connection."""
+type NpmMetadatumEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `NpmMetadatum` at the end of the edge."""
+  node: NpmMetadatum
+}
+
+"""
+A condition to be used against `NpmMetadatum` object types. All fields are
+tested for equality and combined with a logical ‘and.’
+"""
+input NpmMetadatumCondition {
+  """Checks for equality with the object’s `rowId` field."""
+  rowId: UUID
+
+  """Checks for equality with the object’s `artifactId` field."""
+  artifactId: UUID
+
+  """Checks for equality with the object’s `name` field."""
+  name: String
+
+  """Checks for equality with the object’s `version` field."""
+  version: String
+}
+
+"""Methods to use when ordering `NpmMetadatum`."""
+enum NpmMetadatumOrderBy {
+  NATURAL
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+  ROW_ID_ASC
+  ROW_ID_DESC
+  ARTIFACT_ID_ASC
+  ARTIFACT_ID_DESC
+  NAME_ASC
+  NAME_DESC
+  VERSION_ASC
+  VERSION_DESC
+}
+
+"""A connection to a list of `ScanResult` values."""
+type ScanResultConnection {
+  """A list of `ScanResult` objects."""
+  nodes: [ScanResult]!
+
+  """
+  A list of edges which contains the `ScanResult` and cursor to aid in pagination.
+  """
+  edges: [ScanResultEdge]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `ScanResult` you could get from the connection."""
+  totalCount: Int!
+}
+
+type ScanResult implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  id: ID!
+  rowId: UUID!
+  artifactId: UUID!
+  status: String!
+  scanner: String
+  critical: Int!
+  high: Int!
+  medium: Int!
+  low: Int!
+  unknown: Int!
+  findings: JSON
+  error: String
+  createdAt: Datetime
+  scannedAt: Datetime
+
+  """Reads a single `Artifact` that is related to this `ScanResult`."""
+  artifact: Artifact
+}
+
+"""A `ScanResult` edge in the connection."""
+type ScanResultEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `ScanResult` at the end of the edge."""
+  node: ScanResult
+}
+
+"""
+A condition to be used against `ScanResult` object types. All fields are tested
+for equality and combined with a logical ‘and.’
+"""
+input ScanResultCondition {
+  """Checks for equality with the object’s `rowId` field."""
+  rowId: UUID
+
+  """Checks for equality with the object’s `artifactId` field."""
+  artifactId: UUID
+
+  """Checks for equality with the object’s `status` field."""
+  status: String
+}
+
+"""Methods to use when ordering `ScanResult`."""
+enum ScanResultOrderBy {
+  NATURAL
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+  ROW_ID_ASC
+  ROW_ID_DESC
+  ARTIFACT_ID_ASC
+  ARTIFACT_ID_DESC
+  STATUS_ASC
+  STATUS_DESC
+}
+
+type Plugin implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  id: ID!
+  rowId: UUID!
+  name: String!
+  version: String!
+  description: String!
+  type: String!
+  bin: String
+  endpoint: String
+  commands: JSON
+  packages: JSON
+  createdAt: Datetime
+  updatedAt: Datetime
 }
 
 type FederatedSource implements Node {
@@ -2596,6 +3291,74 @@ enum NamespaceOrderBy {
   ORGANIZATION_ID_DESC
 }
 
+"""A connection to a list of `Plugin` values."""
+type PluginConnection {
+  """A list of `Plugin` objects."""
+  nodes: [Plugin]!
+
+  """
+  A list of edges which contains the `Plugin` and cursor to aid in pagination.
+  """
+  edges: [PluginEdge]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `Plugin` you could get from the connection."""
+  totalCount: Int!
+}
+
+"""A `Plugin` edge in the connection."""
+type PluginEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `Plugin` at the end of the edge."""
+  node: Plugin
+}
+
+"""
+A condition to be used against `Plugin` object types. All fields are tested for equality and combined with a logical ‘and.’
+"""
+input PluginCondition {
+  """Checks for equality with the object’s `rowId` field."""
+  rowId: UUID
+
+  """Checks for equality with the object’s `name` field."""
+  name: String
+}
+
+"""
+A filter to be used against `Plugin` object types. All fields are combined with a logical ‘and.’
+"""
+input PluginFilter {
+  """Filter by the object’s `rowId` field."""
+  rowId: UUIDFilter
+
+  """Filter by the object’s `name` field."""
+  name: StringFilter
+
+  """Checks for all expressions in this list."""
+  and: [PluginFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [PluginFilter!]
+
+  """Negates the expression."""
+  not: PluginFilter
+}
+
+"""Methods to use when ordering `Plugin`."""
+enum PluginOrderBy {
+  NATURAL
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+  ROW_ID_ASC
+  ROW_ID_DESC
+  NAME_ASC
+  NAME_DESC
+}
+
 """A connection to a list of `FederatedSource` values."""
 type FederatedSourceConnection {
   """A list of `FederatedSource` objects."""
@@ -2680,6 +3443,14 @@ type Mutation {
     input: CreateTagInput!
   ): CreateTagPayload
 
+  """Creates a single `NpmDistTag`."""
+  createNpmDistTag(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateNpmDistTagInput!
+  ): CreateNpmDistTagPayload
+
   """Creates a single `UploadSession`."""
   createUploadSession(
     """
@@ -2687,14 +3458,6 @@ type Mutation {
     """
     input: CreateUploadSessionInput!
   ): CreateUploadSessionPayload
-
-  """Creates a single `Artifact`."""
-  createArtifact(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: CreateArtifactInput!
-  ): CreateArtifactPayload
 
   """Creates a single `SchemaMetadatum`."""
   createSchemaMetadatum(
@@ -2712,6 +3475,14 @@ type Mutation {
     input: CreateNamespaceInput!
   ): CreateNamespacePayload
 
+  """Creates a single `Artifact`."""
+  createArtifact(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateArtifactInput!
+  ): CreateArtifactPayload
+
   """Creates a single `Repository`."""
   createRepository(
     """
@@ -2719,6 +3490,30 @@ type Mutation {
     """
     input: CreateRepositoryInput!
   ): CreateRepositoryPayload
+
+  """Creates a single `NpmMetadatum`."""
+  createNpmMetadatum(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateNpmMetadatumInput!
+  ): CreateNpmMetadatumPayload
+
+  """Creates a single `Plugin`."""
+  createPlugin(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreatePluginInput!
+  ): CreatePluginPayload
+
+  """Creates a single `ScanResult`."""
+  createScanResult(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateScanResultInput!
+  ): CreateScanResultPayload
 
   """Creates a single `FederatedSource`."""
   createFederatedSource(
@@ -2805,6 +3600,24 @@ type Mutation {
   ): UpdateTagPayload
 
   """
+  Updates a single `NpmDistTag` using its globally unique id and a patch.
+  """
+  updateNpmDistTagById(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateNpmDistTagByIdInput!
+  ): UpdateNpmDistTagPayload
+
+  """Updates a single `NpmDistTag` using a unique key and a patch."""
+  updateNpmDistTag(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateNpmDistTagInput!
+  ): UpdateNpmDistTagPayload
+
+  """
   Updates a single `UploadSession` using its globally unique id and a patch.
   """
   updateUploadSessionById(
@@ -2821,22 +3634,6 @@ type Mutation {
     """
     input: UpdateUploadSessionInput!
   ): UpdateUploadSessionPayload
-
-  """Updates a single `Artifact` using its globally unique id and a patch."""
-  updateArtifactById(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdateArtifactByIdInput!
-  ): UpdateArtifactPayload
-
-  """Updates a single `Artifact` using a unique key and a patch."""
-  updateArtifact(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdateArtifactInput!
-  ): UpdateArtifactPayload
 
   """
   Updates a single `SchemaMetadatum` using its globally unique id and a patch.
@@ -2880,6 +3677,22 @@ type Mutation {
     input: UpdateNamespaceByNameInput!
   ): UpdateNamespacePayload
 
+  """Updates a single `Artifact` using its globally unique id and a patch."""
+  updateArtifactById(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateArtifactByIdInput!
+  ): UpdateArtifactPayload
+
+  """Updates a single `Artifact` using a unique key and a patch."""
+  updateArtifact(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateArtifactInput!
+  ): UpdateArtifactPayload
+
   """
   Updates a single `Repository` using its globally unique id and a patch.
   """
@@ -2897,6 +3710,66 @@ type Mutation {
     """
     input: UpdateRepositoryInput!
   ): UpdateRepositoryPayload
+
+  """
+  Updates a single `NpmMetadatum` using its globally unique id and a patch.
+  """
+  updateNpmMetadatumById(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateNpmMetadatumByIdInput!
+  ): UpdateNpmMetadatumPayload
+
+  """Updates a single `NpmMetadatum` using a unique key and a patch."""
+  updateNpmMetadatum(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateNpmMetadatumInput!
+  ): UpdateNpmMetadatumPayload
+
+  """Updates a single `Plugin` using its globally unique id and a patch."""
+  updatePluginById(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdatePluginByIdInput!
+  ): UpdatePluginPayload
+
+  """Updates a single `Plugin` using a unique key and a patch."""
+  updatePlugin(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdatePluginInput!
+  ): UpdatePluginPayload
+
+  """Updates a single `Plugin` using a unique key and a patch."""
+  updatePluginByName(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdatePluginByNameInput!
+  ): UpdatePluginPayload
+
+  """
+  Updates a single `ScanResult` using its globally unique id and a patch.
+  """
+  updateScanResultById(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateScanResultByIdInput!
+  ): UpdateScanResultPayload
+
+  """Updates a single `ScanResult` using a unique key and a patch."""
+  updateScanResult(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateScanResultInput!
+  ): UpdateScanResultPayload
 
   """
   Updates a single `FederatedSource` using its globally unique id and a patch.
@@ -3024,6 +3897,22 @@ type Mutation {
     input: DeleteTagInput!
   ): DeleteTagPayload
 
+  """Deletes a single `NpmDistTag` using its globally unique id."""
+  deleteNpmDistTagById(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteNpmDistTagByIdInput!
+  ): DeleteNpmDistTagPayload
+
+  """Deletes a single `NpmDistTag` using a unique key."""
+  deleteNpmDistTag(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteNpmDistTagInput!
+  ): DeleteNpmDistTagPayload
+
   """Deletes a single `UploadSession` using its globally unique id."""
   deleteUploadSessionById(
     """
@@ -3039,22 +3928,6 @@ type Mutation {
     """
     input: DeleteUploadSessionInput!
   ): DeleteUploadSessionPayload
-
-  """Deletes a single `Artifact` using its globally unique id."""
-  deleteArtifactById(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteArtifactByIdInput!
-  ): DeleteArtifactPayload
-
-  """Deletes a single `Artifact` using a unique key."""
-  deleteArtifact(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteArtifactInput!
-  ): DeleteArtifactPayload
 
   """Deletes a single `SchemaMetadatum` using its globally unique id."""
   deleteSchemaMetadatumById(
@@ -3096,6 +3969,22 @@ type Mutation {
     input: DeleteNamespaceByNameInput!
   ): DeleteNamespacePayload
 
+  """Deletes a single `Artifact` using its globally unique id."""
+  deleteArtifactById(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteArtifactByIdInput!
+  ): DeleteArtifactPayload
+
+  """Deletes a single `Artifact` using a unique key."""
+  deleteArtifact(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteArtifactInput!
+  ): DeleteArtifactPayload
+
   """Deletes a single `Repository` using its globally unique id."""
   deleteRepositoryById(
     """
@@ -3111,6 +4000,62 @@ type Mutation {
     """
     input: DeleteRepositoryInput!
   ): DeleteRepositoryPayload
+
+  """Deletes a single `NpmMetadatum` using its globally unique id."""
+  deleteNpmMetadatumById(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteNpmMetadatumByIdInput!
+  ): DeleteNpmMetadatumPayload
+
+  """Deletes a single `NpmMetadatum` using a unique key."""
+  deleteNpmMetadatum(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteNpmMetadatumInput!
+  ): DeleteNpmMetadatumPayload
+
+  """Deletes a single `Plugin` using its globally unique id."""
+  deletePluginById(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeletePluginByIdInput!
+  ): DeletePluginPayload
+
+  """Deletes a single `Plugin` using a unique key."""
+  deletePlugin(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeletePluginInput!
+  ): DeletePluginPayload
+
+  """Deletes a single `Plugin` using a unique key."""
+  deletePluginByName(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeletePluginByNameInput!
+  ): DeletePluginPayload
+
+  """Deletes a single `ScanResult` using its globally unique id."""
+  deleteScanResultById(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteScanResultByIdInput!
+  ): DeleteScanResultPayload
+
+  """Deletes a single `ScanResult` using a unique key."""
+  deleteScanResult(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteScanResultInput!
+  ): DeleteScanResultPayload
 
   """Deletes a single `FederatedSource` using its globally unique id."""
   deleteFederatedSourceById(
@@ -3318,6 +4263,51 @@ input TagInput {
   updatedAt: Datetime
 }
 
+"""The output of our create `NpmDistTag` mutation."""
+type CreateNpmDistTagPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `NpmDistTag` that was created by this mutation."""
+  npmDistTag: NpmDistTag
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `NpmDistTag`. May be used by Relay 1."""
+  npmDistTagEdge(
+    """The method to use when ordering `NpmDistTag`."""
+    orderBy: [NpmDistTagOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): NpmDistTagEdge
+}
+
+"""All input for the create `NpmDistTag` mutation."""
+input CreateNpmDistTagInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `NpmDistTag` to be created by this mutation."""
+  npmDistTag: NpmDistTagInput!
+}
+
+"""An input for mutations affecting `NpmDistTag`"""
+input NpmDistTagInput {
+  rowId: UUID
+  repositoryId: UUID!
+  tag: String!
+  version: String!
+  createdAt: Datetime
+  updatedAt: Datetime
+}
+
 """The output of our create `UploadSession` mutation."""
 type CreateUploadSessionPayload {
   """
@@ -3360,53 +4350,6 @@ input UploadSessionInput {
   offset: BigInt
   createdAt: Datetime
   expiresAt: Datetime!
-}
-
-"""The output of our create `Artifact` mutation."""
-type CreateArtifactPayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """The `Artifact` that was created by this mutation."""
-  artifact: Artifact
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-
-  """An edge for our `Artifact`. May be used by Relay 1."""
-  artifactEdge(
-    """The method to use when ordering `Artifact`."""
-    orderBy: [ArtifactOrderBy!]! = [PRIMARY_KEY_ASC]
-  ): ArtifactEdge
-}
-
-"""All input for the create `Artifact` mutation."""
-input CreateArtifactInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-
-  """The `Artifact` to be created by this mutation."""
-  artifact: ArtifactInput!
-}
-
-"""An input for mutations affecting `Artifact`"""
-input ArtifactInput {
-  rowId: UUID
-  repositoryId: UUID!
-  digest: String!
-  size: BigInt!
-  mediaType: String!
-  content: String
-  createdAt: Datetime
-  storagePath: String
 }
 
 """The output of our create `SchemaMetadatum` mutation."""
@@ -3498,6 +4441,54 @@ input NamespaceInput {
   organizationId: UUID
 }
 
+"""The output of our create `Artifact` mutation."""
+type CreateArtifactPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `Artifact` that was created by this mutation."""
+  artifact: Artifact
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `Artifact`. May be used by Relay 1."""
+  artifactEdge(
+    """The method to use when ordering `Artifact`."""
+    orderBy: [ArtifactOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): ArtifactEdge
+}
+
+"""All input for the create `Artifact` mutation."""
+input CreateArtifactInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `Artifact` to be created by this mutation."""
+  artifact: ArtifactInput!
+}
+
+"""An input for mutations affecting `Artifact`"""
+input ArtifactInput {
+  rowId: UUID
+  repositoryId: UUID!
+  digest: String!
+  size: BigInt!
+  mediaType: String!
+  content: String
+  createdAt: Datetime
+  storagePath: String
+  subject: String
+}
+
 """The output of our create `Repository` mutation."""
 type CreateRepositoryPayload {
   """
@@ -3543,6 +4534,157 @@ input RepositoryInput {
   isPublic: Boolean
   createdAt: Datetime
   updatedAt: Datetime
+  downloadCount: BigInt
+}
+
+"""The output of our create `NpmMetadatum` mutation."""
+type CreateNpmMetadatumPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `NpmMetadatum` that was created by this mutation."""
+  npmMetadatum: NpmMetadatum
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `NpmMetadatum`. May be used by Relay 1."""
+  npmMetadatumEdge(
+    """The method to use when ordering `NpmMetadatum`."""
+    orderBy: [NpmMetadatumOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): NpmMetadatumEdge
+}
+
+"""All input for the create `NpmMetadatum` mutation."""
+input CreateNpmMetadatumInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `NpmMetadatum` to be created by this mutation."""
+  npmMetadatum: NpmMetadatumInput!
+}
+
+"""An input for mutations affecting `NpmMetadatum`"""
+input NpmMetadatumInput {
+  rowId: UUID
+  artifactId: UUID!
+  name: String!
+  version: String!
+  manifest: JSON!
+  shasum: String!
+  integrity: String!
+  createdAt: Datetime
+  updatedAt: Datetime
+}
+
+"""The output of our create `Plugin` mutation."""
+type CreatePluginPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `Plugin` that was created by this mutation."""
+  plugin: Plugin
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `Plugin`. May be used by Relay 1."""
+  pluginEdge(
+    """The method to use when ordering `Plugin`."""
+    orderBy: [PluginOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): PluginEdge
+}
+
+"""All input for the create `Plugin` mutation."""
+input CreatePluginInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `Plugin` to be created by this mutation."""
+  plugin: PluginInput!
+}
+
+"""An input for mutations affecting `Plugin`"""
+input PluginInput {
+  rowId: UUID
+  name: String!
+  version: String!
+  description: String!
+  type: String!
+  bin: String
+  endpoint: String
+  commands: JSON
+  packages: JSON
+  createdAt: Datetime
+  updatedAt: Datetime
+}
+
+"""The output of our create `ScanResult` mutation."""
+type CreateScanResultPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `ScanResult` that was created by this mutation."""
+  scanResult: ScanResult
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `ScanResult`. May be used by Relay 1."""
+  scanResultEdge(
+    """The method to use when ordering `ScanResult`."""
+    orderBy: [ScanResultOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): ScanResultEdge
+}
+
+"""All input for the create `ScanResult` mutation."""
+input CreateScanResultInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `ScanResult` to be created by this mutation."""
+  scanResult: ScanResultInput!
+}
+
+"""An input for mutations affecting `ScanResult`"""
+input ScanResultInput {
+  rowId: UUID
+  artifactId: UUID!
+  status: String
+  scanner: String
+  critical: Int
+  high: Int
+  medium: Int
+  low: Int
+  unknown: Int
+  findings: JSON
+  error: String
+  createdAt: Datetime
+  scannedAt: Datetime
 }
 
 """The output of our create `FederatedSource` mutation."""
@@ -3955,6 +5097,75 @@ input UpdateTagInput {
   patch: TagPatch!
 }
 
+"""The output of our update `NpmDistTag` mutation."""
+type UpdateNpmDistTagPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `NpmDistTag` that was updated by this mutation."""
+  npmDistTag: NpmDistTag
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `NpmDistTag`. May be used by Relay 1."""
+  npmDistTagEdge(
+    """The method to use when ordering `NpmDistTag`."""
+    orderBy: [NpmDistTagOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): NpmDistTagEdge
+}
+
+"""All input for the `updateNpmDistTagById` mutation."""
+input UpdateNpmDistTagByIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `NpmDistTag` to be updated.
+  """
+  id: ID!
+
+  """
+  An object where the defined keys will be set on the `NpmDistTag` being updated.
+  """
+  patch: NpmDistTagPatch!
+}
+
+"""
+Represents an update to a `NpmDistTag`. Fields that are set will be updated.
+"""
+input NpmDistTagPatch {
+  rowId: UUID
+  repositoryId: UUID
+  tag: String
+  version: String
+  createdAt: Datetime
+  updatedAt: Datetime
+}
+
+"""All input for the `updateNpmDistTag` mutation."""
+input UpdateNpmDistTagInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  rowId: UUID!
+
+  """
+  An object where the defined keys will be set on the `NpmDistTag` being updated.
+  """
+  patch: NpmDistTagPatch!
+}
+
 """The output of our update `UploadSession` mutation."""
 type UpdateUploadSessionPayload {
   """
@@ -4021,77 +5232,6 @@ input UpdateUploadSessionInput {
   An object where the defined keys will be set on the `UploadSession` being updated.
   """
   patch: UploadSessionPatch!
-}
-
-"""The output of our update `Artifact` mutation."""
-type UpdateArtifactPayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """The `Artifact` that was updated by this mutation."""
-  artifact: Artifact
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-
-  """An edge for our `Artifact`. May be used by Relay 1."""
-  artifactEdge(
-    """The method to use when ordering `Artifact`."""
-    orderBy: [ArtifactOrderBy!]! = [PRIMARY_KEY_ASC]
-  ): ArtifactEdge
-}
-
-"""All input for the `updateArtifactById` mutation."""
-input UpdateArtifactByIdInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-
-  """
-  The globally unique `ID` which will identify a single `Artifact` to be updated.
-  """
-  id: ID!
-
-  """
-  An object where the defined keys will be set on the `Artifact` being updated.
-  """
-  patch: ArtifactPatch!
-}
-
-"""
-Represents an update to a `Artifact`. Fields that are set will be updated.
-"""
-input ArtifactPatch {
-  rowId: UUID
-  repositoryId: UUID
-  digest: String
-  size: BigInt
-  mediaType: String
-  content: String
-  createdAt: Datetime
-  storagePath: String
-}
-
-"""All input for the `updateArtifact` mutation."""
-input UpdateArtifactInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-  rowId: UUID!
-
-  """
-  An object where the defined keys will be set on the `Artifact` being updated.
-  """
-  patch: ArtifactPatch!
 }
 
 """The output of our update `SchemaMetadatum` mutation."""
@@ -4246,6 +5386,78 @@ input UpdateNamespaceByNameInput {
   patch: NamespacePatch!
 }
 
+"""The output of our update `Artifact` mutation."""
+type UpdateArtifactPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `Artifact` that was updated by this mutation."""
+  artifact: Artifact
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `Artifact`. May be used by Relay 1."""
+  artifactEdge(
+    """The method to use when ordering `Artifact`."""
+    orderBy: [ArtifactOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): ArtifactEdge
+}
+
+"""All input for the `updateArtifactById` mutation."""
+input UpdateArtifactByIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `Artifact` to be updated.
+  """
+  id: ID!
+
+  """
+  An object where the defined keys will be set on the `Artifact` being updated.
+  """
+  patch: ArtifactPatch!
+}
+
+"""
+Represents an update to a `Artifact`. Fields that are set will be updated.
+"""
+input ArtifactPatch {
+  rowId: UUID
+  repositoryId: UUID
+  digest: String
+  size: BigInt
+  mediaType: String
+  content: String
+  createdAt: Datetime
+  storagePath: String
+  subject: String
+}
+
+"""All input for the `updateArtifact` mutation."""
+input UpdateArtifactInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  rowId: UUID!
+
+  """
+  An object where the defined keys will be set on the `Artifact` being updated.
+  """
+  patch: ArtifactPatch!
+}
+
 """The output of our update `Repository` mutation."""
 type UpdateRepositoryPayload {
   """
@@ -4300,6 +5512,7 @@ input RepositoryPatch {
   isPublic: Boolean
   createdAt: Datetime
   updatedAt: Datetime
+  downloadCount: BigInt
 }
 
 """All input for the `updateRepository` mutation."""
@@ -4315,6 +5528,243 @@ input UpdateRepositoryInput {
   An object where the defined keys will be set on the `Repository` being updated.
   """
   patch: RepositoryPatch!
+}
+
+"""The output of our update `NpmMetadatum` mutation."""
+type UpdateNpmMetadatumPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `NpmMetadatum` that was updated by this mutation."""
+  npmMetadatum: NpmMetadatum
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `NpmMetadatum`. May be used by Relay 1."""
+  npmMetadatumEdge(
+    """The method to use when ordering `NpmMetadatum`."""
+    orderBy: [NpmMetadatumOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): NpmMetadatumEdge
+}
+
+"""All input for the `updateNpmMetadatumById` mutation."""
+input UpdateNpmMetadatumByIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `NpmMetadatum` to be updated.
+  """
+  id: ID!
+
+  """
+  An object where the defined keys will be set on the `NpmMetadatum` being updated.
+  """
+  patch: NpmMetadatumPatch!
+}
+
+"""
+Represents an update to a `NpmMetadatum`. Fields that are set will be updated.
+"""
+input NpmMetadatumPatch {
+  rowId: UUID
+  artifactId: UUID
+  name: String
+  version: String
+  manifest: JSON
+  shasum: String
+  integrity: String
+  createdAt: Datetime
+  updatedAt: Datetime
+}
+
+"""All input for the `updateNpmMetadatum` mutation."""
+input UpdateNpmMetadatumInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  rowId: UUID!
+
+  """
+  An object where the defined keys will be set on the `NpmMetadatum` being updated.
+  """
+  patch: NpmMetadatumPatch!
+}
+
+"""The output of our update `Plugin` mutation."""
+type UpdatePluginPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `Plugin` that was updated by this mutation."""
+  plugin: Plugin
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `Plugin`. May be used by Relay 1."""
+  pluginEdge(
+    """The method to use when ordering `Plugin`."""
+    orderBy: [PluginOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): PluginEdge
+}
+
+"""All input for the `updatePluginById` mutation."""
+input UpdatePluginByIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `Plugin` to be updated.
+  """
+  id: ID!
+
+  """
+  An object where the defined keys will be set on the `Plugin` being updated.
+  """
+  patch: PluginPatch!
+}
+
+"""
+Represents an update to a `Plugin`. Fields that are set will be updated.
+"""
+input PluginPatch {
+  rowId: UUID
+  name: String
+  version: String
+  description: String
+  type: String
+  bin: String
+  endpoint: String
+  commands: JSON
+  packages: JSON
+  createdAt: Datetime
+  updatedAt: Datetime
+}
+
+"""All input for the `updatePlugin` mutation."""
+input UpdatePluginInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  rowId: UUID!
+
+  """
+  An object where the defined keys will be set on the `Plugin` being updated.
+  """
+  patch: PluginPatch!
+}
+
+"""All input for the `updatePluginByName` mutation."""
+input UpdatePluginByNameInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  name: String!
+
+  """
+  An object where the defined keys will be set on the `Plugin` being updated.
+  """
+  patch: PluginPatch!
+}
+
+"""The output of our update `ScanResult` mutation."""
+type UpdateScanResultPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `ScanResult` that was updated by this mutation."""
+  scanResult: ScanResult
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `ScanResult`. May be used by Relay 1."""
+  scanResultEdge(
+    """The method to use when ordering `ScanResult`."""
+    orderBy: [ScanResultOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): ScanResultEdge
+}
+
+"""All input for the `updateScanResultById` mutation."""
+input UpdateScanResultByIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `ScanResult` to be updated.
+  """
+  id: ID!
+
+  """
+  An object where the defined keys will be set on the `ScanResult` being updated.
+  """
+  patch: ScanResultPatch!
+}
+
+"""
+Represents an update to a `ScanResult`. Fields that are set will be updated.
+"""
+input ScanResultPatch {
+  rowId: UUID
+  artifactId: UUID
+  status: String
+  scanner: String
+  critical: Int
+  high: Int
+  medium: Int
+  low: Int
+  unknown: Int
+  findings: JSON
+  error: String
+  createdAt: Datetime
+  scannedAt: Datetime
+}
+
+"""All input for the `updateScanResult` mutation."""
+input UpdateScanResultInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  rowId: UUID!
+
+  """
+  An object where the defined keys will be set on the `ScanResult` being updated.
+  """
+  patch: ScanResultPatch!
 }
 
 """The output of our update `FederatedSource` mutation."""
@@ -4779,6 +6229,54 @@ input DeleteTagInput {
   rowId: UUID!
 }
 
+"""The output of our delete `NpmDistTag` mutation."""
+type DeleteNpmDistTagPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `NpmDistTag` that was deleted by this mutation."""
+  npmDistTag: NpmDistTag
+  deletedNpmDistTagId: ID
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `NpmDistTag`. May be used by Relay 1."""
+  npmDistTagEdge(
+    """The method to use when ordering `NpmDistTag`."""
+    orderBy: [NpmDistTagOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): NpmDistTagEdge
+}
+
+"""All input for the `deleteNpmDistTagById` mutation."""
+input DeleteNpmDistTagByIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `NpmDistTag` to be deleted.
+  """
+  id: ID!
+}
+
+"""All input for the `deleteNpmDistTag` mutation."""
+input DeleteNpmDistTagInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  rowId: UUID!
+}
+
 """The output of our delete `UploadSession` mutation."""
 type DeleteUploadSessionPayload {
   """
@@ -4819,54 +6317,6 @@ input DeleteUploadSessionByIdInput {
 
 """All input for the `deleteUploadSession` mutation."""
 input DeleteUploadSessionInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-  rowId: UUID!
-}
-
-"""The output of our delete `Artifact` mutation."""
-type DeleteArtifactPayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """The `Artifact` that was deleted by this mutation."""
-  artifact: Artifact
-  deletedArtifactId: ID
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-
-  """An edge for our `Artifact`. May be used by Relay 1."""
-  artifactEdge(
-    """The method to use when ordering `Artifact`."""
-    orderBy: [ArtifactOrderBy!]! = [PRIMARY_KEY_ASC]
-  ): ArtifactEdge
-}
-
-"""All input for the `deleteArtifactById` mutation."""
-input DeleteArtifactByIdInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-
-  """
-  The globally unique `ID` which will identify a single `Artifact` to be deleted.
-  """
-  id: ID!
-}
-
-"""All input for the `deleteArtifact` mutation."""
-input DeleteArtifactInput {
   """
   An arbitrary string value with no semantic meaning. Will be included in the
   payload verbatim. May be used to track mutations by the client.
@@ -4981,6 +6431,54 @@ input DeleteNamespaceByNameInput {
   name: String!
 }
 
+"""The output of our delete `Artifact` mutation."""
+type DeleteArtifactPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `Artifact` that was deleted by this mutation."""
+  artifact: Artifact
+  deletedArtifactId: ID
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `Artifact`. May be used by Relay 1."""
+  artifactEdge(
+    """The method to use when ordering `Artifact`."""
+    orderBy: [ArtifactOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): ArtifactEdge
+}
+
+"""All input for the `deleteArtifactById` mutation."""
+input DeleteArtifactByIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `Artifact` to be deleted.
+  """
+  id: ID!
+}
+
+"""All input for the `deleteArtifact` mutation."""
+input DeleteArtifactInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  rowId: UUID!
+}
+
 """The output of our delete `Repository` mutation."""
 type DeleteRepositoryPayload {
   """
@@ -5021,6 +6519,160 @@ input DeleteRepositoryByIdInput {
 
 """All input for the `deleteRepository` mutation."""
 input DeleteRepositoryInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  rowId: UUID!
+}
+
+"""The output of our delete `NpmMetadatum` mutation."""
+type DeleteNpmMetadatumPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `NpmMetadatum` that was deleted by this mutation."""
+  npmMetadatum: NpmMetadatum
+  deletedNpmMetadatumId: ID
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `NpmMetadatum`. May be used by Relay 1."""
+  npmMetadatumEdge(
+    """The method to use when ordering `NpmMetadatum`."""
+    orderBy: [NpmMetadatumOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): NpmMetadatumEdge
+}
+
+"""All input for the `deleteNpmMetadatumById` mutation."""
+input DeleteNpmMetadatumByIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `NpmMetadatum` to be deleted.
+  """
+  id: ID!
+}
+
+"""All input for the `deleteNpmMetadatum` mutation."""
+input DeleteNpmMetadatumInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  rowId: UUID!
+}
+
+"""The output of our delete `Plugin` mutation."""
+type DeletePluginPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `Plugin` that was deleted by this mutation."""
+  plugin: Plugin
+  deletedPluginId: ID
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `Plugin`. May be used by Relay 1."""
+  pluginEdge(
+    """The method to use when ordering `Plugin`."""
+    orderBy: [PluginOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): PluginEdge
+}
+
+"""All input for the `deletePluginById` mutation."""
+input DeletePluginByIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `Plugin` to be deleted.
+  """
+  id: ID!
+}
+
+"""All input for the `deletePlugin` mutation."""
+input DeletePluginInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  rowId: UUID!
+}
+
+"""All input for the `deletePluginByName` mutation."""
+input DeletePluginByNameInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  name: String!
+}
+
+"""The output of our delete `ScanResult` mutation."""
+type DeleteScanResultPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `ScanResult` that was deleted by this mutation."""
+  scanResult: ScanResult
+  deletedScanResultId: ID
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `ScanResult`. May be used by Relay 1."""
+  scanResultEdge(
+    """The method to use when ordering `ScanResult`."""
+    orderBy: [ScanResultOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): ScanResultEdge
+}
+
+"""All input for the `deleteScanResultById` mutation."""
+input DeleteScanResultByIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `ScanResult` to be deleted.
+  """
+  id: ID!
+}
+
+"""All input for the `deleteScanResult` mutation."""
+input DeleteScanResultInput {
   """
   An arbitrary string value with no semantic meaning. Will be included in the
   payload verbatim. May be used to track mutations by the client.
