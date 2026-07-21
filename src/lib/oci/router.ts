@@ -37,6 +37,7 @@ import {
 } from "lib/billing";
 import {
   maintenanceAllowedNamespaces,
+  pullThroughTtlMs,
   registryRequireAuth,
 } from "lib/config/env.config";
 import { dbPool } from "lib/db";
@@ -349,7 +350,9 @@ const cacheUpstreamManifest = async (
       })
       .onConflictDoUpdate({
         target: [tagTable.repositoryId, tagTable.name],
-        set: { artifactId: artifact.id },
+        // Refresh updatedAt so it marks the last upstream revalidation (the TTL
+        // clock), and repoint the tag if the upstream digest moved.
+        set: { artifactId: artifact.id, updatedAt: new Date().toISOString() },
       });
   }
 
@@ -423,7 +426,7 @@ const handleGetManifest = async (
       artifact = result[0];
     } else {
       const result = await dbPool
-        .select({ artifact: artifactTable })
+        .select({ artifact: artifactTable, tagUpdatedAt: tagTable.updatedAt })
         .from(tagTable)
         .innerJoin(artifactTable, eq(tagTable.artifactId, artifactTable.id))
         .where(
@@ -434,6 +437,27 @@ const handleGetManifest = async (
         )
         .limit(1);
       artifact = result[0]?.artifact;
+
+      // Pull-through revalidation: a mutable cached tag past its TTL is
+      // re-fetched upstream (digest may have moved). On success serve the fresh
+      // copy; on upstream failure keep serving the stale cache.
+      if (artifact && resolveUpstream(namespace) && pullThroughTtlMs > 0) {
+        const cachedAt = result[0]?.tagUpdatedAt;
+        const stale =
+          !cachedAt ||
+          Date.now() - new Date(cachedAt).getTime() > pullThroughTtlMs;
+        if (stale) {
+          const revalidated = await cacheUpstreamManifest(
+            namespace,
+            repo,
+            reference,
+          );
+          if (revalidated) {
+            artifact = revalidated.artifact;
+            repoData = revalidated.repoData;
+          }
+        }
+      }
     }
   }
 

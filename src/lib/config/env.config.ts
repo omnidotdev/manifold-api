@@ -64,6 +64,15 @@ export const {
    * upstream, cached, and served. Empty (default) = no mirrors (inert).
    */
   PULL_THROUGH_UPSTREAMS = "{}",
+  /**
+   * TTL (seconds) before a pull-through-cached TAG is revalidated against its
+   * upstream. Mutable tags (e.g. `latest`) can move upstream, so a cached tag
+   * older than this is re-fetched on the next pull; if the upstream digest
+   * changed the new manifest is cached and the tag repointed. Digest pulls are
+   * immutable and never revalidated. Default "0" = never revalidate (cache
+   * forever, the prior behaviour).
+   */
+  PULL_THROUGH_TTL_SECONDS = "0",
   /** Vortex event streaming API URL */
   VORTEX_API_URL,
   /** Vortex event streaming API key */
@@ -114,6 +123,8 @@ export const isDevEnv = NODE_ENV === "development",
   scanRegistryEndpoint = SCAN_REGISTRY_ENDPOINT,
   scanRegistryInsecure = SCAN_REGISTRY_INSECURE === "true",
   pullThroughUpstreams = parsePullThroughUpstreams(PULL_THROUGH_UPSTREAMS),
+  pullThroughTtlMs =
+    (Number.parseInt(PULL_THROUGH_TTL_SECONDS, 10) || 0) * 1000,
   tagRetentionCount = Number.parseInt(TAG_RETENTION_COUNT, 10) || 0,
   maintenanceAllowedNamespaces = MAINTENANCE_ALLOWED_NAMESPACES.split(",")
     .map((s) => s.trim())
