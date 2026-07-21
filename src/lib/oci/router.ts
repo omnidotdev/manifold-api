@@ -888,6 +888,86 @@ const handleHeadBlob = async (
   set.headers["Content-Length"] = String(artifact.size);
 };
 
+/**
+ * OCI cross-repo blob mount: POST /v2/<name>/blobs/uploads/?mount=<digest>&from=<repo>.
+ * Blobs are content-addressed and stored globally by digest, so "mounting" a
+ * layer that already exists just links it into the target repo (no re-upload,
+ * no data copy) and returns 201. On any miss it falls back to a normal upload
+ * session (202), which is spec-compliant.
+ * @see https://github.com/opencontainers/distribution-spec/blob/main/spec.md#mounting-a-blob-from-another-repository
+ */
+const handleMountBlob = async (
+  name: string,
+  mountDigest: string,
+  fromRepo: string | undefined,
+  set: { status?: number | string; headers: Record<string, string | number> },
+) => {
+  const { namespace, repo } = parseRepoName(name);
+  const repoData = await getOrCreateRepository(namespace, repo);
+
+  if (!repoData) {
+    set.status = 404;
+    return ociErrors.nameUnknown(name);
+  }
+  if ("limitError" in repoData) {
+    set.status = repoData.limitError.status;
+    return repoData.limitError.body;
+  }
+
+  // Locate the source blob. Prefer the named `from` repo, then fall back to any
+  // repo holding it (global content-addressed dedup). When REGISTRY_REQUIRE_AUTH
+  // is enabled the write to `name` was already authorized; the digest itself is
+  // the capability (you must already possess the content to know it).
+  let source: typeof artifactTable.$inferSelect | undefined;
+  if (fromRepo) {
+    const { namespace: fromNs, repo: fromName } = parseRepoName(fromRepo);
+    const fromData = await getRepository(fromNs, fromName);
+    if (fromData) {
+      const [row] = await dbPool
+        .select()
+        .from(artifactTable)
+        .where(
+          and(
+            eq(artifactTable.repositoryId, fromData.repository.id),
+            eq(artifactTable.digest, mountDigest),
+          ),
+        )
+        .limit(1);
+      source = row;
+    }
+  }
+  if (!source) {
+    const [row] = await dbPool
+      .select()
+      .from(artifactTable)
+      .where(eq(artifactTable.digest, mountDigest))
+      .limit(1);
+    source = row;
+  }
+
+  // Only a real stored blob can be mounted; otherwise start a normal upload.
+  if (!source?.storagePath) {
+    return handleStartUpload(name, set);
+  }
+
+  await dbPool
+    .insert(artifactTable)
+    .values({
+      repositoryId: repoData.repository.id,
+      digest: source.digest,
+      size: source.size,
+      mediaType: source.mediaType,
+      storagePath: source.storagePath,
+    })
+    .onConflictDoNothing({
+      target: [artifactTable.repositoryId, artifactTable.digest],
+    });
+
+  set.status = 201;
+  set.headers.Location = `/v2/${name}/blobs/${source.digest}`;
+  set.headers["Docker-Content-Digest"] = source.digest;
+};
+
 const handleStartUpload = async (
   name: string,
   set: { status?: number | string; headers: Record<string, string | number> },
@@ -1484,7 +1564,13 @@ const ociRouter = new Elysia({ prefix: "/v2" })
         break;
 
       case "blob-upload-start":
-        if (method === "POST") return handleStartUpload(route.name, set);
+        if (method === "POST") {
+          const q = query as Record<string, string>;
+          // Cross-repo mount (?mount=<digest>&from=<repo>) links an existing
+          // blob without re-upload; otherwise start a normal upload session.
+          if (q.mount) return handleMountBlob(route.name, q.mount, q.from, set);
+          return handleStartUpload(route.name, set);
+        }
         break;
 
       case "blob-upload-chunk":
