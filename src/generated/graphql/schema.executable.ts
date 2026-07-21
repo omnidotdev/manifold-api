@@ -166,7 +166,7 @@ const spec_containerMetadata = {
   },
   description: undefined,
   extensions: {
-    oid: "376534",
+    oid: "16413",
     isTableLike: true,
     pg: {
       serviceName: "main",
@@ -240,7 +240,7 @@ const spec_wasmMetadata = {
   },
   description: undefined,
   extensions: {
-    oid: "376611",
+    oid: "16490",
     isTableLike: true,
     pg: {
       serviceName: "main",
@@ -337,7 +337,7 @@ const spec_tag = {
   },
   description: undefined,
   extensions: {
-    oid: "376585",
+    oid: "16464",
     isTableLike: true,
     pg: {
       serviceName: "main",
@@ -351,6 +351,104 @@ const spec_tag = {
   executor: executor
 };
 const tagCodec = recordCodec(spec_tag);
+const npmDistTagIdentifier = sql.identifier("public", "npm_dist_tag");
+const spec_npmDistTag = {
+  name: "npmDistTag",
+  identifier: npmDistTagIdentifier,
+  attributes: {
+    __proto__: null,
+    id: {
+      description: undefined,
+      codec: TYPES.uuid,
+      notNull: true,
+      hasDefault: true,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true
+      }
+    },
+    repository_id: {
+      description: undefined,
+      codec: TYPES.uuid,
+      notNull: true,
+      hasDefault: false,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true
+      }
+    },
+    tag: {
+      description: undefined,
+      codec: TYPES.text,
+      notNull: true,
+      hasDefault: false,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true
+      }
+    },
+    version: {
+      description: undefined,
+      codec: TYPES.text,
+      notNull: true,
+      hasDefault: false,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    },
+    created_at: {
+      description: undefined,
+      codec: TYPES.timestamptz,
+      notNull: false,
+      hasDefault: true,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    },
+    updated_at: {
+      description: undefined,
+      codec: TYPES.timestamptz,
+      notNull: false,
+      hasDefault: true,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    }
+  },
+  description: undefined,
+  extensions: {
+    oid: "16701",
+    isTableLike: true,
+    pg: {
+      serviceName: "main",
+      schemaName: "public",
+      name: "npm_dist_tag"
+    },
+    tags: {
+      __proto__: null
+    }
+  },
+  executor: executor
+};
+const npmDistTagCodec = recordCodec(spec_npmDistTag);
 const uploadSessionIdentifier = sql.identifier("public", "upload_session");
 const spec_uploadSession = {
   name: "uploadSession",
@@ -422,7 +520,7 @@ const spec_uploadSession = {
   },
   description: undefined,
   extensions: {
-    oid: "376599",
+    oid: "16478",
     isTableLike: true,
     pg: {
       serviceName: "main",
@@ -436,6 +534,191 @@ const spec_uploadSession = {
   executor: executor
 };
 const uploadSessionCodec = recordCodec(spec_uploadSession);
+const schemaMetadataIdentifier = sql.identifier("public", "schema_metadata");
+const spec_schemaMetadata = {
+  name: "schemaMetadata",
+  identifier: schemaMetadataIdentifier,
+  attributes: {
+    __proto__: null,
+    artifact_id: {
+      description: undefined,
+      codec: TYPES.uuid,
+      notNull: true,
+      hasDefault: false,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true
+      }
+    },
+    version: {
+      description: undefined,
+      codec: TYPES.text,
+      notNull: false,
+      hasDefault: false,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    },
+    title: {
+      description: undefined,
+      codec: TYPES.text,
+      notNull: false,
+      hasDefault: false,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    },
+    is_valid: {
+      description: undefined,
+      codec: TYPES.boolean,
+      notNull: true,
+      hasDefault: true,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    },
+    validation_errors: {
+      description: undefined,
+      codec: TYPES.jsonb,
+      notNull: false,
+      hasDefault: false,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    }
+  },
+  description: undefined,
+  extensions: {
+    oid: "16454",
+    isTableLike: true,
+    pg: {
+      serviceName: "main",
+      schemaName: "public",
+      name: "schema_metadata"
+    },
+    tags: {
+      __proto__: null
+    }
+  },
+  executor: executor
+};
+const schemaMetadataCodec = recordCodec(spec_schemaMetadata);
+const namespaceIdentifier = sql.identifier("public", "namespace");
+const spec_namespace = {
+  name: "namespace",
+  identifier: namespaceIdentifier,
+  attributes: {
+    __proto__: null,
+    id: {
+      description: undefined,
+      codec: TYPES.uuid,
+      notNull: true,
+      hasDefault: true,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true
+      }
+    },
+    name: {
+      description: undefined,
+      codec: TYPES.text,
+      notNull: true,
+      hasDefault: false,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true
+      }
+    },
+    description: {
+      description: undefined,
+      codec: TYPES.text,
+      notNull: false,
+      hasDefault: false,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    },
+    created_at: {
+      description: undefined,
+      codec: TYPES.timestamptz,
+      notNull: false,
+      hasDefault: true,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    },
+    updated_at: {
+      description: undefined,
+      codec: TYPES.timestamptz,
+      notNull: false,
+      hasDefault: true,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    },
+    organization_id: {
+      description: undefined,
+      codec: TYPES.uuid,
+      notNull: false,
+      hasDefault: false,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true
+      }
+    }
+  },
+  description: undefined,
+  extensions: {
+    oid: "16424",
+    isTableLike: true,
+    pg: {
+      serviceName: "main",
+      schemaName: "public",
+      name: "namespace"
+    },
+    tags: {
+      __proto__: null
+    }
+  },
+  executor: executor
+};
+const namespaceCodec = recordCodec(spec_namespace);
 const artifactIdentifier = sql.identifier("public", "artifact");
 const spec_artifact = {
   name: "artifact",
@@ -542,11 +825,23 @@ const spec_artifact = {
         canUpdate: true,
         isIndexed: false
       }
+    },
+    subject: {
+      description: undefined,
+      codec: TYPES.text,
+      notNull: false,
+      hasDefault: false,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true
+      }
     }
   },
   description: undefined,
   extensions: {
-    oid: "376520",
+    oid: "16399",
     isTableLike: true,
     pg: {
       serviceName: "main",
@@ -560,191 +855,6 @@ const spec_artifact = {
   executor: executor
 };
 const artifactCodec = recordCodec(spec_artifact);
-const schemaMetadataIdentifier = sql.identifier("public", "schema_metadata");
-const spec_schemaMetadata = {
-  name: "schemaMetadata",
-  identifier: schemaMetadataIdentifier,
-  attributes: {
-    __proto__: null,
-    artifact_id: {
-      description: undefined,
-      codec: TYPES.uuid,
-      notNull: true,
-      hasDefault: false,
-      extensions: {
-        tags: {},
-        canSelect: true,
-        canInsert: true,
-        canUpdate: true
-      }
-    },
-    version: {
-      description: undefined,
-      codec: TYPES.text,
-      notNull: false,
-      hasDefault: false,
-      extensions: {
-        tags: {},
-        canSelect: true,
-        canInsert: true,
-        canUpdate: true,
-        isIndexed: false
-      }
-    },
-    title: {
-      description: undefined,
-      codec: TYPES.text,
-      notNull: false,
-      hasDefault: false,
-      extensions: {
-        tags: {},
-        canSelect: true,
-        canInsert: true,
-        canUpdate: true,
-        isIndexed: false
-      }
-    },
-    is_valid: {
-      description: undefined,
-      codec: TYPES.boolean,
-      notNull: true,
-      hasDefault: true,
-      extensions: {
-        tags: {},
-        canSelect: true,
-        canInsert: true,
-        canUpdate: true,
-        isIndexed: false
-      }
-    },
-    validation_errors: {
-      description: undefined,
-      codec: TYPES.jsonb,
-      notNull: false,
-      hasDefault: false,
-      extensions: {
-        tags: {},
-        canSelect: true,
-        canInsert: true,
-        canUpdate: true,
-        isIndexed: false
-      }
-    }
-  },
-  description: undefined,
-  extensions: {
-    oid: "376575",
-    isTableLike: true,
-    pg: {
-      serviceName: "main",
-      schemaName: "public",
-      name: "schema_metadata"
-    },
-    tags: {
-      __proto__: null
-    }
-  },
-  executor: executor
-};
-const schemaMetadataCodec = recordCodec(spec_schemaMetadata);
-const namespaceIdentifier = sql.identifier("public", "namespace");
-const spec_namespace = {
-  name: "namespace",
-  identifier: namespaceIdentifier,
-  attributes: {
-    __proto__: null,
-    id: {
-      description: undefined,
-      codec: TYPES.uuid,
-      notNull: true,
-      hasDefault: true,
-      extensions: {
-        tags: {},
-        canSelect: true,
-        canInsert: true,
-        canUpdate: true
-      }
-    },
-    name: {
-      description: undefined,
-      codec: TYPES.text,
-      notNull: true,
-      hasDefault: false,
-      extensions: {
-        tags: {},
-        canSelect: true,
-        canInsert: true,
-        canUpdate: true
-      }
-    },
-    description: {
-      description: undefined,
-      codec: TYPES.text,
-      notNull: false,
-      hasDefault: false,
-      extensions: {
-        tags: {},
-        canSelect: true,
-        canInsert: true,
-        canUpdate: true,
-        isIndexed: false
-      }
-    },
-    created_at: {
-      description: undefined,
-      codec: TYPES.timestamptz,
-      notNull: false,
-      hasDefault: true,
-      extensions: {
-        tags: {},
-        canSelect: true,
-        canInsert: true,
-        canUpdate: true,
-        isIndexed: false
-      }
-    },
-    updated_at: {
-      description: undefined,
-      codec: TYPES.timestamptz,
-      notNull: false,
-      hasDefault: true,
-      extensions: {
-        tags: {},
-        canSelect: true,
-        canInsert: true,
-        canUpdate: true,
-        isIndexed: false
-      }
-    },
-    organization_id: {
-      description: undefined,
-      codec: TYPES.uuid,
-      notNull: false,
-      hasDefault: false,
-      extensions: {
-        tags: {},
-        canSelect: true,
-        canInsert: true,
-        canUpdate: true
-      }
-    }
-  },
-  description: undefined,
-  extensions: {
-    oid: "376545",
-    isTableLike: true,
-    pg: {
-      serviceName: "main",
-      schemaName: "public",
-      name: "namespace"
-    },
-    tags: {
-      __proto__: null
-    }
-  },
-  executor: executor
-};
-const namespaceCodec = recordCodec(spec_namespace);
 const repositoryIdentifier = sql.identifier("public", "repository");
 const spec_repository = {
   name: "repository",
@@ -850,11 +960,24 @@ const spec_repository = {
         canUpdate: true,
         isIndexed: false
       }
+    },
+    download_count: {
+      description: undefined,
+      codec: TYPES.bigint,
+      notNull: true,
+      hasDefault: true,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
     }
   },
   description: undefined,
   extensions: {
-    oid: "376559",
+    oid: "16438",
     isTableLike: true,
     pg: {
       serviceName: "main",
@@ -868,6 +991,495 @@ const spec_repository = {
   executor: executor
 };
 const repositoryCodec = recordCodec(spec_repository);
+const npmMetadataIdentifier = sql.identifier("public", "npm_metadata");
+const spec_npmMetadata = {
+  name: "npmMetadata",
+  identifier: npmMetadataIdentifier,
+  attributes: {
+    __proto__: null,
+    id: {
+      description: undefined,
+      codec: TYPES.uuid,
+      notNull: true,
+      hasDefault: true,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true
+      }
+    },
+    artifact_id: {
+      description: undefined,
+      codec: TYPES.uuid,
+      notNull: true,
+      hasDefault: false,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true
+      }
+    },
+    name: {
+      description: undefined,
+      codec: TYPES.text,
+      notNull: true,
+      hasDefault: false,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true
+      }
+    },
+    version: {
+      description: undefined,
+      codec: TYPES.text,
+      notNull: true,
+      hasDefault: false,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true
+      }
+    },
+    manifest: {
+      description: undefined,
+      codec: TYPES.jsonb,
+      notNull: true,
+      hasDefault: false,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    },
+    shasum: {
+      description: undefined,
+      codec: TYPES.text,
+      notNull: true,
+      hasDefault: false,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    },
+    integrity: {
+      description: undefined,
+      codec: TYPES.text,
+      notNull: true,
+      hasDefault: false,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    },
+    created_at: {
+      description: undefined,
+      codec: TYPES.timestamptz,
+      notNull: false,
+      hasDefault: true,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    },
+    updated_at: {
+      description: undefined,
+      codec: TYPES.timestamptz,
+      notNull: false,
+      hasDefault: true,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    }
+  },
+  description: undefined,
+  extensions: {
+    oid: "16715",
+    isTableLike: true,
+    pg: {
+      serviceName: "main",
+      schemaName: "public",
+      name: "npm_metadata"
+    },
+    tags: {
+      __proto__: null
+    }
+  },
+  executor: executor
+};
+const npmMetadataCodec = recordCodec(spec_npmMetadata);
+const pluginIdentifier = sql.identifier("public", "plugin");
+const spec_plugin = {
+  name: "plugin",
+  identifier: pluginIdentifier,
+  attributes: {
+    __proto__: null,
+    id: {
+      description: undefined,
+      codec: TYPES.uuid,
+      notNull: true,
+      hasDefault: true,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true
+      }
+    },
+    name: {
+      description: undefined,
+      codec: TYPES.text,
+      notNull: true,
+      hasDefault: false,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true
+      }
+    },
+    version: {
+      description: undefined,
+      codec: TYPES.text,
+      notNull: true,
+      hasDefault: false,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    },
+    description: {
+      description: undefined,
+      codec: TYPES.text,
+      notNull: true,
+      hasDefault: false,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    },
+    type: {
+      description: undefined,
+      codec: TYPES.text,
+      notNull: true,
+      hasDefault: false,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    },
+    bin: {
+      description: undefined,
+      codec: TYPES.text,
+      notNull: false,
+      hasDefault: false,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    },
+    endpoint: {
+      description: undefined,
+      codec: TYPES.text,
+      notNull: false,
+      hasDefault: false,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    },
+    commands: {
+      description: undefined,
+      codec: TYPES.jsonb,
+      notNull: false,
+      hasDefault: true,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    },
+    packages: {
+      description: undefined,
+      codec: TYPES.jsonb,
+      notNull: false,
+      hasDefault: false,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    },
+    created_at: {
+      description: undefined,
+      codec: TYPES.timestamptz,
+      notNull: false,
+      hasDefault: true,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    },
+    updated_at: {
+      description: undefined,
+      codec: TYPES.timestamptz,
+      notNull: false,
+      hasDefault: true,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    }
+  },
+  description: undefined,
+  extensions: {
+    oid: "16681",
+    isTableLike: true,
+    pg: {
+      serviceName: "main",
+      schemaName: "public",
+      name: "plugin"
+    },
+    tags: {
+      __proto__: null
+    }
+  },
+  executor: executor
+};
+const pluginCodec = recordCodec(spec_plugin);
+const scanResultIdentifier = sql.identifier("public", "scan_result");
+const spec_scanResult = {
+  name: "scanResult",
+  identifier: scanResultIdentifier,
+  attributes: {
+    __proto__: null,
+    id: {
+      description: undefined,
+      codec: TYPES.uuid,
+      notNull: true,
+      hasDefault: true,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true
+      }
+    },
+    artifact_id: {
+      description: undefined,
+      codec: TYPES.uuid,
+      notNull: true,
+      hasDefault: false,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true
+      }
+    },
+    status: {
+      description: undefined,
+      codec: TYPES.text,
+      notNull: true,
+      hasDefault: true,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true
+      }
+    },
+    scanner: {
+      description: undefined,
+      codec: TYPES.text,
+      notNull: false,
+      hasDefault: false,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    },
+    critical: {
+      description: undefined,
+      codec: TYPES.int,
+      notNull: true,
+      hasDefault: true,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    },
+    high: {
+      description: undefined,
+      codec: TYPES.int,
+      notNull: true,
+      hasDefault: true,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    },
+    medium: {
+      description: undefined,
+      codec: TYPES.int,
+      notNull: true,
+      hasDefault: true,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    },
+    low: {
+      description: undefined,
+      codec: TYPES.int,
+      notNull: true,
+      hasDefault: true,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    },
+    unknown: {
+      description: undefined,
+      codec: TYPES.int,
+      notNull: true,
+      hasDefault: true,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    },
+    findings: {
+      description: undefined,
+      codec: TYPES.jsonb,
+      notNull: false,
+      hasDefault: false,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    },
+    error: {
+      description: undefined,
+      codec: TYPES.text,
+      notNull: false,
+      hasDefault: false,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    },
+    created_at: {
+      description: undefined,
+      codec: TYPES.timestamptz,
+      notNull: false,
+      hasDefault: true,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    },
+    scanned_at: {
+      description: undefined,
+      codec: TYPES.timestamptz,
+      notNull: false,
+      hasDefault: false,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    }
+  },
+  description: undefined,
+  extensions: {
+    oid: "16746",
+    isTableLike: true,
+    pg: {
+      serviceName: "main",
+      schemaName: "public",
+      name: "scan_result"
+    },
+    tags: {
+      __proto__: null
+    }
+  },
+  executor: executor
+};
+const scanResultCodec = recordCodec(spec_scanResult);
 const federatedSourceIdentifier = sql.identifier("public", "federated_source");
 const spec_federatedSource = {
   name: "federatedSource",
@@ -1017,7 +1629,7 @@ const spec_federatedSource = {
   },
   description: undefined,
   extensions: {
-    oid: "445316",
+    oid: "16611",
     isTableLike: true,
     pg: {
       serviceName: "main",
@@ -1204,7 +1816,7 @@ const spec_federatedSkillCache = {
   },
   description: undefined,
   extensions: {
-    oid: "445302",
+    oid: "16597",
     isTableLike: true,
     pg: {
       serviceName: "main",
@@ -1218,6 +1830,194 @@ const spec_federatedSkillCache = {
   executor: executor
 };
 const federatedSkillCacheCodec = recordCodec(spec_federatedSkillCache);
+const cargoMetadataIdentifier = sql.identifier("public", "cargo_metadata");
+const spec_cargoMetadata = {
+  name: "cargoMetadata",
+  identifier: cargoMetadataIdentifier,
+  attributes: {
+    __proto__: null,
+    id: {
+      description: undefined,
+      codec: TYPES.uuid,
+      notNull: true,
+      hasDefault: true,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true
+      }
+    },
+    artifact_id: {
+      description: undefined,
+      codec: TYPES.uuid,
+      notNull: true,
+      hasDefault: false,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true
+      }
+    },
+    name: {
+      description: undefined,
+      codec: TYPES.text,
+      notNull: true,
+      hasDefault: false,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true
+      }
+    },
+    vers: {
+      description: undefined,
+      codec: TYPES.text,
+      notNull: true,
+      hasDefault: false,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true
+      }
+    },
+    deps: {
+      description: undefined,
+      codec: TYPES.jsonb,
+      notNull: true,
+      hasDefault: true,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    },
+    features: {
+      description: undefined,
+      codec: TYPES.jsonb,
+      notNull: true,
+      hasDefault: true,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    },
+    cksum: {
+      description: undefined,
+      codec: TYPES.text,
+      notNull: true,
+      hasDefault: false,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    },
+    yanked: {
+      description: undefined,
+      codec: TYPES.boolean,
+      notNull: true,
+      hasDefault: true,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    },
+    links: {
+      description: undefined,
+      codec: TYPES.text,
+      notNull: false,
+      hasDefault: false,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    },
+    rust_version: {
+      description: undefined,
+      codec: TYPES.text,
+      notNull: false,
+      hasDefault: false,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    },
+    v: {
+      description: undefined,
+      codec: TYPES.int,
+      notNull: true,
+      hasDefault: true,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    },
+    created_at: {
+      description: undefined,
+      codec: TYPES.timestamptz,
+      notNull: false,
+      hasDefault: true,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    },
+    updated_at: {
+      description: undefined,
+      codec: TYPES.timestamptz,
+      notNull: false,
+      hasDefault: true,
+      extensions: {
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        isIndexed: false
+      }
+    }
+  },
+  description: undefined,
+  extensions: {
+    oid: "16651",
+    isTableLike: true,
+    pg: {
+      serviceName: "main",
+      schemaName: "public",
+      name: "cargo_metadata"
+    },
+    tags: {
+      __proto__: null
+    }
+  },
+  executor: executor
+};
+const cargoMetadataCodec = recordCodec(spec_cargoMetadata);
 const apiTokenIdentifier = sql.identifier("public", "api_token");
 const spec_apiToken = {
   name: "apiToken",
@@ -1402,7 +2202,7 @@ const spec_apiToken = {
   },
   description: undefined,
   extensions: {
-    oid: "376809",
+    oid: "16559",
     isTableLike: true,
     pg: {
       serviceName: "main",
@@ -1416,194 +2216,6 @@ const spec_apiToken = {
   executor: executor
 };
 const apiTokenCodec = recordCodec(spec_apiToken);
-const cargoMetadataIdentifier = sql.identifier("public", "cargo_metadata");
-const spec_cargoMetadata = {
-  name: "cargoMetadata",
-  identifier: cargoMetadataIdentifier,
-  attributes: {
-    __proto__: null,
-    id: {
-      description: undefined,
-      codec: TYPES.uuid,
-      notNull: true,
-      hasDefault: true,
-      extensions: {
-        tags: {},
-        canSelect: true,
-        canInsert: true,
-        canUpdate: true
-      }
-    },
-    artifact_id: {
-      description: undefined,
-      codec: TYPES.uuid,
-      notNull: true,
-      hasDefault: false,
-      extensions: {
-        tags: {},
-        canSelect: true,
-        canInsert: true,
-        canUpdate: true
-      }
-    },
-    name: {
-      description: undefined,
-      codec: TYPES.text,
-      notNull: true,
-      hasDefault: false,
-      extensions: {
-        tags: {},
-        canSelect: true,
-        canInsert: true,
-        canUpdate: true
-      }
-    },
-    vers: {
-      description: undefined,
-      codec: TYPES.text,
-      notNull: true,
-      hasDefault: false,
-      extensions: {
-        tags: {},
-        canSelect: true,
-        canInsert: true,
-        canUpdate: true
-      }
-    },
-    deps: {
-      description: undefined,
-      codec: TYPES.jsonb,
-      notNull: true,
-      hasDefault: true,
-      extensions: {
-        tags: {},
-        canSelect: true,
-        canInsert: true,
-        canUpdate: true,
-        isIndexed: false
-      }
-    },
-    features: {
-      description: undefined,
-      codec: TYPES.jsonb,
-      notNull: true,
-      hasDefault: true,
-      extensions: {
-        tags: {},
-        canSelect: true,
-        canInsert: true,
-        canUpdate: true,
-        isIndexed: false
-      }
-    },
-    cksum: {
-      description: undefined,
-      codec: TYPES.text,
-      notNull: true,
-      hasDefault: false,
-      extensions: {
-        tags: {},
-        canSelect: true,
-        canInsert: true,
-        canUpdate: true,
-        isIndexed: false
-      }
-    },
-    yanked: {
-      description: undefined,
-      codec: TYPES.boolean,
-      notNull: true,
-      hasDefault: true,
-      extensions: {
-        tags: {},
-        canSelect: true,
-        canInsert: true,
-        canUpdate: true,
-        isIndexed: false
-      }
-    },
-    links: {
-      description: undefined,
-      codec: TYPES.text,
-      notNull: false,
-      hasDefault: false,
-      extensions: {
-        tags: {},
-        canSelect: true,
-        canInsert: true,
-        canUpdate: true,
-        isIndexed: false
-      }
-    },
-    rust_version: {
-      description: undefined,
-      codec: TYPES.text,
-      notNull: false,
-      hasDefault: false,
-      extensions: {
-        tags: {},
-        canSelect: true,
-        canInsert: true,
-        canUpdate: true,
-        isIndexed: false
-      }
-    },
-    v: {
-      description: undefined,
-      codec: TYPES.int,
-      notNull: true,
-      hasDefault: true,
-      extensions: {
-        tags: {},
-        canSelect: true,
-        canInsert: true,
-        canUpdate: true,
-        isIndexed: false
-      }
-    },
-    created_at: {
-      description: undefined,
-      codec: TYPES.timestamptz,
-      notNull: false,
-      hasDefault: true,
-      extensions: {
-        tags: {},
-        canSelect: true,
-        canInsert: true,
-        canUpdate: true,
-        isIndexed: false
-      }
-    },
-    updated_at: {
-      description: undefined,
-      codec: TYPES.timestamptz,
-      notNull: false,
-      hasDefault: true,
-      extensions: {
-        tags: {},
-        canSelect: true,
-        canInsert: true,
-        canUpdate: true,
-        isIndexed: false
-      }
-    }
-  },
-  description: undefined,
-  extensions: {
-    oid: "495542",
-    isTableLike: true,
-    pg: {
-      serviceName: "main",
-      schemaName: "public",
-      name: "cargo_metadata"
-    },
-    tags: {
-      __proto__: null
-    }
-  },
-  executor: executor
-};
-const cargoMetadataCodec = recordCodec(spec_cargoMetadata);
 const container_metadataUniques = [{
   isPrimary: true,
   attributes: ["artifact_id"],
@@ -1712,6 +2324,42 @@ const registryConfig_pgResources_tag_tag = {
     canDelete: true
   }
 };
+const npm_dist_tagUniques = [{
+  isPrimary: true,
+  attributes: ["id"],
+  description: undefined,
+  extensions: {
+    tags: {
+      __proto__: null
+    }
+  }
+}];
+const registryConfig_pgResources_npm_dist_tag_npm_dist_tag = {
+  executor: executor,
+  name: "npm_dist_tag",
+  identifier: "main.public.npm_dist_tag",
+  from: npmDistTagIdentifier,
+  codec: npmDistTagCodec,
+  uniques: npm_dist_tagUniques,
+  isVirtual: false,
+  description: undefined,
+  extensions: {
+    description: undefined,
+    pg: {
+      serviceName: "main",
+      schemaName: "public",
+      name: "npm_dist_tag"
+    },
+    isInsertable: true,
+    isUpdatable: true,
+    isDeletable: true,
+    tags: {},
+    canSelect: true,
+    canInsert: true,
+    canUpdate: true,
+    canDelete: true
+  }
+};
 const upload_sessionUniques = [{
   isPrimary: true,
   attributes: ["id"],
@@ -1737,42 +2385,6 @@ const registryConfig_pgResources_upload_session_upload_session = {
       serviceName: "main",
       schemaName: "public",
       name: "upload_session"
-    },
-    isInsertable: true,
-    isUpdatable: true,
-    isDeletable: true,
-    tags: {},
-    canSelect: true,
-    canInsert: true,
-    canUpdate: true,
-    canDelete: true
-  }
-};
-const artifactUniques = [{
-  isPrimary: true,
-  attributes: ["id"],
-  description: undefined,
-  extensions: {
-    tags: {
-      __proto__: null
-    }
-  }
-}];
-const registryConfig_pgResources_artifact_artifact = {
-  executor: executor,
-  name: "artifact",
-  identifier: "main.public.artifact",
-  from: artifactIdentifier,
-  codec: artifactCodec,
-  uniques: artifactUniques,
-  isVirtual: false,
-  description: undefined,
-  extensions: {
-    description: undefined,
-    pg: {
-      serviceName: "main",
-      schemaName: "public",
-      name: "artifact"
     },
     isInsertable: true,
     isUpdatable: true,
@@ -1865,6 +2477,42 @@ const registryConfig_pgResources_namespace_namespace = {
     canDelete: true
   }
 };
+const artifactUniques = [{
+  isPrimary: true,
+  attributes: ["id"],
+  description: undefined,
+  extensions: {
+    tags: {
+      __proto__: null
+    }
+  }
+}];
+const registryConfig_pgResources_artifact_artifact = {
+  executor: executor,
+  name: "artifact",
+  identifier: "main.public.artifact",
+  from: artifactIdentifier,
+  codec: artifactCodec,
+  uniques: artifactUniques,
+  isVirtual: false,
+  description: undefined,
+  extensions: {
+    description: undefined,
+    pg: {
+      serviceName: "main",
+      schemaName: "public",
+      name: "artifact"
+    },
+    isInsertable: true,
+    isUpdatable: true,
+    isDeletable: true,
+    tags: {},
+    canSelect: true,
+    canInsert: true,
+    canUpdate: true,
+    canDelete: true
+  }
+};
 const repositoryUniques = [{
   isPrimary: true,
   attributes: ["id"],
@@ -1890,6 +2538,97 @@ const registryConfig_pgResources_repository_repository = {
       serviceName: "main",
       schemaName: "public",
       name: "repository"
+    },
+    isInsertable: true,
+    isUpdatable: true,
+    isDeletable: true,
+    tags: {},
+    canSelect: true,
+    canInsert: true,
+    canUpdate: true,
+    canDelete: true
+  }
+};
+const npm_metadataUniques = [{
+  isPrimary: true,
+  attributes: ["id"],
+  description: undefined,
+  extensions: {
+    tags: {
+      __proto__: null
+    }
+  }
+}];
+const registryConfig_pgResources_npm_metadata_npm_metadata = {
+  executor: executor,
+  name: "npm_metadata",
+  identifier: "main.public.npm_metadata",
+  from: npmMetadataIdentifier,
+  codec: npmMetadataCodec,
+  uniques: npm_metadataUniques,
+  isVirtual: false,
+  description: undefined,
+  extensions: {
+    description: undefined,
+    pg: {
+      serviceName: "main",
+      schemaName: "public",
+      name: "npm_metadata"
+    },
+    isInsertable: true,
+    isUpdatable: true,
+    isDeletable: true,
+    tags: {},
+    canSelect: true,
+    canInsert: true,
+    canUpdate: true,
+    canDelete: true
+  }
+};
+const pluginUniques = [{
+  isPrimary: true,
+  attributes: ["id"],
+  description: undefined,
+  extensions: {
+    tags: {
+      __proto__: null
+    }
+  }
+}, {
+  isPrimary: false,
+  attributes: ["name"],
+  description: undefined,
+  extensions: {
+    tags: {
+      __proto__: null
+    }
+  }
+}];
+const scan_resultUniques = [{
+  isPrimary: true,
+  attributes: ["id"],
+  description: undefined,
+  extensions: {
+    tags: {
+      __proto__: null
+    }
+  }
+}];
+const registryConfig_pgResources_scan_result_scan_result = {
+  executor: executor,
+  name: "scan_result",
+  identifier: "main.public.scan_result",
+  from: scanResultIdentifier,
+  codec: scanResultCodec,
+  uniques: scan_resultUniques,
+  isVirtual: false,
+  description: undefined,
+  extensions: {
+    description: undefined,
+    pg: {
+      serviceName: "main",
+      schemaName: "public",
+      name: "scan_result"
     },
     isInsertable: true,
     isUpdatable: true,
@@ -2069,28 +2808,61 @@ const registryConfig = {
     wasmMetadata: wasmMetadataCodec,
     tag: tagCodec,
     timestamptz: TYPES.timestamptz,
+    npmDistTag: npmDistTagCodec,
     uploadSession: uploadSessionCodec,
     int8: TYPES.bigint,
-    artifact: artifactCodec,
     schemaMetadata: schemaMetadataCodec,
     bool: TYPES.boolean,
     namespace: namespaceCodec,
+    artifact: artifactCodec,
     repository: repositoryCodec,
+    npmMetadata: npmMetadataCodec,
+    plugin: pluginCodec,
+    scanResult: scanResultCodec,
     federatedSource: federatedSourceCodec,
     federatedSkillCache: federatedSkillCacheCodec,
-    apiToken: apiTokenCodec,
-    cargoMetadata: cargoMetadataCodec
+    cargoMetadata: cargoMetadataCodec,
+    apiToken: apiTokenCodec
   },
   pgResources: {
     __proto__: null,
     container_metadata: registryConfig_pgResources_container_metadata_container_metadata,
     wasm_metadata: registryConfig_pgResources_wasm_metadata_wasm_metadata,
     tag: registryConfig_pgResources_tag_tag,
+    npm_dist_tag: registryConfig_pgResources_npm_dist_tag_npm_dist_tag,
     upload_session: registryConfig_pgResources_upload_session_upload_session,
-    artifact: registryConfig_pgResources_artifact_artifact,
     schema_metadata: registryConfig_pgResources_schema_metadata_schema_metadata,
     namespace: registryConfig_pgResources_namespace_namespace,
+    artifact: registryConfig_pgResources_artifact_artifact,
     repository: registryConfig_pgResources_repository_repository,
+    npm_metadata: registryConfig_pgResources_npm_metadata_npm_metadata,
+    plugin: {
+      executor: executor,
+      name: "plugin",
+      identifier: "main.public.plugin",
+      from: pluginIdentifier,
+      codec: pluginCodec,
+      uniques: pluginUniques,
+      isVirtual: false,
+      description: undefined,
+      extensions: {
+        description: undefined,
+        pg: {
+          serviceName: "main",
+          schemaName: "public",
+          name: "plugin"
+        },
+        isInsertable: true,
+        isUpdatable: true,
+        isDeletable: true,
+        tags: {},
+        canSelect: true,
+        canInsert: true,
+        canUpdate: true,
+        canDelete: true
+      }
+    },
+    scan_result: registryConfig_pgResources_scan_result_scan_result,
     federated_source: registryConfig_pgResources_federated_source_federated_source,
     federated_skill_cache: registryConfig_pgResources_federated_skill_cache_federated_skill_cache,
     cargo_metadata: registryConfig_pgResources_cargo_metadata_cargo_metadata,
@@ -2222,6 +2994,36 @@ const registryConfig = {
             behavior: []
           }
         }
+      },
+      npmMetadataByTheirArtifactId: {
+        localCodec: artifactCodec,
+        remoteResourceOptions: registryConfig_pgResources_npm_metadata_npm_metadata,
+        localCodecPolymorphicTypes: undefined,
+        localAttributes: ["id"],
+        remoteAttributes: ["artifact_id"],
+        isUnique: false,
+        isReferencee: true,
+        description: undefined,
+        extensions: {
+          tags: {
+            behavior: []
+          }
+        }
+      },
+      scanResultsByTheirArtifactId: {
+        localCodec: artifactCodec,
+        remoteResourceOptions: registryConfig_pgResources_scan_result_scan_result,
+        localCodecPolymorphicTypes: undefined,
+        localAttributes: ["id"],
+        remoteAttributes: ["artifact_id"],
+        isUnique: false,
+        isReferencee: true,
+        description: undefined,
+        extensions: {
+          tags: {
+            behavior: []
+          }
+        }
       }
     },
     cargoMetadata: {
@@ -2329,6 +3131,42 @@ const registryConfig = {
         }
       }
     },
+    npmDistTag: {
+      __proto__: null,
+      repositoryByMyRepositoryId: {
+        localCodec: npmDistTagCodec,
+        remoteResourceOptions: registryConfig_pgResources_repository_repository,
+        localCodecPolymorphicTypes: undefined,
+        localAttributes: ["repository_id"],
+        remoteAttributes: ["id"],
+        isUnique: true,
+        isReferencee: false,
+        description: undefined,
+        extensions: {
+          tags: {
+            behavior: []
+          }
+        }
+      }
+    },
+    npmMetadata: {
+      __proto__: null,
+      artifactByMyArtifactId: {
+        localCodec: npmMetadataCodec,
+        remoteResourceOptions: registryConfig_pgResources_artifact_artifact,
+        localCodecPolymorphicTypes: undefined,
+        localAttributes: ["artifact_id"],
+        remoteAttributes: ["id"],
+        isUnique: true,
+        isReferencee: false,
+        description: undefined,
+        extensions: {
+          tags: {
+            behavior: []
+          }
+        }
+      }
+    },
     repository: {
       __proto__: null,
       namespaceByMyNamespaceId: {
@@ -2399,6 +3237,39 @@ const registryConfig = {
         remoteAttributes: ["repository_id"],
         isUnique: false,
         isReferencee: true,
+        description: undefined,
+        extensions: {
+          tags: {
+            behavior: []
+          }
+        }
+      },
+      npmDistTagsByTheirRepositoryId: {
+        localCodec: repositoryCodec,
+        remoteResourceOptions: registryConfig_pgResources_npm_dist_tag_npm_dist_tag,
+        localCodecPolymorphicTypes: undefined,
+        localAttributes: ["id"],
+        remoteAttributes: ["repository_id"],
+        isUnique: false,
+        isReferencee: true,
+        description: undefined,
+        extensions: {
+          tags: {
+            behavior: []
+          }
+        }
+      }
+    },
+    scanResult: {
+      __proto__: null,
+      artifactByMyArtifactId: {
+        localCodec: scanResultCodec,
+        remoteResourceOptions: registryConfig_pgResources_artifact_artifact,
+        localCodecPolymorphicTypes: undefined,
+        localAttributes: ["artifact_id"],
+        remoteAttributes: ["id"],
+        isUnique: true,
+        isReferencee: false,
         description: undefined,
         extensions: {
           tags: {
@@ -2500,11 +3371,15 @@ const registry = makeRegistry(registryConfig);
 const resource_container_metadataPgResource = registry.pgResources["container_metadata"];
 const resource_wasm_metadataPgResource = registry.pgResources["wasm_metadata"];
 const resource_tagPgResource = registry.pgResources["tag"];
+const resource_npm_dist_tagPgResource = registry.pgResources["npm_dist_tag"];
 const resource_upload_sessionPgResource = registry.pgResources["upload_session"];
-const resource_artifactPgResource = registry.pgResources["artifact"];
 const resource_schema_metadataPgResource = registry.pgResources["schema_metadata"];
 const resource_namespacePgResource = registry.pgResources["namespace"];
+const resource_artifactPgResource = registry.pgResources["artifact"];
 const resource_repositoryPgResource = registry.pgResources["repository"];
+const resource_npm_metadataPgResource = registry.pgResources["npm_metadata"];
+const resource_pluginPgResource = registry.pgResources["plugin"];
+const resource_scan_resultPgResource = registry.pgResources["scan_result"];
 const resource_federated_sourcePgResource = registry.pgResources["federated_source"];
 const resource_federated_skill_cachePgResource = registry.pgResources["federated_skill_cache"];
 const resource_cargo_metadataPgResource = registry.pgResources["cargo_metadata"];
@@ -2604,6 +3479,32 @@ const nodeFetcher_Tag = $nodeId => {
   const $decoded = lambda($nodeId, specForHandler(nodeIdHandler_Tag));
   return nodeIdHandler_Tag.get(nodeIdHandler_Tag.getSpec($decoded));
 };
+const nodeIdHandler_NpmDistTag = {
+  typeName: "NpmDistTag",
+  codec: nodeIdCodecs_base64JSON_base64JSON,
+  deprecationReason: undefined,
+  plan($record) {
+    return list([constant("NpmDistTag", false), $record.get("id")]);
+  },
+  getSpec($list) {
+    return {
+      id: inhibitOnNull(access($list, [1]))
+    };
+  },
+  getIdentifiers(value) {
+    return value.slice(1);
+  },
+  get(spec) {
+    return resource_npm_dist_tagPgResource.get(spec);
+  },
+  match(obj) {
+    return obj[0] === "NpmDistTag";
+  }
+};
+const nodeFetcher_NpmDistTag = $nodeId => {
+  const $decoded = lambda($nodeId, specForHandler(nodeIdHandler_NpmDistTag));
+  return nodeIdHandler_NpmDistTag.get(nodeIdHandler_NpmDistTag.getSpec($decoded));
+};
 const nodeIdHandler_UploadSession = {
   typeName: "UploadSession",
   codec: nodeIdCodecs_base64JSON_base64JSON,
@@ -2629,32 +3530,6 @@ const nodeIdHandler_UploadSession = {
 const nodeFetcher_UploadSession = $nodeId => {
   const $decoded = lambda($nodeId, specForHandler(nodeIdHandler_UploadSession));
   return nodeIdHandler_UploadSession.get(nodeIdHandler_UploadSession.getSpec($decoded));
-};
-const nodeIdHandler_Artifact = {
-  typeName: "Artifact",
-  codec: nodeIdCodecs_base64JSON_base64JSON,
-  deprecationReason: undefined,
-  plan($record) {
-    return list([constant("Artifact", false), $record.get("id")]);
-  },
-  getSpec($list) {
-    return {
-      id: inhibitOnNull(access($list, [1]))
-    };
-  },
-  getIdentifiers(value) {
-    return value.slice(1);
-  },
-  get(spec) {
-    return resource_artifactPgResource.get(spec);
-  },
-  match(obj) {
-    return obj[0] === "Artifact";
-  }
-};
-const nodeFetcher_Artifact = $nodeId => {
-  const $decoded = lambda($nodeId, specForHandler(nodeIdHandler_Artifact));
-  return nodeIdHandler_Artifact.get(nodeIdHandler_Artifact.getSpec($decoded));
 };
 const nodeIdHandler_SchemaMetadatum = {
   typeName: "SchemaMetadatum",
@@ -2708,6 +3583,32 @@ const nodeFetcher_Namespace = $nodeId => {
   const $decoded = lambda($nodeId, specForHandler(nodeIdHandler_Namespace));
   return nodeIdHandler_Namespace.get(nodeIdHandler_Namespace.getSpec($decoded));
 };
+const nodeIdHandler_Artifact = {
+  typeName: "Artifact",
+  codec: nodeIdCodecs_base64JSON_base64JSON,
+  deprecationReason: undefined,
+  plan($record) {
+    return list([constant("Artifact", false), $record.get("id")]);
+  },
+  getSpec($list) {
+    return {
+      id: inhibitOnNull(access($list, [1]))
+    };
+  },
+  getIdentifiers(value) {
+    return value.slice(1);
+  },
+  get(spec) {
+    return resource_artifactPgResource.get(spec);
+  },
+  match(obj) {
+    return obj[0] === "Artifact";
+  }
+};
+const nodeFetcher_Artifact = $nodeId => {
+  const $decoded = lambda($nodeId, specForHandler(nodeIdHandler_Artifact));
+  return nodeIdHandler_Artifact.get(nodeIdHandler_Artifact.getSpec($decoded));
+};
 const nodeIdHandler_Repository = {
   typeName: "Repository",
   codec: nodeIdCodecs_base64JSON_base64JSON,
@@ -2733,6 +3634,84 @@ const nodeIdHandler_Repository = {
 const nodeFetcher_Repository = $nodeId => {
   const $decoded = lambda($nodeId, specForHandler(nodeIdHandler_Repository));
   return nodeIdHandler_Repository.get(nodeIdHandler_Repository.getSpec($decoded));
+};
+const nodeIdHandler_NpmMetadatum = {
+  typeName: "NpmMetadatum",
+  codec: nodeIdCodecs_base64JSON_base64JSON,
+  deprecationReason: undefined,
+  plan($record) {
+    return list([constant("NpmMetadatum", false), $record.get("id")]);
+  },
+  getSpec($list) {
+    return {
+      id: inhibitOnNull(access($list, [1]))
+    };
+  },
+  getIdentifiers(value) {
+    return value.slice(1);
+  },
+  get(spec) {
+    return resource_npm_metadataPgResource.get(spec);
+  },
+  match(obj) {
+    return obj[0] === "NpmMetadatum";
+  }
+};
+const nodeFetcher_NpmMetadatum = $nodeId => {
+  const $decoded = lambda($nodeId, specForHandler(nodeIdHandler_NpmMetadatum));
+  return nodeIdHandler_NpmMetadatum.get(nodeIdHandler_NpmMetadatum.getSpec($decoded));
+};
+const nodeIdHandler_Plugin = {
+  typeName: "Plugin",
+  codec: nodeIdCodecs_base64JSON_base64JSON,
+  deprecationReason: undefined,
+  plan($record) {
+    return list([constant("Plugin", false), $record.get("id")]);
+  },
+  getSpec($list) {
+    return {
+      id: inhibitOnNull(access($list, [1]))
+    };
+  },
+  getIdentifiers(value) {
+    return value.slice(1);
+  },
+  get(spec) {
+    return resource_pluginPgResource.get(spec);
+  },
+  match(obj) {
+    return obj[0] === "Plugin";
+  }
+};
+const nodeFetcher_Plugin = $nodeId => {
+  const $decoded = lambda($nodeId, specForHandler(nodeIdHandler_Plugin));
+  return nodeIdHandler_Plugin.get(nodeIdHandler_Plugin.getSpec($decoded));
+};
+const nodeIdHandler_ScanResult = {
+  typeName: "ScanResult",
+  codec: nodeIdCodecs_base64JSON_base64JSON,
+  deprecationReason: undefined,
+  plan($record) {
+    return list([constant("ScanResult", false), $record.get("id")]);
+  },
+  getSpec($list) {
+    return {
+      id: inhibitOnNull(access($list, [1]))
+    };
+  },
+  getIdentifiers(value) {
+    return value.slice(1);
+  },
+  get(spec) {
+    return resource_scan_resultPgResource.get(spec);
+  },
+  match(obj) {
+    return obj[0] === "ScanResult";
+  }
+};
+const nodeFetcher_ScanResult = $nodeId => {
+  const $decoded = lambda($nodeId, specForHandler(nodeIdHandler_ScanResult));
+  return nodeIdHandler_ScanResult.get(nodeIdHandler_ScanResult.getSpec($decoded));
 };
 const nodeIdHandler_FederatedSource = {
   typeName: "FederatedSource",
@@ -2976,39 +3955,6 @@ function assertAllowed12(value, mode) {
   }
   if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
 }
-const nodeIdHandlerByTypeName = {
-  __proto__: null,
-  Query: nodeIdHandler_Query,
-  ContainerMetadatum: nodeIdHandler_ContainerMetadatum,
-  WasmMetadatum: nodeIdHandler_WasmMetadatum,
-  Tag: nodeIdHandler_Tag,
-  UploadSession: nodeIdHandler_UploadSession,
-  Artifact: nodeIdHandler_Artifact,
-  SchemaMetadatum: nodeIdHandler_SchemaMetadatum,
-  Namespace: nodeIdHandler_Namespace,
-  Repository: nodeIdHandler_Repository,
-  FederatedSource: nodeIdHandler_FederatedSource,
-  FederatedSkillCache: nodeIdHandler_FederatedSkillCache,
-  CargoMetadatum: nodeIdHandler_CargoMetadatum,
-  ApiToken: nodeIdHandler_ApiToken
-};
-const decodeNodeId = makeDecodeNodeId(Object.values(nodeIdHandlerByTypeName));
-function findTypeNameMatch(specifier) {
-  if (!specifier) return null;
-  for (const [typeName, typeSpec] of Object.entries(nodeIdHandlerByTypeName)) {
-    const value = specifier[typeSpec.codec.name];
-    if (value != null && typeSpec.match(value)) return typeName;
-  }
-  console.warn(`Could not find a type that matched the specifier '${inspect(specifier)}'`);
-  return null;
-}
-function UUIDSerialize(value) {
-  return "" + value;
-}
-const coerce = string => {
-  if (!/^[0-9a-f]{8}-?[0-9a-f]{4}-?[0-9a-f]{4}-?[0-9a-f]{4}-?[0-9a-f]{12}$/i.test(string)) throw new GraphQLError("Invalid UUID, expected 32 hexadecimal characters, optionally with hyphens");
-  return string;
-};
 function assertAllowed13(value, mode) {
   if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
   if (mode === "list" && !false) {
@@ -3053,6 +3999,43 @@ function assertAllowed16(value, mode) {
   }
   if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
 }
+const nodeIdHandlerByTypeName = {
+  __proto__: null,
+  Query: nodeIdHandler_Query,
+  ContainerMetadatum: nodeIdHandler_ContainerMetadatum,
+  WasmMetadatum: nodeIdHandler_WasmMetadatum,
+  Tag: nodeIdHandler_Tag,
+  NpmDistTag: nodeIdHandler_NpmDistTag,
+  UploadSession: nodeIdHandler_UploadSession,
+  SchemaMetadatum: nodeIdHandler_SchemaMetadatum,
+  Namespace: nodeIdHandler_Namespace,
+  Artifact: nodeIdHandler_Artifact,
+  Repository: nodeIdHandler_Repository,
+  NpmMetadatum: nodeIdHandler_NpmMetadatum,
+  Plugin: nodeIdHandler_Plugin,
+  ScanResult: nodeIdHandler_ScanResult,
+  FederatedSource: nodeIdHandler_FederatedSource,
+  FederatedSkillCache: nodeIdHandler_FederatedSkillCache,
+  CargoMetadatum: nodeIdHandler_CargoMetadatum,
+  ApiToken: nodeIdHandler_ApiToken
+};
+const decodeNodeId = makeDecodeNodeId(Object.values(nodeIdHandlerByTypeName));
+function findTypeNameMatch(specifier) {
+  if (!specifier) return null;
+  for (const [typeName, typeSpec] of Object.entries(nodeIdHandlerByTypeName)) {
+    const value = specifier[typeSpec.codec.name];
+    if (value != null && typeSpec.match(value)) return typeName;
+  }
+  console.warn(`Could not find a type that matched the specifier '${inspect(specifier)}'`);
+  return null;
+}
+function UUIDSerialize(value) {
+  return "" + value;
+}
+const coerce = string => {
+  if (!/^[0-9a-f]{8}-?[0-9a-f]{4}-?[0-9a-f]{4}-?[0-9a-f]{4}-?[0-9a-f]{12}$/i.test(string)) throw new GraphQLError("Invalid UUID, expected 32 hexadecimal characters, optionally with hyphens");
+  return string;
+};
 function assertAllowed17(value, mode) {
   if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
   if (mode === "list" && !false) {
@@ -3097,26 +4080,6 @@ function assertAllowed20(value, mode) {
   }
   if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
 }
-const colSpec = {
-  fieldName: "rowId",
-  attributeName: "id",
-  attribute: spec_repository.attributes.id
-};
-const colSpec2 = {
-  fieldName: "namespaceId",
-  attributeName: "namespace_id",
-  attribute: spec_repository.attributes.namespace_id
-};
-const colSpec3 = {
-  fieldName: "name",
-  attributeName: "name",
-  attribute: spec_repository.attributes.name
-};
-const colSpec4 = {
-  fieldName: "artifactType",
-  attributeName: "artifact_type",
-  attribute: spec_repository.attributes.artifact_type
-};
 function assertAllowed21(value, mode) {
   if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
   if (mode === "list" && !false) {
@@ -3140,6 +4103,103 @@ function assertAllowed22(value, mode) {
   if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
 }
 function assertAllowed23(value, mode) {
+  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+  if (mode === "list" && !false) {
+    const arr = value;
+    if (arr) {
+      const l = arr.length;
+      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+    }
+  }
+  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+}
+function assertAllowed24(value, mode) {
+  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+  if (mode === "list" && !false) {
+    const arr = value;
+    if (arr) {
+      const l = arr.length;
+      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+    }
+  }
+  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+}
+function assertAllowed25(value, mode) {
+  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+  if (mode === "list" && !false) {
+    const arr = value;
+    if (arr) {
+      const l = arr.length;
+      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+    }
+  }
+  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+}
+function assertAllowed26(value, mode) {
+  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+  if (mode === "list" && !false) {
+    const arr = value;
+    if (arr) {
+      const l = arr.length;
+      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+    }
+  }
+  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+}
+function assertAllowed27(value, mode) {
+  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+  if (mode === "list" && !false) {
+    const arr = value;
+    if (arr) {
+      const l = arr.length;
+      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+    }
+  }
+  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+}
+const colSpec = {
+  fieldName: "rowId",
+  attributeName: "id",
+  attribute: spec_repository.attributes.id
+};
+const colSpec2 = {
+  fieldName: "namespaceId",
+  attributeName: "namespace_id",
+  attribute: spec_repository.attributes.namespace_id
+};
+const colSpec3 = {
+  fieldName: "name",
+  attributeName: "name",
+  attribute: spec_repository.attributes.name
+};
+const colSpec4 = {
+  fieldName: "artifactType",
+  attributeName: "artifact_type",
+  attribute: spec_repository.attributes.artifact_type
+};
+function assertAllowed28(value, mode) {
+  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+  if (mode === "list" && !false) {
+    const arr = value;
+    if (arr) {
+      const l = arr.length;
+      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+    }
+  }
+  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+}
+function assertAllowed29(value, mode) {
+  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+  if (mode === "list" && !false) {
+    const arr = value;
+    if (arr) {
+      const l = arr.length;
+      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+    }
+  }
+  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+}
+function assertAllowed30(value, mode) {
   if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
   if (mode === "list" && !false) {
     const arr = value;
@@ -3522,7 +4582,7 @@ function resolveSqlValue12(_unused, input, inputCodec) {
     if (inputCodec === TYPES.citext) return sqlValue;else return sql`lower(${sqlValue})`;
   }
 }
-function assertAllowed24(value, mode) {
+function assertAllowed31(value, mode) {
   if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
   if (mode === "list" && !false) {
     const arr = value;
@@ -3548,93 +4608,11 @@ const colSpec7 = {
   attributeName: "digest",
   attribute: spec_artifact.attributes.digest
 };
-function assertAllowed25(value, mode) {
-  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
-  if (mode === "list" && !false) {
-    const arr = value;
-    if (arr) {
-      const l = arr.length;
-      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
-    }
-  }
-  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
-}
-function assertAllowed26(value, mode) {
-  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
-  if (mode === "list" && !false) {
-    const arr = value;
-    if (arr) {
-      const l = arr.length;
-      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
-    }
-  }
-  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
-}
-function assertAllowed27(value, mode) {
-  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
-  if (mode === "list" && !false) {
-    const arr = value;
-    if (arr) {
-      const l = arr.length;
-      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
-    }
-  }
-  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
-}
 const colSpec8 = {
-  fieldName: "artifactId",
-  attributeName: "artifact_id",
-  attribute: spec_containerMetadata.attributes.artifact_id
+  fieldName: "subject",
+  attributeName: "subject",
+  attribute: spec_artifact.attributes.subject
 };
-function assertAllowed28(value, mode) {
-  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
-  if (mode === "list" && !false) {
-    const arr = value;
-    if (arr) {
-      const l = arr.length;
-      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
-    }
-  }
-  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
-}
-function assertAllowed29(value, mode) {
-  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
-  if (mode === "list" && !false) {
-    const arr = value;
-    if (arr) {
-      const l = arr.length;
-      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
-    }
-  }
-  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
-}
-const colSpec9 = {
-  fieldName: "artifactId",
-  attributeName: "artifact_id",
-  attribute: spec_schemaMetadata.attributes.artifact_id
-};
-function assertAllowed30(value, mode) {
-  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
-  if (mode === "list" && !false) {
-    const arr = value;
-    if (arr) {
-      const l = arr.length;
-      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
-    }
-  }
-  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
-}
-function assertAllowed31(value, mode) {
-  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
-  if (mode === "list" && !false) {
-    const arr = value;
-    if (arr) {
-      const l = arr.length;
-      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
-    }
-  }
-  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
-}
 function assertAllowed32(value, mode) {
   if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
   if (mode === "list" && !false) {
@@ -3646,26 +4624,6 @@ function assertAllowed32(value, mode) {
   }
   if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
 }
-const colSpec10 = {
-  fieldName: "rowId",
-  attributeName: "id",
-  attribute: spec_tag.attributes.id
-};
-const colSpec11 = {
-  fieldName: "repositoryId",
-  attributeName: "repository_id",
-  attribute: spec_tag.attributes.repository_id
-};
-const colSpec12 = {
-  fieldName: "artifactId",
-  attributeName: "artifact_id",
-  attribute: spec_tag.attributes.artifact_id
-};
-const colSpec13 = {
-  fieldName: "name",
-  attributeName: "name",
-  attribute: spec_tag.attributes.name
-};
 function assertAllowed33(value, mode) {
   if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
   if (mode === "list" && !false) {
@@ -3688,10 +4646,10 @@ function assertAllowed34(value, mode) {
   }
   if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
 }
-const colSpec14 = {
+const colSpec9 = {
   fieldName: "artifactId",
   attributeName: "artifact_id",
-  attribute: spec_wasmMetadata.attributes.artifact_id
+  attribute: spec_containerMetadata.attributes.artifact_id
 };
 function assertAllowed35(value, mode) {
   if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
@@ -3715,6 +4673,11 @@ function assertAllowed36(value, mode) {
   }
   if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
 }
+const colSpec10 = {
+  fieldName: "artifactId",
+  attributeName: "artifact_id",
+  attribute: spec_schemaMetadata.attributes.artifact_id
+};
 function assertAllowed37(value, mode) {
   if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
   if (mode === "list" && !false) {
@@ -3726,26 +4689,6 @@ function assertAllowed37(value, mode) {
   }
   if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
 }
-const colSpec15 = {
-  fieldName: "rowId",
-  attributeName: "id",
-  attribute: spec_cargoMetadata.attributes.id
-};
-const colSpec16 = {
-  fieldName: "artifactId",
-  attributeName: "artifact_id",
-  attribute: spec_cargoMetadata.attributes.artifact_id
-};
-const colSpec17 = {
-  fieldName: "name",
-  attributeName: "name",
-  attribute: spec_cargoMetadata.attributes.name
-};
-const colSpec18 = {
-  fieldName: "vers",
-  attributeName: "vers",
-  attribute: spec_cargoMetadata.attributes.vers
-};
 function assertAllowed38(value, mode) {
   if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
   if (mode === "list" && !false) {
@@ -3768,6 +4711,26 @@ function assertAllowed39(value, mode) {
   }
   if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
 }
+const colSpec11 = {
+  fieldName: "rowId",
+  attributeName: "id",
+  attribute: spec_tag.attributes.id
+};
+const colSpec12 = {
+  fieldName: "repositoryId",
+  attributeName: "repository_id",
+  attribute: spec_tag.attributes.repository_id
+};
+const colSpec13 = {
+  fieldName: "artifactId",
+  attributeName: "artifact_id",
+  attribute: spec_tag.attributes.artifact_id
+};
+const colSpec14 = {
+  fieldName: "name",
+  attributeName: "name",
+  attribute: spec_tag.attributes.name
+};
 function assertAllowed40(value, mode) {
   if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
   if (mode === "list" && !false) {
@@ -3790,20 +4753,10 @@ function assertAllowed41(value, mode) {
   }
   if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
 }
-const colSpec19 = {
-  fieldName: "rowId",
-  attributeName: "id",
-  attribute: spec_uploadSession.attributes.id
-};
-const colSpec20 = {
-  fieldName: "repositoryId",
-  attributeName: "repository_id",
-  attribute: spec_uploadSession.attributes.repository_id
-};
-const colSpec21 = {
-  fieldName: "expiresAt",
-  attributeName: "expires_at",
-  attribute: spec_uploadSession.attributes.expires_at
+const colSpec15 = {
+  fieldName: "artifactId",
+  attributeName: "artifact_id",
+  attribute: spec_wasmMetadata.attributes.artifact_id
 };
 function assertAllowed42(value, mode) {
   if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
@@ -3817,6 +4770,219 @@ function assertAllowed42(value, mode) {
   if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
 }
 function assertAllowed43(value, mode) {
+  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+  if (mode === "list" && !false) {
+    const arr = value;
+    if (arr) {
+      const l = arr.length;
+      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+    }
+  }
+  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+}
+function assertAllowed44(value, mode) {
+  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+  if (mode === "list" && !false) {
+    const arr = value;
+    if (arr) {
+      const l = arr.length;
+      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+    }
+  }
+  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+}
+const colSpec16 = {
+  fieldName: "rowId",
+  attributeName: "id",
+  attribute: spec_cargoMetadata.attributes.id
+};
+const colSpec17 = {
+  fieldName: "artifactId",
+  attributeName: "artifact_id",
+  attribute: spec_cargoMetadata.attributes.artifact_id
+};
+const colSpec18 = {
+  fieldName: "name",
+  attributeName: "name",
+  attribute: spec_cargoMetadata.attributes.name
+};
+const colSpec19 = {
+  fieldName: "vers",
+  attributeName: "vers",
+  attribute: spec_cargoMetadata.attributes.vers
+};
+function assertAllowed45(value, mode) {
+  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+  if (mode === "list" && !false) {
+    const arr = value;
+    if (arr) {
+      const l = arr.length;
+      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+    }
+  }
+  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+}
+function assertAllowed46(value, mode) {
+  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+  if (mode === "list" && !false) {
+    const arr = value;
+    if (arr) {
+      const l = arr.length;
+      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+    }
+  }
+  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+}
+function assertAllowed47(value, mode) {
+  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+  if (mode === "list" && !false) {
+    const arr = value;
+    if (arr) {
+      const l = arr.length;
+      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+    }
+  }
+  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+}
+const colSpec20 = {
+  fieldName: "rowId",
+  attributeName: "id",
+  attribute: spec_npmMetadata.attributes.id
+};
+const colSpec21 = {
+  fieldName: "artifactId",
+  attributeName: "artifact_id",
+  attribute: spec_npmMetadata.attributes.artifact_id
+};
+const colSpec22 = {
+  fieldName: "name",
+  attributeName: "name",
+  attribute: spec_npmMetadata.attributes.name
+};
+const colSpec23 = {
+  fieldName: "version",
+  attributeName: "version",
+  attribute: spec_npmMetadata.attributes.version
+};
+function assertAllowed48(value, mode) {
+  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+  if (mode === "list" && !false) {
+    const arr = value;
+    if (arr) {
+      const l = arr.length;
+      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+    }
+  }
+  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+}
+function assertAllowed49(value, mode) {
+  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+  if (mode === "list" && !false) {
+    const arr = value;
+    if (arr) {
+      const l = arr.length;
+      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+    }
+  }
+  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+}
+function assertAllowed50(value, mode) {
+  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+  if (mode === "list" && !false) {
+    const arr = value;
+    if (arr) {
+      const l = arr.length;
+      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+    }
+  }
+  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+}
+const colSpec24 = {
+  fieldName: "rowId",
+  attributeName: "id",
+  attribute: spec_scanResult.attributes.id
+};
+const colSpec25 = {
+  fieldName: "artifactId",
+  attributeName: "artifact_id",
+  attribute: spec_scanResult.attributes.artifact_id
+};
+const colSpec26 = {
+  fieldName: "status",
+  attributeName: "status",
+  attribute: spec_scanResult.attributes.status
+};
+function assertAllowed51(value, mode) {
+  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+  if (mode === "list" && !false) {
+    const arr = value;
+    if (arr) {
+      const l = arr.length;
+      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+    }
+  }
+  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+}
+function assertAllowed52(value, mode) {
+  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+  if (mode === "list" && !false) {
+    const arr = value;
+    if (arr) {
+      const l = arr.length;
+      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+    }
+  }
+  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+}
+function assertAllowed53(value, mode) {
+  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+  if (mode === "list" && !false) {
+    const arr = value;
+    if (arr) {
+      const l = arr.length;
+      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+    }
+  }
+  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+}
+function assertAllowed54(value, mode) {
+  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+  if (mode === "list" && !false) {
+    const arr = value;
+    if (arr) {
+      const l = arr.length;
+      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+    }
+  }
+  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+}
+const colSpec27 = {
+  fieldName: "rowId",
+  attributeName: "id",
+  attribute: spec_uploadSession.attributes.id
+};
+const colSpec28 = {
+  fieldName: "repositoryId",
+  attributeName: "repository_id",
+  attribute: spec_uploadSession.attributes.repository_id
+};
+const colSpec29 = {
+  fieldName: "expiresAt",
+  attributeName: "expires_at",
+  attribute: spec_uploadSession.attributes.expires_at
+};
+function assertAllowed55(value, mode) {
+  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+  if (mode === "list" && !false) {
+    const arr = value;
+    if (arr) {
+      const l = arr.length;
+      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+    }
+  }
+  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+}
+function assertAllowed56(value, mode) {
   if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
   if (mode === "list" && !false) {
     const arr = value;
@@ -3877,7 +5043,7 @@ const resolve46 = (i, v) => sql`${i} < ${v}`;
 const resolve47 = (i, v) => sql`${i} <= ${v}`;
 const resolve48 = (i, v) => sql`${i} > ${v}`;
 const resolve49 = (i, v) => sql`${i} >= ${v}`;
-function assertAllowed44(value, mode) {
+function assertAllowed57(value, mode) {
   if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
   if (mode === "list" && !false) {
     const arr = value;
@@ -3888,42 +5054,42 @@ function assertAllowed44(value, mode) {
   }
   if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
 }
-const colSpec22 = {
+const colSpec30 = {
   fieldName: "rowId",
   attributeName: "id",
   attribute: spec_apiToken.attributes.id
 };
-const colSpec23 = {
+const colSpec31 = {
   fieldName: "tokenHash",
   attributeName: "token_hash",
   attribute: spec_apiToken.attributes.token_hash
 };
-const colSpec24 = {
+const colSpec32 = {
   fieldName: "tokenPrefix",
   attributeName: "token_prefix",
   attribute: spec_apiToken.attributes.token_prefix
 };
-const colSpec25 = {
+const colSpec33 = {
   fieldName: "namespaceId",
   attributeName: "namespace_id",
   attribute: spec_apiToken.attributes.namespace_id
 };
-const colSpec26 = {
+const colSpec34 = {
   fieldName: "repositoryId",
   attributeName: "repository_id",
   attribute: spec_apiToken.attributes.repository_id
 };
-const colSpec27 = {
+const colSpec35 = {
   fieldName: "createdBy",
   attributeName: "created_by",
   attribute: spec_apiToken.attributes.created_by
 };
-const colSpec28 = {
+const colSpec36 = {
   fieldName: "isActive",
   attributeName: "is_active",
   attribute: spec_apiToken.attributes.is_active
 };
-function assertAllowed45(value, mode) {
+function assertAllowed58(value, mode) {
   if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
   if (mode === "list" && !false) {
     const arr = value;
@@ -3934,7 +5100,7 @@ function assertAllowed45(value, mode) {
   }
   if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
 }
-function assertAllowed46(value, mode) {
+function assertAllowed59(value, mode) {
   if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
   if (mode === "list" && !false) {
     const arr = value;
@@ -3995,22 +5161,22 @@ const resolve57 = (i, v) => sql`${i} < ${v}`;
 const resolve58 = (i, v) => sql`${i} <= ${v}`;
 const resolve59 = (i, v) => sql`${i} > ${v}`;
 const resolve60 = (i, v) => sql`${i} >= ${v}`;
-const colSpec29 = {
+const colSpec37 = {
   fieldName: "rowId",
   attributeName: "id",
   attribute: spec_namespace.attributes.id
 };
-const colSpec30 = {
+const colSpec38 = {
   fieldName: "name",
   attributeName: "name",
   attribute: spec_namespace.attributes.name
 };
-const colSpec31 = {
+const colSpec39 = {
   fieldName: "organizationId",
   attributeName: "organization_id",
   attribute: spec_namespace.attributes.organization_id
 };
-function assertAllowed47(value, mode) {
+function assertAllowed60(value, mode) {
   if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
   if (mode === "list" && !false) {
     const arr = value;
@@ -4021,7 +5187,7 @@ function assertAllowed47(value, mode) {
   }
   if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
 }
-function assertAllowed48(value, mode) {
+function assertAllowed61(value, mode) {
   if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
   if (mode === "list" && !false) {
     const arr = value;
@@ -4032,7 +5198,7 @@ function assertAllowed48(value, mode) {
   }
   if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
 }
-function assertAllowed49(value, mode) {
+function assertAllowed62(value, mode) {
   if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
   if (mode === "list" && !false) {
     const arr = value;
@@ -4043,7 +5209,7 @@ function assertAllowed49(value, mode) {
   }
   if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
 }
-function assertAllowed50(value, mode) {
+function assertAllowed63(value, mode) {
   if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
   if (mode === "list" && !false) {
     const arr = value;
@@ -4054,7 +5220,7 @@ function assertAllowed50(value, mode) {
   }
   if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
 }
-function assertAllowed51(value, mode) {
+function assertAllowed64(value, mode) {
   if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
   if (mode === "list" && !false) {
     const arr = value;
@@ -4065,32 +5231,80 @@ function assertAllowed51(value, mode) {
   }
   if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
 }
-const colSpec32 = {
+const colSpec40 = {
+  fieldName: "rowId",
+  attributeName: "id",
+  attribute: spec_npmDistTag.attributes.id
+};
+const colSpec41 = {
+  fieldName: "repositoryId",
+  attributeName: "repository_id",
+  attribute: spec_npmDistTag.attributes.repository_id
+};
+const colSpec42 = {
+  fieldName: "tag",
+  attributeName: "tag",
+  attribute: spec_npmDistTag.attributes.tag
+};
+function assertAllowed65(value, mode) {
+  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+  if (mode === "list" && !false) {
+    const arr = value;
+    if (arr) {
+      const l = arr.length;
+      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+    }
+  }
+  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+}
+function assertAllowed66(value, mode) {
+  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+  if (mode === "list" && !false) {
+    const arr = value;
+    if (arr) {
+      const l = arr.length;
+      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+    }
+  }
+  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+}
+function assertAllowed67(value, mode) {
+  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+  if (mode === "list" && !false) {
+    const arr = value;
+    if (arr) {
+      const l = arr.length;
+      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+    }
+  }
+  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+}
+const colSpec43 = {
   fieldName: "rowId",
   attributeName: "id",
   attribute: spec_federatedSkillCache.attributes.id
 };
-const colSpec33 = {
+const colSpec44 = {
   fieldName: "sourceId",
   attributeName: "source_id",
   attribute: spec_federatedSkillCache.attributes.source_id
 };
-const colSpec34 = {
+const colSpec45 = {
   fieldName: "slug",
   attributeName: "slug",
   attribute: spec_federatedSkillCache.attributes.slug
 };
-const colSpec35 = {
+const colSpec46 = {
   fieldName: "expiresAt",
   attributeName: "expires_at",
   attribute: spec_federatedSkillCache.attributes.expires_at
 };
-const colSpec36 = {
+const colSpec47 = {
   fieldName: "vetStatus",
   attributeName: "vet_status",
   attribute: spec_federatedSkillCache.attributes.vet_status
 };
-function assertAllowed52(value, mode) {
+function assertAllowed68(value, mode) {
   if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
   if (mode === "list" && !false) {
     const arr = value;
@@ -4101,7 +5315,7 @@ function assertAllowed52(value, mode) {
   }
   if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
 }
-function assertAllowed53(value, mode) {
+function assertAllowed69(value, mode) {
   if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
   if (mode === "list" && !false) {
     const arr = value;
@@ -4112,22 +5326,22 @@ function assertAllowed53(value, mode) {
   }
   if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
 }
-const colSpec37 = {
+const colSpec48 = {
   fieldName: "rowId",
   attributeName: "id",
   attribute: spec_federatedSource.attributes.id
 };
-const colSpec38 = {
+const colSpec49 = {
   fieldName: "namespace",
   attributeName: "namespace",
   attribute: spec_federatedSource.attributes.namespace
 };
-const colSpec39 = {
+const colSpec50 = {
   fieldName: "upstreamType",
   attributeName: "upstream_type",
   attribute: spec_federatedSource.attributes.upstream_type
 };
-function assertAllowed54(value, mode) {
+function assertAllowed70(value, mode) {
   if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
   if (mode === "list" && !false) {
     const arr = value;
@@ -4138,7 +5352,7 @@ function assertAllowed54(value, mode) {
   }
   if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
 }
-function assertAllowed55(value, mode) {
+function assertAllowed71(value, mode) {
   if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
   if (mode === "list" && !false) {
     const arr = value;
@@ -4149,7 +5363,28 @@ function assertAllowed55(value, mode) {
   }
   if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
 }
-function assertAllowed56(value, mode) {
+function assertAllowed72(value, mode) {
+  if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+  if (mode === "list" && !false) {
+    const arr = value;
+    if (arr) {
+      const l = arr.length;
+      for (let i = 0; i < l; i++) if (isEmpty(arr[i])) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+    }
+  }
+  if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+}
+const colSpec51 = {
+  fieldName: "rowId",
+  attributeName: "id",
+  attribute: spec_plugin.attributes.id
+};
+const colSpec52 = {
+  fieldName: "name",
+  attributeName: "name",
+  attribute: spec_plugin.attributes.name
+};
+function assertAllowed73(value, mode) {
   if (mode === "object" && !false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
   if (mode === "list" && !false) {
     const arr = value;
@@ -4172,13 +5407,13 @@ const specFromArgs_Tag = args => {
   const $nodeId = args.getRaw(["input", "id"]);
   return specFromNodeId(nodeIdHandler_Tag, $nodeId);
 };
+const specFromArgs_NpmDistTag = args => {
+  const $nodeId = args.getRaw(["input", "id"]);
+  return specFromNodeId(nodeIdHandler_NpmDistTag, $nodeId);
+};
 const specFromArgs_UploadSession = args => {
   const $nodeId = args.getRaw(["input", "id"]);
   return specFromNodeId(nodeIdHandler_UploadSession, $nodeId);
-};
-const specFromArgs_Artifact = args => {
-  const $nodeId = args.getRaw(["input", "id"]);
-  return specFromNodeId(nodeIdHandler_Artifact, $nodeId);
 };
 const specFromArgs_SchemaMetadatum = args => {
   const $nodeId = args.getRaw(["input", "id"]);
@@ -4188,9 +5423,25 @@ const specFromArgs_Namespace = args => {
   const $nodeId = args.getRaw(["input", "id"]);
   return specFromNodeId(nodeIdHandler_Namespace, $nodeId);
 };
+const specFromArgs_Artifact = args => {
+  const $nodeId = args.getRaw(["input", "id"]);
+  return specFromNodeId(nodeIdHandler_Artifact, $nodeId);
+};
 const specFromArgs_Repository = args => {
   const $nodeId = args.getRaw(["input", "id"]);
   return specFromNodeId(nodeIdHandler_Repository, $nodeId);
+};
+const specFromArgs_NpmMetadatum = args => {
+  const $nodeId = args.getRaw(["input", "id"]);
+  return specFromNodeId(nodeIdHandler_NpmMetadatum, $nodeId);
+};
+const specFromArgs_Plugin = args => {
+  const $nodeId = args.getRaw(["input", "id"]);
+  return specFromNodeId(nodeIdHandler_Plugin, $nodeId);
+};
+const specFromArgs_ScanResult = args => {
+  const $nodeId = args.getRaw(["input", "id"]);
+  return specFromNodeId(nodeIdHandler_ScanResult, $nodeId);
 };
 const specFromArgs_FederatedSource = args => {
   const $nodeId = args.getRaw(["input", "id"]);
@@ -4220,13 +5471,13 @@ const specFromArgs_Tag2 = args => {
   const $nodeId = args.getRaw(["input", "id"]);
   return specFromNodeId(nodeIdHandler_Tag, $nodeId);
 };
+const specFromArgs_NpmDistTag2 = args => {
+  const $nodeId = args.getRaw(["input", "id"]);
+  return specFromNodeId(nodeIdHandler_NpmDistTag, $nodeId);
+};
 const specFromArgs_UploadSession2 = args => {
   const $nodeId = args.getRaw(["input", "id"]);
   return specFromNodeId(nodeIdHandler_UploadSession, $nodeId);
-};
-const specFromArgs_Artifact2 = args => {
-  const $nodeId = args.getRaw(["input", "id"]);
-  return specFromNodeId(nodeIdHandler_Artifact, $nodeId);
 };
 const specFromArgs_SchemaMetadatum2 = args => {
   const $nodeId = args.getRaw(["input", "id"]);
@@ -4236,9 +5487,25 @@ const specFromArgs_Namespace2 = args => {
   const $nodeId = args.getRaw(["input", "id"]);
   return specFromNodeId(nodeIdHandler_Namespace, $nodeId);
 };
+const specFromArgs_Artifact2 = args => {
+  const $nodeId = args.getRaw(["input", "id"]);
+  return specFromNodeId(nodeIdHandler_Artifact, $nodeId);
+};
 const specFromArgs_Repository2 = args => {
   const $nodeId = args.getRaw(["input", "id"]);
   return specFromNodeId(nodeIdHandler_Repository, $nodeId);
+};
+const specFromArgs_NpmMetadatum2 = args => {
+  const $nodeId = args.getRaw(["input", "id"]);
+  return specFromNodeId(nodeIdHandler_NpmMetadatum, $nodeId);
+};
+const specFromArgs_Plugin2 = args => {
+  const $nodeId = args.getRaw(["input", "id"]);
+  return specFromNodeId(nodeIdHandler_Plugin, $nodeId);
+};
+const specFromArgs_ScanResult2 = args => {
+  const $nodeId = args.getRaw(["input", "id"]);
+  return specFromNodeId(nodeIdHandler_ScanResult, $nodeId);
 };
 const specFromArgs_FederatedSource2 = args => {
   const $nodeId = args.getRaw(["input", "id"]);
@@ -4302,11 +5569,11 @@ type Query implements Node {
   """Get a single \`Tag\`."""
   tag(rowId: UUID!): Tag
 
+  """Get a single \`NpmDistTag\`."""
+  npmDistTag(rowId: UUID!): NpmDistTag
+
   """Get a single \`UploadSession\`."""
   uploadSession(rowId: UUID!): UploadSession
-
-  """Get a single \`Artifact\`."""
-  artifact(rowId: UUID!): Artifact
 
   """Get a single \`SchemaMetadatum\`."""
   schemaMetadatum(artifactId: UUID!): SchemaMetadatum
@@ -4317,8 +5584,23 @@ type Query implements Node {
   """Get a single \`Namespace\`."""
   namespaceByName(name: String!): Namespace
 
+  """Get a single \`Artifact\`."""
+  artifact(rowId: UUID!): Artifact
+
   """Get a single \`Repository\`."""
   repository(rowId: UUID!): Repository
+
+  """Get a single \`NpmMetadatum\`."""
+  npmMetadatum(rowId: UUID!): NpmMetadatum
+
+  """Get a single \`Plugin\`."""
+  plugin(rowId: UUID!): Plugin
+
+  """Get a single \`Plugin\`."""
+  pluginByName(name: String!): Plugin
+
+  """Get a single \`ScanResult\`."""
+  scanResult(rowId: UUID!): ScanResult
 
   """Get a single \`FederatedSource\`."""
   federatedSource(rowId: UUID!): FederatedSource
@@ -4357,6 +5639,14 @@ type Query implements Node {
     id: ID!
   ): Tag
 
+  """Reads a single \`NpmDistTag\` using its globally unique \`ID\`."""
+  npmDistTagById(
+    """
+    The globally unique \`ID\` to be used in selecting a single \`NpmDistTag\`.
+    """
+    id: ID!
+  ): NpmDistTag
+
   """Reads a single \`UploadSession\` using its globally unique \`ID\`."""
   uploadSessionById(
     """
@@ -4364,12 +5654,6 @@ type Query implements Node {
     """
     id: ID!
   ): UploadSession
-
-  """Reads a single \`Artifact\` using its globally unique \`ID\`."""
-  artifactById(
-    """The globally unique \`ID\` to be used in selecting a single \`Artifact\`."""
-    id: ID!
-  ): Artifact
 
   """Reads a single \`SchemaMetadatum\` using its globally unique \`ID\`."""
   schemaMetadatumById(
@@ -4385,6 +5669,12 @@ type Query implements Node {
     id: ID!
   ): Namespace
 
+  """Reads a single \`Artifact\` using its globally unique \`ID\`."""
+  artifactById(
+    """The globally unique \`ID\` to be used in selecting a single \`Artifact\`."""
+    id: ID!
+  ): Artifact
+
   """Reads a single \`Repository\` using its globally unique \`ID\`."""
   repositoryById(
     """
@@ -4392,6 +5682,28 @@ type Query implements Node {
     """
     id: ID!
   ): Repository
+
+  """Reads a single \`NpmMetadatum\` using its globally unique \`ID\`."""
+  npmMetadatumById(
+    """
+    The globally unique \`ID\` to be used in selecting a single \`NpmMetadatum\`.
+    """
+    id: ID!
+  ): NpmMetadatum
+
+  """Reads a single \`Plugin\` using its globally unique \`ID\`."""
+  pluginById(
+    """The globally unique \`ID\` to be used in selecting a single \`Plugin\`."""
+    id: ID!
+  ): Plugin
+
+  """Reads a single \`ScanResult\` using its globally unique \`ID\`."""
+  scanResultById(
+    """
+    The globally unique \`ID\` to be used in selecting a single \`ScanResult\`.
+    """
+    id: ID!
+  ): ScanResult
 
   """Reads a single \`FederatedSource\` using its globally unique \`ID\`."""
   federatedSourceById(
@@ -4525,6 +5837,40 @@ type Query implements Node {
     orderBy: [TagOrderBy!] = [PRIMARY_KEY_ASC]
   ): TagConnection
 
+  """Reads and enables pagination through a set of \`NpmDistTag\`."""
+  npmDistTags(
+    """Only read the first \`n\` values of the set."""
+    first: Int
+
+    """Only read the last \`n\` values of the set."""
+    last: Int
+
+    """
+    Skip the first \`n\` values from our \`after\` cursor, an alternative to cursor
+    based pagination. May not be used with \`last\`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: NpmDistTagCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: NpmDistTagFilter
+
+    """The method to use when ordering \`NpmDistTag\`."""
+    orderBy: [NpmDistTagOrderBy!] = [PRIMARY_KEY_ASC]
+  ): NpmDistTagConnection
+
   """Reads and enables pagination through a set of \`UploadSession\`."""
   uploadSessions(
     """Only read the first \`n\` values of the set."""
@@ -4558,40 +5904,6 @@ type Query implements Node {
     """The method to use when ordering \`UploadSession\`."""
     orderBy: [UploadSessionOrderBy!] = [PRIMARY_KEY_ASC]
   ): UploadSessionConnection
-
-  """Reads and enables pagination through a set of \`Artifact\`."""
-  artifacts(
-    """Only read the first \`n\` values of the set."""
-    first: Int
-
-    """Only read the last \`n\` values of the set."""
-    last: Int
-
-    """
-    Skip the first \`n\` values from our \`after\` cursor, an alternative to cursor
-    based pagination. May not be used with \`last\`.
-    """
-    offset: Int
-
-    """Read all values in the set before (above) this cursor."""
-    before: Cursor
-
-    """Read all values in the set after (below) this cursor."""
-    after: Cursor
-
-    """
-    A condition to be used in determining which values should be returned by the collection.
-    """
-    condition: ArtifactCondition
-
-    """
-    A filter to be used in determining which values should be returned by the collection.
-    """
-    filter: ArtifactFilter
-
-    """The method to use when ordering \`Artifact\`."""
-    orderBy: [ArtifactOrderBy!] = [PRIMARY_KEY_ASC]
-  ): ArtifactConnection
 
   """Reads and enables pagination through a set of \`SchemaMetadatum\`."""
   schemaMetadata(
@@ -4661,6 +5973,40 @@ type Query implements Node {
     orderBy: [NamespaceOrderBy!] = [PRIMARY_KEY_ASC]
   ): NamespaceConnection
 
+  """Reads and enables pagination through a set of \`Artifact\`."""
+  artifacts(
+    """Only read the first \`n\` values of the set."""
+    first: Int
+
+    """Only read the last \`n\` values of the set."""
+    last: Int
+
+    """
+    Skip the first \`n\` values from our \`after\` cursor, an alternative to cursor
+    based pagination. May not be used with \`last\`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: ArtifactCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: ArtifactFilter
+
+    """The method to use when ordering \`Artifact\`."""
+    orderBy: [ArtifactOrderBy!] = [PRIMARY_KEY_ASC]
+  ): ArtifactConnection
+
   """Reads and enables pagination through a set of \`Repository\`."""
   repositories(
     """Only read the first \`n\` values of the set."""
@@ -4694,6 +6040,108 @@ type Query implements Node {
     """The method to use when ordering \`Repository\`."""
     orderBy: [RepositoryOrderBy!] = [PRIMARY_KEY_ASC]
   ): RepositoryConnection
+
+  """Reads and enables pagination through a set of \`NpmMetadatum\`."""
+  npmMetadata(
+    """Only read the first \`n\` values of the set."""
+    first: Int
+
+    """Only read the last \`n\` values of the set."""
+    last: Int
+
+    """
+    Skip the first \`n\` values from our \`after\` cursor, an alternative to cursor
+    based pagination. May not be used with \`last\`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: NpmMetadatumCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: NpmMetadatumFilter
+
+    """The method to use when ordering \`NpmMetadatum\`."""
+    orderBy: [NpmMetadatumOrderBy!] = [PRIMARY_KEY_ASC]
+  ): NpmMetadatumConnection
+
+  """Reads and enables pagination through a set of \`Plugin\`."""
+  plugins(
+    """Only read the first \`n\` values of the set."""
+    first: Int
+
+    """Only read the last \`n\` values of the set."""
+    last: Int
+
+    """
+    Skip the first \`n\` values from our \`after\` cursor, an alternative to cursor
+    based pagination. May not be used with \`last\`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: PluginCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: PluginFilter
+
+    """The method to use when ordering \`Plugin\`."""
+    orderBy: [PluginOrderBy!] = [PRIMARY_KEY_ASC]
+  ): PluginConnection
+
+  """Reads and enables pagination through a set of \`ScanResult\`."""
+  scanResults(
+    """Only read the first \`n\` values of the set."""
+    first: Int
+
+    """Only read the last \`n\` values of the set."""
+    last: Int
+
+    """
+    Skip the first \`n\` values from our \`after\` cursor, an alternative to cursor
+    based pagination. May not be used with \`last\`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: ScanResultCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: ScanResultFilter
+
+    """The method to use when ordering \`ScanResult\`."""
+    orderBy: [ScanResultOrderBy!] = [PRIMARY_KEY_ASC]
+  ): ScanResultConnection
 
   """Reads and enables pagination through a set of \`FederatedSource\`."""
   federatedSources(
@@ -4881,6 +6329,7 @@ type Artifact implements Node {
   content: String
   createdAt: Datetime
   storagePath: String
+  subject: String
 
   """Reads a single \`Repository\` that is related to this \`Artifact\`."""
   repository: Repository
@@ -4963,6 +6412,74 @@ type Artifact implements Node {
     """The method to use when ordering \`CargoMetadatum\`."""
     orderBy: [CargoMetadatumOrderBy!] = [PRIMARY_KEY_ASC]
   ): CargoMetadatumConnection!
+
+  """Reads and enables pagination through a set of \`NpmMetadatum\`."""
+  npmMetadata(
+    """Only read the first \`n\` values of the set."""
+    first: Int
+
+    """Only read the last \`n\` values of the set."""
+    last: Int
+
+    """
+    Skip the first \`n\` values from our \`after\` cursor, an alternative to cursor
+    based pagination. May not be used with \`last\`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: NpmMetadatumCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: NpmMetadatumFilter
+
+    """The method to use when ordering \`NpmMetadatum\`."""
+    orderBy: [NpmMetadatumOrderBy!] = [PRIMARY_KEY_ASC]
+  ): NpmMetadatumConnection!
+
+  """Reads and enables pagination through a set of \`ScanResult\`."""
+  scanResults(
+    """Only read the first \`n\` values of the set."""
+    first: Int
+
+    """Only read the last \`n\` values of the set."""
+    last: Int
+
+    """
+    Skip the first \`n\` values from our \`after\` cursor, an alternative to cursor
+    based pagination. May not be used with \`last\`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: ScanResultCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: ScanResultFilter
+
+    """The method to use when ordering \`ScanResult\`."""
+    orderBy: [ScanResultOrderBy!] = [PRIMARY_KEY_ASC]
+  ): ScanResultConnection!
 }
 
 """
@@ -4994,6 +6511,7 @@ type Repository implements Node {
   isPublic: Boolean!
   createdAt: Datetime
   updatedAt: Datetime
+  downloadCount: BigInt!
 
   """Reads a single \`Namespace\` that is related to this \`Repository\`."""
   namespace: Namespace
@@ -5133,6 +6651,40 @@ type Repository implements Node {
     """The method to use when ordering \`ApiToken\`."""
     orderBy: [ApiTokenOrderBy!] = [PRIMARY_KEY_ASC]
   ): ApiTokenConnection!
+
+  """Reads and enables pagination through a set of \`NpmDistTag\`."""
+  npmDistTags(
+    """Only read the first \`n\` values of the set."""
+    first: Int
+
+    """Only read the last \`n\` values of the set."""
+    last: Int
+
+    """
+    Skip the first \`n\` values from our \`after\` cursor, an alternative to cursor
+    based pagination. May not be used with \`last\`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: NpmDistTagCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: NpmDistTagFilter
+
+    """The method to use when ordering \`NpmDistTag\`."""
+    orderBy: [NpmDistTagOrderBy!] = [PRIMARY_KEY_ASC]
+  ): NpmDistTagConnection!
 }
 
 type Namespace implements Node {
@@ -5317,6 +6869,12 @@ input RepositoryFilter {
 
   """Some related \`apiTokens\` exist."""
   apiTokensExist: Boolean
+
+  """Filter by the object’s \`npmDistTags\` relation."""
+  npmDistTags: RepositoryToManyNpmDistTagFilter
+
+  """Some related \`npmDistTags\` exist."""
+  npmDistTagsExist: Boolean
 
   """Filter by the object’s \`namespace\` relation."""
   namespace: NamespaceFilter
@@ -5538,6 +7096,9 @@ input ArtifactFilter {
   """Filter by the object’s \`digest\` field."""
   digest: StringFilter
 
+  """Filter by the object’s \`subject\` field."""
+  subject: StringFilter
+
   """Filter by the object’s \`containerMetadatum\` relation."""
   containerMetadatum: ContainerMetadatumFilter
 
@@ -5567,6 +7128,18 @@ input ArtifactFilter {
 
   """Some related \`cargoMetadata\` exist."""
   cargoMetadataExist: Boolean
+
+  """Filter by the object’s \`npmMetadata\` relation."""
+  npmMetadata: ArtifactToManyNpmMetadatumFilter
+
+  """Some related \`npmMetadata\` exist."""
+  npmMetadataExist: Boolean
+
+  """Filter by the object’s \`scanResults\` relation."""
+  scanResults: ArtifactToManyScanResultFilter
+
+  """Some related \`scanResults\` exist."""
+  scanResultsExist: Boolean
 
   """Filter by the object’s \`repository\` relation."""
   repository: RepositoryFilter
@@ -5740,6 +7313,101 @@ input CargoMetadatumFilter {
 
   """Negates the expression."""
   not: CargoMetadatumFilter
+}
+
+"""
+A filter to be used against many \`NpmMetadatum\` object types. All fields are combined with a logical ‘and.’
+"""
+input ArtifactToManyNpmMetadatumFilter {
+  """
+  Every related \`NpmMetadatum\` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  every: NpmMetadatumFilter
+
+  """
+  Some related \`NpmMetadatum\` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  some: NpmMetadatumFilter
+
+  """
+  No related \`NpmMetadatum\` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  none: NpmMetadatumFilter
+}
+
+"""
+A filter to be used against \`NpmMetadatum\` object types. All fields are combined with a logical ‘and.’
+"""
+input NpmMetadatumFilter {
+  """Filter by the object’s \`rowId\` field."""
+  rowId: UUIDFilter
+
+  """Filter by the object’s \`artifactId\` field."""
+  artifactId: UUIDFilter
+
+  """Filter by the object’s \`name\` field."""
+  name: StringFilter
+
+  """Filter by the object’s \`version\` field."""
+  version: StringFilter
+
+  """Filter by the object’s \`artifact\` relation."""
+  artifact: ArtifactFilter
+
+  """Checks for all expressions in this list."""
+  and: [NpmMetadatumFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [NpmMetadatumFilter!]
+
+  """Negates the expression."""
+  not: NpmMetadatumFilter
+}
+
+"""
+A filter to be used against many \`ScanResult\` object types. All fields are combined with a logical ‘and.’
+"""
+input ArtifactToManyScanResultFilter {
+  """
+  Every related \`ScanResult\` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  every: ScanResultFilter
+
+  """
+  Some related \`ScanResult\` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  some: ScanResultFilter
+
+  """
+  No related \`ScanResult\` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  none: ScanResultFilter
+}
+
+"""
+A filter to be used against \`ScanResult\` object types. All fields are combined with a logical ‘and.’
+"""
+input ScanResultFilter {
+  """Filter by the object’s \`rowId\` field."""
+  rowId: UUIDFilter
+
+  """Filter by the object’s \`artifactId\` field."""
+  artifactId: UUIDFilter
+
+  """Filter by the object’s \`status\` field."""
+  status: StringFilter
+
+  """Filter by the object’s \`artifact\` relation."""
+  artifact: ArtifactFilter
+
+  """Checks for all expressions in this list."""
+  and: [ScanResultFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [ScanResultFilter!]
+
+  """Negates the expression."""
+  not: ScanResultFilter
 }
 
 """
@@ -6031,6 +7699,52 @@ input NamespaceToManyApiTokenFilter {
   none: ApiTokenFilter
 }
 
+"""
+A filter to be used against many \`NpmDistTag\` object types. All fields are combined with a logical ‘and.’
+"""
+input RepositoryToManyNpmDistTagFilter {
+  """
+  Every related \`NpmDistTag\` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  every: NpmDistTagFilter
+
+  """
+  Some related \`NpmDistTag\` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  some: NpmDistTagFilter
+
+  """
+  No related \`NpmDistTag\` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  none: NpmDistTagFilter
+}
+
+"""
+A filter to be used against \`NpmDistTag\` object types. All fields are combined with a logical ‘and.’
+"""
+input NpmDistTagFilter {
+  """Filter by the object’s \`rowId\` field."""
+  rowId: UUIDFilter
+
+  """Filter by the object’s \`repositoryId\` field."""
+  repositoryId: UUIDFilter
+
+  """Filter by the object’s \`tag\` field."""
+  tag: StringFilter
+
+  """Filter by the object’s \`repository\` relation."""
+  repository: RepositoryFilter
+
+  """Checks for all expressions in this list."""
+  and: [NpmDistTagFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [NpmDistTagFilter!]
+
+  """Negates the expression."""
+  not: NpmDistTagFilter
+}
+
 """Methods to use when ordering \`Repository\`."""
 enum RepositoryOrderBy {
   NATURAL
@@ -6186,6 +7900,9 @@ input ArtifactCondition {
 
   """Checks for equality with the object’s \`digest\` field."""
   digest: String
+
+  """Checks for equality with the object’s \`subject\` field."""
+  subject: String
 }
 
 """Methods to use when ordering \`Artifact\`."""
@@ -6199,6 +7916,8 @@ enum ArtifactOrderBy {
   REPOSITORY_ID_DESC
   DIGEST_ASC
   DIGEST_DESC
+  SUBJECT_ASC
+  SUBJECT_DESC
 }
 
 """A connection to a list of \`Tag\` values."""
@@ -6347,6 +8066,76 @@ enum UploadSessionOrderBy {
   EXPIRES_AT_DESC
 }
 
+"""A connection to a list of \`NpmDistTag\` values."""
+type NpmDistTagConnection {
+  """A list of \`NpmDistTag\` objects."""
+  nodes: [NpmDistTag]!
+
+  """
+  A list of edges which contains the \`NpmDistTag\` and cursor to aid in pagination.
+  """
+  edges: [NpmDistTagEdge]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* \`NpmDistTag\` you could get from the connection."""
+  totalCount: Int!
+}
+
+type NpmDistTag implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  id: ID!
+  rowId: UUID!
+  repositoryId: UUID!
+  tag: String!
+  version: String!
+  createdAt: Datetime
+  updatedAt: Datetime
+
+  """Reads a single \`Repository\` that is related to this \`NpmDistTag\`."""
+  repository: Repository
+}
+
+"""A \`NpmDistTag\` edge in the connection."""
+type NpmDistTagEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The \`NpmDistTag\` at the end of the edge."""
+  node: NpmDistTag
+}
+
+"""
+A condition to be used against \`NpmDistTag\` object types. All fields are tested
+for equality and combined with a logical ‘and.’
+"""
+input NpmDistTagCondition {
+  """Checks for equality with the object’s \`rowId\` field."""
+  rowId: UUID
+
+  """Checks for equality with the object’s \`repositoryId\` field."""
+  repositoryId: UUID
+
+  """Checks for equality with the object’s \`tag\` field."""
+  tag: String
+}
+
+"""Methods to use when ordering \`NpmDistTag\`."""
+enum NpmDistTagOrderBy {
+  NATURAL
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+  ROW_ID_ASC
+  ROW_ID_DESC
+  REPOSITORY_ID_ASC
+  REPOSITORY_ID_DESC
+  TAG_ASC
+  TAG_DESC
+}
+
 type SchemaMetadatum implements Node {
   """
   A globally unique identifier. Can be used in various places throughout the system to identify this single value.
@@ -6456,6 +8245,179 @@ enum CargoMetadatumOrderBy {
   NAME_DESC
   VERS_ASC
   VERS_DESC
+}
+
+"""A connection to a list of \`NpmMetadatum\` values."""
+type NpmMetadatumConnection {
+  """A list of \`NpmMetadatum\` objects."""
+  nodes: [NpmMetadatum]!
+
+  """
+  A list of edges which contains the \`NpmMetadatum\` and cursor to aid in pagination.
+  """
+  edges: [NpmMetadatumEdge]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* \`NpmMetadatum\` you could get from the connection."""
+  totalCount: Int!
+}
+
+type NpmMetadatum implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  id: ID!
+  rowId: UUID!
+  artifactId: UUID!
+  name: String!
+  version: String!
+  manifest: JSON!
+  shasum: String!
+  integrity: String!
+  createdAt: Datetime
+  updatedAt: Datetime
+
+  """Reads a single \`Artifact\` that is related to this \`NpmMetadatum\`."""
+  artifact: Artifact
+}
+
+"""A \`NpmMetadatum\` edge in the connection."""
+type NpmMetadatumEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The \`NpmMetadatum\` at the end of the edge."""
+  node: NpmMetadatum
+}
+
+"""
+A condition to be used against \`NpmMetadatum\` object types. All fields are
+tested for equality and combined with a logical ‘and.’
+"""
+input NpmMetadatumCondition {
+  """Checks for equality with the object’s \`rowId\` field."""
+  rowId: UUID
+
+  """Checks for equality with the object’s \`artifactId\` field."""
+  artifactId: UUID
+
+  """Checks for equality with the object’s \`name\` field."""
+  name: String
+
+  """Checks for equality with the object’s \`version\` field."""
+  version: String
+}
+
+"""Methods to use when ordering \`NpmMetadatum\`."""
+enum NpmMetadatumOrderBy {
+  NATURAL
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+  ROW_ID_ASC
+  ROW_ID_DESC
+  ARTIFACT_ID_ASC
+  ARTIFACT_ID_DESC
+  NAME_ASC
+  NAME_DESC
+  VERSION_ASC
+  VERSION_DESC
+}
+
+"""A connection to a list of \`ScanResult\` values."""
+type ScanResultConnection {
+  """A list of \`ScanResult\` objects."""
+  nodes: [ScanResult]!
+
+  """
+  A list of edges which contains the \`ScanResult\` and cursor to aid in pagination.
+  """
+  edges: [ScanResultEdge]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* \`ScanResult\` you could get from the connection."""
+  totalCount: Int!
+}
+
+type ScanResult implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  id: ID!
+  rowId: UUID!
+  artifactId: UUID!
+  status: String!
+  scanner: String
+  critical: Int!
+  high: Int!
+  medium: Int!
+  low: Int!
+  unknown: Int!
+  findings: JSON
+  error: String
+  createdAt: Datetime
+  scannedAt: Datetime
+
+  """Reads a single \`Artifact\` that is related to this \`ScanResult\`."""
+  artifact: Artifact
+}
+
+"""A \`ScanResult\` edge in the connection."""
+type ScanResultEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The \`ScanResult\` at the end of the edge."""
+  node: ScanResult
+}
+
+"""
+A condition to be used against \`ScanResult\` object types. All fields are tested
+for equality and combined with a logical ‘and.’
+"""
+input ScanResultCondition {
+  """Checks for equality with the object’s \`rowId\` field."""
+  rowId: UUID
+
+  """Checks for equality with the object’s \`artifactId\` field."""
+  artifactId: UUID
+
+  """Checks for equality with the object’s \`status\` field."""
+  status: String
+}
+
+"""Methods to use when ordering \`ScanResult\`."""
+enum ScanResultOrderBy {
+  NATURAL
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+  ROW_ID_ASC
+  ROW_ID_DESC
+  ARTIFACT_ID_ASC
+  ARTIFACT_ID_DESC
+  STATUS_ASC
+  STATUS_DESC
+}
+
+type Plugin implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  id: ID!
+  rowId: UUID!
+  name: String!
+  version: String!
+  description: String!
+  type: String!
+  bin: String
+  endpoint: String
+  commands: JSON
+  packages: JSON
+  createdAt: Datetime
+  updatedAt: Datetime
 }
 
 type FederatedSource implements Node {
@@ -6872,6 +8834,74 @@ enum NamespaceOrderBy {
   ORGANIZATION_ID_DESC
 }
 
+"""A connection to a list of \`Plugin\` values."""
+type PluginConnection {
+  """A list of \`Plugin\` objects."""
+  nodes: [Plugin]!
+
+  """
+  A list of edges which contains the \`Plugin\` and cursor to aid in pagination.
+  """
+  edges: [PluginEdge]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* \`Plugin\` you could get from the connection."""
+  totalCount: Int!
+}
+
+"""A \`Plugin\` edge in the connection."""
+type PluginEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The \`Plugin\` at the end of the edge."""
+  node: Plugin
+}
+
+"""
+A condition to be used against \`Plugin\` object types. All fields are tested for equality and combined with a logical ‘and.’
+"""
+input PluginCondition {
+  """Checks for equality with the object’s \`rowId\` field."""
+  rowId: UUID
+
+  """Checks for equality with the object’s \`name\` field."""
+  name: String
+}
+
+"""
+A filter to be used against \`Plugin\` object types. All fields are combined with a logical ‘and.’
+"""
+input PluginFilter {
+  """Filter by the object’s \`rowId\` field."""
+  rowId: UUIDFilter
+
+  """Filter by the object’s \`name\` field."""
+  name: StringFilter
+
+  """Checks for all expressions in this list."""
+  and: [PluginFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [PluginFilter!]
+
+  """Negates the expression."""
+  not: PluginFilter
+}
+
+"""Methods to use when ordering \`Plugin\`."""
+enum PluginOrderBy {
+  NATURAL
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+  ROW_ID_ASC
+  ROW_ID_DESC
+  NAME_ASC
+  NAME_DESC
+}
+
 """A connection to a list of \`FederatedSource\` values."""
 type FederatedSourceConnection {
   """A list of \`FederatedSource\` objects."""
@@ -6956,6 +8986,14 @@ type Mutation {
     input: CreateTagInput!
   ): CreateTagPayload
 
+  """Creates a single \`NpmDistTag\`."""
+  createNpmDistTag(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateNpmDistTagInput!
+  ): CreateNpmDistTagPayload
+
   """Creates a single \`UploadSession\`."""
   createUploadSession(
     """
@@ -6963,14 +9001,6 @@ type Mutation {
     """
     input: CreateUploadSessionInput!
   ): CreateUploadSessionPayload
-
-  """Creates a single \`Artifact\`."""
-  createArtifact(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: CreateArtifactInput!
-  ): CreateArtifactPayload
 
   """Creates a single \`SchemaMetadatum\`."""
   createSchemaMetadatum(
@@ -6988,6 +9018,14 @@ type Mutation {
     input: CreateNamespaceInput!
   ): CreateNamespacePayload
 
+  """Creates a single \`Artifact\`."""
+  createArtifact(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateArtifactInput!
+  ): CreateArtifactPayload
+
   """Creates a single \`Repository\`."""
   createRepository(
     """
@@ -6995,6 +9033,30 @@ type Mutation {
     """
     input: CreateRepositoryInput!
   ): CreateRepositoryPayload
+
+  """Creates a single \`NpmMetadatum\`."""
+  createNpmMetadatum(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateNpmMetadatumInput!
+  ): CreateNpmMetadatumPayload
+
+  """Creates a single \`Plugin\`."""
+  createPlugin(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreatePluginInput!
+  ): CreatePluginPayload
+
+  """Creates a single \`ScanResult\`."""
+  createScanResult(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateScanResultInput!
+  ): CreateScanResultPayload
 
   """Creates a single \`FederatedSource\`."""
   createFederatedSource(
@@ -7081,6 +9143,24 @@ type Mutation {
   ): UpdateTagPayload
 
   """
+  Updates a single \`NpmDistTag\` using its globally unique id and a patch.
+  """
+  updateNpmDistTagById(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateNpmDistTagByIdInput!
+  ): UpdateNpmDistTagPayload
+
+  """Updates a single \`NpmDistTag\` using a unique key and a patch."""
+  updateNpmDistTag(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateNpmDistTagInput!
+  ): UpdateNpmDistTagPayload
+
+  """
   Updates a single \`UploadSession\` using its globally unique id and a patch.
   """
   updateUploadSessionById(
@@ -7097,22 +9177,6 @@ type Mutation {
     """
     input: UpdateUploadSessionInput!
   ): UpdateUploadSessionPayload
-
-  """Updates a single \`Artifact\` using its globally unique id and a patch."""
-  updateArtifactById(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdateArtifactByIdInput!
-  ): UpdateArtifactPayload
-
-  """Updates a single \`Artifact\` using a unique key and a patch."""
-  updateArtifact(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdateArtifactInput!
-  ): UpdateArtifactPayload
 
   """
   Updates a single \`SchemaMetadatum\` using its globally unique id and a patch.
@@ -7156,6 +9220,22 @@ type Mutation {
     input: UpdateNamespaceByNameInput!
   ): UpdateNamespacePayload
 
+  """Updates a single \`Artifact\` using its globally unique id and a patch."""
+  updateArtifactById(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateArtifactByIdInput!
+  ): UpdateArtifactPayload
+
+  """Updates a single \`Artifact\` using a unique key and a patch."""
+  updateArtifact(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateArtifactInput!
+  ): UpdateArtifactPayload
+
   """
   Updates a single \`Repository\` using its globally unique id and a patch.
   """
@@ -7173,6 +9253,66 @@ type Mutation {
     """
     input: UpdateRepositoryInput!
   ): UpdateRepositoryPayload
+
+  """
+  Updates a single \`NpmMetadatum\` using its globally unique id and a patch.
+  """
+  updateNpmMetadatumById(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateNpmMetadatumByIdInput!
+  ): UpdateNpmMetadatumPayload
+
+  """Updates a single \`NpmMetadatum\` using a unique key and a patch."""
+  updateNpmMetadatum(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateNpmMetadatumInput!
+  ): UpdateNpmMetadatumPayload
+
+  """Updates a single \`Plugin\` using its globally unique id and a patch."""
+  updatePluginById(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdatePluginByIdInput!
+  ): UpdatePluginPayload
+
+  """Updates a single \`Plugin\` using a unique key and a patch."""
+  updatePlugin(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdatePluginInput!
+  ): UpdatePluginPayload
+
+  """Updates a single \`Plugin\` using a unique key and a patch."""
+  updatePluginByName(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdatePluginByNameInput!
+  ): UpdatePluginPayload
+
+  """
+  Updates a single \`ScanResult\` using its globally unique id and a patch.
+  """
+  updateScanResultById(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateScanResultByIdInput!
+  ): UpdateScanResultPayload
+
+  """Updates a single \`ScanResult\` using a unique key and a patch."""
+  updateScanResult(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateScanResultInput!
+  ): UpdateScanResultPayload
 
   """
   Updates a single \`FederatedSource\` using its globally unique id and a patch.
@@ -7300,6 +9440,22 @@ type Mutation {
     input: DeleteTagInput!
   ): DeleteTagPayload
 
+  """Deletes a single \`NpmDistTag\` using its globally unique id."""
+  deleteNpmDistTagById(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteNpmDistTagByIdInput!
+  ): DeleteNpmDistTagPayload
+
+  """Deletes a single \`NpmDistTag\` using a unique key."""
+  deleteNpmDistTag(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteNpmDistTagInput!
+  ): DeleteNpmDistTagPayload
+
   """Deletes a single \`UploadSession\` using its globally unique id."""
   deleteUploadSessionById(
     """
@@ -7315,22 +9471,6 @@ type Mutation {
     """
     input: DeleteUploadSessionInput!
   ): DeleteUploadSessionPayload
-
-  """Deletes a single \`Artifact\` using its globally unique id."""
-  deleteArtifactById(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteArtifactByIdInput!
-  ): DeleteArtifactPayload
-
-  """Deletes a single \`Artifact\` using a unique key."""
-  deleteArtifact(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteArtifactInput!
-  ): DeleteArtifactPayload
 
   """Deletes a single \`SchemaMetadatum\` using its globally unique id."""
   deleteSchemaMetadatumById(
@@ -7372,6 +9512,22 @@ type Mutation {
     input: DeleteNamespaceByNameInput!
   ): DeleteNamespacePayload
 
+  """Deletes a single \`Artifact\` using its globally unique id."""
+  deleteArtifactById(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteArtifactByIdInput!
+  ): DeleteArtifactPayload
+
+  """Deletes a single \`Artifact\` using a unique key."""
+  deleteArtifact(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteArtifactInput!
+  ): DeleteArtifactPayload
+
   """Deletes a single \`Repository\` using its globally unique id."""
   deleteRepositoryById(
     """
@@ -7387,6 +9543,62 @@ type Mutation {
     """
     input: DeleteRepositoryInput!
   ): DeleteRepositoryPayload
+
+  """Deletes a single \`NpmMetadatum\` using its globally unique id."""
+  deleteNpmMetadatumById(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteNpmMetadatumByIdInput!
+  ): DeleteNpmMetadatumPayload
+
+  """Deletes a single \`NpmMetadatum\` using a unique key."""
+  deleteNpmMetadatum(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteNpmMetadatumInput!
+  ): DeleteNpmMetadatumPayload
+
+  """Deletes a single \`Plugin\` using its globally unique id."""
+  deletePluginById(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeletePluginByIdInput!
+  ): DeletePluginPayload
+
+  """Deletes a single \`Plugin\` using a unique key."""
+  deletePlugin(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeletePluginInput!
+  ): DeletePluginPayload
+
+  """Deletes a single \`Plugin\` using a unique key."""
+  deletePluginByName(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeletePluginByNameInput!
+  ): DeletePluginPayload
+
+  """Deletes a single \`ScanResult\` using its globally unique id."""
+  deleteScanResultById(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteScanResultByIdInput!
+  ): DeleteScanResultPayload
+
+  """Deletes a single \`ScanResult\` using a unique key."""
+  deleteScanResult(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteScanResultInput!
+  ): DeleteScanResultPayload
 
   """Deletes a single \`FederatedSource\` using its globally unique id."""
   deleteFederatedSourceById(
@@ -7594,6 +9806,51 @@ input TagInput {
   updatedAt: Datetime
 }
 
+"""The output of our create \`NpmDistTag\` mutation."""
+type CreateNpmDistTagPayload {
+  """
+  The exact same \`clientMutationId\` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The \`NpmDistTag\` that was created by this mutation."""
+  npmDistTag: NpmDistTag
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our \`NpmDistTag\`. May be used by Relay 1."""
+  npmDistTagEdge(
+    """The method to use when ordering \`NpmDistTag\`."""
+    orderBy: [NpmDistTagOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): NpmDistTagEdge
+}
+
+"""All input for the create \`NpmDistTag\` mutation."""
+input CreateNpmDistTagInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The \`NpmDistTag\` to be created by this mutation."""
+  npmDistTag: NpmDistTagInput!
+}
+
+"""An input for mutations affecting \`NpmDistTag\`"""
+input NpmDistTagInput {
+  rowId: UUID
+  repositoryId: UUID!
+  tag: String!
+  version: String!
+  createdAt: Datetime
+  updatedAt: Datetime
+}
+
 """The output of our create \`UploadSession\` mutation."""
 type CreateUploadSessionPayload {
   """
@@ -7636,53 +9893,6 @@ input UploadSessionInput {
   offset: BigInt
   createdAt: Datetime
   expiresAt: Datetime!
-}
-
-"""The output of our create \`Artifact\` mutation."""
-type CreateArtifactPayload {
-  """
-  The exact same \`clientMutationId\` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """The \`Artifact\` that was created by this mutation."""
-  artifact: Artifact
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-
-  """An edge for our \`Artifact\`. May be used by Relay 1."""
-  artifactEdge(
-    """The method to use when ordering \`Artifact\`."""
-    orderBy: [ArtifactOrderBy!]! = [PRIMARY_KEY_ASC]
-  ): ArtifactEdge
-}
-
-"""All input for the create \`Artifact\` mutation."""
-input CreateArtifactInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-
-  """The \`Artifact\` to be created by this mutation."""
-  artifact: ArtifactInput!
-}
-
-"""An input for mutations affecting \`Artifact\`"""
-input ArtifactInput {
-  rowId: UUID
-  repositoryId: UUID!
-  digest: String!
-  size: BigInt!
-  mediaType: String!
-  content: String
-  createdAt: Datetime
-  storagePath: String
 }
 
 """The output of our create \`SchemaMetadatum\` mutation."""
@@ -7774,6 +9984,54 @@ input NamespaceInput {
   organizationId: UUID
 }
 
+"""The output of our create \`Artifact\` mutation."""
+type CreateArtifactPayload {
+  """
+  The exact same \`clientMutationId\` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The \`Artifact\` that was created by this mutation."""
+  artifact: Artifact
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our \`Artifact\`. May be used by Relay 1."""
+  artifactEdge(
+    """The method to use when ordering \`Artifact\`."""
+    orderBy: [ArtifactOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): ArtifactEdge
+}
+
+"""All input for the create \`Artifact\` mutation."""
+input CreateArtifactInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The \`Artifact\` to be created by this mutation."""
+  artifact: ArtifactInput!
+}
+
+"""An input for mutations affecting \`Artifact\`"""
+input ArtifactInput {
+  rowId: UUID
+  repositoryId: UUID!
+  digest: String!
+  size: BigInt!
+  mediaType: String!
+  content: String
+  createdAt: Datetime
+  storagePath: String
+  subject: String
+}
+
 """The output of our create \`Repository\` mutation."""
 type CreateRepositoryPayload {
   """
@@ -7819,6 +10077,157 @@ input RepositoryInput {
   isPublic: Boolean
   createdAt: Datetime
   updatedAt: Datetime
+  downloadCount: BigInt
+}
+
+"""The output of our create \`NpmMetadatum\` mutation."""
+type CreateNpmMetadatumPayload {
+  """
+  The exact same \`clientMutationId\` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The \`NpmMetadatum\` that was created by this mutation."""
+  npmMetadatum: NpmMetadatum
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our \`NpmMetadatum\`. May be used by Relay 1."""
+  npmMetadatumEdge(
+    """The method to use when ordering \`NpmMetadatum\`."""
+    orderBy: [NpmMetadatumOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): NpmMetadatumEdge
+}
+
+"""All input for the create \`NpmMetadatum\` mutation."""
+input CreateNpmMetadatumInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The \`NpmMetadatum\` to be created by this mutation."""
+  npmMetadatum: NpmMetadatumInput!
+}
+
+"""An input for mutations affecting \`NpmMetadatum\`"""
+input NpmMetadatumInput {
+  rowId: UUID
+  artifactId: UUID!
+  name: String!
+  version: String!
+  manifest: JSON!
+  shasum: String!
+  integrity: String!
+  createdAt: Datetime
+  updatedAt: Datetime
+}
+
+"""The output of our create \`Plugin\` mutation."""
+type CreatePluginPayload {
+  """
+  The exact same \`clientMutationId\` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The \`Plugin\` that was created by this mutation."""
+  plugin: Plugin
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our \`Plugin\`. May be used by Relay 1."""
+  pluginEdge(
+    """The method to use when ordering \`Plugin\`."""
+    orderBy: [PluginOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): PluginEdge
+}
+
+"""All input for the create \`Plugin\` mutation."""
+input CreatePluginInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The \`Plugin\` to be created by this mutation."""
+  plugin: PluginInput!
+}
+
+"""An input for mutations affecting \`Plugin\`"""
+input PluginInput {
+  rowId: UUID
+  name: String!
+  version: String!
+  description: String!
+  type: String!
+  bin: String
+  endpoint: String
+  commands: JSON
+  packages: JSON
+  createdAt: Datetime
+  updatedAt: Datetime
+}
+
+"""The output of our create \`ScanResult\` mutation."""
+type CreateScanResultPayload {
+  """
+  The exact same \`clientMutationId\` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The \`ScanResult\` that was created by this mutation."""
+  scanResult: ScanResult
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our \`ScanResult\`. May be used by Relay 1."""
+  scanResultEdge(
+    """The method to use when ordering \`ScanResult\`."""
+    orderBy: [ScanResultOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): ScanResultEdge
+}
+
+"""All input for the create \`ScanResult\` mutation."""
+input CreateScanResultInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The \`ScanResult\` to be created by this mutation."""
+  scanResult: ScanResultInput!
+}
+
+"""An input for mutations affecting \`ScanResult\`"""
+input ScanResultInput {
+  rowId: UUID
+  artifactId: UUID!
+  status: String
+  scanner: String
+  critical: Int
+  high: Int
+  medium: Int
+  low: Int
+  unknown: Int
+  findings: JSON
+  error: String
+  createdAt: Datetime
+  scannedAt: Datetime
 }
 
 """The output of our create \`FederatedSource\` mutation."""
@@ -8231,6 +10640,75 @@ input UpdateTagInput {
   patch: TagPatch!
 }
 
+"""The output of our update \`NpmDistTag\` mutation."""
+type UpdateNpmDistTagPayload {
+  """
+  The exact same \`clientMutationId\` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The \`NpmDistTag\` that was updated by this mutation."""
+  npmDistTag: NpmDistTag
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our \`NpmDistTag\`. May be used by Relay 1."""
+  npmDistTagEdge(
+    """The method to use when ordering \`NpmDistTag\`."""
+    orderBy: [NpmDistTagOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): NpmDistTagEdge
+}
+
+"""All input for the \`updateNpmDistTagById\` mutation."""
+input UpdateNpmDistTagByIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique \`ID\` which will identify a single \`NpmDistTag\` to be updated.
+  """
+  id: ID!
+
+  """
+  An object where the defined keys will be set on the \`NpmDistTag\` being updated.
+  """
+  patch: NpmDistTagPatch!
+}
+
+"""
+Represents an update to a \`NpmDistTag\`. Fields that are set will be updated.
+"""
+input NpmDistTagPatch {
+  rowId: UUID
+  repositoryId: UUID
+  tag: String
+  version: String
+  createdAt: Datetime
+  updatedAt: Datetime
+}
+
+"""All input for the \`updateNpmDistTag\` mutation."""
+input UpdateNpmDistTagInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  rowId: UUID!
+
+  """
+  An object where the defined keys will be set on the \`NpmDistTag\` being updated.
+  """
+  patch: NpmDistTagPatch!
+}
+
 """The output of our update \`UploadSession\` mutation."""
 type UpdateUploadSessionPayload {
   """
@@ -8297,77 +10775,6 @@ input UpdateUploadSessionInput {
   An object where the defined keys will be set on the \`UploadSession\` being updated.
   """
   patch: UploadSessionPatch!
-}
-
-"""The output of our update \`Artifact\` mutation."""
-type UpdateArtifactPayload {
-  """
-  The exact same \`clientMutationId\` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """The \`Artifact\` that was updated by this mutation."""
-  artifact: Artifact
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-
-  """An edge for our \`Artifact\`. May be used by Relay 1."""
-  artifactEdge(
-    """The method to use when ordering \`Artifact\`."""
-    orderBy: [ArtifactOrderBy!]! = [PRIMARY_KEY_ASC]
-  ): ArtifactEdge
-}
-
-"""All input for the \`updateArtifactById\` mutation."""
-input UpdateArtifactByIdInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-
-  """
-  The globally unique \`ID\` which will identify a single \`Artifact\` to be updated.
-  """
-  id: ID!
-
-  """
-  An object where the defined keys will be set on the \`Artifact\` being updated.
-  """
-  patch: ArtifactPatch!
-}
-
-"""
-Represents an update to a \`Artifact\`. Fields that are set will be updated.
-"""
-input ArtifactPatch {
-  rowId: UUID
-  repositoryId: UUID
-  digest: String
-  size: BigInt
-  mediaType: String
-  content: String
-  createdAt: Datetime
-  storagePath: String
-}
-
-"""All input for the \`updateArtifact\` mutation."""
-input UpdateArtifactInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-  rowId: UUID!
-
-  """
-  An object where the defined keys will be set on the \`Artifact\` being updated.
-  """
-  patch: ArtifactPatch!
 }
 
 """The output of our update \`SchemaMetadatum\` mutation."""
@@ -8522,6 +10929,78 @@ input UpdateNamespaceByNameInput {
   patch: NamespacePatch!
 }
 
+"""The output of our update \`Artifact\` mutation."""
+type UpdateArtifactPayload {
+  """
+  The exact same \`clientMutationId\` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The \`Artifact\` that was updated by this mutation."""
+  artifact: Artifact
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our \`Artifact\`. May be used by Relay 1."""
+  artifactEdge(
+    """The method to use when ordering \`Artifact\`."""
+    orderBy: [ArtifactOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): ArtifactEdge
+}
+
+"""All input for the \`updateArtifactById\` mutation."""
+input UpdateArtifactByIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique \`ID\` which will identify a single \`Artifact\` to be updated.
+  """
+  id: ID!
+
+  """
+  An object where the defined keys will be set on the \`Artifact\` being updated.
+  """
+  patch: ArtifactPatch!
+}
+
+"""
+Represents an update to a \`Artifact\`. Fields that are set will be updated.
+"""
+input ArtifactPatch {
+  rowId: UUID
+  repositoryId: UUID
+  digest: String
+  size: BigInt
+  mediaType: String
+  content: String
+  createdAt: Datetime
+  storagePath: String
+  subject: String
+}
+
+"""All input for the \`updateArtifact\` mutation."""
+input UpdateArtifactInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  rowId: UUID!
+
+  """
+  An object where the defined keys will be set on the \`Artifact\` being updated.
+  """
+  patch: ArtifactPatch!
+}
+
 """The output of our update \`Repository\` mutation."""
 type UpdateRepositoryPayload {
   """
@@ -8576,6 +11055,7 @@ input RepositoryPatch {
   isPublic: Boolean
   createdAt: Datetime
   updatedAt: Datetime
+  downloadCount: BigInt
 }
 
 """All input for the \`updateRepository\` mutation."""
@@ -8591,6 +11071,243 @@ input UpdateRepositoryInput {
   An object where the defined keys will be set on the \`Repository\` being updated.
   """
   patch: RepositoryPatch!
+}
+
+"""The output of our update \`NpmMetadatum\` mutation."""
+type UpdateNpmMetadatumPayload {
+  """
+  The exact same \`clientMutationId\` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The \`NpmMetadatum\` that was updated by this mutation."""
+  npmMetadatum: NpmMetadatum
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our \`NpmMetadatum\`. May be used by Relay 1."""
+  npmMetadatumEdge(
+    """The method to use when ordering \`NpmMetadatum\`."""
+    orderBy: [NpmMetadatumOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): NpmMetadatumEdge
+}
+
+"""All input for the \`updateNpmMetadatumById\` mutation."""
+input UpdateNpmMetadatumByIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique \`ID\` which will identify a single \`NpmMetadatum\` to be updated.
+  """
+  id: ID!
+
+  """
+  An object where the defined keys will be set on the \`NpmMetadatum\` being updated.
+  """
+  patch: NpmMetadatumPatch!
+}
+
+"""
+Represents an update to a \`NpmMetadatum\`. Fields that are set will be updated.
+"""
+input NpmMetadatumPatch {
+  rowId: UUID
+  artifactId: UUID
+  name: String
+  version: String
+  manifest: JSON
+  shasum: String
+  integrity: String
+  createdAt: Datetime
+  updatedAt: Datetime
+}
+
+"""All input for the \`updateNpmMetadatum\` mutation."""
+input UpdateNpmMetadatumInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  rowId: UUID!
+
+  """
+  An object where the defined keys will be set on the \`NpmMetadatum\` being updated.
+  """
+  patch: NpmMetadatumPatch!
+}
+
+"""The output of our update \`Plugin\` mutation."""
+type UpdatePluginPayload {
+  """
+  The exact same \`clientMutationId\` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The \`Plugin\` that was updated by this mutation."""
+  plugin: Plugin
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our \`Plugin\`. May be used by Relay 1."""
+  pluginEdge(
+    """The method to use when ordering \`Plugin\`."""
+    orderBy: [PluginOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): PluginEdge
+}
+
+"""All input for the \`updatePluginById\` mutation."""
+input UpdatePluginByIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique \`ID\` which will identify a single \`Plugin\` to be updated.
+  """
+  id: ID!
+
+  """
+  An object where the defined keys will be set on the \`Plugin\` being updated.
+  """
+  patch: PluginPatch!
+}
+
+"""
+Represents an update to a \`Plugin\`. Fields that are set will be updated.
+"""
+input PluginPatch {
+  rowId: UUID
+  name: String
+  version: String
+  description: String
+  type: String
+  bin: String
+  endpoint: String
+  commands: JSON
+  packages: JSON
+  createdAt: Datetime
+  updatedAt: Datetime
+}
+
+"""All input for the \`updatePlugin\` mutation."""
+input UpdatePluginInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  rowId: UUID!
+
+  """
+  An object where the defined keys will be set on the \`Plugin\` being updated.
+  """
+  patch: PluginPatch!
+}
+
+"""All input for the \`updatePluginByName\` mutation."""
+input UpdatePluginByNameInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  name: String!
+
+  """
+  An object where the defined keys will be set on the \`Plugin\` being updated.
+  """
+  patch: PluginPatch!
+}
+
+"""The output of our update \`ScanResult\` mutation."""
+type UpdateScanResultPayload {
+  """
+  The exact same \`clientMutationId\` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The \`ScanResult\` that was updated by this mutation."""
+  scanResult: ScanResult
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our \`ScanResult\`. May be used by Relay 1."""
+  scanResultEdge(
+    """The method to use when ordering \`ScanResult\`."""
+    orderBy: [ScanResultOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): ScanResultEdge
+}
+
+"""All input for the \`updateScanResultById\` mutation."""
+input UpdateScanResultByIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique \`ID\` which will identify a single \`ScanResult\` to be updated.
+  """
+  id: ID!
+
+  """
+  An object where the defined keys will be set on the \`ScanResult\` being updated.
+  """
+  patch: ScanResultPatch!
+}
+
+"""
+Represents an update to a \`ScanResult\`. Fields that are set will be updated.
+"""
+input ScanResultPatch {
+  rowId: UUID
+  artifactId: UUID
+  status: String
+  scanner: String
+  critical: Int
+  high: Int
+  medium: Int
+  low: Int
+  unknown: Int
+  findings: JSON
+  error: String
+  createdAt: Datetime
+  scannedAt: Datetime
+}
+
+"""All input for the \`updateScanResult\` mutation."""
+input UpdateScanResultInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  rowId: UUID!
+
+  """
+  An object where the defined keys will be set on the \`ScanResult\` being updated.
+  """
+  patch: ScanResultPatch!
 }
 
 """The output of our update \`FederatedSource\` mutation."""
@@ -9055,6 +11772,54 @@ input DeleteTagInput {
   rowId: UUID!
 }
 
+"""The output of our delete \`NpmDistTag\` mutation."""
+type DeleteNpmDistTagPayload {
+  """
+  The exact same \`clientMutationId\` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The \`NpmDistTag\` that was deleted by this mutation."""
+  npmDistTag: NpmDistTag
+  deletedNpmDistTagId: ID
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our \`NpmDistTag\`. May be used by Relay 1."""
+  npmDistTagEdge(
+    """The method to use when ordering \`NpmDistTag\`."""
+    orderBy: [NpmDistTagOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): NpmDistTagEdge
+}
+
+"""All input for the \`deleteNpmDistTagById\` mutation."""
+input DeleteNpmDistTagByIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique \`ID\` which will identify a single \`NpmDistTag\` to be deleted.
+  """
+  id: ID!
+}
+
+"""All input for the \`deleteNpmDistTag\` mutation."""
+input DeleteNpmDistTagInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  rowId: UUID!
+}
+
 """The output of our delete \`UploadSession\` mutation."""
 type DeleteUploadSessionPayload {
   """
@@ -9095,54 +11860,6 @@ input DeleteUploadSessionByIdInput {
 
 """All input for the \`deleteUploadSession\` mutation."""
 input DeleteUploadSessionInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-  rowId: UUID!
-}
-
-"""The output of our delete \`Artifact\` mutation."""
-type DeleteArtifactPayload {
-  """
-  The exact same \`clientMutationId\` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """The \`Artifact\` that was deleted by this mutation."""
-  artifact: Artifact
-  deletedArtifactId: ID
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-
-  """An edge for our \`Artifact\`. May be used by Relay 1."""
-  artifactEdge(
-    """The method to use when ordering \`Artifact\`."""
-    orderBy: [ArtifactOrderBy!]! = [PRIMARY_KEY_ASC]
-  ): ArtifactEdge
-}
-
-"""All input for the \`deleteArtifactById\` mutation."""
-input DeleteArtifactByIdInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-
-  """
-  The globally unique \`ID\` which will identify a single \`Artifact\` to be deleted.
-  """
-  id: ID!
-}
-
-"""All input for the \`deleteArtifact\` mutation."""
-input DeleteArtifactInput {
   """
   An arbitrary string value with no semantic meaning. Will be included in the
   payload verbatim. May be used to track mutations by the client.
@@ -9257,6 +11974,54 @@ input DeleteNamespaceByNameInput {
   name: String!
 }
 
+"""The output of our delete \`Artifact\` mutation."""
+type DeleteArtifactPayload {
+  """
+  The exact same \`clientMutationId\` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The \`Artifact\` that was deleted by this mutation."""
+  artifact: Artifact
+  deletedArtifactId: ID
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our \`Artifact\`. May be used by Relay 1."""
+  artifactEdge(
+    """The method to use when ordering \`Artifact\`."""
+    orderBy: [ArtifactOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): ArtifactEdge
+}
+
+"""All input for the \`deleteArtifactById\` mutation."""
+input DeleteArtifactByIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique \`ID\` which will identify a single \`Artifact\` to be deleted.
+  """
+  id: ID!
+}
+
+"""All input for the \`deleteArtifact\` mutation."""
+input DeleteArtifactInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  rowId: UUID!
+}
+
 """The output of our delete \`Repository\` mutation."""
 type DeleteRepositoryPayload {
   """
@@ -9297,6 +12062,160 @@ input DeleteRepositoryByIdInput {
 
 """All input for the \`deleteRepository\` mutation."""
 input DeleteRepositoryInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  rowId: UUID!
+}
+
+"""The output of our delete \`NpmMetadatum\` mutation."""
+type DeleteNpmMetadatumPayload {
+  """
+  The exact same \`clientMutationId\` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The \`NpmMetadatum\` that was deleted by this mutation."""
+  npmMetadatum: NpmMetadatum
+  deletedNpmMetadatumId: ID
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our \`NpmMetadatum\`. May be used by Relay 1."""
+  npmMetadatumEdge(
+    """The method to use when ordering \`NpmMetadatum\`."""
+    orderBy: [NpmMetadatumOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): NpmMetadatumEdge
+}
+
+"""All input for the \`deleteNpmMetadatumById\` mutation."""
+input DeleteNpmMetadatumByIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique \`ID\` which will identify a single \`NpmMetadatum\` to be deleted.
+  """
+  id: ID!
+}
+
+"""All input for the \`deleteNpmMetadatum\` mutation."""
+input DeleteNpmMetadatumInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  rowId: UUID!
+}
+
+"""The output of our delete \`Plugin\` mutation."""
+type DeletePluginPayload {
+  """
+  The exact same \`clientMutationId\` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The \`Plugin\` that was deleted by this mutation."""
+  plugin: Plugin
+  deletedPluginId: ID
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our \`Plugin\`. May be used by Relay 1."""
+  pluginEdge(
+    """The method to use when ordering \`Plugin\`."""
+    orderBy: [PluginOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): PluginEdge
+}
+
+"""All input for the \`deletePluginById\` mutation."""
+input DeletePluginByIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique \`ID\` which will identify a single \`Plugin\` to be deleted.
+  """
+  id: ID!
+}
+
+"""All input for the \`deletePlugin\` mutation."""
+input DeletePluginInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  rowId: UUID!
+}
+
+"""All input for the \`deletePluginByName\` mutation."""
+input DeletePluginByNameInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  name: String!
+}
+
+"""The output of our delete \`ScanResult\` mutation."""
+type DeleteScanResultPayload {
+  """
+  The exact same \`clientMutationId\` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The \`ScanResult\` that was deleted by this mutation."""
+  scanResult: ScanResult
+  deletedScanResultId: ID
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our \`ScanResult\`. May be used by Relay 1."""
+  scanResultEdge(
+    """The method to use when ordering \`ScanResult\`."""
+    orderBy: [ScanResultOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): ScanResultEdge
+}
+
+"""All input for the \`deleteScanResultById\` mutation."""
+input DeleteScanResultByIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique \`ID\` which will identify a single \`ScanResult\` to be deleted.
+  """
+  id: ID!
+}
+
+"""All input for the \`deleteScanResult\` mutation."""
+input DeleteScanResultInput {
   """
   An arbitrary string value with no semantic meaning. Will be included in the
   payload verbatim. May be used to track mutations by the client.
@@ -9550,7 +12469,7 @@ export const objects = {
           filter(_, $connection, fieldArg) {
             const $pgSelect = $connection.getSubplan();
             fieldArg.apply($pgSelect, (queryBuilder, value) => {
-              assertAllowed12(value, "object");
+              assertAllowed16(value, "object");
               if (value == null) return;
               const condition = new PgCondition(queryBuilder);
               return condition;
@@ -9600,7 +12519,7 @@ export const objects = {
           filter(_, $connection, fieldArg) {
             const $pgSelect = $connection.getSubplan();
             fieldArg.apply($pgSelect, (queryBuilder, value) => {
-              assertAllowed5(value, "object");
+              assertAllowed8(value, "object");
               if (value == null) return;
               const condition = new PgCondition(queryBuilder);
               return condition;
@@ -9639,7 +12558,7 @@ export const objects = {
           filter(_, $connection, fieldArg) {
             const $pgSelect = $connection.getSubplan();
             fieldArg.apply($pgSelect, (queryBuilder, value) => {
-              assertAllowed11(value, "object");
+              assertAllowed15(value, "object");
               if (value == null) return;
               const condition = new PgCondition(queryBuilder);
               return condition;
@@ -9750,7 +12669,7 @@ export const objects = {
           filter(_, $connection, fieldArg) {
             const $pgSelect = $connection.getSubplan();
             fieldArg.apply($pgSelect, (queryBuilder, value) => {
-              assertAllowed10(value, "object");
+              assertAllowed14(value, "object");
               if (value == null) return;
               const condition = new PgCondition(queryBuilder);
               return condition;
@@ -9807,7 +12726,7 @@ export const objects = {
           filter(_, $connection, fieldArg) {
             const $pgSelect = $connection.getSubplan();
             fieldArg.apply($pgSelect, (queryBuilder, value) => {
-              assertAllowed9(value, "object");
+              assertAllowed13(value, "object");
               if (value == null) return;
               const condition = new PgCondition(queryBuilder);
               return condition;
@@ -9883,6 +12802,163 @@ export const objects = {
       node(_$root, fieldArgs) {
         return fieldArgs.getRaw("id");
       },
+      npmDistTag(_$root, {
+        $rowId
+      }) {
+        return resource_npm_dist_tagPgResource.get({
+          id: $rowId
+        });
+      },
+      npmDistTagById(_$parent, args) {
+        const $nodeId = args.getRaw("id");
+        return nodeFetcher_NpmDistTag($nodeId);
+      },
+      npmDistTags: {
+        plan() {
+          return connection(resource_npm_dist_tagPgResource.find());
+        },
+        args: {
+          first(_, $connection, arg) {
+            $connection.setFirst(arg.getRaw());
+          },
+          last(_, $connection, val) {
+            $connection.setLast(val.getRaw());
+          },
+          offset(_, $connection, val) {
+            $connection.setOffset(val.getRaw());
+          },
+          before(_, $connection, val) {
+            $connection.setBefore(val.getRaw());
+          },
+          after(_, $connection, val) {
+            $connection.setAfter(val.getRaw());
+          },
+          condition(_condition, $connection, arg) {
+            const $select = $connection.getSubplan();
+            arg.apply($select, qbWhereBuilder);
+          },
+          filter(_, $connection, fieldArg) {
+            const $pgSelect = $connection.getSubplan();
+            fieldArg.apply($pgSelect, (queryBuilder, value) => {
+              assertAllowed4(value, "object");
+              if (value == null) return;
+              const condition = new PgCondition(queryBuilder);
+              return condition;
+            });
+          },
+          orderBy(parent, $connection, value) {
+            const $select = $connection.getSubplan();
+            value.apply($select);
+          }
+        }
+      },
+      npmMetadata: {
+        plan() {
+          return connection(resource_npm_metadataPgResource.find());
+        },
+        args: {
+          first(_, $connection, arg) {
+            $connection.setFirst(arg.getRaw());
+          },
+          last(_, $connection, val) {
+            $connection.setLast(val.getRaw());
+          },
+          offset(_, $connection, val) {
+            $connection.setOffset(val.getRaw());
+          },
+          before(_, $connection, val) {
+            $connection.setBefore(val.getRaw());
+          },
+          after(_, $connection, val) {
+            $connection.setAfter(val.getRaw());
+          },
+          condition(_condition, $connection, arg) {
+            const $select = $connection.getSubplan();
+            arg.apply($select, qbWhereBuilder);
+          },
+          filter(_, $connection, fieldArg) {
+            const $pgSelect = $connection.getSubplan();
+            fieldArg.apply($pgSelect, (queryBuilder, value) => {
+              assertAllowed10(value, "object");
+              if (value == null) return;
+              const condition = new PgCondition(queryBuilder);
+              return condition;
+            });
+          },
+          orderBy(parent, $connection, value) {
+            const $select = $connection.getSubplan();
+            value.apply($select);
+          }
+        }
+      },
+      npmMetadatum(_$root, {
+        $rowId
+      }) {
+        return resource_npm_metadataPgResource.get({
+          id: $rowId
+        });
+      },
+      npmMetadatumById(_$parent, args) {
+        const $nodeId = args.getRaw("id");
+        return nodeFetcher_NpmMetadatum($nodeId);
+      },
+      plugin(_$root, {
+        $rowId
+      }) {
+        return resource_pluginPgResource.get({
+          id: $rowId
+        });
+      },
+      pluginById(_$parent, args) {
+        const $nodeId = args.getRaw("id");
+        return nodeFetcher_Plugin($nodeId);
+      },
+      pluginByName(_$root, {
+        $name
+      }) {
+        return resource_pluginPgResource.get({
+          name: $name
+        });
+      },
+      plugins: {
+        plan() {
+          return connection(resource_pluginPgResource.find());
+        },
+        args: {
+          first(_, $connection, arg) {
+            $connection.setFirst(arg.getRaw());
+          },
+          last(_, $connection, val) {
+            $connection.setLast(val.getRaw());
+          },
+          offset(_, $connection, val) {
+            $connection.setOffset(val.getRaw());
+          },
+          before(_, $connection, val) {
+            $connection.setBefore(val.getRaw());
+          },
+          after(_, $connection, val) {
+            $connection.setAfter(val.getRaw());
+          },
+          condition(_condition, $connection, arg) {
+            const $select = $connection.getSubplan();
+            arg.apply($select, qbWhereBuilder);
+          },
+          filter(_, $connection, fieldArg) {
+            const $pgSelect = $connection.getSubplan();
+            fieldArg.apply($pgSelect, (queryBuilder, value) => {
+              assertAllowed11(value, "object");
+              if (value == null) return;
+              const condition = new PgCondition(queryBuilder);
+              return condition;
+            });
+          },
+          orderBy(parent, $connection, value) {
+            const $select = $connection.getSubplan();
+            value.apply($select);
+          }
+        }
+      },
       query() {
         return rootValue();
       },
@@ -9913,7 +12989,7 @@ export const objects = {
           filter(_, $connection, fieldArg) {
             const $pgSelect = $connection.getSubplan();
             fieldArg.apply($pgSelect, (queryBuilder, value) => {
-              assertAllowed8(value, "object");
+              assertAllowed9(value, "object");
               if (value == null) return;
               const condition = new PgCondition(queryBuilder);
               return condition;
@@ -9935,6 +13011,56 @@ export const objects = {
       repositoryById(_$parent, args) {
         const $nodeId = args.getRaw("id");
         return nodeFetcher_Repository($nodeId);
+      },
+      scanResult(_$root, {
+        $rowId
+      }) {
+        return resource_scan_resultPgResource.get({
+          id: $rowId
+        });
+      },
+      scanResultById(_$parent, args) {
+        const $nodeId = args.getRaw("id");
+        return nodeFetcher_ScanResult($nodeId);
+      },
+      scanResults: {
+        plan() {
+          return connection(resource_scan_resultPgResource.find());
+        },
+        args: {
+          first(_, $connection, arg) {
+            $connection.setFirst(arg.getRaw());
+          },
+          last(_, $connection, val) {
+            $connection.setLast(val.getRaw());
+          },
+          offset(_, $connection, val) {
+            $connection.setOffset(val.getRaw());
+          },
+          before(_, $connection, val) {
+            $connection.setBefore(val.getRaw());
+          },
+          after(_, $connection, val) {
+            $connection.setAfter(val.getRaw());
+          },
+          condition(_condition, $connection, arg) {
+            const $select = $connection.getSubplan();
+            arg.apply($select, qbWhereBuilder);
+          },
+          filter(_, $connection, fieldArg) {
+            const $pgSelect = $connection.getSubplan();
+            fieldArg.apply($pgSelect, (queryBuilder, value) => {
+              assertAllowed12(value, "object");
+              if (value == null) return;
+              const condition = new PgCondition(queryBuilder);
+              return condition;
+            });
+          },
+          orderBy(parent, $connection, value) {
+            const $select = $connection.getSubplan();
+            value.apply($select);
+          }
+        }
       },
       schemaMetadata: {
         plan() {
@@ -10074,7 +13200,7 @@ export const objects = {
           filter(_, $connection, fieldArg) {
             const $pgSelect = $connection.getSubplan();
             fieldArg.apply($pgSelect, (queryBuilder, value) => {
-              assertAllowed4(value, "object");
+              assertAllowed5(value, "object");
               if (value == null) return;
               const condition = new PgCondition(queryBuilder);
               return condition;
@@ -10239,9 +13365,65 @@ export const objects = {
           }
         }
       },
+      createNpmDistTag: {
+        plan(_, args) {
+          const $insert = pgInsertSingle(resource_npm_dist_tagPgResource, Object.create(null));
+          args.apply($insert);
+          return object({
+            result: $insert
+          });
+        },
+        args: {
+          input(_, $object) {
+            return $object;
+          }
+        }
+      },
+      createNpmMetadatum: {
+        plan(_, args) {
+          const $insert = pgInsertSingle(resource_npm_metadataPgResource, Object.create(null));
+          args.apply($insert);
+          return object({
+            result: $insert
+          });
+        },
+        args: {
+          input(_, $object) {
+            return $object;
+          }
+        }
+      },
+      createPlugin: {
+        plan(_, args) {
+          const $insert = pgInsertSingle(resource_pluginPgResource, Object.create(null));
+          args.apply($insert);
+          return object({
+            result: $insert
+          });
+        },
+        args: {
+          input(_, $object) {
+            return $object;
+          }
+        }
+      },
       createRepository: {
         plan(_, args) {
           const $insert = pgInsertSingle(resource_repositoryPgResource, Object.create(null));
+          args.apply($insert);
+          return object({
+            result: $insert
+          });
+        },
+        args: {
+          input(_, $object) {
+            return $object;
+          }
+        }
+      },
+      createScanResult: {
+        plan(_, args) {
+          const $insert = pgInsertSingle(resource_scan_resultPgResource, Object.create(null));
           args.apply($insert);
           return object({
             result: $insert
@@ -10551,6 +13733,112 @@ export const objects = {
           }
         }
       },
+      deleteNpmDistTag: {
+        plan(_$root, args) {
+          const $delete = pgDeleteSingle(resource_npm_dist_tagPgResource, {
+            id: args.getRaw(['input', "rowId"])
+          });
+          args.apply($delete);
+          return object({
+            result: $delete
+          });
+        },
+        args: {
+          input(_, $object) {
+            return $object;
+          }
+        }
+      },
+      deleteNpmDistTagById: {
+        plan(_$root, args) {
+          const $delete = pgDeleteSingle(resource_npm_dist_tagPgResource, specFromArgs_NpmDistTag2(args));
+          args.apply($delete);
+          return object({
+            result: $delete
+          });
+        },
+        args: {
+          input(_, $object) {
+            return $object;
+          }
+        }
+      },
+      deleteNpmMetadatum: {
+        plan(_$root, args) {
+          const $delete = pgDeleteSingle(resource_npm_metadataPgResource, {
+            id: args.getRaw(['input', "rowId"])
+          });
+          args.apply($delete);
+          return object({
+            result: $delete
+          });
+        },
+        args: {
+          input(_, $object) {
+            return $object;
+          }
+        }
+      },
+      deleteNpmMetadatumById: {
+        plan(_$root, args) {
+          const $delete = pgDeleteSingle(resource_npm_metadataPgResource, specFromArgs_NpmMetadatum2(args));
+          args.apply($delete);
+          return object({
+            result: $delete
+          });
+        },
+        args: {
+          input(_, $object) {
+            return $object;
+          }
+        }
+      },
+      deletePlugin: {
+        plan(_$root, args) {
+          const $delete = pgDeleteSingle(resource_pluginPgResource, {
+            id: args.getRaw(['input', "rowId"])
+          });
+          args.apply($delete);
+          return object({
+            result: $delete
+          });
+        },
+        args: {
+          input(_, $object) {
+            return $object;
+          }
+        }
+      },
+      deletePluginById: {
+        plan(_$root, args) {
+          const $delete = pgDeleteSingle(resource_pluginPgResource, specFromArgs_Plugin2(args));
+          args.apply($delete);
+          return object({
+            result: $delete
+          });
+        },
+        args: {
+          input(_, $object) {
+            return $object;
+          }
+        }
+      },
+      deletePluginByName: {
+        plan(_$root, args) {
+          const $delete = pgDeleteSingle(resource_pluginPgResource, {
+            name: args.getRaw(['input', "name"])
+          });
+          args.apply($delete);
+          return object({
+            result: $delete
+          });
+        },
+        args: {
+          input(_, $object) {
+            return $object;
+          }
+        }
+      },
       deleteRepository: {
         plan(_$root, args) {
           const $delete = pgDeleteSingle(resource_repositoryPgResource, {
@@ -10570,6 +13858,36 @@ export const objects = {
       deleteRepositoryById: {
         plan(_$root, args) {
           const $delete = pgDeleteSingle(resource_repositoryPgResource, specFromArgs_Repository2(args));
+          args.apply($delete);
+          return object({
+            result: $delete
+          });
+        },
+        args: {
+          input(_, $object) {
+            return $object;
+          }
+        }
+      },
+      deleteScanResult: {
+        plan(_$root, args) {
+          const $delete = pgDeleteSingle(resource_scan_resultPgResource, {
+            id: args.getRaw(['input', "rowId"])
+          });
+          args.apply($delete);
+          return object({
+            result: $delete
+          });
+        },
+        args: {
+          input(_, $object) {
+            return $object;
+          }
+        }
+      },
+      deleteScanResultById: {
+        plan(_$root, args) {
+          const $delete = pgDeleteSingle(resource_scan_resultPgResource, specFromArgs_ScanResult2(args));
           args.apply($delete);
           return object({
             result: $delete
@@ -10943,6 +14261,112 @@ export const objects = {
           }
         }
       },
+      updateNpmDistTag: {
+        plan(_$root, args) {
+          const $update = pgUpdateSingle(resource_npm_dist_tagPgResource, {
+            id: args.getRaw(['input', "rowId"])
+          });
+          args.apply($update);
+          return object({
+            result: $update
+          });
+        },
+        args: {
+          input(_, $object) {
+            return $object;
+          }
+        }
+      },
+      updateNpmDistTagById: {
+        plan(_$root, args) {
+          const $update = pgUpdateSingle(resource_npm_dist_tagPgResource, specFromArgs_NpmDistTag(args));
+          args.apply($update);
+          return object({
+            result: $update
+          });
+        },
+        args: {
+          input(_, $object) {
+            return $object;
+          }
+        }
+      },
+      updateNpmMetadatum: {
+        plan(_$root, args) {
+          const $update = pgUpdateSingle(resource_npm_metadataPgResource, {
+            id: args.getRaw(['input', "rowId"])
+          });
+          args.apply($update);
+          return object({
+            result: $update
+          });
+        },
+        args: {
+          input(_, $object) {
+            return $object;
+          }
+        }
+      },
+      updateNpmMetadatumById: {
+        plan(_$root, args) {
+          const $update = pgUpdateSingle(resource_npm_metadataPgResource, specFromArgs_NpmMetadatum(args));
+          args.apply($update);
+          return object({
+            result: $update
+          });
+        },
+        args: {
+          input(_, $object) {
+            return $object;
+          }
+        }
+      },
+      updatePlugin: {
+        plan(_$root, args) {
+          const $update = pgUpdateSingle(resource_pluginPgResource, {
+            id: args.getRaw(['input', "rowId"])
+          });
+          args.apply($update);
+          return object({
+            result: $update
+          });
+        },
+        args: {
+          input(_, $object) {
+            return $object;
+          }
+        }
+      },
+      updatePluginById: {
+        plan(_$root, args) {
+          const $update = pgUpdateSingle(resource_pluginPgResource, specFromArgs_Plugin(args));
+          args.apply($update);
+          return object({
+            result: $update
+          });
+        },
+        args: {
+          input(_, $object) {
+            return $object;
+          }
+        }
+      },
+      updatePluginByName: {
+        plan(_$root, args) {
+          const $update = pgUpdateSingle(resource_pluginPgResource, {
+            name: args.getRaw(['input', "name"])
+          });
+          args.apply($update);
+          return object({
+            result: $update
+          });
+        },
+        args: {
+          input(_, $object) {
+            return $object;
+          }
+        }
+      },
       updateRepository: {
         plan(_$root, args) {
           const $update = pgUpdateSingle(resource_repositoryPgResource, {
@@ -10962,6 +14386,36 @@ export const objects = {
       updateRepositoryById: {
         plan(_$root, args) {
           const $update = pgUpdateSingle(resource_repositoryPgResource, specFromArgs_Repository(args));
+          args.apply($update);
+          return object({
+            result: $update
+          });
+        },
+        args: {
+          input(_, $object) {
+            return $object;
+          }
+        }
+      },
+      updateScanResult: {
+        plan(_$root, args) {
+          const $update = pgUpdateSingle(resource_scan_resultPgResource, {
+            id: args.getRaw(['input', "rowId"])
+          });
+          args.apply($update);
+          return object({
+            result: $update
+          });
+        },
+        args: {
+          input(_, $object) {
+            return $object;
+          }
+        }
+      },
+      updateScanResultById: {
+        plan(_$root, args) {
+          const $update = pgUpdateSingle(resource_scan_resultPgResource, specFromArgs_ScanResult(args));
           args.apply($update);
           return object({
             result: $update
@@ -11193,7 +14647,7 @@ export const objects = {
           filter(_, $connection, fieldArg) {
             const $pgSelect = $connection.getSubplan();
             fieldArg.apply($pgSelect, (queryBuilder, value) => {
-              assertAllowed14(value, "object");
+              assertAllowed18(value, "object");
               if (value == null) return;
               const condition = new PgCondition(queryBuilder);
               return condition;
@@ -11220,6 +14674,48 @@ export const objects = {
       mediaType($record) {
         return $record.get("media_type");
       },
+      npmMetadata: {
+        plan($record) {
+          const $records = resource_npm_metadataPgResource.find({
+            artifact_id: $record.get("id")
+          });
+          return connection($records);
+        },
+        args: {
+          first(_, $connection, arg) {
+            $connection.setFirst(arg.getRaw());
+          },
+          last(_, $connection, val) {
+            $connection.setLast(val.getRaw());
+          },
+          offset(_, $connection, val) {
+            $connection.setOffset(val.getRaw());
+          },
+          before(_, $connection, val) {
+            $connection.setBefore(val.getRaw());
+          },
+          after(_, $connection, val) {
+            $connection.setAfter(val.getRaw());
+          },
+          condition(_condition, $connection, arg) {
+            const $select = $connection.getSubplan();
+            arg.apply($select, qbWhereBuilder);
+          },
+          filter(_, $connection, fieldArg) {
+            const $pgSelect = $connection.getSubplan();
+            fieldArg.apply($pgSelect, (queryBuilder, value) => {
+              assertAllowed19(value, "object");
+              if (value == null) return;
+              const condition = new PgCondition(queryBuilder);
+              return condition;
+            });
+          },
+          orderBy(parent, $connection, value) {
+            const $select = $connection.getSubplan();
+            value.apply($select);
+          }
+        }
+      },
       repository($record) {
         return resource_repositoryPgResource.get({
           id: $record.get("repository_id")
@@ -11230,6 +14726,48 @@ export const objects = {
       },
       rowId($record) {
         return $record.get("id");
+      },
+      scanResults: {
+        plan($record) {
+          const $records = resource_scan_resultPgResource.find({
+            artifact_id: $record.get("id")
+          });
+          return connection($records);
+        },
+        args: {
+          first(_, $connection, arg) {
+            $connection.setFirst(arg.getRaw());
+          },
+          last(_, $connection, val) {
+            $connection.setLast(val.getRaw());
+          },
+          offset(_, $connection, val) {
+            $connection.setOffset(val.getRaw());
+          },
+          before(_, $connection, val) {
+            $connection.setBefore(val.getRaw());
+          },
+          after(_, $connection, val) {
+            $connection.setAfter(val.getRaw());
+          },
+          condition(_condition, $connection, arg) {
+            const $select = $connection.getSubplan();
+            arg.apply($select, qbWhereBuilder);
+          },
+          filter(_, $connection, fieldArg) {
+            const $pgSelect = $connection.getSubplan();
+            fieldArg.apply($pgSelect, (queryBuilder, value) => {
+              assertAllowed20(value, "object");
+              if (value == null) return;
+              const condition = new PgCondition(queryBuilder);
+              return condition;
+            });
+          },
+          orderBy(parent, $connection, value) {
+            const $select = $connection.getSubplan();
+            value.apply($select);
+          }
+        }
       },
       schemaMetadatum($record) {
         return resource_schema_metadataPgResource.get({
@@ -11269,7 +14807,7 @@ export const objects = {
           filter(_, $connection, fieldArg) {
             const $pgSelect = $connection.getSubplan();
             fieldArg.apply($pgSelect, (queryBuilder, value) => {
-              assertAllowed13(value, "object");
+              assertAllowed17(value, "object");
               if (value == null) return;
               const condition = new PgCondition(queryBuilder);
               return condition;
@@ -11501,6 +15039,57 @@ export const objects = {
       }
     }
   },
+  CreateNpmDistTagPayload: {
+    assertStep: assertExecutableStep,
+    plans: {
+      clientMutationId($mutation) {
+        return $mutation.getStepForKey("result").getMeta("clientMutationId");
+      },
+      npmDistTag($object) {
+        return $object.get("result");
+      },
+      npmDistTagEdge($mutation, fieldArgs) {
+        return pgMutationPayloadEdge(resource_npm_dist_tagPgResource, npm_dist_tagUniques[0].attributes, $mutation, fieldArgs);
+      },
+      query() {
+        return rootValue();
+      }
+    }
+  },
+  CreateNpmMetadatumPayload: {
+    assertStep: assertExecutableStep,
+    plans: {
+      clientMutationId($mutation) {
+        return $mutation.getStepForKey("result").getMeta("clientMutationId");
+      },
+      npmMetadatum($object) {
+        return $object.get("result");
+      },
+      npmMetadatumEdge($mutation, fieldArgs) {
+        return pgMutationPayloadEdge(resource_npm_metadataPgResource, npm_metadataUniques[0].attributes, $mutation, fieldArgs);
+      },
+      query() {
+        return rootValue();
+      }
+    }
+  },
+  CreatePluginPayload: {
+    assertStep: assertExecutableStep,
+    plans: {
+      clientMutationId($mutation) {
+        return $mutation.getStepForKey("result").getMeta("clientMutationId");
+      },
+      plugin($object) {
+        return $object.get("result");
+      },
+      pluginEdge($mutation, fieldArgs) {
+        return pgMutationPayloadEdge(resource_pluginPgResource, pluginUniques[0].attributes, $mutation, fieldArgs);
+      },
+      query() {
+        return rootValue();
+      }
+    }
+  },
   CreateRepositoryPayload: {
     assertStep: assertExecutableStep,
     plans: {
@@ -11515,6 +15104,23 @@ export const objects = {
       },
       repositoryEdge($mutation, fieldArgs) {
         return pgMutationPayloadEdge(resource_repositoryPgResource, repositoryUniques[0].attributes, $mutation, fieldArgs);
+      }
+    }
+  },
+  CreateScanResultPayload: {
+    assertStep: assertExecutableStep,
+    plans: {
+      clientMutationId($mutation) {
+        return $mutation.getStepForKey("result").getMeta("clientMutationId");
+      },
+      query() {
+        return rootValue();
+      },
+      scanResult($object) {
+        return $object.get("result");
+      },
+      scanResultEdge($mutation, fieldArgs) {
+        return pgMutationPayloadEdge(resource_scan_resultPgResource, scan_resultUniques[0].attributes, $mutation, fieldArgs);
       }
     }
   },
@@ -11740,6 +15346,72 @@ export const objects = {
       }
     }
   },
+  DeleteNpmDistTagPayload: {
+    assertStep: ObjectStep,
+    plans: {
+      clientMutationId($mutation) {
+        return $mutation.getStepForKey("result").getMeta("clientMutationId");
+      },
+      deletedNpmDistTagId($object) {
+        const $record = $object.getStepForKey("result"),
+          specifier = nodeIdHandler_NpmDistTag.plan($record);
+        return lambda(specifier, nodeIdCodecs_base64JSON_base64JSON.encode);
+      },
+      npmDistTag($object) {
+        return $object.get("result");
+      },
+      npmDistTagEdge($mutation, fieldArgs) {
+        return pgMutationPayloadEdge(resource_npm_dist_tagPgResource, npm_dist_tagUniques[0].attributes, $mutation, fieldArgs);
+      },
+      query() {
+        return rootValue();
+      }
+    }
+  },
+  DeleteNpmMetadatumPayload: {
+    assertStep: ObjectStep,
+    plans: {
+      clientMutationId($mutation) {
+        return $mutation.getStepForKey("result").getMeta("clientMutationId");
+      },
+      deletedNpmMetadatumId($object) {
+        const $record = $object.getStepForKey("result"),
+          specifier = nodeIdHandler_NpmMetadatum.plan($record);
+        return lambda(specifier, nodeIdCodecs_base64JSON_base64JSON.encode);
+      },
+      npmMetadatum($object) {
+        return $object.get("result");
+      },
+      npmMetadatumEdge($mutation, fieldArgs) {
+        return pgMutationPayloadEdge(resource_npm_metadataPgResource, npm_metadataUniques[0].attributes, $mutation, fieldArgs);
+      },
+      query() {
+        return rootValue();
+      }
+    }
+  },
+  DeletePluginPayload: {
+    assertStep: ObjectStep,
+    plans: {
+      clientMutationId($mutation) {
+        return $mutation.getStepForKey("result").getMeta("clientMutationId");
+      },
+      deletedPluginId($object) {
+        const $record = $object.getStepForKey("result"),
+          specifier = nodeIdHandler_Plugin.plan($record);
+        return lambda(specifier, nodeIdCodecs_base64JSON_base64JSON.encode);
+      },
+      plugin($object) {
+        return $object.get("result");
+      },
+      pluginEdge($mutation, fieldArgs) {
+        return pgMutationPayloadEdge(resource_pluginPgResource, pluginUniques[0].attributes, $mutation, fieldArgs);
+      },
+      query() {
+        return rootValue();
+      }
+    }
+  },
   DeleteRepositoryPayload: {
     assertStep: ObjectStep,
     plans: {
@@ -11759,6 +15431,28 @@ export const objects = {
       },
       repositoryEdge($mutation, fieldArgs) {
         return pgMutationPayloadEdge(resource_repositoryPgResource, repositoryUniques[0].attributes, $mutation, fieldArgs);
+      }
+    }
+  },
+  DeleteScanResultPayload: {
+    assertStep: ObjectStep,
+    plans: {
+      clientMutationId($mutation) {
+        return $mutation.getStepForKey("result").getMeta("clientMutationId");
+      },
+      deletedScanResultId($object) {
+        const $record = $object.getStepForKey("result"),
+          specifier = nodeIdHandler_ScanResult.plan($record);
+        return lambda(specifier, nodeIdCodecs_base64JSON_base64JSON.encode);
+      },
+      query() {
+        return rootValue();
+      },
+      scanResult($object) {
+        return $object.get("result");
+      },
+      scanResultEdge($mutation, fieldArgs) {
+        return pgMutationPayloadEdge(resource_scan_resultPgResource, scan_resultUniques[0].attributes, $mutation, fieldArgs);
       }
     }
   },
@@ -11949,7 +15643,7 @@ export const objects = {
           filter(_, $connection, fieldArg) {
             const $pgSelect = $connection.getSubplan();
             fieldArg.apply($pgSelect, (queryBuilder, value) => {
-              assertAllowed51(value, "object");
+              assertAllowed67(value, "object");
               if (value == null) return;
               const condition = new PgCondition(queryBuilder);
               return condition;
@@ -12034,7 +15728,7 @@ export const objects = {
           filter(_, $connection, fieldArg) {
             const $pgSelect = $connection.getSubplan();
             fieldArg.apply($pgSelect, (queryBuilder, value) => {
-              assertAllowed20(value, "object");
+              assertAllowed27(value, "object");
               if (value == null) return;
               const condition = new PgCondition(queryBuilder);
               return condition;
@@ -12086,7 +15780,7 @@ export const objects = {
           filter(_, $connection, fieldArg) {
             const $pgSelect = $connection.getSubplan();
             fieldArg.apply($pgSelect, (queryBuilder, value) => {
-              assertAllowed19(value, "object");
+              assertAllowed26(value, "object");
               if (value == null) return;
               const condition = new PgCondition(queryBuilder);
               return condition;
@@ -12112,6 +15806,115 @@ export const objects = {
     }
   },
   NamespaceConnection: {
+    assertStep: ConnectionStep,
+    plans: {
+      totalCount($connection) {
+        return $connection.cloneSubplanWithoutPagination("aggregate").singleAsRecord().select(sql`count(*)`, TYPES.bigint, !1);
+      }
+    }
+  },
+  NpmDistTag: {
+    assertStep: assertPgClassSingleStep,
+    plans: {
+      createdAt($record) {
+        return $record.get("created_at");
+      },
+      id($parent) {
+        const specifier = nodeIdHandler_NpmDistTag.plan($parent);
+        return lambda(specifier, nodeIdCodecs[nodeIdHandler_NpmDistTag.codec.name].encode);
+      },
+      repository($record) {
+        return resource_repositoryPgResource.get({
+          id: $record.get("repository_id")
+        });
+      },
+      repositoryId($record) {
+        return $record.get("repository_id");
+      },
+      rowId($record) {
+        return $record.get("id");
+      },
+      updatedAt($record) {
+        return $record.get("updated_at");
+      }
+    },
+    planType($specifier) {
+      const spec = Object.create(null);
+      for (const pkCol of npm_dist_tagUniques[0].attributes) spec[pkCol] = get2($specifier, pkCol);
+      return resource_npm_dist_tagPgResource.get(spec);
+    }
+  },
+  NpmDistTagConnection: {
+    assertStep: ConnectionStep,
+    plans: {
+      totalCount($connection) {
+        return $connection.cloneSubplanWithoutPagination("aggregate").singleAsRecord().select(sql`count(*)`, TYPES.bigint, !1);
+      }
+    }
+  },
+  NpmMetadatum: {
+    assertStep: assertPgClassSingleStep,
+    plans: {
+      artifact($record) {
+        return resource_artifactPgResource.get({
+          id: $record.get("artifact_id")
+        });
+      },
+      artifactId($record) {
+        return $record.get("artifact_id");
+      },
+      createdAt($record) {
+        return $record.get("created_at");
+      },
+      id($parent) {
+        const specifier = nodeIdHandler_NpmMetadatum.plan($parent);
+        return lambda(specifier, nodeIdCodecs[nodeIdHandler_NpmMetadatum.codec.name].encode);
+      },
+      rowId($record) {
+        return $record.get("id");
+      },
+      updatedAt($record) {
+        return $record.get("updated_at");
+      }
+    },
+    planType($specifier) {
+      const spec = Object.create(null);
+      for (const pkCol of npm_metadataUniques[0].attributes) spec[pkCol] = get2($specifier, pkCol);
+      return resource_npm_metadataPgResource.get(spec);
+    }
+  },
+  NpmMetadatumConnection: {
+    assertStep: ConnectionStep,
+    plans: {
+      totalCount($connection) {
+        return $connection.cloneSubplanWithoutPagination("aggregate").singleAsRecord().select(sql`count(*)`, TYPES.bigint, !1);
+      }
+    }
+  },
+  Plugin: {
+    assertStep: assertPgClassSingleStep,
+    plans: {
+      createdAt($record) {
+        return $record.get("created_at");
+      },
+      id($parent) {
+        const specifier = nodeIdHandler_Plugin.plan($parent);
+        return lambda(specifier, nodeIdCodecs[nodeIdHandler_Plugin.codec.name].encode);
+      },
+      rowId($record) {
+        return $record.get("id");
+      },
+      updatedAt($record) {
+        return $record.get("updated_at");
+      }
+    },
+    planType($specifier) {
+      const spec = Object.create(null);
+      for (const pkCol of pluginUniques[0].attributes) spec[pkCol] = get2($specifier, pkCol);
+      return resource_pluginPgResource.get(spec);
+    }
+  },
+  PluginConnection: {
     assertStep: ConnectionStep,
     plans: {
       totalCount($connection) {
@@ -12152,7 +15955,7 @@ export const objects = {
           filter(_, $connection, fieldArg) {
             const $pgSelect = $connection.getSubplan();
             fieldArg.apply($pgSelect, (queryBuilder, value) => {
-              assertAllowed18(value, "object");
+              assertAllowed24(value, "object");
               if (value == null) return;
               const condition = new PgCondition(queryBuilder);
               return condition;
@@ -12194,7 +15997,7 @@ export const objects = {
           filter(_, $connection, fieldArg) {
             const $pgSelect = $connection.getSubplan();
             fieldArg.apply($pgSelect, (queryBuilder, value) => {
-              assertAllowed15(value, "object");
+              assertAllowed21(value, "object");
               if (value == null) return;
               const condition = new PgCondition(queryBuilder);
               return condition;
@@ -12212,6 +16015,9 @@ export const objects = {
       createdAt($record) {
         return $record.get("created_at");
       },
+      downloadCount($record) {
+        return $record.get("download_count");
+      },
       id($parent) {
         const specifier = nodeIdHandler_Repository.plan($parent);
         return lambda(specifier, nodeIdCodecs[nodeIdHandler_Repository.codec.name].encode);
@@ -12226,6 +16032,48 @@ export const objects = {
       },
       namespaceId($record) {
         return $record.get("namespace_id");
+      },
+      npmDistTags: {
+        plan($record) {
+          const $records = resource_npm_dist_tagPgResource.find({
+            repository_id: $record.get("id")
+          });
+          return connection($records);
+        },
+        args: {
+          first(_, $connection, arg) {
+            $connection.setFirst(arg.getRaw());
+          },
+          last(_, $connection, val) {
+            $connection.setLast(val.getRaw());
+          },
+          offset(_, $connection, val) {
+            $connection.setOffset(val.getRaw());
+          },
+          before(_, $connection, val) {
+            $connection.setBefore(val.getRaw());
+          },
+          after(_, $connection, val) {
+            $connection.setAfter(val.getRaw());
+          },
+          condition(_condition, $connection, arg) {
+            const $select = $connection.getSubplan();
+            arg.apply($select, qbWhereBuilder);
+          },
+          filter(_, $connection, fieldArg) {
+            const $pgSelect = $connection.getSubplan();
+            fieldArg.apply($pgSelect, (queryBuilder, value) => {
+              assertAllowed25(value, "object");
+              if (value == null) return;
+              const condition = new PgCondition(queryBuilder);
+              return condition;
+            });
+          },
+          orderBy(parent, $connection, value) {
+            const $select = $connection.getSubplan();
+            value.apply($select);
+          }
+        }
       },
       rowId($record) {
         return $record.get("id");
@@ -12260,7 +16108,7 @@ export const objects = {
           filter(_, $connection, fieldArg) {
             const $pgSelect = $connection.getSubplan();
             fieldArg.apply($pgSelect, (queryBuilder, value) => {
-              assertAllowed16(value, "object");
+              assertAllowed22(value, "object");
               if (value == null) return;
               const condition = new PgCondition(queryBuilder);
               return condition;
@@ -12305,7 +16153,7 @@ export const objects = {
           filter(_, $connection, fieldArg) {
             const $pgSelect = $connection.getSubplan();
             fieldArg.apply($pgSelect, (queryBuilder, value) => {
-              assertAllowed17(value, "object");
+              assertAllowed23(value, "object");
               if (value == null) return;
               const condition = new PgCondition(queryBuilder);
               return condition;
@@ -12325,6 +16173,45 @@ export const objects = {
     }
   },
   RepositoryConnection: {
+    assertStep: ConnectionStep,
+    plans: {
+      totalCount($connection) {
+        return $connection.cloneSubplanWithoutPagination("aggregate").singleAsRecord().select(sql`count(*)`, TYPES.bigint, !1);
+      }
+    }
+  },
+  ScanResult: {
+    assertStep: assertPgClassSingleStep,
+    plans: {
+      artifact($record) {
+        return resource_artifactPgResource.get({
+          id: $record.get("artifact_id")
+        });
+      },
+      artifactId($record) {
+        return $record.get("artifact_id");
+      },
+      createdAt($record) {
+        return $record.get("created_at");
+      },
+      id($parent) {
+        const specifier = nodeIdHandler_ScanResult.plan($parent);
+        return lambda(specifier, nodeIdCodecs[nodeIdHandler_ScanResult.codec.name].encode);
+      },
+      rowId($record) {
+        return $record.get("id");
+      },
+      scannedAt($record) {
+        return $record.get("scanned_at");
+      }
+    },
+    planType($specifier) {
+      const spec = Object.create(null);
+      for (const pkCol of scan_resultUniques[0].attributes) spec[pkCol] = get2($specifier, pkCol);
+      return resource_scan_resultPgResource.get(spec);
+    }
+  },
+  ScanResultConnection: {
     assertStep: ConnectionStep,
     plans: {
       totalCount($connection) {
@@ -12534,6 +16421,57 @@ export const objects = {
       }
     }
   },
+  UpdateNpmDistTagPayload: {
+    assertStep: ObjectStep,
+    plans: {
+      clientMutationId($mutation) {
+        return $mutation.getStepForKey("result").getMeta("clientMutationId");
+      },
+      npmDistTag($object) {
+        return $object.get("result");
+      },
+      npmDistTagEdge($mutation, fieldArgs) {
+        return pgMutationPayloadEdge(resource_npm_dist_tagPgResource, npm_dist_tagUniques[0].attributes, $mutation, fieldArgs);
+      },
+      query() {
+        return rootValue();
+      }
+    }
+  },
+  UpdateNpmMetadatumPayload: {
+    assertStep: ObjectStep,
+    plans: {
+      clientMutationId($mutation) {
+        return $mutation.getStepForKey("result").getMeta("clientMutationId");
+      },
+      npmMetadatum($object) {
+        return $object.get("result");
+      },
+      npmMetadatumEdge($mutation, fieldArgs) {
+        return pgMutationPayloadEdge(resource_npm_metadataPgResource, npm_metadataUniques[0].attributes, $mutation, fieldArgs);
+      },
+      query() {
+        return rootValue();
+      }
+    }
+  },
+  UpdatePluginPayload: {
+    assertStep: ObjectStep,
+    plans: {
+      clientMutationId($mutation) {
+        return $mutation.getStepForKey("result").getMeta("clientMutationId");
+      },
+      plugin($object) {
+        return $object.get("result");
+      },
+      pluginEdge($mutation, fieldArgs) {
+        return pgMutationPayloadEdge(resource_pluginPgResource, pluginUniques[0].attributes, $mutation, fieldArgs);
+      },
+      query() {
+        return rootValue();
+      }
+    }
+  },
   UpdateRepositoryPayload: {
     assertStep: ObjectStep,
     plans: {
@@ -12548,6 +16486,23 @@ export const objects = {
       },
       repositoryEdge($mutation, fieldArgs) {
         return pgMutationPayloadEdge(resource_repositoryPgResource, repositoryUniques[0].attributes, $mutation, fieldArgs);
+      }
+    }
+  },
+  UpdateScanResultPayload: {
+    assertStep: ObjectStep,
+    plans: {
+      clientMutationId($mutation) {
+        return $mutation.getStepForKey("result").getMeta("clientMutationId");
+      },
+      query() {
+        return rootValue();
+      },
+      scanResult($object) {
+        return $object.get("result");
+      },
+      scanResultEdge($mutation, fieldArgs) {
+        return pgMutationPayloadEdge(resource_scan_resultPgResource, scan_resultUniques[0].attributes, $mutation, fieldArgs);
       }
     }
   },
@@ -12774,7 +16729,7 @@ export const inputObjects = {
   ApiTokenFilter: {
     plans: {
       and($where, value) {
-        assertAllowed46(value, "list");
+        assertAllowed59(value, "list");
         if (value == null) return;
         return $where.andPlan();
       },
@@ -12783,7 +16738,7 @@ export const inputObjects = {
         if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
         if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
         const condition = new PgCondition(queryBuilder);
-        condition.extensions.pgFilterAttribute = colSpec27;
+        condition.extensions.pgFilterAttribute = colSpec35;
         return condition;
       },
       isActive(queryBuilder, value) {
@@ -12791,11 +16746,11 @@ export const inputObjects = {
         if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
         if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
         const condition = new PgCondition(queryBuilder);
-        condition.extensions.pgFilterAttribute = colSpec28;
+        condition.extensions.pgFilterAttribute = colSpec36;
         return condition;
       },
       namespace($where, value) {
-        assertAllowed45(value, "object");
+        assertAllowed58(value, "object");
         if (value == null) return;
         const $subQuery = $where.existsPlan({
           tableExpression: namespaceIdentifier,
@@ -12812,22 +16767,22 @@ export const inputObjects = {
         if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
         if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
         const condition = new PgCondition(queryBuilder);
-        condition.extensions.pgFilterAttribute = colSpec25;
+        condition.extensions.pgFilterAttribute = colSpec33;
         return condition;
       },
       not($where, value) {
-        assertAllowed46(value, "object");
+        assertAllowed59(value, "object");
         if (value == null) return;
         return $where.notPlan().andPlan();
       },
       or($where, value) {
-        assertAllowed46(value, "list");
+        assertAllowed59(value, "list");
         if (value == null) return;
         const $or = $where.orPlan();
         return () => $or.andPlan();
       },
       repository($where, value) {
-        assertAllowed45(value, "object");
+        assertAllowed58(value, "object");
         if (value == null) return;
         const $subQuery = $where.existsPlan({
           tableExpression: repositoryIdentifier,
@@ -12840,7 +16795,7 @@ export const inputObjects = {
         return $subQuery;
       },
       repositoryExists($where, value) {
-        assertAllowed45(value, "scalar");
+        assertAllowed58(value, "scalar");
         if (value == null) return;
         const $subQuery = $where.existsPlan({
           tableExpression: repositoryIdentifier,
@@ -12857,7 +16812,7 @@ export const inputObjects = {
         if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
         if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
         const condition = new PgCondition(queryBuilder);
-        condition.extensions.pgFilterAttribute = colSpec26;
+        condition.extensions.pgFilterAttribute = colSpec34;
         return condition;
       },
       rowId(queryBuilder, value) {
@@ -12865,7 +16820,7 @@ export const inputObjects = {
         if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
         if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
         const condition = new PgCondition(queryBuilder);
-        condition.extensions.pgFilterAttribute = colSpec22;
+        condition.extensions.pgFilterAttribute = colSpec30;
         return condition;
       },
       tokenHash(queryBuilder, value) {
@@ -12873,7 +16828,7 @@ export const inputObjects = {
         if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
         if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
         const condition = new PgCondition(queryBuilder);
-        condition.extensions.pgFilterAttribute = colSpec23;
+        condition.extensions.pgFilterAttribute = colSpec31;
         return condition;
       },
       tokenPrefix(queryBuilder, value) {
@@ -12881,7 +16836,7 @@ export const inputObjects = {
         if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
         if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
         const condition = new PgCondition(queryBuilder);
-        condition.extensions.pgFilterAttribute = colSpec24;
+        condition.extensions.pgFilterAttribute = colSpec32;
         return condition;
       }
     }
@@ -13092,18 +17047,27 @@ export const inputObjects = {
             return val === null ? sql`${expression} is null` : sql`${expression} = ${sqlValueWithCodec(val, TYPES.uuid)}`;
           }
         });
+      },
+      subject($condition, val) {
+        $condition.where({
+          type: "attribute",
+          attribute: "subject",
+          callback(expression) {
+            return val === null ? sql`${expression} is null` : sql`${expression} = ${sqlValueWithCodec(val, TYPES.text)}`;
+          }
+        });
       }
     }
   },
   ArtifactFilter: {
     plans: {
       and($where, value) {
-        assertAllowed27(value, "list");
+        assertAllowed34(value, "list");
         if (value == null) return;
         return $where.andPlan();
       },
       cargoMetadata($where, value) {
-        assertAllowed25(value, "object");
+        assertAllowed32(value, "object");
         const $rel = $where.andPlan();
         $rel.extensions.pgFilterRelation = {
           tableExpression: cargoMetadataIdentifier,
@@ -13114,7 +17078,7 @@ export const inputObjects = {
         return $rel;
       },
       cargoMetadataExist($where, value) {
-        assertAllowed25(value, "scalar");
+        assertAllowed32(value, "scalar");
         if (value == null) return;
         const $subQuery = $where.existsPlan({
           tableExpression: cargoMetadataIdentifier,
@@ -13127,7 +17091,7 @@ export const inputObjects = {
         });
       },
       containerMetadatum($where, value) {
-        assertAllowed25(value, "object");
+        assertAllowed32(value, "object");
         const $subQuery = $where.existsPlan({
           tableExpression: containerMetadataIdentifier,
           alias: resource_container_metadataPgResource.name
@@ -13139,7 +17103,7 @@ export const inputObjects = {
         return $subQuery;
       },
       containerMetadatumExists($where, value) {
-        assertAllowed25(value, "scalar");
+        assertAllowed32(value, "scalar");
         if (value == null) return;
         const $subQuery = $where.existsPlan({
           tableExpression: containerMetadataIdentifier,
@@ -13160,18 +17124,42 @@ export const inputObjects = {
         return condition;
       },
       not($where, value) {
-        assertAllowed27(value, "object");
+        assertAllowed34(value, "object");
         if (value == null) return;
         return $where.notPlan().andPlan();
       },
+      npmMetadata($where, value) {
+        assertAllowed32(value, "object");
+        const $rel = $where.andPlan();
+        $rel.extensions.pgFilterRelation = {
+          tableExpression: npmMetadataIdentifier,
+          alias: resource_npm_metadataPgResource.name,
+          localAttributes: registryConfig.pgRelations.artifact.npmMetadataByTheirArtifactId.localAttributes,
+          remoteAttributes: registryConfig.pgRelations.artifact.npmMetadataByTheirArtifactId.remoteAttributes
+        };
+        return $rel;
+      },
+      npmMetadataExist($where, value) {
+        assertAllowed32(value, "scalar");
+        if (value == null) return;
+        const $subQuery = $where.existsPlan({
+          tableExpression: npmMetadataIdentifier,
+          alias: resource_npm_metadataPgResource.name,
+          equals: value
+        });
+        registryConfig.pgRelations.artifact.npmMetadataByTheirArtifactId.localAttributes.forEach((localAttribute, i) => {
+          const remoteAttribute = registryConfig.pgRelations.artifact.npmMetadataByTheirArtifactId.remoteAttributes[i];
+          $subQuery.where(sql`${$where.alias}.${sql.identifier(localAttribute)} = ${$subQuery.alias}.${sql.identifier(remoteAttribute)}`);
+        });
+      },
       or($where, value) {
-        assertAllowed27(value, "list");
+        assertAllowed34(value, "list");
         if (value == null) return;
         const $or = $where.orPlan();
         return () => $or.andPlan();
       },
       repository($where, value) {
-        assertAllowed26(value, "object");
+        assertAllowed33(value, "object");
         if (value == null) return;
         const $subQuery = $where.existsPlan({
           tableExpression: repositoryIdentifier,
@@ -13199,8 +17187,32 @@ export const inputObjects = {
         condition.extensions.pgFilterAttribute = colSpec5;
         return condition;
       },
+      scanResults($where, value) {
+        assertAllowed32(value, "object");
+        const $rel = $where.andPlan();
+        $rel.extensions.pgFilterRelation = {
+          tableExpression: scanResultIdentifier,
+          alias: resource_scan_resultPgResource.name,
+          localAttributes: registryConfig.pgRelations.artifact.scanResultsByTheirArtifactId.localAttributes,
+          remoteAttributes: registryConfig.pgRelations.artifact.scanResultsByTheirArtifactId.remoteAttributes
+        };
+        return $rel;
+      },
+      scanResultsExist($where, value) {
+        assertAllowed32(value, "scalar");
+        if (value == null) return;
+        const $subQuery = $where.existsPlan({
+          tableExpression: scanResultIdentifier,
+          alias: resource_scan_resultPgResource.name,
+          equals: value
+        });
+        registryConfig.pgRelations.artifact.scanResultsByTheirArtifactId.localAttributes.forEach((localAttribute, i) => {
+          const remoteAttribute = registryConfig.pgRelations.artifact.scanResultsByTheirArtifactId.remoteAttributes[i];
+          $subQuery.where(sql`${$where.alias}.${sql.identifier(localAttribute)} = ${$subQuery.alias}.${sql.identifier(remoteAttribute)}`);
+        });
+      },
       schemaMetadatum($where, value) {
-        assertAllowed25(value, "object");
+        assertAllowed32(value, "object");
         const $subQuery = $where.existsPlan({
           tableExpression: schemaMetadataIdentifier,
           alias: resource_schema_metadataPgResource.name
@@ -13212,7 +17224,7 @@ export const inputObjects = {
         return $subQuery;
       },
       schemaMetadatumExists($where, value) {
-        assertAllowed25(value, "scalar");
+        assertAllowed32(value, "scalar");
         if (value == null) return;
         const $subQuery = $where.existsPlan({
           tableExpression: schemaMetadataIdentifier,
@@ -13224,8 +17236,16 @@ export const inputObjects = {
           $subQuery.where(sql`${$where.alias}.${sql.identifier(localAttribute)} = ${$subQuery.alias}.${sql.identifier(remoteAttribute)}`);
         });
       },
+      subject(queryBuilder, value) {
+        if (value === void 0) return;
+        if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+        if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+        const condition = new PgCondition(queryBuilder);
+        condition.extensions.pgFilterAttribute = colSpec8;
+        return condition;
+      },
       tags($where, value) {
-        assertAllowed25(value, "object");
+        assertAllowed32(value, "object");
         const $rel = $where.andPlan();
         $rel.extensions.pgFilterRelation = {
           tableExpression: tagIdentifier,
@@ -13236,7 +17256,7 @@ export const inputObjects = {
         return $rel;
       },
       tagsExist($where, value) {
-        assertAllowed25(value, "scalar");
+        assertAllowed32(value, "scalar");
         if (value == null) return;
         const $subQuery = $where.existsPlan({
           tableExpression: tagIdentifier,
@@ -13249,7 +17269,7 @@ export const inputObjects = {
         });
       },
       wasmMetadatum($where, value) {
-        assertAllowed25(value, "object");
+        assertAllowed32(value, "object");
         const $subQuery = $where.existsPlan({
           tableExpression: wasmMetadataIdentifier,
           alias: resource_wasm_metadataPgResource.name
@@ -13261,7 +17281,7 @@ export const inputObjects = {
         return $subQuery;
       },
       wasmMetadatumExists($where, value) {
-        assertAllowed25(value, "scalar");
+        assertAllowed32(value, "scalar");
         if (value == null) return;
         const $subQuery = $where.existsPlan({
           tableExpression: wasmMetadataIdentifier,
@@ -13325,6 +17345,12 @@ export const inputObjects = {
         schema
       }) {
         obj.set("storage_path", bakedInputRuntime(schema, field.type, val));
+      },
+      subject(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("subject", bakedInputRuntime(schema, field.type, val));
       }
     }
   },
@@ -13378,13 +17404,19 @@ export const inputObjects = {
         schema
       }) {
         obj.set("storage_path", bakedInputRuntime(schema, field.type, val));
+      },
+      subject(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("subject", bakedInputRuntime(schema, field.type, val));
       }
     }
   },
   ArtifactToManyCargoMetadatumFilter: {
     plans: {
       every($where, value) {
-        assertAllowed37(value, "object");
+        assertAllowed44(value, "object");
         if (value == null) return;
         if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
         const {
@@ -13404,7 +17436,7 @@ export const inputObjects = {
         return $subQuery.notPlan().andPlan();
       },
       none($where, value) {
-        assertAllowed37(value, "object");
+        assertAllowed44(value, "object");
         if (value == null) return;
         if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
         const {
@@ -13424,7 +17456,135 @@ export const inputObjects = {
         return $subQuery;
       },
       some($where, value) {
-        assertAllowed37(value, "object");
+        assertAllowed44(value, "object");
+        if (value == null) return;
+        if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
+        const {
+            localAttributes,
+            remoteAttributes,
+            tableExpression,
+            alias
+          } = $where.extensions.pgFilterRelation,
+          $subQuery = $where.existsPlan({
+            tableExpression,
+            alias
+          });
+        localAttributes.forEach((localAttribute, i) => {
+          const remoteAttribute = remoteAttributes[i];
+          $subQuery.where(sql`${$where.alias}.${sql.identifier(localAttribute)} = ${$subQuery.alias}.${sql.identifier(remoteAttribute)}`);
+        });
+        return $subQuery;
+      }
+    }
+  },
+  ArtifactToManyNpmMetadatumFilter: {
+    plans: {
+      every($where, value) {
+        assertAllowed47(value, "object");
+        if (value == null) return;
+        if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
+        const {
+            localAttributes,
+            remoteAttributes,
+            tableExpression,
+            alias
+          } = $where.extensions.pgFilterRelation,
+          $subQuery = $where.notPlan().existsPlan({
+            tableExpression,
+            alias
+          });
+        localAttributes.forEach((localAttribute, i) => {
+          const remoteAttribute = remoteAttributes[i];
+          $subQuery.where(sql`${$where.alias}.${sql.identifier(localAttribute)} = ${$subQuery.alias}.${sql.identifier(remoteAttribute)}`);
+        });
+        return $subQuery.notPlan().andPlan();
+      },
+      none($where, value) {
+        assertAllowed47(value, "object");
+        if (value == null) return;
+        if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
+        const {
+            localAttributes,
+            remoteAttributes,
+            tableExpression,
+            alias
+          } = $where.extensions.pgFilterRelation,
+          $subQuery = $where.notPlan().existsPlan({
+            tableExpression,
+            alias
+          });
+        localAttributes.forEach((localAttribute, i) => {
+          const remoteAttribute = remoteAttributes[i];
+          $subQuery.where(sql`${$where.alias}.${sql.identifier(localAttribute)} = ${$subQuery.alias}.${sql.identifier(remoteAttribute)}`);
+        });
+        return $subQuery;
+      },
+      some($where, value) {
+        assertAllowed47(value, "object");
+        if (value == null) return;
+        if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
+        const {
+            localAttributes,
+            remoteAttributes,
+            tableExpression,
+            alias
+          } = $where.extensions.pgFilterRelation,
+          $subQuery = $where.existsPlan({
+            tableExpression,
+            alias
+          });
+        localAttributes.forEach((localAttribute, i) => {
+          const remoteAttribute = remoteAttributes[i];
+          $subQuery.where(sql`${$where.alias}.${sql.identifier(localAttribute)} = ${$subQuery.alias}.${sql.identifier(remoteAttribute)}`);
+        });
+        return $subQuery;
+      }
+    }
+  },
+  ArtifactToManyScanResultFilter: {
+    plans: {
+      every($where, value) {
+        assertAllowed50(value, "object");
+        if (value == null) return;
+        if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
+        const {
+            localAttributes,
+            remoteAttributes,
+            tableExpression,
+            alias
+          } = $where.extensions.pgFilterRelation,
+          $subQuery = $where.notPlan().existsPlan({
+            tableExpression,
+            alias
+          });
+        localAttributes.forEach((localAttribute, i) => {
+          const remoteAttribute = remoteAttributes[i];
+          $subQuery.where(sql`${$where.alias}.${sql.identifier(localAttribute)} = ${$subQuery.alias}.${sql.identifier(remoteAttribute)}`);
+        });
+        return $subQuery.notPlan().andPlan();
+      },
+      none($where, value) {
+        assertAllowed50(value, "object");
+        if (value == null) return;
+        if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
+        const {
+            localAttributes,
+            remoteAttributes,
+            tableExpression,
+            alias
+          } = $where.extensions.pgFilterRelation,
+          $subQuery = $where.notPlan().existsPlan({
+            tableExpression,
+            alias
+          });
+        localAttributes.forEach((localAttribute, i) => {
+          const remoteAttribute = remoteAttributes[i];
+          $subQuery.where(sql`${$where.alias}.${sql.identifier(localAttribute)} = ${$subQuery.alias}.${sql.identifier(remoteAttribute)}`);
+        });
+        return $subQuery;
+      },
+      some($where, value) {
+        assertAllowed50(value, "object");
         if (value == null) return;
         if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
         const {
@@ -13448,7 +17608,7 @@ export const inputObjects = {
   ArtifactToManyTagFilter: {
     plans: {
       every($where, value) {
-        assertAllowed32(value, "object");
+        assertAllowed39(value, "object");
         if (value == null) return;
         if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
         const {
@@ -13468,7 +17628,7 @@ export const inputObjects = {
         return $subQuery.notPlan().andPlan();
       },
       none($where, value) {
-        assertAllowed32(value, "object");
+        assertAllowed39(value, "object");
         if (value == null) return;
         if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
         const {
@@ -13488,7 +17648,7 @@ export const inputObjects = {
         return $subQuery;
       },
       some($where, value) {
-        assertAllowed32(value, "object");
+        assertAllowed39(value, "object");
         if (value == null) return;
         if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
         const {
@@ -13820,12 +17980,12 @@ export const inputObjects = {
   CargoMetadatumFilter: {
     plans: {
       and($where, value) {
-        assertAllowed39(value, "list");
+        assertAllowed46(value, "list");
         if (value == null) return;
         return $where.andPlan();
       },
       artifact($where, value) {
-        assertAllowed38(value, "object");
+        assertAllowed45(value, "object");
         if (value == null) return;
         const $subQuery = $where.existsPlan({
           tableExpression: artifactIdentifier,
@@ -13842,7 +18002,7 @@ export const inputObjects = {
         if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
         if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
         const condition = new PgCondition(queryBuilder);
-        condition.extensions.pgFilterAttribute = colSpec16;
+        condition.extensions.pgFilterAttribute = colSpec17;
         return condition;
       },
       name(queryBuilder, value) {
@@ -13850,16 +18010,16 @@ export const inputObjects = {
         if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
         if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
         const condition = new PgCondition(queryBuilder);
-        condition.extensions.pgFilterAttribute = colSpec17;
+        condition.extensions.pgFilterAttribute = colSpec18;
         return condition;
       },
       not($where, value) {
-        assertAllowed39(value, "object");
+        assertAllowed46(value, "object");
         if (value == null) return;
         return $where.notPlan().andPlan();
       },
       or($where, value) {
-        assertAllowed39(value, "list");
+        assertAllowed46(value, "list");
         if (value == null) return;
         const $or = $where.orPlan();
         return () => $or.andPlan();
@@ -13869,7 +18029,7 @@ export const inputObjects = {
         if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
         if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
         const condition = new PgCondition(queryBuilder);
-        condition.extensions.pgFilterAttribute = colSpec15;
+        condition.extensions.pgFilterAttribute = colSpec16;
         return condition;
       },
       vers(queryBuilder, value) {
@@ -13877,7 +18037,7 @@ export const inputObjects = {
         if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
         if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
         const condition = new PgCondition(queryBuilder);
-        condition.extensions.pgFilterAttribute = colSpec18;
+        condition.extensions.pgFilterAttribute = colSpec19;
         return condition;
       }
     }
@@ -14064,12 +18224,12 @@ export const inputObjects = {
   ContainerMetadatumFilter: {
     plans: {
       and($where, value) {
-        assertAllowed29(value, "list");
+        assertAllowed36(value, "list");
         if (value == null) return;
         return $where.andPlan();
       },
       artifact($where, value) {
-        assertAllowed28(value, "object");
+        assertAllowed35(value, "object");
         if (value == null) return;
         const $subQuery = $where.existsPlan({
           tableExpression: artifactIdentifier,
@@ -14086,16 +18246,16 @@ export const inputObjects = {
         if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
         if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
         const condition = new PgCondition(queryBuilder);
-        condition.extensions.pgFilterAttribute = colSpec8;
+        condition.extensions.pgFilterAttribute = colSpec9;
         return condition;
       },
       not($where, value) {
-        assertAllowed29(value, "object");
+        assertAllowed36(value, "object");
         if (value == null) return;
         return $where.notPlan().andPlan();
       },
       or($where, value) {
-        assertAllowed29(value, "list");
+        assertAllowed36(value, "list");
         if (value == null) return;
         const $or = $where.orPlan();
         return () => $or.andPlan();
@@ -14254,12 +18414,52 @@ export const inputObjects = {
       }
     }
   },
+  CreateNpmDistTagInput: {
+    plans: {
+      clientMutationId(qb, val) {
+        qb.setMeta("clientMutationId", val);
+      },
+      npmDistTag(qb, arg) {
+        if (arg != null) return qb.setBuilder();
+      }
+    }
+  },
+  CreateNpmMetadatumInput: {
+    plans: {
+      clientMutationId(qb, val) {
+        qb.setMeta("clientMutationId", val);
+      },
+      npmMetadatum(qb, arg) {
+        if (arg != null) return qb.setBuilder();
+      }
+    }
+  },
+  CreatePluginInput: {
+    plans: {
+      clientMutationId(qb, val) {
+        qb.setMeta("clientMutationId", val);
+      },
+      plugin(qb, arg) {
+        if (arg != null) return qb.setBuilder();
+      }
+    }
+  },
   CreateRepositoryInput: {
     plans: {
       clientMutationId(qb, val) {
         qb.setMeta("clientMutationId", val);
       },
       repository(qb, arg) {
+        if (arg != null) return qb.setBuilder();
+      }
+    }
+  },
+  CreateScanResultInput: {
+    plans: {
+      clientMutationId(qb, val) {
+        qb.setMeta("clientMutationId", val);
+      },
+      scanResult(qb, arg) {
         if (arg != null) return qb.setBuilder();
       }
     }
@@ -14684,6 +18884,55 @@ export const inputObjects = {
       }
     }
   },
+  DeleteNpmDistTagByIdInput: {
+    plans: {
+      clientMutationId(qb, val) {
+        qb.setMeta("clientMutationId", val);
+      }
+    }
+  },
+  DeleteNpmDistTagInput: {
+    plans: {
+      clientMutationId(qb, val) {
+        qb.setMeta("clientMutationId", val);
+      }
+    }
+  },
+  DeleteNpmMetadatumByIdInput: {
+    plans: {
+      clientMutationId(qb, val) {
+        qb.setMeta("clientMutationId", val);
+      }
+    }
+  },
+  DeleteNpmMetadatumInput: {
+    plans: {
+      clientMutationId(qb, val) {
+        qb.setMeta("clientMutationId", val);
+      }
+    }
+  },
+  DeletePluginByIdInput: {
+    plans: {
+      clientMutationId(qb, val) {
+        qb.setMeta("clientMutationId", val);
+      }
+    }
+  },
+  DeletePluginByNameInput: {
+    plans: {
+      clientMutationId(qb, val) {
+        qb.setMeta("clientMutationId", val);
+      }
+    }
+  },
+  DeletePluginInput: {
+    plans: {
+      clientMutationId(qb, val) {
+        qb.setMeta("clientMutationId", val);
+      }
+    }
+  },
   DeleteRepositoryByIdInput: {
     plans: {
       clientMutationId(qb, val) {
@@ -14692,6 +18941,20 @@ export const inputObjects = {
     }
   },
   DeleteRepositoryInput: {
+    plans: {
+      clientMutationId(qb, val) {
+        qb.setMeta("clientMutationId", val);
+      }
+    }
+  },
+  DeleteScanResultByIdInput: {
+    plans: {
+      clientMutationId(qb, val) {
+        qb.setMeta("clientMutationId", val);
+      }
+    }
+  },
+  DeleteScanResultInput: {
     plans: {
       clientMutationId(qb, val) {
         qb.setMeta("clientMutationId", val);
@@ -14806,7 +19069,7 @@ export const inputObjects = {
   FederatedSkillCacheFilter: {
     plans: {
       and($where, value) {
-        assertAllowed53(value, "list");
+        assertAllowed69(value, "list");
         if (value == null) return;
         return $where.andPlan();
       },
@@ -14815,16 +19078,16 @@ export const inputObjects = {
         if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
         if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
         const condition = new PgCondition(queryBuilder);
-        condition.extensions.pgFilterAttribute = colSpec35;
+        condition.extensions.pgFilterAttribute = colSpec46;
         return condition;
       },
       not($where, value) {
-        assertAllowed53(value, "object");
+        assertAllowed69(value, "object");
         if (value == null) return;
         return $where.notPlan().andPlan();
       },
       or($where, value) {
-        assertAllowed53(value, "list");
+        assertAllowed69(value, "list");
         if (value == null) return;
         const $or = $where.orPlan();
         return () => $or.andPlan();
@@ -14834,7 +19097,7 @@ export const inputObjects = {
         if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
         if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
         const condition = new PgCondition(queryBuilder);
-        condition.extensions.pgFilterAttribute = colSpec32;
+        condition.extensions.pgFilterAttribute = colSpec43;
         return condition;
       },
       slug(queryBuilder, value) {
@@ -14842,11 +19105,11 @@ export const inputObjects = {
         if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
         if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
         const condition = new PgCondition(queryBuilder);
-        condition.extensions.pgFilterAttribute = colSpec34;
+        condition.extensions.pgFilterAttribute = colSpec45;
         return condition;
       },
       source($where, value) {
-        assertAllowed52(value, "object");
+        assertAllowed68(value, "object");
         if (value == null) return;
         const $subQuery = $where.existsPlan({
           tableExpression: federatedSourceIdentifier,
@@ -14863,7 +19126,7 @@ export const inputObjects = {
         if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
         if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
         const condition = new PgCondition(queryBuilder);
-        condition.extensions.pgFilterAttribute = colSpec33;
+        condition.extensions.pgFilterAttribute = colSpec44;
         return condition;
       },
       vetStatus(queryBuilder, value) {
@@ -14871,7 +19134,7 @@ export const inputObjects = {
         if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
         if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
         const condition = new PgCondition(queryBuilder);
-        condition.extensions.pgFilterAttribute = colSpec36;
+        condition.extensions.pgFilterAttribute = colSpec47;
         return condition;
       }
     }
@@ -15076,12 +19339,12 @@ export const inputObjects = {
   FederatedSourceFilter: {
     plans: {
       and($where, value) {
-        assertAllowed55(value, "list");
+        assertAllowed71(value, "list");
         if (value == null) return;
         return $where.andPlan();
       },
       federatedSkillCachesBySourceId($where, value) {
-        assertAllowed54(value, "object");
+        assertAllowed70(value, "object");
         const $rel = $where.andPlan();
         $rel.extensions.pgFilterRelation = {
           tableExpression: federatedSkillCacheIdentifier,
@@ -15092,7 +19355,7 @@ export const inputObjects = {
         return $rel;
       },
       federatedSkillCachesBySourceIdExist($where, value) {
-        assertAllowed54(value, "scalar");
+        assertAllowed70(value, "scalar");
         if (value == null) return;
         const $subQuery = $where.existsPlan({
           tableExpression: federatedSkillCacheIdentifier,
@@ -15109,16 +19372,16 @@ export const inputObjects = {
         if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
         if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
         const condition = new PgCondition(queryBuilder);
-        condition.extensions.pgFilterAttribute = colSpec38;
+        condition.extensions.pgFilterAttribute = colSpec49;
         return condition;
       },
       not($where, value) {
-        assertAllowed55(value, "object");
+        assertAllowed71(value, "object");
         if (value == null) return;
         return $where.notPlan().andPlan();
       },
       or($where, value) {
-        assertAllowed55(value, "list");
+        assertAllowed71(value, "list");
         if (value == null) return;
         const $or = $where.orPlan();
         return () => $or.andPlan();
@@ -15128,7 +19391,7 @@ export const inputObjects = {
         if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
         if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
         const condition = new PgCondition(queryBuilder);
-        condition.extensions.pgFilterAttribute = colSpec37;
+        condition.extensions.pgFilterAttribute = colSpec48;
         return condition;
       },
       upstreamType(queryBuilder, value) {
@@ -15136,7 +19399,7 @@ export const inputObjects = {
         if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
         if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
         const condition = new PgCondition(queryBuilder);
-        condition.extensions.pgFilterAttribute = colSpec39;
+        condition.extensions.pgFilterAttribute = colSpec50;
         return condition;
       }
     }
@@ -15286,7 +19549,7 @@ export const inputObjects = {
   FederatedSourceToManyFederatedSkillCacheFilter: {
     plans: {
       every($where, value) {
-        assertAllowed56(value, "object");
+        assertAllowed72(value, "object");
         if (value == null) return;
         if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
         const {
@@ -15306,7 +19569,7 @@ export const inputObjects = {
         return $subQuery.notPlan().andPlan();
       },
       none($where, value) {
-        assertAllowed56(value, "object");
+        assertAllowed72(value, "object");
         if (value == null) return;
         if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
         const {
@@ -15326,7 +19589,7 @@ export const inputObjects = {
         return $subQuery;
       },
       some($where, value) {
-        assertAllowed56(value, "object");
+        assertAllowed72(value, "object");
         if (value == null) return;
         if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
         const {
@@ -15381,12 +19644,12 @@ export const inputObjects = {
   NamespaceFilter: {
     plans: {
       and($where, value) {
-        assertAllowed48(value, "list");
+        assertAllowed61(value, "list");
         if (value == null) return;
         return $where.andPlan();
       },
       apiTokens($where, value) {
-        assertAllowed47(value, "object");
+        assertAllowed60(value, "object");
         const $rel = $where.andPlan();
         $rel.extensions.pgFilterRelation = {
           tableExpression: apiTokenIdentifier,
@@ -15397,7 +19660,7 @@ export const inputObjects = {
         return $rel;
       },
       apiTokensExist($where, value) {
-        assertAllowed47(value, "scalar");
+        assertAllowed60(value, "scalar");
         if (value == null) return;
         const $subQuery = $where.existsPlan({
           tableExpression: apiTokenIdentifier,
@@ -15414,16 +19677,16 @@ export const inputObjects = {
         if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
         if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
         const condition = new PgCondition(queryBuilder);
-        condition.extensions.pgFilterAttribute = colSpec30;
+        condition.extensions.pgFilterAttribute = colSpec38;
         return condition;
       },
       not($where, value) {
-        assertAllowed48(value, "object");
+        assertAllowed61(value, "object");
         if (value == null) return;
         return $where.notPlan().andPlan();
       },
       or($where, value) {
-        assertAllowed48(value, "list");
+        assertAllowed61(value, "list");
         if (value == null) return;
         const $or = $where.orPlan();
         return () => $or.andPlan();
@@ -15433,11 +19696,11 @@ export const inputObjects = {
         if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
         if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
         const condition = new PgCondition(queryBuilder);
-        condition.extensions.pgFilterAttribute = colSpec31;
+        condition.extensions.pgFilterAttribute = colSpec39;
         return condition;
       },
       repositories($where, value) {
-        assertAllowed47(value, "object");
+        assertAllowed60(value, "object");
         const $rel = $where.andPlan();
         $rel.extensions.pgFilterRelation = {
           tableExpression: repositoryIdentifier,
@@ -15448,7 +19711,7 @@ export const inputObjects = {
         return $rel;
       },
       repositoriesExist($where, value) {
-        assertAllowed47(value, "scalar");
+        assertAllowed60(value, "scalar");
         if (value == null) return;
         const $subQuery = $where.existsPlan({
           tableExpression: repositoryIdentifier,
@@ -15465,7 +19728,7 @@ export const inputObjects = {
         if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
         if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
         const condition = new PgCondition(queryBuilder);
-        condition.extensions.pgFilterAttribute = colSpec29;
+        condition.extensions.pgFilterAttribute = colSpec37;
         return condition;
       }
     }
@@ -15555,7 +19818,7 @@ export const inputObjects = {
   NamespaceToManyApiTokenFilter: {
     plans: {
       every($where, value) {
-        assertAllowed50(value, "object");
+        assertAllowed63(value, "object");
         if (value == null) return;
         if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
         const {
@@ -15575,7 +19838,7 @@ export const inputObjects = {
         return $subQuery.notPlan().andPlan();
       },
       none($where, value) {
-        assertAllowed50(value, "object");
+        assertAllowed63(value, "object");
         if (value == null) return;
         if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
         const {
@@ -15595,7 +19858,7 @@ export const inputObjects = {
         return $subQuery;
       },
       some($where, value) {
-        assertAllowed50(value, "object");
+        assertAllowed63(value, "object");
         if (value == null) return;
         if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
         const {
@@ -15619,7 +19882,7 @@ export const inputObjects = {
   NamespaceToManyRepositoryFilter: {
     plans: {
       every($where, value) {
-        assertAllowed49(value, "object");
+        assertAllowed62(value, "object");
         if (value == null) return;
         if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
         const {
@@ -15639,7 +19902,7 @@ export const inputObjects = {
         return $subQuery.notPlan().andPlan();
       },
       none($where, value) {
-        assertAllowed49(value, "object");
+        assertAllowed62(value, "object");
         if (value == null) return;
         if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
         const {
@@ -15659,7 +19922,7 @@ export const inputObjects = {
         return $subQuery;
       },
       some($where, value) {
-        assertAllowed49(value, "object");
+        assertAllowed62(value, "object");
         if (value == null) return;
         if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
         const {
@@ -15677,6 +19940,599 @@ export const inputObjects = {
           $subQuery.where(sql`${$where.alias}.${sql.identifier(localAttribute)} = ${$subQuery.alias}.${sql.identifier(remoteAttribute)}`);
         });
         return $subQuery;
+      }
+    }
+  },
+  NpmDistTagCondition: {
+    plans: {
+      repositoryId($condition, val) {
+        $condition.where({
+          type: "attribute",
+          attribute: "repository_id",
+          callback(expression) {
+            return val === null ? sql`${expression} is null` : sql`${expression} = ${sqlValueWithCodec(val, TYPES.uuid)}`;
+          }
+        });
+      },
+      rowId($condition, val) {
+        $condition.where({
+          type: "attribute",
+          attribute: "id",
+          callback(expression) {
+            return val === null ? sql`${expression} is null` : sql`${expression} = ${sqlValueWithCodec(val, TYPES.uuid)}`;
+          }
+        });
+      },
+      tag($condition, val) {
+        $condition.where({
+          type: "attribute",
+          attribute: "tag",
+          callback(expression) {
+            return val === null ? sql`${expression} is null` : sql`${expression} = ${sqlValueWithCodec(val, TYPES.text)}`;
+          }
+        });
+      }
+    }
+  },
+  NpmDistTagFilter: {
+    plans: {
+      and($where, value) {
+        assertAllowed66(value, "list");
+        if (value == null) return;
+        return $where.andPlan();
+      },
+      not($where, value) {
+        assertAllowed66(value, "object");
+        if (value == null) return;
+        return $where.notPlan().andPlan();
+      },
+      or($where, value) {
+        assertAllowed66(value, "list");
+        if (value == null) return;
+        const $or = $where.orPlan();
+        return () => $or.andPlan();
+      },
+      repository($where, value) {
+        assertAllowed65(value, "object");
+        if (value == null) return;
+        const $subQuery = $where.existsPlan({
+          tableExpression: repositoryIdentifier,
+          alias: resource_repositoryPgResource.name
+        });
+        registryConfig.pgRelations.npmDistTag.repositoryByMyRepositoryId.localAttributes.forEach((localAttribute, i) => {
+          const remoteAttribute = registryConfig.pgRelations.npmDistTag.repositoryByMyRepositoryId.remoteAttributes[i];
+          $subQuery.where(sql`${$where.alias}.${sql.identifier(localAttribute)} = ${$subQuery.alias}.${sql.identifier(remoteAttribute)}`);
+        });
+        return $subQuery;
+      },
+      repositoryId(queryBuilder, value) {
+        if (value === void 0) return;
+        if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+        if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+        const condition = new PgCondition(queryBuilder);
+        condition.extensions.pgFilterAttribute = colSpec41;
+        return condition;
+      },
+      rowId(queryBuilder, value) {
+        if (value === void 0) return;
+        if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+        if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+        const condition = new PgCondition(queryBuilder);
+        condition.extensions.pgFilterAttribute = colSpec40;
+        return condition;
+      },
+      tag(queryBuilder, value) {
+        if (value === void 0) return;
+        if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+        if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+        const condition = new PgCondition(queryBuilder);
+        condition.extensions.pgFilterAttribute = colSpec42;
+        return condition;
+      }
+    }
+  },
+  NpmDistTagInput: {
+    baked: createObjectAndApplyChildren,
+    plans: {
+      createdAt(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("created_at", bakedInputRuntime(schema, field.type, val));
+      },
+      repositoryId(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("repository_id", bakedInputRuntime(schema, field.type, val));
+      },
+      rowId(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("id", bakedInputRuntime(schema, field.type, val));
+      },
+      tag(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("tag", bakedInputRuntime(schema, field.type, val));
+      },
+      updatedAt(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("updated_at", bakedInputRuntime(schema, field.type, val));
+      },
+      version(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("version", bakedInputRuntime(schema, field.type, val));
+      }
+    }
+  },
+  NpmDistTagPatch: {
+    baked: createObjectAndApplyChildren,
+    plans: {
+      createdAt(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("created_at", bakedInputRuntime(schema, field.type, val));
+      },
+      repositoryId(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("repository_id", bakedInputRuntime(schema, field.type, val));
+      },
+      rowId(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("id", bakedInputRuntime(schema, field.type, val));
+      },
+      tag(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("tag", bakedInputRuntime(schema, field.type, val));
+      },
+      updatedAt(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("updated_at", bakedInputRuntime(schema, field.type, val));
+      },
+      version(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("version", bakedInputRuntime(schema, field.type, val));
+      }
+    }
+  },
+  NpmMetadatumCondition: {
+    plans: {
+      artifactId($condition, val) {
+        $condition.where({
+          type: "attribute",
+          attribute: "artifact_id",
+          callback(expression) {
+            return val === null ? sql`${expression} is null` : sql`${expression} = ${sqlValueWithCodec(val, TYPES.uuid)}`;
+          }
+        });
+      },
+      name($condition, val) {
+        $condition.where({
+          type: "attribute",
+          attribute: "name",
+          callback(expression) {
+            return val === null ? sql`${expression} is null` : sql`${expression} = ${sqlValueWithCodec(val, TYPES.text)}`;
+          }
+        });
+      },
+      rowId($condition, val) {
+        $condition.where({
+          type: "attribute",
+          attribute: "id",
+          callback(expression) {
+            return val === null ? sql`${expression} is null` : sql`${expression} = ${sqlValueWithCodec(val, TYPES.uuid)}`;
+          }
+        });
+      },
+      version($condition, val) {
+        $condition.where({
+          type: "attribute",
+          attribute: "version",
+          callback(expression) {
+            return val === null ? sql`${expression} is null` : sql`${expression} = ${sqlValueWithCodec(val, TYPES.text)}`;
+          }
+        });
+      }
+    }
+  },
+  NpmMetadatumFilter: {
+    plans: {
+      and($where, value) {
+        assertAllowed49(value, "list");
+        if (value == null) return;
+        return $where.andPlan();
+      },
+      artifact($where, value) {
+        assertAllowed48(value, "object");
+        if (value == null) return;
+        const $subQuery = $where.existsPlan({
+          tableExpression: artifactIdentifier,
+          alias: resource_artifactPgResource.name
+        });
+        registryConfig.pgRelations.npmMetadata.artifactByMyArtifactId.localAttributes.forEach((localAttribute, i) => {
+          const remoteAttribute = registryConfig.pgRelations.npmMetadata.artifactByMyArtifactId.remoteAttributes[i];
+          $subQuery.where(sql`${$where.alias}.${sql.identifier(localAttribute)} = ${$subQuery.alias}.${sql.identifier(remoteAttribute)}`);
+        });
+        return $subQuery;
+      },
+      artifactId(queryBuilder, value) {
+        if (value === void 0) return;
+        if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+        if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+        const condition = new PgCondition(queryBuilder);
+        condition.extensions.pgFilterAttribute = colSpec21;
+        return condition;
+      },
+      name(queryBuilder, value) {
+        if (value === void 0) return;
+        if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+        if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+        const condition = new PgCondition(queryBuilder);
+        condition.extensions.pgFilterAttribute = colSpec22;
+        return condition;
+      },
+      not($where, value) {
+        assertAllowed49(value, "object");
+        if (value == null) return;
+        return $where.notPlan().andPlan();
+      },
+      or($where, value) {
+        assertAllowed49(value, "list");
+        if (value == null) return;
+        const $or = $where.orPlan();
+        return () => $or.andPlan();
+      },
+      rowId(queryBuilder, value) {
+        if (value === void 0) return;
+        if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+        if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+        const condition = new PgCondition(queryBuilder);
+        condition.extensions.pgFilterAttribute = colSpec20;
+        return condition;
+      },
+      version(queryBuilder, value) {
+        if (value === void 0) return;
+        if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+        if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+        const condition = new PgCondition(queryBuilder);
+        condition.extensions.pgFilterAttribute = colSpec23;
+        return condition;
+      }
+    }
+  },
+  NpmMetadatumInput: {
+    baked: createObjectAndApplyChildren,
+    plans: {
+      artifactId(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("artifact_id", bakedInputRuntime(schema, field.type, val));
+      },
+      createdAt(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("created_at", bakedInputRuntime(schema, field.type, val));
+      },
+      integrity(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("integrity", bakedInputRuntime(schema, field.type, val));
+      },
+      manifest(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("manifest", bakedInputRuntime(schema, field.type, val));
+      },
+      name(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("name", bakedInputRuntime(schema, field.type, val));
+      },
+      rowId(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("id", bakedInputRuntime(schema, field.type, val));
+      },
+      shasum(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("shasum", bakedInputRuntime(schema, field.type, val));
+      },
+      updatedAt(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("updated_at", bakedInputRuntime(schema, field.type, val));
+      },
+      version(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("version", bakedInputRuntime(schema, field.type, val));
+      }
+    }
+  },
+  NpmMetadatumPatch: {
+    baked: createObjectAndApplyChildren,
+    plans: {
+      artifactId(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("artifact_id", bakedInputRuntime(schema, field.type, val));
+      },
+      createdAt(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("created_at", bakedInputRuntime(schema, field.type, val));
+      },
+      integrity(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("integrity", bakedInputRuntime(schema, field.type, val));
+      },
+      manifest(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("manifest", bakedInputRuntime(schema, field.type, val));
+      },
+      name(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("name", bakedInputRuntime(schema, field.type, val));
+      },
+      rowId(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("id", bakedInputRuntime(schema, field.type, val));
+      },
+      shasum(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("shasum", bakedInputRuntime(schema, field.type, val));
+      },
+      updatedAt(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("updated_at", bakedInputRuntime(schema, field.type, val));
+      },
+      version(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("version", bakedInputRuntime(schema, field.type, val));
+      }
+    }
+  },
+  PluginCondition: {
+    plans: {
+      name($condition, val) {
+        $condition.where({
+          type: "attribute",
+          attribute: "name",
+          callback(expression) {
+            return val === null ? sql`${expression} is null` : sql`${expression} = ${sqlValueWithCodec(val, TYPES.text)}`;
+          }
+        });
+      },
+      rowId($condition, val) {
+        $condition.where({
+          type: "attribute",
+          attribute: "id",
+          callback(expression) {
+            return val === null ? sql`${expression} is null` : sql`${expression} = ${sqlValueWithCodec(val, TYPES.uuid)}`;
+          }
+        });
+      }
+    }
+  },
+  PluginFilter: {
+    plans: {
+      and($where, value) {
+        assertAllowed73(value, "list");
+        if (value == null) return;
+        return $where.andPlan();
+      },
+      name(queryBuilder, value) {
+        if (value === void 0) return;
+        if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+        if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+        const condition = new PgCondition(queryBuilder);
+        condition.extensions.pgFilterAttribute = colSpec52;
+        return condition;
+      },
+      not($where, value) {
+        assertAllowed73(value, "object");
+        if (value == null) return;
+        return $where.notPlan().andPlan();
+      },
+      or($where, value) {
+        assertAllowed73(value, "list");
+        if (value == null) return;
+        const $or = $where.orPlan();
+        return () => $or.andPlan();
+      },
+      rowId(queryBuilder, value) {
+        if (value === void 0) return;
+        if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+        if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+        const condition = new PgCondition(queryBuilder);
+        condition.extensions.pgFilterAttribute = colSpec51;
+        return condition;
+      }
+    }
+  },
+  PluginInput: {
+    baked: createObjectAndApplyChildren,
+    plans: {
+      bin(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("bin", bakedInputRuntime(schema, field.type, val));
+      },
+      commands(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("commands", bakedInputRuntime(schema, field.type, val));
+      },
+      createdAt(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("created_at", bakedInputRuntime(schema, field.type, val));
+      },
+      description(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("description", bakedInputRuntime(schema, field.type, val));
+      },
+      endpoint(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("endpoint", bakedInputRuntime(schema, field.type, val));
+      },
+      name(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("name", bakedInputRuntime(schema, field.type, val));
+      },
+      packages(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("packages", bakedInputRuntime(schema, field.type, val));
+      },
+      rowId(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("id", bakedInputRuntime(schema, field.type, val));
+      },
+      type(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("type", bakedInputRuntime(schema, field.type, val));
+      },
+      updatedAt(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("updated_at", bakedInputRuntime(schema, field.type, val));
+      },
+      version(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("version", bakedInputRuntime(schema, field.type, val));
+      }
+    }
+  },
+  PluginPatch: {
+    baked: createObjectAndApplyChildren,
+    plans: {
+      bin(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("bin", bakedInputRuntime(schema, field.type, val));
+      },
+      commands(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("commands", bakedInputRuntime(schema, field.type, val));
+      },
+      createdAt(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("created_at", bakedInputRuntime(schema, field.type, val));
+      },
+      description(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("description", bakedInputRuntime(schema, field.type, val));
+      },
+      endpoint(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("endpoint", bakedInputRuntime(schema, field.type, val));
+      },
+      name(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("name", bakedInputRuntime(schema, field.type, val));
+      },
+      packages(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("packages", bakedInputRuntime(schema, field.type, val));
+      },
+      rowId(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("id", bakedInputRuntime(schema, field.type, val));
+      },
+      type(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("type", bakedInputRuntime(schema, field.type, val));
+      },
+      updatedAt(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("updated_at", bakedInputRuntime(schema, field.type, val));
+      },
+      version(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("version", bakedInputRuntime(schema, field.type, val));
       }
     }
   },
@@ -15723,12 +20579,12 @@ export const inputObjects = {
   RepositoryFilter: {
     plans: {
       and($where, value) {
-        assertAllowed23(value, "list");
+        assertAllowed30(value, "list");
         if (value == null) return;
         return $where.andPlan();
       },
       apiTokens($where, value) {
-        assertAllowed21(value, "object");
+        assertAllowed28(value, "object");
         const $rel = $where.andPlan();
         $rel.extensions.pgFilterRelation = {
           tableExpression: apiTokenIdentifier,
@@ -15739,7 +20595,7 @@ export const inputObjects = {
         return $rel;
       },
       apiTokensExist($where, value) {
-        assertAllowed21(value, "scalar");
+        assertAllowed28(value, "scalar");
         if (value == null) return;
         const $subQuery = $where.existsPlan({
           tableExpression: apiTokenIdentifier,
@@ -15752,7 +20608,7 @@ export const inputObjects = {
         });
       },
       artifacts($where, value) {
-        assertAllowed21(value, "object");
+        assertAllowed28(value, "object");
         const $rel = $where.andPlan();
         $rel.extensions.pgFilterRelation = {
           tableExpression: artifactIdentifier,
@@ -15763,7 +20619,7 @@ export const inputObjects = {
         return $rel;
       },
       artifactsExist($where, value) {
-        assertAllowed21(value, "scalar");
+        assertAllowed28(value, "scalar");
         if (value == null) return;
         const $subQuery = $where.existsPlan({
           tableExpression: artifactIdentifier,
@@ -15792,7 +20648,7 @@ export const inputObjects = {
         return condition;
       },
       namespace($where, value) {
-        assertAllowed22(value, "object");
+        assertAllowed29(value, "object");
         if (value == null) return;
         const $subQuery = $where.existsPlan({
           tableExpression: namespaceIdentifier,
@@ -15813,12 +20669,36 @@ export const inputObjects = {
         return condition;
       },
       not($where, value) {
-        assertAllowed23(value, "object");
+        assertAllowed30(value, "object");
         if (value == null) return;
         return $where.notPlan().andPlan();
       },
+      npmDistTags($where, value) {
+        assertAllowed28(value, "object");
+        const $rel = $where.andPlan();
+        $rel.extensions.pgFilterRelation = {
+          tableExpression: npmDistTagIdentifier,
+          alias: resource_npm_dist_tagPgResource.name,
+          localAttributes: registryConfig.pgRelations.repository.npmDistTagsByTheirRepositoryId.localAttributes,
+          remoteAttributes: registryConfig.pgRelations.repository.npmDistTagsByTheirRepositoryId.remoteAttributes
+        };
+        return $rel;
+      },
+      npmDistTagsExist($where, value) {
+        assertAllowed28(value, "scalar");
+        if (value == null) return;
+        const $subQuery = $where.existsPlan({
+          tableExpression: npmDistTagIdentifier,
+          alias: resource_npm_dist_tagPgResource.name,
+          equals: value
+        });
+        registryConfig.pgRelations.repository.npmDistTagsByTheirRepositoryId.localAttributes.forEach((localAttribute, i) => {
+          const remoteAttribute = registryConfig.pgRelations.repository.npmDistTagsByTheirRepositoryId.remoteAttributes[i];
+          $subQuery.where(sql`${$where.alias}.${sql.identifier(localAttribute)} = ${$subQuery.alias}.${sql.identifier(remoteAttribute)}`);
+        });
+      },
       or($where, value) {
-        assertAllowed23(value, "list");
+        assertAllowed30(value, "list");
         if (value == null) return;
         const $or = $where.orPlan();
         return () => $or.andPlan();
@@ -15832,7 +20712,7 @@ export const inputObjects = {
         return condition;
       },
       tags($where, value) {
-        assertAllowed21(value, "object");
+        assertAllowed28(value, "object");
         const $rel = $where.andPlan();
         $rel.extensions.pgFilterRelation = {
           tableExpression: tagIdentifier,
@@ -15843,7 +20723,7 @@ export const inputObjects = {
         return $rel;
       },
       tagsExist($where, value) {
-        assertAllowed21(value, "scalar");
+        assertAllowed28(value, "scalar");
         if (value == null) return;
         const $subQuery = $where.existsPlan({
           tableExpression: tagIdentifier,
@@ -15856,7 +20736,7 @@ export const inputObjects = {
         });
       },
       uploadSessions($where, value) {
-        assertAllowed21(value, "object");
+        assertAllowed28(value, "object");
         const $rel = $where.andPlan();
         $rel.extensions.pgFilterRelation = {
           tableExpression: uploadSessionIdentifier,
@@ -15867,7 +20747,7 @@ export const inputObjects = {
         return $rel;
       },
       uploadSessionsExist($where, value) {
-        assertAllowed21(value, "scalar");
+        assertAllowed28(value, "scalar");
         if (value == null) return;
         const $subQuery = $where.existsPlan({
           tableExpression: uploadSessionIdentifier,
@@ -15901,6 +20781,12 @@ export const inputObjects = {
         schema
       }) {
         obj.set("description", bakedInputRuntime(schema, field.type, val));
+      },
+      downloadCount(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("download_count", bakedInputRuntime(schema, field.type, val));
       },
       isPublic(obj, val, {
         field,
@@ -15955,6 +20841,12 @@ export const inputObjects = {
       }) {
         obj.set("description", bakedInputRuntime(schema, field.type, val));
       },
+      downloadCount(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("download_count", bakedInputRuntime(schema, field.type, val));
+      },
       isPublic(obj, val, {
         field,
         schema
@@ -15990,7 +20882,7 @@ export const inputObjects = {
   RepositoryToManyApiTokenFilter: {
     plans: {
       every($where, value) {
-        assertAllowed44(value, "object");
+        assertAllowed57(value, "object");
         if (value == null) return;
         if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
         const {
@@ -16010,7 +20902,7 @@ export const inputObjects = {
         return $subQuery.notPlan().andPlan();
       },
       none($where, value) {
-        assertAllowed44(value, "object");
+        assertAllowed57(value, "object");
         if (value == null) return;
         if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
         const {
@@ -16030,7 +20922,7 @@ export const inputObjects = {
         return $subQuery;
       },
       some($where, value) {
-        assertAllowed44(value, "object");
+        assertAllowed57(value, "object");
         if (value == null) return;
         if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
         const {
@@ -16054,7 +20946,7 @@ export const inputObjects = {
   RepositoryToManyArtifactFilter: {
     plans: {
       every($where, value) {
-        assertAllowed24(value, "object");
+        assertAllowed31(value, "object");
         if (value == null) return;
         if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
         const {
@@ -16074,7 +20966,7 @@ export const inputObjects = {
         return $subQuery.notPlan().andPlan();
       },
       none($where, value) {
-        assertAllowed24(value, "object");
+        assertAllowed31(value, "object");
         if (value == null) return;
         if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
         const {
@@ -16094,7 +20986,71 @@ export const inputObjects = {
         return $subQuery;
       },
       some($where, value) {
-        assertAllowed24(value, "object");
+        assertAllowed31(value, "object");
+        if (value == null) return;
+        if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
+        const {
+            localAttributes,
+            remoteAttributes,
+            tableExpression,
+            alias
+          } = $where.extensions.pgFilterRelation,
+          $subQuery = $where.existsPlan({
+            tableExpression,
+            alias
+          });
+        localAttributes.forEach((localAttribute, i) => {
+          const remoteAttribute = remoteAttributes[i];
+          $subQuery.where(sql`${$where.alias}.${sql.identifier(localAttribute)} = ${$subQuery.alias}.${sql.identifier(remoteAttribute)}`);
+        });
+        return $subQuery;
+      }
+    }
+  },
+  RepositoryToManyNpmDistTagFilter: {
+    plans: {
+      every($where, value) {
+        assertAllowed64(value, "object");
+        if (value == null) return;
+        if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
+        const {
+            localAttributes,
+            remoteAttributes,
+            tableExpression,
+            alias
+          } = $where.extensions.pgFilterRelation,
+          $subQuery = $where.notPlan().existsPlan({
+            tableExpression,
+            alias
+          });
+        localAttributes.forEach((localAttribute, i) => {
+          const remoteAttribute = remoteAttributes[i];
+          $subQuery.where(sql`${$where.alias}.${sql.identifier(localAttribute)} = ${$subQuery.alias}.${sql.identifier(remoteAttribute)}`);
+        });
+        return $subQuery.notPlan().andPlan();
+      },
+      none($where, value) {
+        assertAllowed64(value, "object");
+        if (value == null) return;
+        if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
+        const {
+            localAttributes,
+            remoteAttributes,
+            tableExpression,
+            alias
+          } = $where.extensions.pgFilterRelation,
+          $subQuery = $where.notPlan().existsPlan({
+            tableExpression,
+            alias
+          });
+        localAttributes.forEach((localAttribute, i) => {
+          const remoteAttribute = remoteAttributes[i];
+          $subQuery.where(sql`${$where.alias}.${sql.identifier(localAttribute)} = ${$subQuery.alias}.${sql.identifier(remoteAttribute)}`);
+        });
+        return $subQuery;
+      },
+      some($where, value) {
+        assertAllowed64(value, "object");
         if (value == null) return;
         if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
         const {
@@ -16118,7 +21074,7 @@ export const inputObjects = {
   RepositoryToManyTagFilter: {
     plans: {
       every($where, value) {
-        assertAllowed40(value, "object");
+        assertAllowed53(value, "object");
         if (value == null) return;
         if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
         const {
@@ -16138,7 +21094,7 @@ export const inputObjects = {
         return $subQuery.notPlan().andPlan();
       },
       none($where, value) {
-        assertAllowed40(value, "object");
+        assertAllowed53(value, "object");
         if (value == null) return;
         if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
         const {
@@ -16158,7 +21114,7 @@ export const inputObjects = {
         return $subQuery;
       },
       some($where, value) {
-        assertAllowed40(value, "object");
+        assertAllowed53(value, "object");
         if (value == null) return;
         if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
         const {
@@ -16182,7 +21138,7 @@ export const inputObjects = {
   RepositoryToManyUploadSessionFilter: {
     plans: {
       every($where, value) {
-        assertAllowed41(value, "object");
+        assertAllowed54(value, "object");
         if (value == null) return;
         if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
         const {
@@ -16202,7 +21158,7 @@ export const inputObjects = {
         return $subQuery.notPlan().andPlan();
       },
       none($where, value) {
-        assertAllowed41(value, "object");
+        assertAllowed54(value, "object");
         if (value == null) return;
         if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
         const {
@@ -16222,7 +21178,7 @@ export const inputObjects = {
         return $subQuery;
       },
       some($where, value) {
-        assertAllowed41(value, "object");
+        assertAllowed54(value, "object");
         if (value == null) return;
         if (!$where.extensions.pgFilterRelation) throw Error("Invalid use of filter, 'pgFilterRelation' expected");
         const {
@@ -16243,6 +21199,260 @@ export const inputObjects = {
       }
     }
   },
+  ScanResultCondition: {
+    plans: {
+      artifactId($condition, val) {
+        $condition.where({
+          type: "attribute",
+          attribute: "artifact_id",
+          callback(expression) {
+            return val === null ? sql`${expression} is null` : sql`${expression} = ${sqlValueWithCodec(val, TYPES.uuid)}`;
+          }
+        });
+      },
+      rowId($condition, val) {
+        $condition.where({
+          type: "attribute",
+          attribute: "id",
+          callback(expression) {
+            return val === null ? sql`${expression} is null` : sql`${expression} = ${sqlValueWithCodec(val, TYPES.uuid)}`;
+          }
+        });
+      },
+      status($condition, val) {
+        $condition.where({
+          type: "attribute",
+          attribute: "status",
+          callback(expression) {
+            return val === null ? sql`${expression} is null` : sql`${expression} = ${sqlValueWithCodec(val, TYPES.text)}`;
+          }
+        });
+      }
+    }
+  },
+  ScanResultFilter: {
+    plans: {
+      and($where, value) {
+        assertAllowed52(value, "list");
+        if (value == null) return;
+        return $where.andPlan();
+      },
+      artifact($where, value) {
+        assertAllowed51(value, "object");
+        if (value == null) return;
+        const $subQuery = $where.existsPlan({
+          tableExpression: artifactIdentifier,
+          alias: resource_artifactPgResource.name
+        });
+        registryConfig.pgRelations.scanResult.artifactByMyArtifactId.localAttributes.forEach((localAttribute, i) => {
+          const remoteAttribute = registryConfig.pgRelations.scanResult.artifactByMyArtifactId.remoteAttributes[i];
+          $subQuery.where(sql`${$where.alias}.${sql.identifier(localAttribute)} = ${$subQuery.alias}.${sql.identifier(remoteAttribute)}`);
+        });
+        return $subQuery;
+      },
+      artifactId(queryBuilder, value) {
+        if (value === void 0) return;
+        if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+        if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+        const condition = new PgCondition(queryBuilder);
+        condition.extensions.pgFilterAttribute = colSpec25;
+        return condition;
+      },
+      not($where, value) {
+        assertAllowed52(value, "object");
+        if (value == null) return;
+        return $where.notPlan().andPlan();
+      },
+      or($where, value) {
+        assertAllowed52(value, "list");
+        if (value == null) return;
+        const $or = $where.orPlan();
+        return () => $or.andPlan();
+      },
+      rowId(queryBuilder, value) {
+        if (value === void 0) return;
+        if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+        if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+        const condition = new PgCondition(queryBuilder);
+        condition.extensions.pgFilterAttribute = colSpec24;
+        return condition;
+      },
+      status(queryBuilder, value) {
+        if (value === void 0) return;
+        if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
+        if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
+        const condition = new PgCondition(queryBuilder);
+        condition.extensions.pgFilterAttribute = colSpec26;
+        return condition;
+      }
+    }
+  },
+  ScanResultInput: {
+    baked: createObjectAndApplyChildren,
+    plans: {
+      artifactId(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("artifact_id", bakedInputRuntime(schema, field.type, val));
+      },
+      createdAt(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("created_at", bakedInputRuntime(schema, field.type, val));
+      },
+      critical(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("critical", bakedInputRuntime(schema, field.type, val));
+      },
+      error(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("error", bakedInputRuntime(schema, field.type, val));
+      },
+      findings(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("findings", bakedInputRuntime(schema, field.type, val));
+      },
+      high(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("high", bakedInputRuntime(schema, field.type, val));
+      },
+      low(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("low", bakedInputRuntime(schema, field.type, val));
+      },
+      medium(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("medium", bakedInputRuntime(schema, field.type, val));
+      },
+      rowId(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("id", bakedInputRuntime(schema, field.type, val));
+      },
+      scannedAt(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("scanned_at", bakedInputRuntime(schema, field.type, val));
+      },
+      scanner(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("scanner", bakedInputRuntime(schema, field.type, val));
+      },
+      status(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("status", bakedInputRuntime(schema, field.type, val));
+      },
+      unknown(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("unknown", bakedInputRuntime(schema, field.type, val));
+      }
+    }
+  },
+  ScanResultPatch: {
+    baked: createObjectAndApplyChildren,
+    plans: {
+      artifactId(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("artifact_id", bakedInputRuntime(schema, field.type, val));
+      },
+      createdAt(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("created_at", bakedInputRuntime(schema, field.type, val));
+      },
+      critical(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("critical", bakedInputRuntime(schema, field.type, val));
+      },
+      error(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("error", bakedInputRuntime(schema, field.type, val));
+      },
+      findings(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("findings", bakedInputRuntime(schema, field.type, val));
+      },
+      high(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("high", bakedInputRuntime(schema, field.type, val));
+      },
+      low(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("low", bakedInputRuntime(schema, field.type, val));
+      },
+      medium(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("medium", bakedInputRuntime(schema, field.type, val));
+      },
+      rowId(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("id", bakedInputRuntime(schema, field.type, val));
+      },
+      scannedAt(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("scanned_at", bakedInputRuntime(schema, field.type, val));
+      },
+      scanner(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("scanner", bakedInputRuntime(schema, field.type, val));
+      },
+      status(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("status", bakedInputRuntime(schema, field.type, val));
+      },
+      unknown(obj, val, {
+        field,
+        schema
+      }) {
+        obj.set("unknown", bakedInputRuntime(schema, field.type, val));
+      }
+    }
+  },
   SchemaMetadatumCondition: {
     plans: {
       artifactId($condition, val) {
@@ -16259,12 +21469,12 @@ export const inputObjects = {
   SchemaMetadatumFilter: {
     plans: {
       and($where, value) {
-        assertAllowed31(value, "list");
+        assertAllowed38(value, "list");
         if (value == null) return;
         return $where.andPlan();
       },
       artifact($where, value) {
-        assertAllowed30(value, "object");
+        assertAllowed37(value, "object");
         if (value == null) return;
         const $subQuery = $where.existsPlan({
           tableExpression: artifactIdentifier,
@@ -16281,16 +21491,16 @@ export const inputObjects = {
         if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
         if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
         const condition = new PgCondition(queryBuilder);
-        condition.extensions.pgFilterAttribute = colSpec9;
+        condition.extensions.pgFilterAttribute = colSpec10;
         return condition;
       },
       not($where, value) {
-        assertAllowed31(value, "object");
+        assertAllowed38(value, "object");
         if (value == null) return;
         return $where.notPlan().andPlan();
       },
       or($where, value) {
-        assertAllowed31(value, "list");
+        assertAllowed38(value, "list");
         if (value == null) return;
         const $or = $where.orPlan();
         return () => $or.andPlan();
@@ -17302,12 +22512,12 @@ export const inputObjects = {
   TagFilter: {
     plans: {
       and($where, value) {
-        assertAllowed34(value, "list");
+        assertAllowed41(value, "list");
         if (value == null) return;
         return $where.andPlan();
       },
       artifact($where, value) {
-        assertAllowed33(value, "object");
+        assertAllowed40(value, "object");
         if (value == null) return;
         const $subQuery = $where.existsPlan({
           tableExpression: artifactIdentifier,
@@ -17324,7 +22534,7 @@ export const inputObjects = {
         if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
         if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
         const condition = new PgCondition(queryBuilder);
-        condition.extensions.pgFilterAttribute = colSpec12;
+        condition.extensions.pgFilterAttribute = colSpec13;
         return condition;
       },
       name(queryBuilder, value) {
@@ -17332,22 +22542,22 @@ export const inputObjects = {
         if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
         if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
         const condition = new PgCondition(queryBuilder);
-        condition.extensions.pgFilterAttribute = colSpec13;
+        condition.extensions.pgFilterAttribute = colSpec14;
         return condition;
       },
       not($where, value) {
-        assertAllowed34(value, "object");
+        assertAllowed41(value, "object");
         if (value == null) return;
         return $where.notPlan().andPlan();
       },
       or($where, value) {
-        assertAllowed34(value, "list");
+        assertAllowed41(value, "list");
         if (value == null) return;
         const $or = $where.orPlan();
         return () => $or.andPlan();
       },
       repository($where, value) {
-        assertAllowed33(value, "object");
+        assertAllowed40(value, "object");
         if (value == null) return;
         const $subQuery = $where.existsPlan({
           tableExpression: repositoryIdentifier,
@@ -17364,7 +22574,7 @@ export const inputObjects = {
         if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
         if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
         const condition = new PgCondition(queryBuilder);
-        condition.extensions.pgFilterAttribute = colSpec11;
+        condition.extensions.pgFilterAttribute = colSpec12;
         return condition;
       },
       rowId(queryBuilder, value) {
@@ -17372,7 +22582,7 @@ export const inputObjects = {
         if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
         if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
         const condition = new PgCondition(queryBuilder);
-        condition.extensions.pgFilterAttribute = colSpec10;
+        condition.extensions.pgFilterAttribute = colSpec11;
         return condition;
       }
     }
@@ -17619,6 +22829,76 @@ export const inputObjects = {
       }
     }
   },
+  UpdateNpmDistTagByIdInput: {
+    plans: {
+      clientMutationId(qb, val) {
+        qb.setMeta("clientMutationId", val);
+      },
+      patch(qb, arg) {
+        if (arg != null) return qb.setBuilder();
+      }
+    }
+  },
+  UpdateNpmDistTagInput: {
+    plans: {
+      clientMutationId(qb, val) {
+        qb.setMeta("clientMutationId", val);
+      },
+      patch(qb, arg) {
+        if (arg != null) return qb.setBuilder();
+      }
+    }
+  },
+  UpdateNpmMetadatumByIdInput: {
+    plans: {
+      clientMutationId(qb, val) {
+        qb.setMeta("clientMutationId", val);
+      },
+      patch(qb, arg) {
+        if (arg != null) return qb.setBuilder();
+      }
+    }
+  },
+  UpdateNpmMetadatumInput: {
+    plans: {
+      clientMutationId(qb, val) {
+        qb.setMeta("clientMutationId", val);
+      },
+      patch(qb, arg) {
+        if (arg != null) return qb.setBuilder();
+      }
+    }
+  },
+  UpdatePluginByIdInput: {
+    plans: {
+      clientMutationId(qb, val) {
+        qb.setMeta("clientMutationId", val);
+      },
+      patch(qb, arg) {
+        if (arg != null) return qb.setBuilder();
+      }
+    }
+  },
+  UpdatePluginByNameInput: {
+    plans: {
+      clientMutationId(qb, val) {
+        qb.setMeta("clientMutationId", val);
+      },
+      patch(qb, arg) {
+        if (arg != null) return qb.setBuilder();
+      }
+    }
+  },
+  UpdatePluginInput: {
+    plans: {
+      clientMutationId(qb, val) {
+        qb.setMeta("clientMutationId", val);
+      },
+      patch(qb, arg) {
+        if (arg != null) return qb.setBuilder();
+      }
+    }
+  },
   UpdateRepositoryByIdInput: {
     plans: {
       clientMutationId(qb, val) {
@@ -17630,6 +22910,26 @@ export const inputObjects = {
     }
   },
   UpdateRepositoryInput: {
+    plans: {
+      clientMutationId(qb, val) {
+        qb.setMeta("clientMutationId", val);
+      },
+      patch(qb, arg) {
+        if (arg != null) return qb.setBuilder();
+      }
+    }
+  },
+  UpdateScanResultByIdInput: {
+    plans: {
+      clientMutationId(qb, val) {
+        qb.setMeta("clientMutationId", val);
+      },
+      patch(qb, arg) {
+        if (arg != null) return qb.setBuilder();
+      }
+    }
+  },
+  UpdateScanResultInput: {
     plans: {
       clientMutationId(qb, val) {
         qb.setMeta("clientMutationId", val);
@@ -17753,7 +23053,7 @@ export const inputObjects = {
   UploadSessionFilter: {
     plans: {
       and($where, value) {
-        assertAllowed43(value, "list");
+        assertAllowed56(value, "list");
         if (value == null) return;
         return $where.andPlan();
       },
@@ -17762,22 +23062,22 @@ export const inputObjects = {
         if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
         if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
         const condition = new PgCondition(queryBuilder);
-        condition.extensions.pgFilterAttribute = colSpec21;
+        condition.extensions.pgFilterAttribute = colSpec29;
         return condition;
       },
       not($where, value) {
-        assertAllowed43(value, "object");
+        assertAllowed56(value, "object");
         if (value == null) return;
         return $where.notPlan().andPlan();
       },
       or($where, value) {
-        assertAllowed43(value, "list");
+        assertAllowed56(value, "list");
         if (value == null) return;
         const $or = $where.orPlan();
         return () => $or.andPlan();
       },
       repository($where, value) {
-        assertAllowed42(value, "object");
+        assertAllowed55(value, "object");
         if (value == null) return;
         const $subQuery = $where.existsPlan({
           tableExpression: repositoryIdentifier,
@@ -17794,7 +23094,7 @@ export const inputObjects = {
         if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
         if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
         const condition = new PgCondition(queryBuilder);
-        condition.extensions.pgFilterAttribute = colSpec20;
+        condition.extensions.pgFilterAttribute = colSpec28;
         return condition;
       },
       rowId(queryBuilder, value) {
@@ -17802,7 +23102,7 @@ export const inputObjects = {
         if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
         if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
         const condition = new PgCondition(queryBuilder);
-        condition.extensions.pgFilterAttribute = colSpec19;
+        condition.extensions.pgFilterAttribute = colSpec27;
         return condition;
       }
     }
@@ -18161,12 +23461,12 @@ export const inputObjects = {
   WasmMetadatumFilter: {
     plans: {
       and($where, value) {
-        assertAllowed36(value, "list");
+        assertAllowed43(value, "list");
         if (value == null) return;
         return $where.andPlan();
       },
       artifact($where, value) {
-        assertAllowed35(value, "object");
+        assertAllowed42(value, "object");
         if (value == null) return;
         const $subQuery = $where.existsPlan({
           tableExpression: artifactIdentifier,
@@ -18183,16 +23483,16 @@ export const inputObjects = {
         if (!false && isEmpty(value)) throw Object.assign(Error("Empty objects are forbidden in filter argument input."), {});
         if (!false && value === null) throw Object.assign(Error("Null literals are forbidden in filter argument input."), {});
         const condition = new PgCondition(queryBuilder);
-        condition.extensions.pgFilterAttribute = colSpec14;
+        condition.extensions.pgFilterAttribute = colSpec15;
         return condition;
       },
       not($where, value) {
-        assertAllowed36(value, "object");
+        assertAllowed43(value, "object");
         if (value == null) return;
         return $where.notPlan().andPlan();
       },
       or($where, value) {
-        assertAllowed36(value, "list");
+        assertAllowed43(value, "list");
         if (value == null) return;
         const $or = $where.orPlan();
         return () => $or.andPlan();
@@ -18500,6 +23800,18 @@ export const enums = {
           direction: "DESC"
         });
         queryBuilder.setOrderIsUnique();
+      },
+      SUBJECT_ASC(queryBuilder) {
+        queryBuilder.orderBy({
+          attribute: "subject",
+          direction: "ASC"
+        });
+      },
+      SUBJECT_DESC(queryBuilder) {
+        queryBuilder.orderBy({
+          attribute: "subject",
+          direction: "DESC"
+        });
       }
     }
   },
@@ -18819,6 +24131,188 @@ export const enums = {
       }
     }
   },
+  NpmDistTagOrderBy: {
+    values: {
+      PRIMARY_KEY_ASC(queryBuilder) {
+        npm_dist_tagUniques[0].attributes.forEach(attributeName => {
+          queryBuilder.orderBy({
+            attribute: attributeName,
+            direction: "ASC"
+          });
+        });
+        queryBuilder.setOrderIsUnique();
+      },
+      PRIMARY_KEY_DESC(queryBuilder) {
+        npm_dist_tagUniques[0].attributes.forEach(attributeName => {
+          queryBuilder.orderBy({
+            attribute: attributeName,
+            direction: "DESC"
+          });
+        });
+        queryBuilder.setOrderIsUnique();
+      },
+      REPOSITORY_ID_ASC(queryBuilder) {
+        queryBuilder.orderBy({
+          attribute: "repository_id",
+          direction: "ASC"
+        });
+      },
+      REPOSITORY_ID_DESC(queryBuilder) {
+        queryBuilder.orderBy({
+          attribute: "repository_id",
+          direction: "DESC"
+        });
+      },
+      ROW_ID_ASC(queryBuilder) {
+        queryBuilder.orderBy({
+          attribute: "id",
+          direction: "ASC"
+        });
+        queryBuilder.setOrderIsUnique();
+      },
+      ROW_ID_DESC(queryBuilder) {
+        queryBuilder.orderBy({
+          attribute: "id",
+          direction: "DESC"
+        });
+        queryBuilder.setOrderIsUnique();
+      },
+      TAG_ASC(queryBuilder) {
+        queryBuilder.orderBy({
+          attribute: "tag",
+          direction: "ASC"
+        });
+      },
+      TAG_DESC(queryBuilder) {
+        queryBuilder.orderBy({
+          attribute: "tag",
+          direction: "DESC"
+        });
+      }
+    }
+  },
+  NpmMetadatumOrderBy: {
+    values: {
+      ARTIFACT_ID_ASC(queryBuilder) {
+        queryBuilder.orderBy({
+          attribute: "artifact_id",
+          direction: "ASC"
+        });
+      },
+      ARTIFACT_ID_DESC(queryBuilder) {
+        queryBuilder.orderBy({
+          attribute: "artifact_id",
+          direction: "DESC"
+        });
+      },
+      NAME_ASC(queryBuilder) {
+        queryBuilder.orderBy({
+          attribute: "name",
+          direction: "ASC"
+        });
+      },
+      NAME_DESC(queryBuilder) {
+        queryBuilder.orderBy({
+          attribute: "name",
+          direction: "DESC"
+        });
+      },
+      PRIMARY_KEY_ASC(queryBuilder) {
+        npm_metadataUniques[0].attributes.forEach(attributeName => {
+          queryBuilder.orderBy({
+            attribute: attributeName,
+            direction: "ASC"
+          });
+        });
+        queryBuilder.setOrderIsUnique();
+      },
+      PRIMARY_KEY_DESC(queryBuilder) {
+        npm_metadataUniques[0].attributes.forEach(attributeName => {
+          queryBuilder.orderBy({
+            attribute: attributeName,
+            direction: "DESC"
+          });
+        });
+        queryBuilder.setOrderIsUnique();
+      },
+      ROW_ID_ASC(queryBuilder) {
+        queryBuilder.orderBy({
+          attribute: "id",
+          direction: "ASC"
+        });
+        queryBuilder.setOrderIsUnique();
+      },
+      ROW_ID_DESC(queryBuilder) {
+        queryBuilder.orderBy({
+          attribute: "id",
+          direction: "DESC"
+        });
+        queryBuilder.setOrderIsUnique();
+      },
+      VERSION_ASC(queryBuilder) {
+        queryBuilder.orderBy({
+          attribute: "version",
+          direction: "ASC"
+        });
+      },
+      VERSION_DESC(queryBuilder) {
+        queryBuilder.orderBy({
+          attribute: "version",
+          direction: "DESC"
+        });
+      }
+    }
+  },
+  PluginOrderBy: {
+    values: {
+      NAME_ASC(queryBuilder) {
+        queryBuilder.orderBy({
+          attribute: "name",
+          direction: "ASC"
+        });
+        queryBuilder.setOrderIsUnique();
+      },
+      NAME_DESC(queryBuilder) {
+        queryBuilder.orderBy({
+          attribute: "name",
+          direction: "DESC"
+        });
+        queryBuilder.setOrderIsUnique();
+      },
+      PRIMARY_KEY_ASC(queryBuilder) {
+        pluginUniques[0].attributes.forEach(attributeName => {
+          queryBuilder.orderBy({
+            attribute: attributeName,
+            direction: "ASC"
+          });
+        });
+        queryBuilder.setOrderIsUnique();
+      },
+      PRIMARY_KEY_DESC(queryBuilder) {
+        pluginUniques[0].attributes.forEach(attributeName => {
+          queryBuilder.orderBy({
+            attribute: attributeName,
+            direction: "DESC"
+          });
+        });
+        queryBuilder.setOrderIsUnique();
+      },
+      ROW_ID_ASC(queryBuilder) {
+        queryBuilder.orderBy({
+          attribute: "id",
+          direction: "ASC"
+        });
+        queryBuilder.setOrderIsUnique();
+      },
+      ROW_ID_DESC(queryBuilder) {
+        queryBuilder.orderBy({
+          attribute: "id",
+          direction: "DESC"
+        });
+        queryBuilder.setOrderIsUnique();
+      }
+    }
+  },
   RepositoryOrderBy: {
     values: {
       ARTIFACT_TYPE_ASC(queryBuilder) {
@@ -18888,6 +24382,66 @@ export const enums = {
           direction: "DESC"
         });
         queryBuilder.setOrderIsUnique();
+      }
+    }
+  },
+  ScanResultOrderBy: {
+    values: {
+      ARTIFACT_ID_ASC(queryBuilder) {
+        queryBuilder.orderBy({
+          attribute: "artifact_id",
+          direction: "ASC"
+        });
+      },
+      ARTIFACT_ID_DESC(queryBuilder) {
+        queryBuilder.orderBy({
+          attribute: "artifact_id",
+          direction: "DESC"
+        });
+      },
+      PRIMARY_KEY_ASC(queryBuilder) {
+        scan_resultUniques[0].attributes.forEach(attributeName => {
+          queryBuilder.orderBy({
+            attribute: attributeName,
+            direction: "ASC"
+          });
+        });
+        queryBuilder.setOrderIsUnique();
+      },
+      PRIMARY_KEY_DESC(queryBuilder) {
+        scan_resultUniques[0].attributes.forEach(attributeName => {
+          queryBuilder.orderBy({
+            attribute: attributeName,
+            direction: "DESC"
+          });
+        });
+        queryBuilder.setOrderIsUnique();
+      },
+      ROW_ID_ASC(queryBuilder) {
+        queryBuilder.orderBy({
+          attribute: "id",
+          direction: "ASC"
+        });
+        queryBuilder.setOrderIsUnique();
+      },
+      ROW_ID_DESC(queryBuilder) {
+        queryBuilder.orderBy({
+          attribute: "id",
+          direction: "DESC"
+        });
+        queryBuilder.setOrderIsUnique();
+      },
+      STATUS_ASC(queryBuilder) {
+        queryBuilder.orderBy({
+          attribute: "status",
+          direction: "ASC"
+        });
+      },
+      STATUS_DESC(queryBuilder) {
+        queryBuilder.orderBy({
+          attribute: "status",
+          direction: "DESC"
+        });
       }
     }
   },

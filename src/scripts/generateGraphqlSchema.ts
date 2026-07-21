@@ -11,7 +11,6 @@ import { join } from "node:path";
 import { exportSchema } from "graphile-export";
 import { printSchema } from "graphql";
 import { makeSchema } from "postgraphile";
-import { replaceInFile } from "replace-in-file";
 
 import graphilePreset from "lib/config/graphile.config";
 
@@ -74,11 +73,16 @@ const generateGraphqlSchema = async () => {
     mode: "typeDefs",
   });
 
-  await replaceInFile({
-    files: schemaFilePath,
-    from: /\/\* eslint-disable graphile-export\/export-instances, graphile-export\/export-methods, graphile-export\/exhaustive-deps \*\//g,
-    to: "// @ts-nocheck",
-  });
+  // graphile-export output is not noImplicitAny / strict-null clean, so the
+  // generated file must be skipped by tsc. Prepend `// @ts-nocheck`
+  // unconditionally: matching the emitted eslint-disable banner is brittle (its
+  // rule list changes between graphile-export versions, e.g. `export-plans` was
+  // added), and a silent no-op there leaves an untype-checkable file breaking
+  // the build (which is how this schema drifted stale).
+  const exported = readFileSync(schemaFilePath, "utf8");
+  if (!exported.startsWith("// @ts-nocheck")) {
+    writeFileSync(schemaFilePath, `// @ts-nocheck\n${exported}`);
+  }
 
   // emit SDL
   writeFileSync(`${generatedDirectory}/schema.graphql`, printSchema(schema));
