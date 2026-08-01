@@ -1,6 +1,7 @@
 import { and, eq } from "drizzle-orm";
 
 import { cargoError } from "lib/cargo/errors";
+import { splitCargoFeatures } from "lib/cargo/features";
 import { cratePrefix } from "lib/cargo/prefix";
 import { dbPool } from "lib/db";
 import {
@@ -86,20 +87,26 @@ export const indexLookup = async (
     return "";
   }
 
-  // Build ndjson response
-  const lines = versions.map((v) =>
-    JSON.stringify({
+  // Build ndjson response. Features that use `dep:`/`?/` syntax must go in
+  // `features2` (with `v` >= 2), or Cargo rejects the entry as invalid.
+  const lines = versions.map((v) => {
+    const { features, features2 } = splitCargoFeatures(
+      v.meta.features as Record<string, string[]> | null,
+    );
+    const hasExtended = Object.keys(features2).length > 0;
+    return JSON.stringify({
       name: v.meta.name,
       vers: v.meta.vers,
       deps: v.meta.deps,
-      features: v.meta.features,
+      features,
       cksum: v.meta.cksum,
       yanked: v.meta.yanked,
       links: v.meta.links,
       rust_version: v.meta.rustVersion,
-      v: v.meta.v,
-    }),
-  );
+      ...(hasExtended ? { features2 } : {}),
+      v: hasExtended ? 2 : (v.meta.v ?? 1),
+    });
+  });
 
   const body = lines.join("\n");
   const etag = `"${Bun.hash(body).toString(16)}"`;
