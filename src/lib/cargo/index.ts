@@ -21,10 +21,37 @@ import type { CargoDependency } from "lib/cargo/wireFormat";
  * Returns the registry configuration Cargo needs to locate
  * the download and API endpoints.
  */
-export const configHandler = (namespace: string, baseUrl: string) => ({
-  dl: `${baseUrl}/cargo/${namespace}/api/v1/crates`,
-  api: `${baseUrl}/cargo/${namespace}`,
-});
+export const configHandler = async (namespace: string, baseUrl: string) => {
+  const config: { dl: string; api: string; "auth-required"?: boolean } = {
+    dl: `${baseUrl}/cargo/${namespace}/api/v1/crates`,
+    api: `${baseUrl}/cargo/${namespace}`,
+  };
+
+  // A crate download is gated per repository (`isPublic`), but Cargo only sends
+  // credentials when the index config advertises it. If the namespace holds any
+  // private crate, require auth so Cargo authenticates every request; otherwise
+  // downloads 403 with "authentication required for private crates".
+  const [ns] = await dbPool
+    .select({ id: namespaceTable.id })
+    .from(namespaceTable)
+    .where(eq(namespaceTable.name, namespace))
+    .limit(1);
+  if (ns) {
+    const [privateRepo] = await dbPool
+      .select({ id: repositoryTable.id })
+      .from(repositoryTable)
+      .where(
+        and(
+          eq(repositoryTable.namespaceId, ns.id),
+          eq(repositoryTable.isPublic, false),
+        ),
+      )
+      .limit(1);
+    if (privateRepo) config["auth-required"] = true;
+  }
+
+  return config;
+};
 
 /**
  * Sparse index lookup handler.
