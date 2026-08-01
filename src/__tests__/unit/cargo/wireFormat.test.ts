@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
 
-import { parsePublishBody } from "lib/cargo/wireFormat";
+import { parsePublishBody, toCargoIndexDependency } from "lib/cargo/wireFormat";
 
 describe("parsePublishBody", () => {
   const buildBody = (
@@ -41,5 +41,51 @@ describe("parsePublishBody", () => {
 
   test("rejects truncated body", () => {
     expect(() => parsePublishBody(new ArrayBuffer(2))).toThrow();
+  });
+});
+
+describe("toCargoIndexDependency", () => {
+  const base = {
+    name: "serde",
+    version_req: "^1.0",
+    features: ["derive"],
+    optional: false,
+    default_features: true,
+    target: null,
+    kind: "normal" as const,
+    registry: null,
+  };
+
+  test("renames version_req to req", () => {
+    const out = toCargoIndexDependency(base);
+    expect(out.req).toBe("^1.0");
+    expect("version_req" in out).toBe(false);
+  });
+
+  test("preserves the other dependency fields", () => {
+    const out = toCargoIndexDependency(base);
+    expect(out).toEqual({
+      name: "serde",
+      req: "^1.0",
+      features: ["derive"],
+      optional: false,
+      default_features: true,
+      target: null,
+      kind: "normal",
+      registry: null,
+    });
+  });
+
+  test("maps explicit_name_in_toml to package for a renamed dependency", () => {
+    const out = toCargoIndexDependency({
+      ...base,
+      name: "renamed",
+      explicit_name_in_toml: "original",
+    });
+    expect(out.package).toBe("original");
+  });
+
+  test("omits package when the dependency is not renamed", () => {
+    expect("package" in toCargoIndexDependency(base)).toBe(false);
   });
 });

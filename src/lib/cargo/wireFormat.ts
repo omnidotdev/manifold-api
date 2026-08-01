@@ -23,7 +23,48 @@ export interface CargoDependency {
   target: string | null;
   kind: "normal" | "dev" | "build";
   registry: string | null;
+  /** Original crate name when the dependency is renamed in Cargo.toml. */
+  explicit_name_in_toml?: string;
 }
+
+/** A dependency as it appears in the Cargo sparse index (not the publish body). */
+export interface CargoIndexDependency {
+  name: string;
+  req: string;
+  features: string[];
+  optional: boolean;
+  default_features: boolean;
+  target: string | null;
+  kind: "normal" | "dev" | "build";
+  registry: string | null;
+  package?: string;
+}
+
+/**
+ * Convert a publish-payload dependency to its Cargo index shape.
+ *
+ * The index format names the version requirement `req`, while the publish body
+ * uses `version_req`; a renamed dependency's original name moves from
+ * `explicit_name_in_toml` to `package`. Serving the publish shape verbatim makes
+ * Cargo reject the whole index entry, since `req` is a required field.
+ *
+ * @see https://doc.rust-lang.org/cargo/reference/registry-index.html#json-schema
+ */
+export const toCargoIndexDependency = (
+  dep: CargoDependency,
+): CargoIndexDependency => ({
+  name: dep.name,
+  req: dep.version_req,
+  features: dep.features,
+  optional: dep.optional,
+  default_features: dep.default_features,
+  target: dep.target,
+  kind: dep.kind,
+  registry: dep.registry,
+  ...(dep.explicit_name_in_toml !== undefined
+    ? { package: dep.explicit_name_in_toml }
+    : {}),
+});
 
 interface ParsedPublishBody {
   metadata: CargoPublishMetadata;

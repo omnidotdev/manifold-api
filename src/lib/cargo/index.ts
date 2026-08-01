@@ -3,6 +3,7 @@ import { and, eq } from "drizzle-orm";
 import { cargoError } from "lib/cargo/errors";
 import { splitCargoFeatures } from "lib/cargo/features";
 import { cratePrefix } from "lib/cargo/prefix";
+import { toCargoIndexDependency } from "lib/cargo/wireFormat";
 import { dbPool } from "lib/db";
 import {
   artifactTable,
@@ -11,6 +12,8 @@ import {
   repositoryTable,
   tagTable,
 } from "lib/db/schema";
+
+import type { CargoDependency } from "lib/cargo/wireFormat";
 
 /**
  * Sparse index config endpoint.
@@ -97,7 +100,9 @@ export const indexLookup = async (
     return JSON.stringify({
       name: v.meta.name,
       vers: v.meta.vers,
-      deps: v.meta.deps,
+      deps: ((v.meta.deps as CargoDependency[] | null) ?? []).map(
+        toCargoIndexDependency,
+      ),
       features,
       cksum: v.meta.cksum,
       yanked: v.meta.yanked,
