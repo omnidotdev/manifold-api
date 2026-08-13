@@ -19,6 +19,12 @@ export const oidcIssuerTable = pgTable("oidc_issuer", {
   // explicit JWKS URL; when null, resolved via OIDC discovery
   // (`<issuer>/.well-known/openid-configuration`)
   jwksUri: text(),
+  // path to a bearer token file to authenticate the JWKS fetch, read fresh per
+  // request. Needed for issuers whose discovery requires auth (e.g. a k8s
+  // apiserver: `/var/run/secrets/kubernetes.io/serviceaccount/token`). Null =
+  // fetch unauthenticated. Scoped per issuer so the token is only ever sent to
+  // that trusted issuer, never leaked to another.
+  jwksAuthTokenPath: text(),
   // expected `aud` claim; a token minted for another audience is rejected
   audience: text().notNull(),
   // soft disable without deleting the row (kills all its trusted publishers)

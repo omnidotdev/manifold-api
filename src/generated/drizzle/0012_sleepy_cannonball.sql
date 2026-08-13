@@ -1,0 +1,1 @@
+ALTER TABLE "oidc_issuer" ADD COLUMN "jwks_auth_token_path" text;
