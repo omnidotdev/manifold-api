@@ -26,6 +26,8 @@ export interface TrustedPublisherSeed {
   namespace: string;
   /** Explicit JWKS URL; when omitted, resolved via OIDC discovery. */
   jwksUri?: string;
+  /** Path to a bearer token file to authenticate the JWKS fetch (e.g. a k8s SA token). */
+  jwksAuthTokenPath?: string;
   /** Permission granted (default "write"). */
   scope?: string;
   /** Additional required claims. */
@@ -54,6 +56,7 @@ export const seedTrustedPublishers = async (
       .values({
         issuer: entry.issuer,
         jwksUri: entry.jwksUri ?? null,
+        jwksAuthTokenPath: entry.jwksAuthTokenPath ?? null,
         audience: entry.audience,
         enabled: true,
       })
@@ -61,6 +64,7 @@ export const seedTrustedPublishers = async (
         target: oidcIssuerTable.issuer,
         set: {
           jwksUri: entry.jwksUri ?? null,
+          jwksAuthTokenPath: entry.jwksAuthTokenPath ?? null,
           audience: entry.audience,
           enabled: true,
           updatedAt: now,

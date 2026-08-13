@@ -1,4 +1,6 @@
-import { createRemoteJWKSet, jwtVerify } from "jose";
+import { readFile } from "node:fs/promises";
+
+import { createRemoteJWKSet, customFetch, jwtVerify } from "jose";
 
 import type { SelectOidcIssuer } from "lib/db/schema";
 
@@ -9,10 +11,33 @@ import type { SelectOidcIssuer } from "lib/db/schema";
  */
 const jwksCache = new Map<string, ReturnType<typeof createRemoteJWKSet>>();
 
-const getJwks = (jwksUri: string) => {
+/**
+ * A fetch that authenticates with a bearer token read FRESH from disk on every
+ * call, so a rotating token (e.g. a k8s projected ServiceAccount token) is
+ * always current. Only ever attached to a specific trusted issuer's JWKS fetch,
+ * so the token is never sent anywhere else.
+ */
+export const makeAuthedFetch =
+  (tokenPath: string, fetchImpl: typeof fetch = fetch) =>
+  async (
+    input: Parameters<typeof fetch>[0],
+    init?: Parameters<typeof fetch>[1],
+  ): Promise<Response> => {
+    const token = (await readFile(tokenPath, "utf8")).trim();
+    const headers = new Headers(init?.headers);
+    headers.set("authorization", `Bearer ${token}`);
+    return fetchImpl(input, { ...init, headers });
+  };
+
+const getJwks = (issuer: SelectOidcIssuer, jwksUri: string) => {
   let set = jwksCache.get(jwksUri);
   if (!set) {
-    set = createRemoteJWKSet(new URL(jwksUri));
+    set = createRemoteJWKSet(
+      new URL(jwksUri),
+      issuer.jwksAuthTokenPath
+        ? { [customFetch]: makeAuthedFetch(issuer.jwksAuthTokenPath) }
+        : undefined,
+    );
     jwksCache.set(jwksUri, set);
   }
   return set;
@@ -26,7 +51,11 @@ const resolveJwksUri = async (issuer: SelectOidcIssuer): Promise<string> => {
     ? issuer.issuer
     : `${issuer.issuer}/`;
   const discovery = new URL(".well-known/openid-configuration", base);
-  const response = await fetch(discovery);
+  // discovery may itself require auth (a k8s apiserver 401s anonymous reads)
+  const doFetch = issuer.jwksAuthTokenPath
+    ? makeAuthedFetch(issuer.jwksAuthTokenPath)
+    : fetch;
+  const response = await doFetch(discovery);
   if (!response.ok) {
     throw new Error(`OIDC discovery failed for ${issuer.issuer}`);
   }
@@ -47,7 +76,7 @@ export const verifyOidcToken = async (
   issuer: SelectOidcIssuer,
 ): Promise<Record<string, unknown>> => {
   const jwksUri = await resolveJwksUri(issuer);
-  const { payload } = await jwtVerify(token, getJwks(jwksUri), {
+  const { payload } = await jwtVerify(token, getJwks(issuer, jwksUri), {
     issuer: issuer.issuer,
     audience: issuer.audience,
   });
