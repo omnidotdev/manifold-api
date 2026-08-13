@@ -23,6 +23,7 @@ import {
   isDevEnv,
   isProdEnv,
   maintenanceAllowedNamespaces,
+  oidcTrustedPublishers,
 } from "lib/config/env.config";
 import { dbPool, pgPool } from "lib/db";
 import ensureDatabase from "lib/db/ensureDatabase";
@@ -45,6 +46,7 @@ import {
 import { clientRateLimitKey } from "lib/middleware/clientKey";
 import npmRouter from "lib/npm/router";
 import { ociRouter } from "lib/oci";
+import { seedTrustedPublishers } from "lib/oidc/seed";
 import { flags } from "lib/providers";
 import { storage } from "lib/storage";
 import webRouter from "lib/web/router";
@@ -59,6 +61,18 @@ const commit = (() => {
 
 // ensure database exists before starting
 await ensureDatabase();
+
+// Apply declarative OIDC trusted-publisher bindings (GitOps-managed via config)
+if (oidcTrustedPublishers.length > 0) {
+  const { seeded, skipped } = await seedTrustedPublishers(
+    dbPool,
+    oidcTrustedPublishers,
+  );
+  // biome-ignore lint/suspicious/noConsole: root logging
+  console.log(
+    `OIDC trusted publishers applied: ${seeded} seeded, ${skipped} skipped`,
+  );
+}
 
 // Start background cleanup of expired upload sessions
 const cleanupTimer = startSessionCleanup();
