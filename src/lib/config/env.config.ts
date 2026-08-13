@@ -1,3 +1,5 @@
+import type { TrustedPublisherSeed } from "lib/oidc/seed";
+
 /**
  * Environment variables.
  */
@@ -97,6 +99,8 @@ export const {
   FEDERATION_AUTO_APPROVE = "true",
   /** Federation sync interval in ms (default 21600000 / 6h) */
   FEDERATION_SYNC_INTERVAL_MS = "21600000",
+  /** JSON array of declarative OIDC trusted-publisher bindings (set by Pulumi) */
+  OIDC_TRUSTED_PUBLISHERS = "[]",
 } = process.env;
 
 /** Parse the PULL_THROUGH_UPSTREAMS JSON into a namespace -> upstream-URL map. */
@@ -113,6 +117,29 @@ function parsePullThroughUpstreams(raw: string): Record<string, string> {
     return {};
   }
 }
+
+/** Parse the OIDC_TRUSTED_PUBLISHERS JSON into validated seed entries. */
+function parseTrustedPublishers(raw: string): TrustedPublisherSeed[] {
+  try {
+    const parsed: unknown = JSON.parse(raw);
+    if (!Array.isArray(parsed)) return [];
+    return parsed.filter(
+      (e): e is TrustedPublisherSeed =>
+        !!e &&
+        typeof e === "object" &&
+        typeof (e as TrustedPublisherSeed).issuer === "string" &&
+        typeof (e as TrustedPublisherSeed).audience === "string" &&
+        typeof (e as TrustedPublisherSeed).subject === "string" &&
+        typeof (e as TrustedPublisherSeed).namespace === "string",
+    );
+  } catch {
+    return [];
+  }
+}
+
+export const oidcTrustedPublishers = parseTrustedPublishers(
+  OIDC_TRUSTED_PUBLISHERS,
+);
 
 export const isDevEnv = NODE_ENV === "development",
   isProdEnv = NODE_ENV === "production",
@@ -141,6 +168,10 @@ if (!VORTEX_API_URL)
   console.warn("VORTEX_API_URL not set, event streaming disabled");
 if (!BLOB_S3_BUCKET)
   console.warn("BLOB_S3_BUCKET not set, S3 blob storage disabled");
+if (oidcTrustedPublishers.length === 0)
+  console.warn(
+    "OIDC_TRUSTED_PUBLISHERS not set, OIDC trusted publishing has no bindings",
+  );
 if (!registryRequireAuth)
   console.warn(
     "REGISTRY_REQUIRE_AUTH not set, OCI registry (/v2) is unauthenticated (safe only behind a private network)",
