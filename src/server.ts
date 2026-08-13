@@ -13,7 +13,7 @@ import { schema } from "generated/graphql/schema.executable";
 import { useGrafast } from "grafast/envelop";
 import webhooks from "webhooks";
 
-import { pluginsApi, tokensApi } from "lib/api";
+import { oidcApi, pluginsApi, tokensApi } from "lib/api";
 import cargoRouter from "lib/cargo/router";
 import appConfig from "lib/config/app.config";
 import {
@@ -162,6 +162,8 @@ const app = new Elysia({
   .use(pluginsApi)
   // API tokens REST endpoints
   .use(tokensApi)
+  // OIDC trusted-publishing token exchange
+  .use(oidcApi)
   // Federation admin routes
   .use(federationRouter)
   // Web content routes (/@namespace/repo/reference)
