@@ -71,6 +71,11 @@ import {
 } from "lib/oci/chunkStore";
 import { computeDigest } from "lib/oci/digest";
 import * as ociErrors from "lib/oci/errors";
+import {
+  STORAGE_METER,
+  storageDeleteDelta,
+  storagePushDelta,
+} from "lib/oci/storageMetering";
 import { events, flags } from "lib/providers";
 import { scanningEnabled } from "lib/scan";
 import { storage } from "lib/storage";
@@ -192,6 +197,60 @@ const getOrCreateRepository = async (
   if (!repoRow) return undefined;
 
   return { repository: repoRow, namespace: nsRow };
+};
+
+/**
+ * Meter newly-stored bytes after a push. Records `size` against the org's
+ * `storage_bytes` meter only when this push actually added content the org did
+ * not already hold (see `storagePushDelta`). No-op when there is no org (billing
+ * unconfigured / anonymous namespace).
+ *
+ * The idempotency key is the freshly-created artifact row id, so a retried record
+ * of the SAME stored copy dedupes, while a delete + later re-push (a NEW row, new
+ * id) is metered again. A digest-only key would be deduped by Aether forever and
+ * silently drop the re-push.
+ */
+const meterStoragePush = async (
+  orgId: string | null | undefined,
+  digest: string,
+  size: number,
+  created: boolean,
+  artifactId: string,
+): Promise<void> => {
+  if (!orgId) return;
+  const delta = await storagePushDelta(orgId, digest, size, created);
+  if (delta > 0) {
+    await recordUsage(
+      "organization",
+      orgId,
+      STORAGE_METER,
+      delta,
+      `storage:add:${artifactId}`,
+    );
+  }
+};
+
+/**
+ * Meter freed bytes after an artifact row is deleted. Decrements the org's
+ * `storage_bytes` meter by the freed size only when the org no longer holds the
+ * digest in any repo, clamped so the meter never goes below zero (see
+ * `storageDeleteDelta`). No idempotency key: a repeated DELETE 404s before it
+ * reaches here, so there is no retry to dedupe, and a stable key would let
+ * Aether suppress a legitimate later decrement (over-counting storage).
+ */
+const meterStorageDelete = async (
+  orgId: string | null | undefined,
+  digest: string,
+  size: number,
+): Promise<void> => {
+  if (!orgId) return;
+  const check = await checkUsage("organization", orgId, STORAGE_METER);
+  // Null = billing unconfigured; skip (matches every other billing call here).
+  if (!check) return;
+  const delta = await storageDeleteDelta(orgId, digest, size, check.value);
+  if (delta < 0) {
+    await recordUsage("organization", orgId, STORAGE_METER, delta);
+  }
 };
 
 // =============================================================================
@@ -621,6 +680,20 @@ const handlePutManifest = async (
     // Non-JSON manifest body -- no subject.
   }
 
+  // Was this manifest already stored in this repo? Content is immutable per
+  // digest, so the upsert below only refreshes metadata; this flag drives
+  // storage metering (a re-push must not be billed as newly stored).
+  const [existingArtifact] = await dbPool
+    .select({ id: artifactTable.id })
+    .from(artifactTable)
+    .where(
+      and(
+        eq(artifactTable.repositoryId, repoData.repository.id),
+        eq(artifactTable.digest, digest),
+      ),
+    )
+    .limit(1);
+
   const [artifact] = await dbPool
     .insert(artifactTable)
     .values({
@@ -677,14 +750,15 @@ const handlePutManifest = async (
 
   const orgId = repoData.namespace.organizationId;
 
-  if (orgId) {
-    await recordUsage(
-      "organization",
-      orgId,
-      "storage_bytes",
-      contentBytes.length,
-    );
-  }
+  // Meter only newly-stored content: a re-push of the same manifest digest (or
+  // a copy already held elsewhere in the org) adds no stored bytes.
+  await meterStoragePush(
+    orgId,
+    digest,
+    contentBytes.length,
+    !existingArtifact,
+    artifact.id,
+  );
 
   try {
     await events.emit({
@@ -974,7 +1048,7 @@ const handleMountBlob = async (
     return handleStartUpload(name, set);
   }
 
-  await dbPool
+  const [mounted] = await dbPool
     .insert(artifactTable)
     .values({
       repositoryId: repoData.repository.id,
@@ -985,7 +1059,21 @@ const handleMountBlob = async (
     })
     .onConflictDoNothing({
       target: [artifactTable.repositoryId, artifactTable.digest],
-    });
+    })
+    .returning();
+
+  // A mount links an existing blob into this repo. Meter it like any other push
+  // (consistent with the upload path): only billed when it created a new row and
+  // the org did not already hold the digest elsewhere.
+  if (mounted) {
+    await meterStoragePush(
+      repoData.namespace.organizationId,
+      source.digest,
+      source.size,
+      true,
+      mounted.id,
+    );
+  }
 
   set.status = 201;
   set.headers.Location = `/v2/${name}/blobs/${source.digest}`;
@@ -1141,7 +1229,7 @@ const handleCompleteUpload = async (
 
     const storagePath = await storage.put(computedDigest, inlineBody);
 
-    await dbPool
+    const [inserted] = await dbPool
       .insert(artifactTable)
       .values({
         repositoryId: repoData.repository.id,
@@ -1150,16 +1238,20 @@ const handleCompleteUpload = async (
         mediaType: "application/octet-stream",
         storagePath,
       })
-      .onConflictDoNothing();
+      .onConflictDoNothing()
+      .returning();
 
     const orgId = repoData.namespace.organizationId;
 
-    if (orgId) {
-      await recordUsage(
-        "organization",
+    // Meter only when this upload created a new artifact row: a re-push of an
+    // already-stored blob conflicts (no row) and must not be billed again.
+    if (inserted) {
+      await meterStoragePush(
         orgId,
-        "storage_bytes",
+        computedDigest,
         inlineBody.byteLength,
+        true,
+        inserted.id,
       );
     }
 
@@ -1218,7 +1310,7 @@ const handleCompleteUpload = async (
     return ociErrors.digestInvalid(expectedDigest, computedDigest);
   }
 
-  await dbPool
+  const [inserted] = await dbPool
     .insert(artifactTable)
     .values({
       repositoryId: repoData.repository.id,
@@ -1227,12 +1319,15 @@ const handleCompleteUpload = async (
       mediaType: "application/octet-stream",
       storagePath,
     })
-    .onConflictDoNothing();
+    .onConflictDoNothing()
+    .returning();
 
   const orgId = repoData.namespace.organizationId;
 
-  if (orgId) {
-    await recordUsage("organization", orgId, "storage_bytes", blobSize);
+  // Meter only when this upload created a new artifact row: a re-push of an
+  // already-stored blob conflicts (no row) and must not be billed again.
+  if (inserted) {
+    await meterStoragePush(orgId, computedDigest, blobSize, true, inserted.id);
   }
 
   await dbPool
@@ -1353,6 +1448,15 @@ const handleDeleteManifest = async (
     await dbPool.delete(tagTable).where(eq(tagTable.artifactId, artifact.id));
     await dbPool.delete(artifactTable).where(eq(artifactTable.id, artifact.id));
 
+    // Free the metered bytes now that the row is gone (only if the org no longer
+    // holds this digest anywhere; clamped at zero). Called after the delete so
+    // the per-org reference count reflects the removal.
+    await meterStorageDelete(
+      repoData.namespace.organizationId,
+      artifact.digest,
+      artifact.size,
+    );
+
     if (artifact.storagePath) {
       await deleteBlobIfUnreferenced(artifact.digest);
     }
@@ -1408,6 +1512,14 @@ const handleDeleteBlob = async (
   }
 
   await dbPool.delete(artifactTable).where(eq(artifactTable.id, artifact.id));
+
+  // Free the metered bytes now that the row is gone (only if the org no longer
+  // holds this digest anywhere; clamped at zero).
+  await meterStorageDelete(
+    repoData.namespace.organizationId,
+    artifact.digest,
+    artifact.size,
+  );
 
   if (artifact.storagePath) {
     await deleteBlobIfUnreferenced(artifact.digest);
