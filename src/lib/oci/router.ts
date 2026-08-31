@@ -661,7 +661,13 @@ const handlePutManifest = async (
       })
       .onConflictDoUpdate({
         target: [tagTable.repositoryId, tagTable.name],
-        set: { artifactId: artifact.id },
+        // Refresh updatedAt on every re-push: the retention pruner keeps the N
+        // most-recently-updated tags (order by updatedAt desc). Without this a
+        // continuously re-pushed rolling tag (e.g. latest/stable) keeps its
+        // first-push timestamp, so once the repo exceeds the retention count the
+        // pruner ranks the actively-used tag as oldest and deletes it. Mirrors
+        // the pull-through path above.
+        set: { artifactId: artifact.id, updatedAt: new Date().toISOString() },
       });
   }
 
