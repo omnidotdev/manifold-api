@@ -68,69 +68,75 @@ const handleOrganizationDeleted = async (
 };
 
 /**
- * IDP webhook receiver.
- * Receives organization lifecycle events from the IDP.
+ * Build the IDP webhook receiver, parameterized by the signing secret so it
+ * can be exercised with an injected secret in tests (the real
+ * AUTH_WEBHOOK_SECRET is snapshotted at process boot, see the default export
+ * below).
  *
  * This handler:
  * 1. Verifies HMAC-SHA256 signature
  * 2. Processes organization lifecycle events
  */
-const idpWebhook = new Elysia().post(
-  "/idp",
-  async ({ request, headers, set }) => {
-    const signature = headers["x-idp-signature"];
-    const eventType = headers["x-idp-event"];
+export const createIdpWebhook = (secret: string | undefined) =>
+  new Elysia().post(
+    "/idp",
+    async ({ request, headers, set }) => {
+      const signature = headers["x-idp-signature"];
+      const eventType = headers["x-idp-event"];
 
-    if (!AUTH_WEBHOOK_SECRET) {
-      console.warn(
-        "AUTH_WEBHOOK_SECRET not set - skipping signature verification",
-      );
-    }
+      try {
+        const rawBody = await request.text();
 
-    try {
-      const rawBody = await request.text();
+        // Fail closed: without a configured secret the caller cannot be
+        // authenticated, so reject rather than process an unverified webhook
+        if (!secret) {
+          console.warn(
+            "AUTH_WEBHOOK_SECRET not set, rejecting unverifiable webhook",
+          );
+          set.status = 503;
+          return { error: "Webhook secret not configured" };
+        }
 
-      // verify signature if secret is configured
-      if (AUTH_WEBHOOK_SECRET && signature) {
-        const isValid = verifySignature(
-          rawBody,
-          signature,
-          AUTH_WEBHOOK_SECRET,
-        );
+        if (!signature) {
+          set.status = 401;
+          return { error: "Missing signature" };
+        }
 
-        if (!isValid) {
+        if (!verifySignature(rawBody, signature, secret)) {
           set.status = 401;
           return { error: "Invalid signature" };
         }
-      } else if (AUTH_WEBHOOK_SECRET && !signature) {
-        set.status = 401;
-        return { error: "Missing signature" };
+
+        const body = JSON.parse(rawBody) as IDPWebhookPayload;
+
+        switch (body.eventType) {
+          case "organization.deleted":
+            await handleOrganizationDeleted(body);
+            break;
+          default:
+            console.warn(`Unknown IDP event type: ${eventType}`);
+        }
+
+        set.status = 200;
+        return { received: true };
+      } catch (err) {
+        console.error("Error processing IDP webhook:", err);
+        set.status = 500;
+        return { error: "Internal Server Error" };
       }
+    },
+    {
+      headers: t.Object({
+        "x-idp-signature": t.Optional(t.String()),
+        "x-idp-event": t.Optional(t.String()),
+      }),
+    },
+  );
 
-      const body = JSON.parse(rawBody) as IDPWebhookPayload;
-
-      switch (body.eventType) {
-        case "organization.deleted":
-          await handleOrganizationDeleted(body);
-          break;
-        default:
-          console.warn(`Unknown IDP event type: ${eventType}`);
-      }
-
-      set.status = 200;
-      return { received: true };
-    } catch (err) {
-      console.error("Error processing IDP webhook:", err);
-      set.status = 500;
-      return { error: "Internal Server Error" };
-    }
-  },
-  {
-    headers: t.Object({
-      "x-idp-signature": t.Optional(t.String()),
-      "x-idp-event": t.Optional(t.String()),
-    }),
-  },
-);
+/**
+ * IDP webhook receiver.
+ * Receives organization lifecycle events from the IDP.
+ */
+const idpWebhook = createIdpWebhook(AUTH_WEBHOOK_SECRET);
 
 export default idpWebhook;
