@@ -3,12 +3,13 @@ import {
   GetObjectCommand,
   HeadObjectCommand,
   PutObjectCommand,
-  S3Client,
 } from "@aws-sdk/client-s3";
 import { Upload } from "@aws-sdk/lib-storage";
 
+import { createResilientS3Client } from "lib/storage/s3Client";
 import { parseDigest } from "lib/storage/util";
 
+import type { S3Client } from "@aws-sdk/client-s3";
 import type { BlobStorage } from "lib/storage/storage";
 
 type S3StorageConfig = {
@@ -33,7 +34,7 @@ class S3Storage implements BlobStorage {
     this.bucket = config.bucket;
     this.prefix = config.prefix ?? "";
 
-    this.client = new S3Client({
+    this.client = createResilientS3Client({
       region: config.region ?? "us-east-1",
       ...(config.endpoint ? { endpoint: config.endpoint } : {}),
       // Enable path-style for MinIO / local S3
