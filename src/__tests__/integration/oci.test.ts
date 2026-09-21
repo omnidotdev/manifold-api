@@ -100,7 +100,8 @@ describe("OCI chunked upload", () => {
     );
 
     expect(patch1Res.status).toBe(202);
-    expect(patch1Res.headers.get("range")).toBe("0-4");
+    // Range is the inclusive byte range stored so far: 4 bytes => offsets 0-3
+    expect(patch1Res.headers.get("range")).toBe("0-3");
 
     // Act: upload chunk 2 (PATCH)
     const chunk2 = new Uint8Array([5, 6, 7, 8]);
@@ -113,7 +114,8 @@ describe("OCI chunked upload", () => {
     );
 
     expect(patch2Res.status).toBe(202);
-    expect(patch2Res.headers.get("range")).toBe("0-8");
+    // 8 bytes total stored => inclusive offsets 0-7
+    expect(patch2Res.headers.get("range")).toBe("0-7");
 
     // Act: complete upload (PUT)
     const fullBlob = new Uint8Array([1, 2, 3, 4, 5, 6, 7, 8]);
@@ -201,6 +203,107 @@ describe("OCI monolithic upload", () => {
     );
 
     expect(getRes.status).toBe(200);
+  });
+
+  test("streams a monolithic PUT body to storage without buffering", async () => {
+    const db = getDb();
+    const app = makeOciApp();
+
+    const ns = await namespaceFactory.create(db, { name: "library" });
+    const repo = await repositoryFactory.create(db, {
+      namespaceId: ns.id,
+      name: "mono-stream-repo",
+      isPublic: true,
+    });
+
+    const repoName = repo.name;
+
+    const postRes = await app.handle(
+      new Request(`${BASE}/v2/${repoName}/blobs/uploads/`, { method: "POST" }),
+    );
+    expect(postRes.status).toBe(202);
+    const uploadPath = postRes.headers.get("location");
+
+    // A moderately large body (5 MiB) so the request is delivered as a
+    // multi-chunk ReadableStream and exercises the streaming (not inline) path.
+    // The parser hook keeps `request.body` unread; the handler streams it
+    // straight through the inline hasher into storage.
+    const size = 5 * 1024 * 1024;
+    const body = new Uint8Array(size);
+    for (let i = 0; i < size; i++) body[i] = (i * 31 + 7) & 0xff;
+
+    const hasher = new Bun.CryptoHasher("sha256");
+    hasher.update(body);
+    const expectedDigest = `sha256:${hasher.digest("hex")}`;
+
+    const putRes = await app.handle(
+      new Request(`${BASE}${uploadPath}?digest=${expectedDigest}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/octet-stream" },
+        body,
+      }),
+    );
+
+    expect(putRes.status).toBe(201);
+    expect(putRes.headers.get("docker-content-digest")).toBe(expectedDigest);
+    expect(putRes.headers.get("location")).toBe(
+      `/v2/${repoName}/blobs/${expectedDigest}`,
+    );
+
+    // The stored artifact row records the streamed byte count
+    const getRes = await app.handle(
+      new Request(`${BASE}/v2/${repoName}/blobs/${expectedDigest}`),
+    );
+    expect(getRes.status).toBe(200);
+    expect(getRes.headers.get("content-length")).toBe(String(size));
+
+    const retrieved = new Uint8Array(await getRes.arrayBuffer());
+    expect(retrieved.byteLength).toBe(size);
+    expect(retrieved).toEqual(body);
+
+    // Digest of the retrieved bytes round-trips
+    const roundTrip = new Bun.CryptoHasher("sha256");
+    roundTrip.update(retrieved);
+    expect(`sha256:${roundTrip.digest("hex")}`).toBe(expectedDigest);
+  });
+
+  test("rejects a monolithic PUT whose body does not match the digest", async () => {
+    const db = getDb();
+    const app = makeOciApp();
+
+    const ns = await namespaceFactory.create(db, { name: "library" });
+    const repo = await repositoryFactory.create(db, {
+      namespaceId: ns.id,
+      name: "mono-mismatch-repo",
+      isPublic: true,
+    });
+
+    const repoName = repo.name;
+
+    const postRes = await app.handle(
+      new Request(`${BASE}/v2/${repoName}/blobs/uploads/`, { method: "POST" }),
+    );
+    const uploadPath = postRes.headers.get("location");
+
+    const body = new TextEncoder().encode("actual body content");
+    // A digest for different content: the streamed hash will not match
+    const wrongDigest = `sha256:${"0".repeat(64)}`;
+
+    const putRes = await app.handle(
+      new Request(`${BASE}${uploadPath}?digest=${wrongDigest}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/octet-stream" },
+        body,
+      }),
+    );
+
+    expect(putRes.status).toBe(400);
+
+    // The blob must not be readable under the (wrong) declared digest
+    const getRes = await app.handle(
+      new Request(`${BASE}/v2/${repoName}/blobs/${wrongDigest}`),
+    );
+    expect(getRes.status).toBe(404);
   });
 });
 
