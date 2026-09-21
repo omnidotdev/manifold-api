@@ -95,8 +95,13 @@ const federationSyncTimer =
  */
 const app = new Elysia({
   serve: {
-    // Allow large OCI blob uploads (container image layers, up to 2 GiB)
-    maxRequestBodySize: 2 * 1024 * 1024 * 1024,
+    // Ceiling for OCI blob uploads (container image layers, buildkit cache
+    // blobs). Blob-upload writes are streamed straight to storage (see the
+    // parser hook in lib/oci/router.ts), never buffered into RAM, so this cap is
+    // only a safety ceiling on total upload size, not a memory budget. Bun
+    // enforces it incrementally as the body streams, so a multi-GB layer above
+    // the old 2 GiB limit uploads without OOMing the process.
+    maxRequestBodySize: 32 * 1024 * 1024 * 1024,
     ...(isDevEnv && {
       // https://elysiajs.com/patterns/configuration#serve-tls
       // https://bun.sh/guides/http/tls

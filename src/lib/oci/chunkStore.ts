@@ -60,18 +60,46 @@ const assembleBlobStream = (
 };
 
 /**
- * Compute SHA256 digest by streaming through a hasher.
- * @param stream - Readable stream to hash
- * @returns Digest in format "sha256:<hex>"
+ * Wrap a byte stream so its SHA256 digest and total size are computed inline as
+ * bytes flow through, without buffering the content.
+ *
+ * The returned `stream` yields the same bytes unchanged and must be piped to a
+ * single consumer (e.g. `storage.putStream`); `result` resolves once that
+ * consumer has drained the stream to completion. This is deliberately a
+ * single-pass transform rather than `stream.tee()` + a separate digest reader:
+ * Bun's `tee()` applies no cross-branch backpressure, so a fast hashing reader
+ * races ahead and buffers the entire (multi-GB) blob in memory for the slower
+ * storage reader. Hashing inline keeps the whole path O(1) in memory.
+ * @param source - Readable stream of the blob bytes
+ * @returns The pass-through stream and a promise of its digest + byte size
  */
-const computeStreamDigest = async (
-  stream: ReadableStream<Uint8Array>,
-): Promise<string> => {
+const createHashingStream = (
+  source: ReadableStream<Uint8Array>,
+): {
+  stream: ReadableStream<Uint8Array>;
+  result: Promise<{ digest: string; size: number }>;
+} => {
   const hasher = new Bun.CryptoHasher("sha256");
-  for await (const chunk of stream) {
-    hasher.update(chunk);
-  }
-  return `sha256:${hasher.digest("hex")}`;
+  let size = 0;
+  let resolveResult!: (value: { digest: string; size: number }) => void;
+  const result = new Promise<{ digest: string; size: number }>((resolve) => {
+    resolveResult = resolve;
+  });
+
+  const stream = source.pipeThrough(
+    new TransformStream<Uint8Array, Uint8Array>({
+      transform(chunk, controller) {
+        hasher.update(chunk);
+        size += chunk.byteLength;
+        controller.enqueue(chunk);
+      },
+      flush() {
+        resolveResult({ digest: `sha256:${hasher.digest("hex")}`, size });
+      },
+    }),
+  );
+
+  return { stream, result };
 };
 
 /**
@@ -105,7 +133,7 @@ export {
   assembleBlob,
   assembleBlobStream,
   cleanupSession,
-  computeStreamDigest,
+  createHashingStream,
   initSession,
   sessionExists,
 };

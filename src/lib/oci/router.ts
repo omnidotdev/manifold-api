@@ -66,7 +66,7 @@ import {
   appendChunk,
   assembleBlobStream,
   cleanupSession,
-  computeStreamDigest,
+  createHashingStream,
   initSession,
 } from "lib/oci/chunkStore";
 import { computeDigest } from "lib/oci/digest";
@@ -1146,7 +1146,7 @@ const handleStartUpload = async (
 const handleUploadChunk = async (
   name: string,
   uuid: string,
-  body: unknown,
+  request: Request,
   set: { status?: number | string; headers: Record<string, string | number> },
 ) => {
   const [session] = await dbPool
@@ -1160,17 +1160,16 @@ const handleUploadChunk = async (
     return ociErrors.blobUnknown(uuid);
   }
 
-  const chunk =
-    body instanceof ArrayBuffer
-      ? new Uint8Array(body)
-      : typeof body === "string"
-        ? new TextEncoder().encode(body)
-        : new Uint8Array(0);
-
-  const chunkSize = chunk.byteLength;
-
-  if (chunkSize > 0) {
-    await appendChunk(uuid, chunk);
+  // Stream the incoming chunk straight to the on-disk session file instead of
+  // buffering it in RAM. The parser hook on the router leaves `request.body` an
+  // unread stream for octet-stream blob-upload writes, so a multi-GB chunk is
+  // appended piece by piece and never materialized as one Uint8Array
+  let chunkSize = 0;
+  if (request.body) {
+    for await (const chunk of request.body) {
+      await appendChunk(uuid, chunk);
+      chunkSize += chunk.byteLength;
+    }
   }
 
   const newOffset = session.offset + chunkSize;
@@ -1186,11 +1185,77 @@ const handleUploadChunk = async (
   set.headers.Range = `0-${newOffset - 1}`;
 };
 
+/**
+ * Persist a freshly-stored blob: insert its artifact row, meter newly-stored
+ * bytes, tear down the upload session, and set the 201 response. Shared by the
+ * monolithic (single PUT) and chunked (PATCH + PUT) completion paths so both
+ * meter and audit identically.
+ */
+const finalizeBlobUpload = async (
+  repoData: RepoData,
+  name: string,
+  namespace: string,
+  repo: string,
+  uuid: string,
+  computedDigest: string,
+  size: number,
+  storagePath: string,
+  set: { status?: number | string; headers: Record<string, string | number> },
+) => {
+  const [inserted] = await dbPool
+    .insert(artifactTable)
+    .values({
+      repositoryId: repoData.repository.id,
+      digest: computedDigest,
+      size,
+      mediaType: "application/octet-stream",
+      storagePath,
+    })
+    .onConflictDoNothing()
+    .returning();
+
+  const orgId = repoData.namespace.organizationId;
+
+  // Meter only when this upload created a new artifact row: a re-push of an
+  // already-stored blob conflicts (no row) and must not be billed again.
+  if (inserted) {
+    await meterStoragePush(orgId, computedDigest, size, true, inserted.id);
+  }
+
+  await dbPool
+    .delete(uploadSessionTable)
+    .where(eq(uploadSessionTable.id, uuid));
+
+  await cleanupSession(uuid);
+
+  logAuditEvent(
+    { organizationId: orgId ?? undefined },
+    {
+      action: "blob.push",
+      resource: "blob",
+      resourceId: computedDigest,
+      details: { namespace, repo, uuid },
+    },
+  );
+
+  set.status = 201;
+  set.headers.Location = `/v2/${name}/blobs/${computedDigest}`;
+  set.headers["Docker-Content-Digest"] = computedDigest;
+};
+
+/** Parse a non-negative Content-Length header into a byte-count hint, if valid. */
+const parseContentLength = (request: Request): number | undefined => {
+  const raw = request.headers.get("content-length");
+  if (!raw) return undefined;
+  const n = Number.parseInt(raw, 10);
+  return Number.isNaN(n) || n < 0 ? undefined : n;
+};
+
 const handleCompleteUpload = async (
   name: string,
   uuid: string,
   expectedDigest: string | undefined,
-  body: unknown,
+  request: Request,
   set: { status?: number | string; headers: Record<string, string | number> },
 ) => {
   const { namespace, repo } = parseRepoName(name);
@@ -1216,74 +1281,76 @@ const handleCompleteUpload = async (
     return ociErrors.blobUnknown(uuid);
   }
 
-  const inlineBody =
-    body instanceof ArrayBuffer
-      ? new Uint8Array(body)
-      : typeof body === "string" && body.length > 0
-        ? new TextEncoder().encode(body)
-        : null;
+  // Monolithic push (buildkit cache blob, oras, docker with a single PUT): the
+  // whole blob arrives in this PUT body with no prior PATCH chunks. Stream it
+  // straight to storage, hashing inline, so a multi-GB body is never buffered in
+  // RAM (the OOM this fix targets) nor staged to disk. The router's parser hook
+  // leaves `request.body` an unread stream for octet-stream blob writes.
+  if (session.offset === 0 && request.body) {
+    // storage keys off the digest; the digest is only known after streaming, so
+    // stage under the client-declared digest and verify what we computed matches
+    const storageKey = expectedDigest ?? "pending";
+    const { stream, result } = createHashingStream(request.body);
 
-  // Small inline body (single PUT with content): use buffered path
-  if (inlineBody && inlineBody.byteLength > 0) {
-    const computedDigest = await computeDigest(inlineBody);
+    let storagePath: string;
+    try {
+      storagePath = await storage.putStream(
+        storageKey,
+        stream,
+        parseContentLength(request),
+      );
+    } catch (err) {
+      await cleanupSession(uuid);
+      throw err;
+    }
+
+    const { digest: computedDigest, size } = await result;
 
     if (expectedDigest && computedDigest !== expectedDigest) {
+      // Remove the mis-keyed object staged under the declared digest
+      try {
+        await storage.delete(storageKey);
+      } catch {
+        // Best-effort cleanup
+      }
       await cleanupSession(uuid);
       set.status = 400;
       return ociErrors.digestInvalid(expectedDigest, computedDigest);
     }
 
-    const storagePath = await storage.put(computedDigest, inlineBody);
-
-    const [inserted] = await dbPool
-      .insert(artifactTable)
-      .values({
-        repositoryId: repoData.repository.id,
-        digest: computedDigest,
-        size: inlineBody.byteLength,
-        mediaType: "application/octet-stream",
-        storagePath,
-      })
-      .onConflictDoNothing()
-      .returning();
-
-    const orgId = repoData.namespace.organizationId;
-
-    // Meter only when this upload created a new artifact row: a re-push of an
-    // already-stored blob conflicts (no row) and must not be billed again.
-    if (inserted) {
-      await meterStoragePush(
-        orgId,
-        computedDigest,
-        inlineBody.byteLength,
-        true,
-        inserted.id,
-      );
-    }
-
-    await dbPool
-      .delete(uploadSessionTable)
-      .where(eq(uploadSessionTable.id, uuid));
-
-    await cleanupSession(uuid);
-
-    logAuditEvent(
-      { organizationId: repoData.namespace.organizationId ?? undefined },
-      {
-        action: "blob.push",
-        resource: "blob",
-        resourceId: computedDigest,
-        details: { namespace, repo, uuid },
-      },
+    return finalizeBlobUpload(
+      repoData,
+      name,
+      namespace,
+      repo,
+      uuid,
+      computedDigest,
+      size,
+      storagePath,
+      set,
     );
-
-    set.status = 201;
-    set.headers.Location = `/v2/${name}/blobs/${computedDigest}`;
-    set.headers["Docker-Content-Digest"] = computedDigest;
-    return;
   }
 
-  if (session.offset === 0) {
+  // Chunked completion: a final PUT after one or more PATCH chunks. It may carry
+  // a trailing chunk, which we append (streaming) to the session file before
+  // assembling. `session.offset` was tracked as chunks were appended
+  if (request.body) {
+    let trailing = 0;
+    for await (const chunk of request.body) {
+      await appendChunk(uuid, chunk);
+      trailing += chunk.byteLength;
+    }
+    if (trailing > 0) {
+      await dbPool
+        .update(uploadSessionTable)
+        .set({ offset: session.offset + trailing })
+        .where(eq(uploadSessionTable.id, uuid));
+    }
+  }
+
+  const { stream: blobStream, size: blobSize } = assembleBlobStream(uuid);
+
+  if (blobSize === 0) {
     set.status = 400;
     return {
       errors: [
@@ -1295,14 +1362,15 @@ const handleCompleteUpload = async (
     };
   }
 
-  // Streaming path: tee the file stream for concurrent digest + upload
-  const { stream: blobStream, size: blobSize } = assembleBlobStream(uuid);
-  const [digestStream, uploadStream] = blobStream.tee();
-
-  const [computedDigest, storagePath] = await Promise.all([
-    computeStreamDigest(digestStream),
-    storage.putStream(expectedDigest ?? "pending", uploadStream, blobSize),
-  ]);
+  // Stream the assembled file to storage, hashing inline (single pass, O(1)
+  // memory, no `tee()` fan-out that would buffer the whole blob)
+  const { stream: hashingStream, result } = createHashingStream(blobStream);
+  const storagePath = await storage.putStream(
+    expectedDigest ?? "pending",
+    hashingStream,
+    blobSize,
+  );
+  const { digest: computedDigest } = await result;
 
   if (expectedDigest && computedDigest !== expectedDigest) {
     // Clean up the incorrectly-keyed blob from storage
@@ -1316,45 +1384,17 @@ const handleCompleteUpload = async (
     return ociErrors.digestInvalid(expectedDigest, computedDigest);
   }
 
-  const [inserted] = await dbPool
-    .insert(artifactTable)
-    .values({
-      repositoryId: repoData.repository.id,
-      digest: computedDigest,
-      size: blobSize,
-      mediaType: "application/octet-stream",
-      storagePath,
-    })
-    .onConflictDoNothing()
-    .returning();
-
-  const orgId = repoData.namespace.organizationId;
-
-  // Meter only when this upload created a new artifact row: a re-push of an
-  // already-stored blob conflicts (no row) and must not be billed again.
-  if (inserted) {
-    await meterStoragePush(orgId, computedDigest, blobSize, true, inserted.id);
-  }
-
-  await dbPool
-    .delete(uploadSessionTable)
-    .where(eq(uploadSessionTable.id, uuid));
-
-  await cleanupSession(uuid);
-
-  logAuditEvent(
-    { organizationId: repoData.namespace.organizationId ?? undefined },
-    {
-      action: "blob.push",
-      resource: "blob",
-      resourceId: computedDigest,
-      details: { namespace, repo, uuid },
-    },
+  return finalizeBlobUpload(
+    repoData,
+    name,
+    namespace,
+    repo,
+    uuid,
+    computedDigest,
+    blobSize,
+    storagePath,
+    set,
   );
-
-  set.status = 201;
-  set.headers.Location = `/v2/${name}/blobs/${computedDigest}`;
-  set.headers["Docker-Content-Digest"] = computedDigest;
 };
 
 const handleCatalog = async (
@@ -1590,6 +1630,28 @@ const handleListTags = async (
  * spec requirement that <name> may contain slashes.
  */
 const ociRouter = new Elysia({ prefix: "/v2" })
+  // Blob-upload writes must never be buffered into RAM: a multi-GB layer or
+  // buildkit cache blob would OOM the process. Elysia's default octet-stream
+  // parser calls `request.arrayBuffer()`, materializing the whole body before
+  // the handler runs. This parser hook intercepts PATCH/PUT to a blob-upload
+  // path and returns the live request stream: Elysia assigns it to `body` and
+  // marks the body parsed, so the default parser is skipped and `request.body`
+  // stays an unread `ReadableStream` the handler streams straight to storage.
+  // Every other route (manifests, tiny blobs) returns nothing here and keeps the
+  // default buffered parsing.
+  .onParse(({ request }) => {
+    if (request.method !== "PATCH" && request.method !== "PUT") return;
+
+    const contentType = request.headers.get("content-type") ?? "";
+    if (!contentType.startsWith("application/octet-stream")) return;
+
+    if (parseOciPath(request.url)?.kind !== "blob-upload-chunk") return;
+
+    // Returning a defined value skips the default parser. A completion PUT with
+    // no body (chunked upload finalize) has a null `request.body`; return an
+    // empty stream so parsing is still skipped and `request.body` stays null
+    return request.body ?? new ReadableStream<Uint8Array>();
+  })
   .onBeforeHandle(async ({ request, set }) => {
     const path = new URL(request.url).pathname.replace(/^\/v2\/?/, "");
 
@@ -1717,13 +1779,13 @@ const ociRouter = new Elysia({ prefix: "/v2" })
 
       case "blob-upload-chunk":
         if (method === "PATCH")
-          return handleUploadChunk(route.name, route.uuid, body, set);
+          return handleUploadChunk(route.name, route.uuid, request, set);
         if (method === "PUT")
           return handleCompleteUpload(
             route.name,
             route.uuid,
             (query as Record<string, string>).digest,
-            body,
+            request,
             set,
           );
         break;
