@@ -10,7 +10,7 @@ const getDefaultOrgContext = () => {
   return {
     id: DEFAULT_ORG_ID,
     slug: "default",
-    name: "Default Organization",
+    name: "Default Workspace",
     type: "team" as const,
   };
 };
