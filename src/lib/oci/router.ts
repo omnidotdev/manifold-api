@@ -37,6 +37,7 @@ import {
 } from "lib/billing";
 import {
   maintenanceAllowedNamespaces,
+  publicRegistryHost,
   pullThroughTtlMs,
   registryRequireAuth,
 } from "lib/config/env.config";
@@ -60,6 +61,7 @@ import {
 import {
   authenticateOciToken,
   authorizeOci,
+  isPublicRegistryWrite,
   registryAuthChallenge,
 } from "lib/oci/auth";
 import {
@@ -1688,6 +1690,28 @@ const ociRouter = new Elysia({ prefix: "/v2" })
     }
 
     const method = request.method;
+
+    // Containment while REGISTRY_REQUIRE_AUTH is off: refuse anonymous WRITES
+    // that arrived via the public host. With auth off the registry is fully
+    // open, which on the public host (api.manifold.omni.dev) would let the open
+    // internet push/overwrite/delete images in the shared namespace -- a
+    // supply-chain path into every deploy. The in-cluster build pipeline reaches
+    // the registry over a different Host (NodePort/service DNS) and is
+    // unaffected; the gateway routes the public hostname here only when the Host
+    // is that hostname, so a public client cannot spoof an internal Host. Once
+    // REGISTRY_REQUIRE_AUTH is on, per-token authz below supersedes this.
+    if (
+      !registryRequireAuth &&
+      isPublicRegistryWrite(
+        method,
+        request.headers.get("host"),
+        publicRegistryHost,
+      )
+    ) {
+      set.status = 403;
+      set.headers["Docker-Distribution-API-Version"] = "registry/2.0";
+      return ociErrors.denied("public registry writes are disabled");
+    }
 
     // Authorization (flag-gated). OFF = fully open (the in-cluster build
     // pipeline relies on this). ON = per-namespace `mf_` token auth: public

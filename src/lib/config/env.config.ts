@@ -101,6 +101,15 @@ export const {
   FEDERATION_SYNC_INTERVAL_MS = "21600000",
   /** JSON array of declarative OIDC trusted-publisher bindings (set by Pulumi) */
   OIDC_TRUSTED_PUBLISHERS = "[]",
+  /**
+   * Public base URL of this API (e.g. https://api.manifold.omni.dev). Used to
+   * recognize requests that arrived via the public gateway (which routes only
+   * that hostname here) so anonymous OCI `/v2` writes from the open internet can
+   * be refused while REGISTRY_REQUIRE_AUTH is off. The in-cluster build pipeline
+   * reaches the registry over a different (NodePort/service) Host and is
+   * unaffected.
+   */
+  PUBLIC_URL,
 } = process.env;
 
 /** Parse the PULL_THROUGH_UPSTREAMS JSON into a namespace -> upstream-URL map. */
@@ -156,6 +165,22 @@ export const isDevEnv = NODE_ENV === "development",
   maintenanceAllowedNamespaces = MAINTENANCE_ALLOWED_NAMESPACES.split(",")
     .map((s) => s.trim())
     .filter(Boolean);
+
+/**
+ * Hostname of the public API URL (e.g. "api.manifold.omni.dev"), or null when
+ * PUBLIC_URL is unset. A request whose Host matches this arrived via the public
+ * gateway, so anonymous `/v2` writes from it are refused while
+ * REGISTRY_REQUIRE_AUTH is off (see isPublicRegistryWrite). The in-cluster build
+ * pipeline uses a different Host (NodePort/service DNS) and is never matched.
+ */
+export const publicRegistryHost = (() => {
+  if (!PUBLIC_URL) return null;
+  try {
+    return new URL(PUBLIC_URL).hostname.toLowerCase();
+  } catch {
+    return null;
+  }
+})();
 
 // Startup warnings for optional integrations
 if (!BILLING_BASE_URL)
