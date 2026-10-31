@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM oven/bun:1.4.2 AS base
+FROM oven/bun:1.4.4 AS base
 WORKDIR /app
 
 # Trivy vulnerability scanner (static binary copied from the official image).
