@@ -37,6 +37,7 @@ import {
   createAuditLogPlugin,
   createAuthenticationPlugin,
   createBillingPlugin,
+  createMutationScopePlugin,
   createScopeEnforcementPlugin,
 } from "lib/graphql/plugins";
 import {
@@ -218,6 +219,7 @@ const app = new Elysia({
         ...armorPlugin,
         createAuthenticationPlugin(),
         createScopeEnforcementPlugin(),
+        createMutationScopePlugin(),
         createBillingPlugin(),
         createAuditLogPlugin(),
         // disable GraphQL schema introspection in production to mitigate reverse engineering
