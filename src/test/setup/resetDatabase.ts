@@ -7,5 +7,7 @@ import type { TestDatabase } from "./createTestDatabase";
  * Uses CASCADE to handle foreign key constraints.
  */
 export const resetDatabase = async (db: TestDatabase["db"]): Promise<void> => {
-  await db.execute(sql`TRUNCATE TABLE "post", "user" CASCADE`);
+  await db.execute(
+    sql`TRUNCATE TABLE upload_session, artifact, tag, repository, api_token, namespace CASCADE`,
+  );
 };

@@ -1,6 +1,5 @@
 import { useParserCache } from "@envelop/parser-cache";
 import { useValidationCache } from "@envelop/validation-cache";
-import { schema } from "generated/graphql/schema.executable";
 import { useGrafast } from "grafast/envelop";
 import { createYoga } from "graphql-yoga";
 import { createWithPgClient } from "postgraphile/adaptors/pg";
@@ -38,7 +37,7 @@ export const createTestGraphQLClient = (
   const withPgClient = createWithPgClient({ pool });
 
   const yoga = createYoga({
-    schema,
+    schema: globalThis.__TEST_SCHEMA__,
     context: async () => ({
       db,
       observer,

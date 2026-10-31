@@ -8,6 +8,8 @@ import { drizzle } from "drizzle-orm/node-postgres";
 import { migrate } from "drizzle-orm/node-postgres/migrator";
 import { Pool } from "pg";
 
+import { reconcileSquashedBaseline } from "lib/db/reconcileBaseline";
+
 const DATABASE_URL = process.env.DATABASE_URL;
 
 if (!DATABASE_URL) {
@@ -20,10 +22,11 @@ const pool = new Pool({ connectionString: DATABASE_URL });
 try {
   const db = drizzle({ client: pool, casing: "snake_case" });
 
-  // biome-ignore lint/suspicious/noConsole: migration status logging
   console.info("[Migrate] Applying migrations...");
+  // Reconcile databases migrated before the 13 -> 1 squash so the baseline is
+  // not re-run over existing tables (no-op on a fresh database)
+  await reconcileSquashedBaseline(pool);
   await migrate(db, { migrationsFolder: "src/generated/drizzle" });
-  // biome-ignore lint/suspicious/noConsole: migration status logging
   console.info("[Migrate] Migrations applied successfully");
 } catch (err) {
   console.error("[Migrate] Migration failed:", err);

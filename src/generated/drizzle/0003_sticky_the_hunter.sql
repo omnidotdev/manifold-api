@@ -1,1 +1,0 @@
-ALTER TABLE "artifact" ADD COLUMN "storage_path" text;

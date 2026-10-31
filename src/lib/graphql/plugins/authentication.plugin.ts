@@ -7,7 +7,7 @@ import ms from "ms";
 import { hashToken, isValidTokenFormat } from "lib/auth/token";
 import { AUTH_BASE_URL } from "lib/config/env.config";
 import { dbPool } from "lib/db";
-import { apiTokenTable } from "lib/db/schema";
+import { apiTokenTable, namespaceTable } from "lib/db/schema";
 
 import type { ResolveUserFn } from "@envelop/generic-auth";
 import type { JWTPayload } from "jose";
@@ -18,13 +18,42 @@ import type {
   TokenObserver,
 } from "lib/graphql/createGraphqlContext";
 
+/**
+ * An organization membership entry from the Gatekeeper userinfo response. The
+ * shape mirrors the JWT session's `organizations` claim (see
+ * `organization.middleware.ts`); only the id is consumed here.
+ */
+interface OrganizationClaim {
+  id: string;
+  slug?: string;
+  name?: string;
+  roles?: string[];
+}
+
 interface UserInfoClaims extends JWTPayload {
   sub: string;
   name?: string;
   preferred_username?: string;
   picture?: string;
   email?: string;
+  organizations?: Array<OrganizationClaim | string>;
 }
+
+/**
+ * Extract Gatekeeper organization ids from a userinfo claim, tolerating both
+ * the object shape (`{ id, slug, ... }`) and a bare id string. These ids drive
+ * the GraphQL org-scope read filter, so a caller only sees private resources
+ * belonging to an org it is a member of.
+ */
+const extractOrgIds = (
+  organizations: UserInfoClaims["organizations"],
+): string[] => {
+  if (!Array.isArray(organizations)) return [];
+
+  return organizations
+    .map((org) => (typeof org === "string" ? org : org?.id))
+    .filter((id): id is string => typeof id === "string" && id.length > 0);
+};
 
 class AuthenticationError extends Error {
   readonly code: string;
@@ -134,9 +163,19 @@ const resolveFromApiToken = async (
     .execute()
     .catch((err) => console.error("[Auth] Failed to update lastUsedAt:", err));
 
+  // A token's visibility org is its namespace's org, so a token reads the same
+  // tenant data the org's members can (its finer scope is still enforced by the
+  // scope-enforcement plugin)
+  const [namespace] = await dbPool
+    .select({ organizationId: namespaceTable.organizationId })
+    .from(namespaceTable)
+    .where(eq(namespaceTable.id, tokenRecord.namespaceId))
+    .limit(1);
+
   return {
     id: `token:${tokenRecord.id}`,
     name: tokenRecord.name,
+    organizations: namespace?.organizationId ? [namespace.organizationId] : [],
     isApiToken: true,
     tokenId: tokenRecord.id,
     tokenName: tokenRecord.name,
@@ -223,6 +262,7 @@ const resolveUser: ResolveUserFn<ContextObserver, GraphQLContext> = async (
       id: claims.sub,
       name: claims.name ?? claims.preferred_username,
       email: claims.email,
+      organizations: extractOrgIds(claims.organizations),
     };
   } catch (err) {
     if (err instanceof AuthenticationError) {

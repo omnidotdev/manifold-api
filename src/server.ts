@@ -9,8 +9,8 @@ import { useDisableIntrospection } from "@graphql-yoga/plugin-disable-introspect
 import { sql } from "drizzle-orm";
 import { Elysia } from "elysia";
 import { rateLimit } from "elysia-rate-limit";
-import { schema } from "generated/graphql/schema.executable";
 import { useGrafast } from "grafast/envelop";
+import { makeSchema } from "postgraphile";
 import webhooks from "webhooks";
 
 import { oidcApi, pluginsApi, tokensApi } from "lib/api";
@@ -24,7 +24,9 @@ import {
   isProdEnv,
   maintenanceAllowedNamespaces,
   oidcTrustedPublishers,
+  protectRoutes,
 } from "lib/config/env.config";
+import { createGraphilePreset } from "lib/config/graphile.config";
 import { dbPool, pgPool } from "lib/db";
 import ensureDatabase from "lib/db/ensureDatabase";
 import federationRouter from "lib/federation/router";
@@ -35,6 +37,7 @@ import {
   createAuditLogPlugin,
   createAuthenticationPlugin,
   createBillingPlugin,
+  createMutationScopePlugin,
   createScopeEnforcementPlugin,
 } from "lib/graphql/plugins";
 import {
@@ -59,8 +62,22 @@ const commit = (() => {
   }
 })();
 
+// Fail closed in production: the GraphQL org-scope read filter only engages
+// when auth is required, so a prod deployment with PROTECT_ROUTES unset would
+// serve tenant data unscoped. Refuse to boot rather than run open
+if (isProdEnv && !protectRoutes) {
+  console.error(
+    "[Server] PROTECT_ROUTES must be 'true' in production; refusing to boot with GraphQL tenant isolation disabled",
+  );
+  process.exit(1);
+}
+
 // ensure database exists before starting
 await ensureDatabase();
+
+// Build the GraphQL schema at boot via makeSchema (not a pre-compiled
+// executable schema) so the org-scope plan wrappers run as plain closures
+const { schema } = await makeSchema(createGraphilePreset());
 
 // Apply declarative OIDC trusted-publisher bindings (GitOps-managed via config)
 if (oidcTrustedPublishers.length > 0) {
@@ -202,6 +219,7 @@ const app = new Elysia({
         ...armorPlugin,
         createAuthenticationPlugin(),
         createScopeEnforcementPlugin(),
+        createMutationScopePlugin(),
         createBillingPlugin(),
         createAuditLogPlugin(),
         // disable GraphQL schema introspection in production to mitigate reverse engineering

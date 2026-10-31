@@ -25,6 +25,7 @@ const makeTokenObserver = (
 ): TokenObserver => ({
   id: `token:test-${scope}`,
   name: `Test ${scope} token`,
+  organizations: [],
   isApiToken: true,
   tokenId: `test-token-${scope}`,
   tokenName: `test-${scope}`,
@@ -56,7 +57,12 @@ const makeJwtClient = () => {
   return createTestGraphQLClient({
     pool,
     db,
-    observer: { id: "user-123", name: "JWT User", email: "jwt@example.com" },
+    observer: {
+      id: "user-123",
+      name: "JWT User",
+      email: "jwt@example.com",
+      organizations: [],
+    },
     plugins: [createScopeEnforcementPlugin()],
   });
 };

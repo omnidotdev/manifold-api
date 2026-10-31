@@ -2,6 +2,7 @@ import { drizzle } from "drizzle-orm/node-postgres";
 import { migrate } from "drizzle-orm/node-postgres/migrator";
 import { Pool } from "pg";
 
+import { reconcileSquashedBaseline } from "lib/db/reconcileBaseline";
 import * as schema from "lib/db/schema";
 
 export interface TestDatabase {
@@ -24,6 +25,7 @@ export const createTestDatabase = async (
     casing: "snake_case",
   });
 
+  await reconcileSquashedBaseline(pool);
   await migrate(db, {
     migrationsFolder: "./src/generated/drizzle",
   });

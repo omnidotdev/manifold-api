@@ -1,10 +1,13 @@
-import { and, count, eq } from "drizzle-orm";
+import { and, count, eq, gt, isNull, or } from "drizzle-orm";
 
 import { dbPool } from "lib/db";
-import { namespaceTable, repositoryTable } from "lib/db/schema";
+import { apiTokenTable, namespaceTable, repositoryTable } from "lib/db/schema";
 import { limitExceeded } from "./errors";
 import { getLimit, getTier, resolveEntitlements } from "./resolve";
 import { checkUsage } from "./usageClient";
+
+type Db = typeof dbPool;
+type ResolveEntitlements = typeof resolveEntitlements;
 
 /**
  * Enforce a metered usage limit for an organization.
@@ -66,6 +69,50 @@ export const enforcePrivateRepoLimit = async (
       limit,
       getTier(entitlements),
     );
+  }
+  return null;
+};
+
+/**
+ * Enforce the `max_api_tokens` count limit before a NEW API token is created.
+ *
+ * `max_api_tokens` is an ORGANIZATION limit, so the count spans every namespace
+ * the org owns (the previous inline check in the tokens route counted a single
+ * namespace, letting a user exceed the org limit by spreading tokens across
+ * namespaces). Expired tokens are excluded so short-lived OIDC publish tokens
+ * do not consume a persistent slot. `db` and `resolve` are injectable for
+ * deterministic tests; defaults are the real pool and resolver. Returns a 402
+ * `{ status, body }` when over the limit, or null to proceed.
+ */
+export const enforceApiTokenLimit = async (
+  orgId: string,
+  {
+    db = dbPool,
+    resolve = resolveEntitlements,
+  }: {
+    db?: Db;
+    resolve?: ResolveEntitlements;
+  } = {},
+): Promise<{ status: number; body: unknown } | null> => {
+  const entitlements = await resolve(orgId);
+  const limit = getLimit(entitlements, "max_api_tokens");
+  if (limit === -1) return null;
+
+  const now = new Date().toISOString();
+  const [row] = await db
+    .select({ count: count() })
+    .from(apiTokenTable)
+    .innerJoin(namespaceTable, eq(apiTokenTable.namespaceId, namespaceTable.id))
+    .where(
+      and(
+        eq(namespaceTable.organizationId, orgId),
+        eq(apiTokenTable.isActive, true),
+        or(isNull(apiTokenTable.expiresAt), gt(apiTokenTable.expiresAt, now)),
+      ),
+    );
+  const current = row?.count ?? 0;
+  if (current >= limit) {
+    return limitExceeded("API tokens", current, limit, getTier(entitlements));
   }
   return null;
 };

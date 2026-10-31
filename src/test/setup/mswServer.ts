@@ -16,6 +16,21 @@ export const TEST_USER = {
 } as const;
 
 /**
+ * Build a userinfo responder that echoes the given organization ids, so a test
+ * can drive the real auth path (JWKS verify then userinfo) as a member of a
+ * specific org. Install per-test with `mswServer.use(userInfoHandlerWithOrgs(...))`.
+ */
+export const userInfoHandlerWithOrgs = (organizationIds: string[]) =>
+  http.get(`${AUTH_BASE_URL}/oauth2/userinfo`, () =>
+    HttpResponse.json({
+      sub: TEST_USER.id,
+      email: TEST_USER.email,
+      name: TEST_USER.name,
+      organizations: organizationIds.map((id) => ({ id })),
+    }),
+  );
+
+/**
  * Test key pair for JWT signing/verification.
  * Generated once and reused for all tests.
  */

@@ -11,12 +11,6 @@ type Query implements Node {
   """
   id: ID!
 
-  """Fetches an object given its globally unique `ID`."""
-  node(
-    """The globally unique `ID`."""
-    id: ID!
-  ): Node
-
   """Get a single `ContainerMetadatum`."""
   containerMetadatum(artifactId: UUID!): ContainerMetadatum
 
@@ -44,6 +38,12 @@ type Query implements Node {
   """Get a single `Artifact`."""
   artifact(rowId: UUID!): Artifact
 
+  """Get a single `OidcIssuer`."""
+  oidcIssuer(rowId: UUID!): OidcIssuer
+
+  """Get a single `OidcIssuer`."""
+  oidcIssuerByIssuer(issuer: String!): OidcIssuer
+
   """Get a single `Repository`."""
   repository(rowId: UUID!): Repository
 
@@ -55,6 +55,9 @@ type Query implements Node {
 
   """Get a single `Plugin`."""
   pluginByName(name: String!): Plugin
+
+  """Get a single `TrustedPublisher`."""
+  trustedPublisher(rowId: UUID!): TrustedPublisher
 
   """Get a single `ScanResult`."""
   scanResult(rowId: UUID!): ScanResult
@@ -73,124 +76,6 @@ type Query implements Node {
 
   """Get a single `ApiToken`."""
   apiToken(rowId: UUID!): ApiToken
-
-  """Reads a single `ContainerMetadatum` using its globally unique `ID`."""
-  containerMetadatumById(
-    """
-    The globally unique `ID` to be used in selecting a single `ContainerMetadatum`.
-    """
-    id: ID!
-  ): ContainerMetadatum
-
-  """Reads a single `WasmMetadatum` using its globally unique `ID`."""
-  wasmMetadatumById(
-    """
-    The globally unique `ID` to be used in selecting a single `WasmMetadatum`.
-    """
-    id: ID!
-  ): WasmMetadatum
-
-  """Reads a single `Tag` using its globally unique `ID`."""
-  tagById(
-    """The globally unique `ID` to be used in selecting a single `Tag`."""
-    id: ID!
-  ): Tag
-
-  """Reads a single `NpmDistTag` using its globally unique `ID`."""
-  npmDistTagById(
-    """
-    The globally unique `ID` to be used in selecting a single `NpmDistTag`.
-    """
-    id: ID!
-  ): NpmDistTag
-
-  """Reads a single `UploadSession` using its globally unique `ID`."""
-  uploadSessionById(
-    """
-    The globally unique `ID` to be used in selecting a single `UploadSession`.
-    """
-    id: ID!
-  ): UploadSession
-
-  """Reads a single `SchemaMetadatum` using its globally unique `ID`."""
-  schemaMetadatumById(
-    """
-    The globally unique `ID` to be used in selecting a single `SchemaMetadatum`.
-    """
-    id: ID!
-  ): SchemaMetadatum
-
-  """Reads a single `Namespace` using its globally unique `ID`."""
-  namespaceById(
-    """The globally unique `ID` to be used in selecting a single `Namespace`."""
-    id: ID!
-  ): Namespace
-
-  """Reads a single `Artifact` using its globally unique `ID`."""
-  artifactById(
-    """The globally unique `ID` to be used in selecting a single `Artifact`."""
-    id: ID!
-  ): Artifact
-
-  """Reads a single `Repository` using its globally unique `ID`."""
-  repositoryById(
-    """
-    The globally unique `ID` to be used in selecting a single `Repository`.
-    """
-    id: ID!
-  ): Repository
-
-  """Reads a single `NpmMetadatum` using its globally unique `ID`."""
-  npmMetadatumById(
-    """
-    The globally unique `ID` to be used in selecting a single `NpmMetadatum`.
-    """
-    id: ID!
-  ): NpmMetadatum
-
-  """Reads a single `Plugin` using its globally unique `ID`."""
-  pluginById(
-    """The globally unique `ID` to be used in selecting a single `Plugin`."""
-    id: ID!
-  ): Plugin
-
-  """Reads a single `ScanResult` using its globally unique `ID`."""
-  scanResultById(
-    """
-    The globally unique `ID` to be used in selecting a single `ScanResult`.
-    """
-    id: ID!
-  ): ScanResult
-
-  """Reads a single `FederatedSource` using its globally unique `ID`."""
-  federatedSourceById(
-    """
-    The globally unique `ID` to be used in selecting a single `FederatedSource`.
-    """
-    id: ID!
-  ): FederatedSource
-
-  """Reads a single `FederatedSkillCache` using its globally unique `ID`."""
-  federatedSkillCacheById(
-    """
-    The globally unique `ID` to be used in selecting a single `FederatedSkillCache`.
-    """
-    id: ID!
-  ): FederatedSkillCache
-
-  """Reads a single `CargoMetadatum` using its globally unique `ID`."""
-  cargoMetadatumById(
-    """
-    The globally unique `ID` to be used in selecting a single `CargoMetadatum`.
-    """
-    id: ID!
-  ): CargoMetadatum
-
-  """Reads a single `ApiToken` using its globally unique `ID`."""
-  apiTokenById(
-    """The globally unique `ID` to be used in selecting a single `ApiToken`."""
-    id: ID!
-  ): ApiToken
 
   """Reads and enables pagination through a set of `ContainerMetadatum`."""
   containerMetadata(
@@ -464,6 +349,40 @@ type Query implements Node {
     orderBy: [ArtifactOrderBy!] = [PRIMARY_KEY_ASC]
   ): ArtifactConnection
 
+  """Reads and enables pagination through a set of `OidcIssuer`."""
+  oidcIssuers(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: OidcIssuerCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: OidcIssuerFilter
+
+    """The method to use when ordering `OidcIssuer`."""
+    orderBy: [OidcIssuerOrderBy!] = [PRIMARY_KEY_ASC]
+  ): OidcIssuerConnection
+
   """Reads and enables pagination through a set of `Repository`."""
   repositories(
     """Only read the first `n` values of the set."""
@@ -565,6 +484,40 @@ type Query implements Node {
     """The method to use when ordering `Plugin`."""
     orderBy: [PluginOrderBy!] = [PRIMARY_KEY_ASC]
   ): PluginConnection
+
+  """Reads and enables pagination through a set of `TrustedPublisher`."""
+  trustedPublishers(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: TrustedPublisherCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: TrustedPublisherFilter
+
+    """The method to use when ordering `TrustedPublisher`."""
+    orderBy: [TrustedPublisherOrderBy!] = [PRIMARY_KEY_ASC]
+  ): TrustedPublisherConnection
 
   """Reads and enables pagination through a set of `ScanResult`."""
   scanResults(
@@ -1223,6 +1176,40 @@ type Namespace implements Node {
     """The method to use when ordering `ApiToken`."""
     orderBy: [ApiTokenOrderBy!] = [PRIMARY_KEY_ASC]
   ): ApiTokenConnection!
+
+  """Reads and enables pagination through a set of `TrustedPublisher`."""
+  trustedPublishers(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: TrustedPublisherCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: TrustedPublisherFilter
+
+    """The method to use when ordering `TrustedPublisher`."""
+    orderBy: [TrustedPublisherOrderBy!] = [PRIMARY_KEY_ASC]
+  ): TrustedPublisherConnection!
 }
 
 """A connection to a list of `Repository` values."""
@@ -2106,6 +2093,12 @@ input NamespaceFilter {
   """Some related `apiTokens` exist."""
   apiTokensExist: Boolean
 
+  """Filter by the object’s `trustedPublishers` relation."""
+  trustedPublishers: NamespaceToManyTrustedPublisherFilter
+
+  """Some related `trustedPublishers` exist."""
+  trustedPublishersExist: Boolean
+
   """Checks for all expressions in this list."""
   and: [NamespaceFilter!]
 
@@ -2154,6 +2147,113 @@ input NamespaceToManyApiTokenFilter {
   No related `ApiToken` matches the filter criteria. All fields are combined with a logical ‘and.’
   """
   none: ApiTokenFilter
+}
+
+"""
+A filter to be used against many `TrustedPublisher` object types. All fields are combined with a logical ‘and.’
+"""
+input NamespaceToManyTrustedPublisherFilter {
+  """
+  Every related `TrustedPublisher` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  every: TrustedPublisherFilter
+
+  """
+  Some related `TrustedPublisher` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  some: TrustedPublisherFilter
+
+  """
+  No related `TrustedPublisher` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  none: TrustedPublisherFilter
+}
+
+"""
+A filter to be used against `TrustedPublisher` object types. All fields are combined with a logical ‘and.’
+"""
+input TrustedPublisherFilter {
+  """Filter by the object’s `rowId` field."""
+  rowId: UUIDFilter
+
+  """Filter by the object’s `namespaceId` field."""
+  namespaceId: UUIDFilter
+
+  """Filter by the object’s `issuerId` field."""
+  issuerId: UUIDFilter
+
+  """Filter by the object’s `subject` field."""
+  subject: StringFilter
+
+  """Filter by the object’s `isActive` field."""
+  isActive: BooleanFilter
+
+  """Filter by the object’s `issuer` relation."""
+  issuer: OidcIssuerFilter
+
+  """Filter by the object’s `namespace` relation."""
+  namespace: NamespaceFilter
+
+  """Filter by the object’s `repository` relation."""
+  repository: RepositoryFilter
+
+  """A related `repository` exists."""
+  repositoryExists: Boolean
+
+  """Checks for all expressions in this list."""
+  and: [TrustedPublisherFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [TrustedPublisherFilter!]
+
+  """Negates the expression."""
+  not: TrustedPublisherFilter
+}
+
+"""
+A filter to be used against `OidcIssuer` object types. All fields are combined with a logical ‘and.’
+"""
+input OidcIssuerFilter {
+  """Filter by the object’s `rowId` field."""
+  rowId: UUIDFilter
+
+  """Filter by the object’s `issuer` field."""
+  issuer: StringFilter
+
+  """Filter by the object’s `trustedPublishersByIssuerId` relation."""
+  trustedPublishersByIssuerId: OidcIssuerToManyTrustedPublisherFilter
+
+  """Some related `trustedPublishersByIssuerId` exist."""
+  trustedPublishersByIssuerIdExist: Boolean
+
+  """Checks for all expressions in this list."""
+  and: [OidcIssuerFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [OidcIssuerFilter!]
+
+  """Negates the expression."""
+  not: OidcIssuerFilter
+}
+
+"""
+A filter to be used against many `TrustedPublisher` object types. All fields are combined with a logical ‘and.’
+"""
+input OidcIssuerToManyTrustedPublisherFilter {
+  """
+  Every related `TrustedPublisher` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  every: TrustedPublisherFilter
+
+  """
+  Some related `TrustedPublisher` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  some: TrustedPublisherFilter
+
+  """
+  No related `TrustedPublisher` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  none: TrustedPublisherFilter
 }
 
 """
@@ -2316,6 +2416,153 @@ enum ApiTokenOrderBy {
   CREATED_BY_DESC
   IS_ACTIVE_ASC
   IS_ACTIVE_DESC
+}
+
+"""A connection to a list of `TrustedPublisher` values."""
+type TrustedPublisherConnection {
+  """A list of `TrustedPublisher` objects."""
+  nodes: [TrustedPublisher]!
+
+  """
+  A list of edges which contains the `TrustedPublisher` and cursor to aid in pagination.
+  """
+  edges: [TrustedPublisherEdge]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """
+  The count of *all* `TrustedPublisher` you could get from the connection.
+  """
+  totalCount: Int!
+}
+
+type TrustedPublisher implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  id: ID!
+  rowId: UUID!
+  namespaceId: UUID!
+  repositoryId: UUID
+  issuerId: UUID!
+  subject: String!
+  claimConstraints: JSON!
+  scope: String!
+  isActive: Boolean!
+  createdBy: String!
+  lastUsedAt: Datetime
+  createdAt: Datetime
+  updatedAt: Datetime
+
+  """
+  Reads a single `OidcIssuer` that is related to this `TrustedPublisher`.
+  """
+  issuer: OidcIssuer
+
+  """Reads a single `Namespace` that is related to this `TrustedPublisher`."""
+  namespace: Namespace
+
+  """
+  Reads a single `Repository` that is related to this `TrustedPublisher`.
+  """
+  repository: Repository
+}
+
+type OidcIssuer implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  id: ID!
+  rowId: UUID!
+  issuer: String!
+  jwksUri: String
+  audience: String!
+  enabled: Boolean!
+  createdAt: Datetime
+  updatedAt: Datetime
+  jwksAuthTokenPath: String
+
+  """Reads and enables pagination through a set of `TrustedPublisher`."""
+  trustedPublishersByIssuerId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: TrustedPublisherCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: TrustedPublisherFilter
+
+    """The method to use when ordering `TrustedPublisher`."""
+    orderBy: [TrustedPublisherOrderBy!] = [PRIMARY_KEY_ASC]
+  ): TrustedPublisherConnection!
+}
+
+"""
+A condition to be used against `TrustedPublisher` object types. All fields are
+tested for equality and combined with a logical ‘and.’
+"""
+input TrustedPublisherCondition {
+  """Checks for equality with the object’s `rowId` field."""
+  rowId: UUID
+
+  """Checks for equality with the object’s `namespaceId` field."""
+  namespaceId: UUID
+
+  """Checks for equality with the object’s `issuerId` field."""
+  issuerId: UUID
+
+  """Checks for equality with the object’s `subject` field."""
+  subject: String
+
+  """Checks for equality with the object’s `isActive` field."""
+  isActive: Boolean
+}
+
+"""Methods to use when ordering `TrustedPublisher`."""
+enum TrustedPublisherOrderBy {
+  NATURAL
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+  ROW_ID_ASC
+  ROW_ID_DESC
+  NAMESPACE_ID_ASC
+  NAMESPACE_ID_DESC
+  ISSUER_ID_ASC
+  ISSUER_ID_DESC
+  SUBJECT_ASC
+  SUBJECT_DESC
+  IS_ACTIVE_ASC
+  IS_ACTIVE_DESC
+}
+
+"""A `TrustedPublisher` edge in the connection."""
+type TrustedPublisherEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `TrustedPublisher` at the end of the edge."""
+  node: TrustedPublisher
 }
 
 """A connection to a list of `Artifact` values."""
@@ -3291,6 +3538,55 @@ enum NamespaceOrderBy {
   ORGANIZATION_ID_DESC
 }
 
+"""A connection to a list of `OidcIssuer` values."""
+type OidcIssuerConnection {
+  """A list of `OidcIssuer` objects."""
+  nodes: [OidcIssuer]!
+
+  """
+  A list of edges which contains the `OidcIssuer` and cursor to aid in pagination.
+  """
+  edges: [OidcIssuerEdge]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `OidcIssuer` you could get from the connection."""
+  totalCount: Int!
+}
+
+"""A `OidcIssuer` edge in the connection."""
+type OidcIssuerEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `OidcIssuer` at the end of the edge."""
+  node: OidcIssuer
+}
+
+"""
+A condition to be used against `OidcIssuer` object types. All fields are tested
+for equality and combined with a logical ‘and.’
+"""
+input OidcIssuerCondition {
+  """Checks for equality with the object’s `rowId` field."""
+  rowId: UUID
+
+  """Checks for equality with the object’s `issuer` field."""
+  issuer: String
+}
+
+"""Methods to use when ordering `OidcIssuer`."""
+enum OidcIssuerOrderBy {
+  NATURAL
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+  ROW_ID_ASC
+  ROW_ID_DESC
+  ISSUER_ASC
+  ISSUER_DESC
+}
+
 """A connection to a list of `Plugin` values."""
 type PluginConnection {
   """A list of `Plugin` objects."""
@@ -3483,6 +3779,14 @@ type Mutation {
     input: CreateArtifactInput!
   ): CreateArtifactPayload
 
+  """Creates a single `OidcIssuer`."""
+  createOidcIssuer(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateOidcIssuerInput!
+  ): CreateOidcIssuerPayload
+
   """Creates a single `Repository`."""
   createRepository(
     """
@@ -3506,6 +3810,14 @@ type Mutation {
     """
     input: CreatePluginInput!
   ): CreatePluginPayload
+
+  """Creates a single `TrustedPublisher`."""
+  createTrustedPublisher(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateTrustedPublisherInput!
+  ): CreateTrustedPublisherPayload
 
   """Creates a single `ScanResult`."""
   createScanResult(
@@ -3694,6 +4006,32 @@ type Mutation {
   ): UpdateArtifactPayload
 
   """
+  Updates a single `OidcIssuer` using its globally unique id and a patch.
+  """
+  updateOidcIssuerById(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateOidcIssuerByIdInput!
+  ): UpdateOidcIssuerPayload
+
+  """Updates a single `OidcIssuer` using a unique key and a patch."""
+  updateOidcIssuer(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateOidcIssuerInput!
+  ): UpdateOidcIssuerPayload
+
+  """Updates a single `OidcIssuer` using a unique key and a patch."""
+  updateOidcIssuerByIssuer(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateOidcIssuerByIssuerInput!
+  ): UpdateOidcIssuerPayload
+
+  """
   Updates a single `Repository` using its globally unique id and a patch.
   """
   updateRepositoryById(
@@ -3752,6 +4090,24 @@ type Mutation {
     """
     input: UpdatePluginByNameInput!
   ): UpdatePluginPayload
+
+  """
+  Updates a single `TrustedPublisher` using its globally unique id and a patch.
+  """
+  updateTrustedPublisherById(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateTrustedPublisherByIdInput!
+  ): UpdateTrustedPublisherPayload
+
+  """Updates a single `TrustedPublisher` using a unique key and a patch."""
+  updateTrustedPublisher(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateTrustedPublisherInput!
+  ): UpdateTrustedPublisherPayload
 
   """
   Updates a single `ScanResult` using its globally unique id and a patch.
@@ -3985,6 +4341,30 @@ type Mutation {
     input: DeleteArtifactInput!
   ): DeleteArtifactPayload
 
+  """Deletes a single `OidcIssuer` using its globally unique id."""
+  deleteOidcIssuerById(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteOidcIssuerByIdInput!
+  ): DeleteOidcIssuerPayload
+
+  """Deletes a single `OidcIssuer` using a unique key."""
+  deleteOidcIssuer(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteOidcIssuerInput!
+  ): DeleteOidcIssuerPayload
+
+  """Deletes a single `OidcIssuer` using a unique key."""
+  deleteOidcIssuerByIssuer(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteOidcIssuerByIssuerInput!
+  ): DeleteOidcIssuerPayload
+
   """Deletes a single `Repository` using its globally unique id."""
   deleteRepositoryById(
     """
@@ -4040,6 +4420,22 @@ type Mutation {
     """
     input: DeletePluginByNameInput!
   ): DeletePluginPayload
+
+  """Deletes a single `TrustedPublisher` using its globally unique id."""
+  deleteTrustedPublisherById(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteTrustedPublisherByIdInput!
+  ): DeleteTrustedPublisherPayload
+
+  """Deletes a single `TrustedPublisher` using a unique key."""
+  deleteTrustedPublisher(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteTrustedPublisherInput!
+  ): DeleteTrustedPublisherPayload
 
   """Deletes a single `ScanResult` using its globally unique id."""
   deleteScanResultById(
@@ -4489,6 +4885,53 @@ input ArtifactInput {
   subject: String
 }
 
+"""The output of our create `OidcIssuer` mutation."""
+type CreateOidcIssuerPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `OidcIssuer` that was created by this mutation."""
+  oidcIssuer: OidcIssuer
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `OidcIssuer`. May be used by Relay 1."""
+  oidcIssuerEdge(
+    """The method to use when ordering `OidcIssuer`."""
+    orderBy: [OidcIssuerOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): OidcIssuerEdge
+}
+
+"""All input for the create `OidcIssuer` mutation."""
+input CreateOidcIssuerInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `OidcIssuer` to be created by this mutation."""
+  oidcIssuer: OidcIssuerInput!
+}
+
+"""An input for mutations affecting `OidcIssuer`"""
+input OidcIssuerInput {
+  rowId: UUID
+  issuer: String!
+  jwksUri: String
+  audience: String!
+  enabled: Boolean
+  createdAt: Datetime
+  updatedAt: Datetime
+  jwksAuthTokenPath: String
+}
+
 """The output of our create `Repository` mutation."""
 type CreateRepositoryPayload {
   """
@@ -4631,6 +5074,57 @@ input PluginInput {
   endpoint: String
   commands: JSON
   packages: JSON
+  createdAt: Datetime
+  updatedAt: Datetime
+}
+
+"""The output of our create `TrustedPublisher` mutation."""
+type CreateTrustedPublisherPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `TrustedPublisher` that was created by this mutation."""
+  trustedPublisher: TrustedPublisher
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `TrustedPublisher`. May be used by Relay 1."""
+  trustedPublisherEdge(
+    """The method to use when ordering `TrustedPublisher`."""
+    orderBy: [TrustedPublisherOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): TrustedPublisherEdge
+}
+
+"""All input for the create `TrustedPublisher` mutation."""
+input CreateTrustedPublisherInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `TrustedPublisher` to be created by this mutation."""
+  trustedPublisher: TrustedPublisherInput!
+}
+
+"""An input for mutations affecting `TrustedPublisher`"""
+input TrustedPublisherInput {
+  rowId: UUID
+  namespaceId: UUID!
+  repositoryId: UUID
+  issuerId: UUID!
+  subject: String!
+  claimConstraints: JSON
+  scope: String
+  isActive: Boolean
+  createdBy: String!
+  lastUsedAt: Datetime
   createdAt: Datetime
   updatedAt: Datetime
 }
@@ -5458,6 +5952,92 @@ input UpdateArtifactInput {
   patch: ArtifactPatch!
 }
 
+"""The output of our update `OidcIssuer` mutation."""
+type UpdateOidcIssuerPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `OidcIssuer` that was updated by this mutation."""
+  oidcIssuer: OidcIssuer
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `OidcIssuer`. May be used by Relay 1."""
+  oidcIssuerEdge(
+    """The method to use when ordering `OidcIssuer`."""
+    orderBy: [OidcIssuerOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): OidcIssuerEdge
+}
+
+"""All input for the `updateOidcIssuerById` mutation."""
+input UpdateOidcIssuerByIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `OidcIssuer` to be updated.
+  """
+  id: ID!
+
+  """
+  An object where the defined keys will be set on the `OidcIssuer` being updated.
+  """
+  patch: OidcIssuerPatch!
+}
+
+"""
+Represents an update to a `OidcIssuer`. Fields that are set will be updated.
+"""
+input OidcIssuerPatch {
+  rowId: UUID
+  issuer: String
+  jwksUri: String
+  audience: String
+  enabled: Boolean
+  createdAt: Datetime
+  updatedAt: Datetime
+  jwksAuthTokenPath: String
+}
+
+"""All input for the `updateOidcIssuer` mutation."""
+input UpdateOidcIssuerInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  rowId: UUID!
+
+  """
+  An object where the defined keys will be set on the `OidcIssuer` being updated.
+  """
+  patch: OidcIssuerPatch!
+}
+
+"""All input for the `updateOidcIssuerByIssuer` mutation."""
+input UpdateOidcIssuerByIssuerInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  issuer: String!
+
+  """
+  An object where the defined keys will be set on the `OidcIssuer` being updated.
+  """
+  patch: OidcIssuerPatch!
+}
+
 """The output of our update `Repository` mutation."""
 type UpdateRepositoryPayload {
   """
@@ -5689,6 +6269,81 @@ input UpdatePluginByNameInput {
   An object where the defined keys will be set on the `Plugin` being updated.
   """
   patch: PluginPatch!
+}
+
+"""The output of our update `TrustedPublisher` mutation."""
+type UpdateTrustedPublisherPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `TrustedPublisher` that was updated by this mutation."""
+  trustedPublisher: TrustedPublisher
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `TrustedPublisher`. May be used by Relay 1."""
+  trustedPublisherEdge(
+    """The method to use when ordering `TrustedPublisher`."""
+    orderBy: [TrustedPublisherOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): TrustedPublisherEdge
+}
+
+"""All input for the `updateTrustedPublisherById` mutation."""
+input UpdateTrustedPublisherByIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `TrustedPublisher` to be updated.
+  """
+  id: ID!
+
+  """
+  An object where the defined keys will be set on the `TrustedPublisher` being updated.
+  """
+  patch: TrustedPublisherPatch!
+}
+
+"""
+Represents an update to a `TrustedPublisher`. Fields that are set will be updated.
+"""
+input TrustedPublisherPatch {
+  rowId: UUID
+  namespaceId: UUID
+  repositoryId: UUID
+  issuerId: UUID
+  subject: String
+  claimConstraints: JSON
+  scope: String
+  isActive: Boolean
+  createdBy: String
+  lastUsedAt: Datetime
+  createdAt: Datetime
+  updatedAt: Datetime
+}
+
+"""All input for the `updateTrustedPublisher` mutation."""
+input UpdateTrustedPublisherInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  rowId: UUID!
+
+  """
+  An object where the defined keys will be set on the `TrustedPublisher` being updated.
+  """
+  patch: TrustedPublisherPatch!
 }
 
 """The output of our update `ScanResult` mutation."""
@@ -6479,6 +7134,64 @@ input DeleteArtifactInput {
   rowId: UUID!
 }
 
+"""The output of our delete `OidcIssuer` mutation."""
+type DeleteOidcIssuerPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `OidcIssuer` that was deleted by this mutation."""
+  oidcIssuer: OidcIssuer
+  deletedOidcIssuerId: ID
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `OidcIssuer`. May be used by Relay 1."""
+  oidcIssuerEdge(
+    """The method to use when ordering `OidcIssuer`."""
+    orderBy: [OidcIssuerOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): OidcIssuerEdge
+}
+
+"""All input for the `deleteOidcIssuerById` mutation."""
+input DeleteOidcIssuerByIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `OidcIssuer` to be deleted.
+  """
+  id: ID!
+}
+
+"""All input for the `deleteOidcIssuer` mutation."""
+input DeleteOidcIssuerInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  rowId: UUID!
+}
+
+"""All input for the `deleteOidcIssuerByIssuer` mutation."""
+input DeleteOidcIssuerByIssuerInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  issuer: String!
+}
+
 """The output of our delete `Repository` mutation."""
 type DeleteRepositoryPayload {
   """
@@ -6631,6 +7344,54 @@ input DeletePluginByNameInput {
   """
   clientMutationId: String
   name: String!
+}
+
+"""The output of our delete `TrustedPublisher` mutation."""
+type DeleteTrustedPublisherPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `TrustedPublisher` that was deleted by this mutation."""
+  trustedPublisher: TrustedPublisher
+  deletedTrustedPublisherId: ID
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `TrustedPublisher`. May be used by Relay 1."""
+  trustedPublisherEdge(
+    """The method to use when ordering `TrustedPublisher`."""
+    orderBy: [TrustedPublisherOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): TrustedPublisherEdge
+}
+
+"""All input for the `deleteTrustedPublisherById` mutation."""
+input DeleteTrustedPublisherByIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `TrustedPublisher` to be deleted.
+  """
+  id: ID!
+}
+
+"""All input for the `deleteTrustedPublisher` mutation."""
+input DeleteTrustedPublisherInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  rowId: UUID!
 }
 
 """The output of our delete `ScanResult` mutation."""
