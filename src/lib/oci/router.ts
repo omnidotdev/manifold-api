@@ -37,6 +37,7 @@ import {
 } from "lib/billing";
 import {
   maintenanceAllowedNamespaces,
+  publicRegistryHost,
   pullThroughTtlMs,
   registryRequireAuth,
 } from "lib/config/env.config";
@@ -60,6 +61,8 @@ import {
 import {
   authenticateOciToken,
   authorizeOci,
+  isPublicRegistryHost,
+  isPublicRegistryWrite,
   registryAuthChallenge,
 } from "lib/oci/auth";
 import {
@@ -1688,6 +1691,58 @@ const ociRouter = new Elysia({ prefix: "/v2" })
     }
 
     const method = request.method;
+
+    // Containment while REGISTRY_REQUIRE_AUTH is off: refuse anonymous WRITES
+    // that arrived via the public host. With auth off the registry is fully
+    // open, which on the public host (api.manifold.omni.dev) would let the open
+    // internet push/overwrite/delete images in the shared namespace -- a
+    // supply-chain path into every deploy. The in-cluster build pipeline reaches
+    // the registry over a different Host (NodePort/service DNS) and is
+    // unaffected; the gateway routes the public hostname here only when the Host
+    // is that hostname, so a public client cannot spoof an internal Host. Once
+    // REGISTRY_REQUIRE_AUTH is on, per-token authz below supersedes this.
+    if (
+      !registryRequireAuth &&
+      isPublicRegistryWrite(
+        method,
+        request.headers.get("host"),
+        publicRegistryHost,
+      )
+    ) {
+      set.status = 403;
+      set.headers["Docker-Distribution-API-Version"] = "registry/2.0";
+      return ociErrors.denied("public registry writes are disabled");
+    }
+
+    // Containment while REGISTRY_REQUIRE_AUTH is off: also authorize READS that
+    // arrived via the public host, so the open internet cannot anonymously pull
+    // a PRIVATE image over it. authorizeOci still serves public repos
+    // anonymously, so public pulls are unaffected; the in-cluster pipeline uses
+    // a different Host and is not matched, so fleet pulls stay open. Once
+    // REGISTRY_REQUIRE_AUTH is on, the per-token authz below covers every host.
+    if (
+      !registryRequireAuth &&
+      route.kind !== "catalog" &&
+      (method === "GET" || method === "HEAD") &&
+      isPublicRegistryHost(request.headers.get("host"), publicRegistryHost)
+    ) {
+      const { namespace, repo } = parseRepoName(route.name);
+      const decision = await authorizeOci(
+        namespace,
+        repo,
+        "read",
+        request.headers.get("authorization"),
+      );
+      if (!decision.ok) {
+        set.status = decision.status;
+        if (decision.challenge)
+          set.headers["WWW-Authenticate"] = registryAuthChallenge;
+        set.headers["Docker-Distribution-API-Version"] = "registry/2.0";
+        return decision.status === 401
+          ? ociErrors.unauthorized(decision.error)
+          : ociErrors.denied(decision.error);
+      }
+    }
 
     // Authorization (flag-gated). OFF = fully open (the in-cluster build
     // pipeline relies on this). ON = per-namespace `mf_` token auth: public

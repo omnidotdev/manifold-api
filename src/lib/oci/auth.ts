@@ -22,6 +22,55 @@ import type { TokenScope } from "lib/db/schema";
 /** `WWW-Authenticate` challenge returned on a 401 so clients know to auth. */
 export const registryAuthChallenge = 'Basic realm="Manifold Registry"';
 
+/**
+ * Should this OCI request be refused as an anonymous public WRITE?
+ *
+ * The `/v2` registry is published on the same public host as the product API
+ * (`api.manifold.omni.dev`). While REGISTRY_REQUIRE_AUTH is off the registry is
+ * fully open, which over a PUBLIC host means the open internet can push,
+ * overwrite, and delete images in the shared namespace -- a supply-chain path
+ * into every deploy. The in-cluster build pipeline reaches the registry over a
+ * different (NodePort/service-DNS) Host, and the gateway routes the public
+ * hostname here only when the Host IS that hostname, so a public client cannot
+ * spoof an internal Host. Refusing writes whose Host equals the public host
+ * therefore blocks anonymous public writes without touching the in-cluster
+ * pipeline. Caller passes `publicHost` (null disables the guard); once
+ * REGISTRY_REQUIRE_AUTH is on, real per-token authz supersedes this.
+ */
+export const isPublicRegistryWrite = (
+  method: string,
+  host: string | null,
+  publicHost: string | null,
+): boolean => {
+  const isWrite =
+    method === "PUT" ||
+    method === "POST" ||
+    method === "PATCH" ||
+    method === "DELETE";
+  if (!isWrite) return false;
+  return isPublicRegistryHost(host, publicHost);
+};
+
+/**
+ * Did this OCI request arrive via the PUBLIC registry host?
+ *
+ * The in-cluster build pipeline reaches the registry over a different
+ * (NodePort/service-DNS) Host, and the gateway routes the public hostname here
+ * only when the Host IS that hostname, so a public client cannot spoof an
+ * internal Host. Used to apply public-internet containment (write refusal, and
+ * private-read authorization) while REGISTRY_REQUIRE_AUTH is off without
+ * touching the in-cluster pipeline. `publicHost` null disables the check.
+ */
+export const isPublicRegistryHost = (
+  host: string | null,
+  publicHost: string | null,
+): boolean => {
+  if (!publicHost) return false;
+  // Strip any :port and compare case-insensitively.
+  const reqHost = (host ?? "").toLowerCase().split(":")[0];
+  return reqHost === publicHost;
+};
+
 export interface OciTokenAuth {
   namespaceId: string;
   repositoryId: string | null;
