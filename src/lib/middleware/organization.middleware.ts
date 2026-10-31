@@ -66,12 +66,14 @@ const organizationMiddleware = new Elysia({
     throw new Error("Not a member of this workspace");
   }
 
-  // Check organization-level authorization via authz provider
+  // Check organization-level authorization via authz provider. "member" is the
+  // basic org-access relation in Warden's contract (providers now types
+  // checkPermission against "admin" | "owner" | "member").
   const canAccess = await authz?.checkPermission(
     session.user.id,
     "organization",
     orgClaim.id,
-    "viewer",
+    "member",
   );
 
   if (!canAccess) {
