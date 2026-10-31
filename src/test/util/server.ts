@@ -7,15 +7,24 @@ import { createWithPgClient } from "postgraphile/adaptors/pg";
 
 import appConfig from "lib/config/app.config";
 import createAuthenticationPlugin from "lib/graphql/plugins/authentication.plugin";
+import { storage } from "lib/storage";
+import { checkStorageStatus } from "lib/storage/health";
 
 export const makeElysiaApp = () => {
   const app = new Elysia();
 
-  app.get("/health", () => ({
-    status: "ok",
-    timestamp: Date.now(),
-    service: appConfig.name,
-  }));
+  // Mirror the real /health handler (src/server.ts) so this probe is exercised
+  // in tests; a hardcoded "ok" previously hid a broken storage probe
+  app.get("/health", async () => {
+    const storageStatus = await checkStorageStatus(storage);
+
+    return {
+      status: storageStatus === "connected" ? "ok" : "degraded",
+      timestamp: Date.now(),
+      service: appConfig.name,
+      storage: storageStatus,
+    };
+  });
 
   return {
     handle: (input: Request | URL | string, init?: RequestInit) =>

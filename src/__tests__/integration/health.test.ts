@@ -12,6 +12,7 @@ describe("GET /health", () => {
 
     const body = await res.json();
     expect(body.status).toBe("ok");
+    expect(body.storage).toBe("connected");
     expect(body.service).toBe("Manifold");
     expect(typeof body.timestamp).toBe("number");
   });

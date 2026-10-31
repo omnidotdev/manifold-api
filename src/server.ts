@@ -52,6 +52,7 @@ import { ociRouter } from "lib/oci";
 import { seedTrustedPublishers } from "lib/oidc/seed";
 import { flags } from "lib/providers";
 import { storage } from "lib/storage";
+import { checkStorageStatus } from "lib/storage/health";
 import webRouter from "lib/web/router";
 
 const commit = (() => {
@@ -156,14 +157,7 @@ const app = new Elysia({
   )
   // health check endpoint
   .get("/health", async () => {
-    let storageStatus = "unknown";
-
-    try {
-      await storage.exists("sha256:healthcheck");
-      storageStatus = "connected";
-    } catch {
-      storageStatus = "unreachable";
-    }
+    const storageStatus = await checkStorageStatus(storage);
 
     return {
       status: storageStatus === "connected" ? "ok" : "degraded",
