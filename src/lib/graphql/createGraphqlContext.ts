@@ -17,6 +17,11 @@ export interface Observer {
   id: string;
   name?: string;
   email?: string;
+  /**
+   * Gatekeeper organization ids the caller may see private data for. Drives
+   * the org-scope read filter; an empty set sees only public resources.
+   */
+  organizations: string[];
 }
 
 /**
@@ -41,6 +46,17 @@ export interface TokenObserver extends Observer {
  * Combined observer type (user or token).
  */
 export type ContextObserver = Observer | TokenObserver;
+
+// Expose the observer to Grafast plan resolvers via
+// `context().get("observer")`, which the org-scope read filter reads
+// (https://grafast.org/grafast/step-library/standard-steps/context)
+declare global {
+  namespace Grafast {
+    interface Context {
+      observer: ContextObserver | null;
+    }
+  }
+}
 
 /**
  * Type guard for token observer.

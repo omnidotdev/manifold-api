@@ -8,11 +8,10 @@ import {
 } from "node:fs";
 import { join } from "node:path";
 
-import { exportSchema } from "graphile-export";
 import { printSchema } from "graphql";
 import { makeSchema } from "postgraphile";
 
-import graphilePreset from "lib/config/graphile.config";
+import { createGraphilePreset } from "lib/config/graphile.config";
 
 const CACHE_DIR = `${__dirname}/../../.cache`;
 const HASH_FILE = `${CACHE_DIR}/schema-hash`;
@@ -60,31 +59,18 @@ const generateGraphqlSchema = async () => {
     return;
   }
 
-  const { schema } = await makeSchema(graphilePreset);
+  const { schema } = await makeSchema(createGraphilePreset());
 
   const generatedDirectory = `${__dirname}/../generated/graphql`;
-  const schemaFilePath = `${generatedDirectory}/schema.executable.ts`;
 
   // create artifacts directory if it doesn't exist
   if (!existsSync(generatedDirectory))
     mkdirSync(generatedDirectory, { recursive: true });
 
-  await exportSchema(schema, schemaFilePath, {
-    mode: "typeDefs",
-  });
-
-  // graphile-export output is not noImplicitAny / strict-null clean, so the
-  // generated file must be skipped by tsc. Prepend `// @ts-nocheck`
-  // unconditionally: matching the emitted eslint-disable banner is brittle (its
-  // rule list changes between graphile-export versions, e.g. `export-plans` was
-  // added), and a silent no-op there leaves an untype-checkable file breaking
-  // the build (which is how this schema drifted stale).
-  const exported = readFileSync(schemaFilePath, "utf8");
-  if (!exported.startsWith("// @ts-nocheck")) {
-    writeFileSync(schemaFilePath, `// @ts-nocheck\n${exported}`);
-  }
-
-  // emit SDL
+  // Emit the SDL only. The server builds an executable schema at boot via
+  // makeSchema (see server.ts); a pre-compiled executable schema is not emitted
+  // because the org-scope plan wrappers are plain closures that graphile-export
+  // cannot serialize. The SDL feeds client codegen
   writeFileSync(`${generatedDirectory}/schema.graphql`, printSchema(schema));
 
   // save hash

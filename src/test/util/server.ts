@@ -1,5 +1,7 @@
+import { useParserCache } from "@envelop/parser-cache";
+import { useValidationCache } from "@envelop/validation-cache";
 import { Elysia } from "elysia";
-import { schema } from "generated/graphql/schema.executable";
+import { useGrafast } from "grafast/envelop";
 import { createYoga } from "graphql-yoga";
 import { createWithPgClient } from "postgraphile/adaptors/pg";
 
@@ -31,8 +33,15 @@ export const makeYogaServer = (opts?: { headers?: Record<string, string> }) => {
   const withPgClient = createWithPgClient({ pool });
 
   const yoga = createYoga({
-    schema,
-    plugins: [createAuthenticationPlugin()],
+    schema: globalThis.__TEST_SCHEMA__,
+    // useGrafast is required for the Postgraphile plans to execute; without it
+    // every connection silently resolves to null
+    plugins: [
+      createAuthenticationPlugin(),
+      useParserCache(),
+      useValidationCache(),
+      useGrafast(),
+    ],
     context: async ({ request }) => ({
       request,
       db,
