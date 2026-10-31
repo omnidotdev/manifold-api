@@ -1,6 +1,10 @@
 import { and, eq } from "drizzle-orm";
 
-import { enforceUsageLimit, recordUsage } from "lib/billing";
+import {
+  enforcePrivateRepoLimit,
+  enforceUsageLimit,
+  recordUsage,
+} from "lib/billing";
 import { dbPool } from "lib/db";
 import {
   artifactTable,
@@ -126,6 +130,29 @@ export const publishHandler = async (
     return npmError(`${fullName}@${version} already exists`);
   }
 
+  // Enforce the org's max_private_repos before creating a NEW private repo.
+  // npm scoped packages are private by default (matching OCI + cargo), so a
+  // first publish consumes a slot; a republish to an existing package does not.
+  if (ns.organizationId) {
+    const [existingRepo] = await dbPool
+      .select({ id: repositoryTable.id })
+      .from(repositoryTable)
+      .where(
+        and(
+          eq(repositoryTable.namespaceId, ns.id),
+          eq(repositoryTable.name, pkg),
+        ),
+      )
+      .limit(1);
+    if (!existingRepo) {
+      const limitError = await enforcePrivateRepoLimit(ns.organizationId);
+      if (limitError) {
+        set.status = limitError.status;
+        return limitError.body;
+      }
+    }
+  }
+
   // Enforce the storage quota before consuming space.
   if (ns.organizationId) {
     const overLimit = await enforceUsageLimit(
@@ -152,7 +179,7 @@ export const publishHandler = async (
         namespaceId: ns.id,
         name: pkg,
         artifactType: "npm",
-        isPublic: true,
+        isPublic: false,
       })
       .onConflictDoNothing({
         target: [repositoryTable.namespaceId, repositoryTable.name],
