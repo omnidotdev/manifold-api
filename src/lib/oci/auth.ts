@@ -42,13 +42,30 @@ export const isPublicRegistryWrite = (
   host: string | null,
   publicHost: string | null,
 ): boolean => {
-  if (!publicHost) return false;
   const isWrite =
     method === "PUT" ||
     method === "POST" ||
     method === "PATCH" ||
     method === "DELETE";
   if (!isWrite) return false;
+  return isPublicRegistryHost(host, publicHost);
+};
+
+/**
+ * Did this OCI request arrive via the PUBLIC registry host?
+ *
+ * The in-cluster build pipeline reaches the registry over a different
+ * (NodePort/service-DNS) Host, and the gateway routes the public hostname here
+ * only when the Host IS that hostname, so a public client cannot spoof an
+ * internal Host. Used to apply public-internet containment (write refusal, and
+ * private-read authorization) while REGISTRY_REQUIRE_AUTH is off without
+ * touching the in-cluster pipeline. `publicHost` null disables the check.
+ */
+export const isPublicRegistryHost = (
+  host: string | null,
+  publicHost: string | null,
+): boolean => {
+  if (!publicHost) return false;
   // Strip any :port and compare case-insensitively.
   const reqHost = (host ?? "").toLowerCase().split(":")[0];
   return reqHost === publicHost;
