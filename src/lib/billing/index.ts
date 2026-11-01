@@ -1,6 +1,7 @@
 export {
   enforceApiTokenLimit,
   enforcePrivateRepoLimit,
+  enforceStorageLimit,
   enforceUsageLimit,
 } from "./enforce";
 export { featureUnavailable, limitExceeded } from "./errors";

@@ -2,7 +2,7 @@ import { and, eq } from "drizzle-orm";
 
 import {
   enforcePrivateRepoLimit,
-  enforceUsageLimit,
+  enforceStorageLimit,
   recordUsage,
 } from "lib/billing";
 import { dbPool } from "lib/db";
@@ -153,12 +153,10 @@ export const publishHandler = async (
     }
   }
 
-  // Enforce the storage quota before consuming space.
+  // Enforce the storage cap before consuming space.
   if (ns.organizationId) {
-    const overLimit = await enforceUsageLimit(
+    const overLimit = await enforceStorageLimit(
       ns.organizationId,
-      "storage_bytes",
-      "Storage",
       bytes.byteLength,
     );
     if (overLimit) {
