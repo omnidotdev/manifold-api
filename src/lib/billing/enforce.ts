@@ -1,7 +1,12 @@
-import { and, count, eq, gt, isNull, or } from "drizzle-orm";
+import { and, count, eq, gt, isNull, or, sum } from "drizzle-orm";
 
 import { dbPool } from "lib/db";
-import { apiTokenTable, namespaceTable, repositoryTable } from "lib/db/schema";
+import {
+  apiTokenTable,
+  artifactTable,
+  namespaceTable,
+  repositoryTable,
+} from "lib/db/schema";
 import { limitExceeded } from "./errors";
 import { getLimit, getTier, resolveEntitlements } from "./resolve";
 import { checkUsage } from "./usageClient";
@@ -113,6 +118,69 @@ export const enforceApiTokenLimit = async (
   const current = row?.count ?? 0;
   if (current >= limit) {
     return limitExceeded("API tokens", current, limit, getTier(entitlements));
+  }
+  return null;
+};
+
+/**
+ * Current bytes an org STORES: the sum of sizes over the DISTINCT digests held
+ * across all of the org's repositories. Blob/manifest content is
+ * content-addressed and de-duplicated by digest, so a digest copied into several
+ * of the org's repos is counted once (mirrors the metering model in
+ * lib/oci/storageMetering).
+ */
+const orgStoredBytes = async (orgId: string, db: Db): Promise<number> => {
+  const distinctDigests = db
+    .selectDistinct({ digest: artifactTable.digest, size: artifactTable.size })
+    .from(artifactTable)
+    .innerJoin(
+      repositoryTable,
+      eq(artifactTable.repositoryId, repositoryTable.id),
+    )
+    .innerJoin(
+      namespaceTable,
+      eq(repositoryTable.namespaceId, namespaceTable.id),
+    )
+    .where(eq(namespaceTable.organizationId, orgId))
+    .as("distinct_digests");
+
+  const [row] = await db
+    .select({ total: sum(distinctDigests.size) })
+    .from(distinctDigests);
+  return Number(row?.total ?? 0);
+};
+
+/**
+ * Enforce the `max_storage_bytes` gauge limit before accepting a push of
+ * `incomingBytes`. Returns a 402 `{ status, body }` when the org's current
+ * stored bytes plus the incoming push would exceed its tier's storage cap, or
+ * null to proceed. No-op when billing is unconfigured or the limit is unlimited
+ * (`getLimit` returns -1).
+ *
+ * Storage is a GAUGE (current bytes held), so it is enforced here against the
+ * entitlement + the org's own content-addressed artifact rows, not through the
+ * Aether usage-meter check path (Aether models usage meters as periodically
+ * reset counters, which would corrupt a storage gauge). Manifold has no overage
+ * billing, so the tier cap is a hard limit on every tier.
+ */
+export const enforceStorageLimit = async (
+  orgId: string,
+  incomingBytes: number,
+  {
+    db = dbPool,
+    resolve = resolveEntitlements,
+  }: {
+    db?: Db;
+    resolve?: ResolveEntitlements;
+  } = {},
+): Promise<{ status: number; body: unknown } | null> => {
+  const entitlements = await resolve(orgId);
+  const limit = getLimit(entitlements, "max_storage_bytes");
+  if (limit === -1) return null;
+
+  const current = await orgStoredBytes(orgId, db);
+  if (current + incomingBytes > limit) {
+    return limitExceeded("Storage", current, limit, getTier(entitlements));
   }
   return null;
 };

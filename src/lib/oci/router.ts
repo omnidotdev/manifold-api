@@ -29,11 +29,9 @@ import { Elysia } from "elysia";
 import {
   checkUsage,
   enforcePrivateRepoLimit,
+  enforceStorageLimit,
   enforceUsageLimit,
-  getTier,
-  limitExceeded,
   recordUsage,
-  resolveEntitlements,
 } from "lib/billing";
 import {
   maintenanceAllowedNamespaces,
@@ -1108,24 +1106,13 @@ const handleStartUpload = async (
   const orgId = repoData.namespace.organizationId;
 
   if (orgId) {
-    const entitlements = await resolveEntitlements(orgId);
-    const storageCheck = await checkUsage(
-      "organization",
-      orgId,
-      "storage_bytes",
-    );
-
-    if (storageCheck && !storageCheck.withinLimit) {
-      const tier = getTier(entitlements);
-      const { status, body } = limitExceeded(
-        "Storage",
-        storageCheck.value,
-        storageCheck.limit ?? 0,
-        tier,
-      );
-
-      set.status = status;
-      return body;
+    // Gate on the org's current stored bytes: the blob size is not known until
+    // the upload completes, so this blocks starting a new upload once the org is
+    // already at its storage cap (the completed blob is metered post-write)
+    const overLimit = await enforceStorageLimit(orgId, 0);
+    if (overLimit) {
+      set.status = overLimit.status;
+      return overLimit.body;
     }
   }
 
