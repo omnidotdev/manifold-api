@@ -1,9 +1,9 @@
 import { beforeEach, describe, expect, test } from "bun:test";
-import { sql } from "drizzle-orm";
+import { and, eq, sql } from "drizzle-orm";
 import { Elysia } from "elysia";
 
 import { generateApiToken } from "lib/auth/token";
-import { apiTokenTable } from "lib/db/schema";
+import { apiTokenTable, repositoryTable } from "lib/db/schema";
 import { authenticateNpmToken, requireNpmWrite } from "lib/npm/auth";
 import {
   deleteDistTagHandler,
@@ -234,6 +234,37 @@ describe("npm registry publish", () => {
     expect(status).toBe(401);
   });
 
+  test("creates a new package as a private repository (isPublic false)", async () => {
+    const { token, namespaceId } = await seedToken("write", "coopbri");
+    const body = buildNpmPublishBody("@coopbri/astro", "1.0.0", tgz);
+    const { status } = await callPublish("coopbri", "astro", token, body);
+    expect(status).toBe(201);
+
+    const [repo] = await getDb()
+      .select({ isPublic: repositoryTable.isPublic })
+      .from(repositoryTable)
+      .where(
+        and(
+          eq(repositoryTable.namespaceId, namespaceId),
+          eq(repositoryTable.name, "astro"),
+        ),
+      )
+      .limit(1);
+    expect(repo?.isPublic).toBe(false);
+  });
+
+  test("denies an anonymous read of a private package (403)", async () => {
+    const { token } = await seedToken("write", "coopbri");
+    await callPublish(
+      "coopbri",
+      "astro",
+      token,
+      buildNpmPublishBody("@coopbri/astro", "1.0.0", tgz),
+    );
+    const { status } = await callPackument("coopbri", "astro", null);
+    expect(status).toBe(403);
+  });
+
   test("serves a packument with dist-tags and an absolute tarball URL", async () => {
     const { token } = await seedToken("write", "coopbri");
     await callPublish(
@@ -243,7 +274,7 @@ describe("npm registry publish", () => {
       buildNpmPublishBody("@coopbri/astro", "1.0.0", tgz),
     );
 
-    const { result } = await callPackument("coopbri", "astro", null);
+    const { result } = await callPackument("coopbri", "astro", token);
     const p = result as {
       "dist-tags": Record<string, string>;
       versions: Record<string, { dist: { tarball: string } }>;
@@ -268,14 +299,14 @@ describe("npm registry publish", () => {
       buildNpmPublishBody("@coopbri/astro", "1.0.0", tgz),
     );
 
-    const { result: pack } = await callPackument("coopbri", "astro", null);
+    const { result: pack } = await callPackument("coopbri", "astro", token);
     const tarballUrl = (
       pack as { versions: Record<string, { dist: { tarball: string } }> }
     ).versions["1.0.0"].dist.tarball;
     const file = tarballUrl.split("/-/")[1];
     expect(file).toBe("astro-1.0.0.tgz");
 
-    const { result } = await callTarball("coopbri", "astro", file, null);
+    const { result } = await callTarball("coopbri", "astro", file, token);
     expect(result).toBeInstanceOf(Response);
     const res = result as Response;
     expect(res.status).toBe(200);
@@ -356,8 +387,9 @@ describe("npm registry router", () => {
     );
     expect(pubRes.status).toBe(201);
 
+    const authHeader = { Authorization: `Bearer ${token}` };
     const packRes = await app.handle(
-      new Request("http://test/npm/@coopbri/astro"),
+      new Request("http://test/npm/@coopbri/astro", { headers: authHeader }),
     );
     expect(packRes.status).toBe(200);
     const pack = (await packRes.json()) as {
@@ -368,7 +400,9 @@ describe("npm registry router", () => {
     const file = pack.versions["1.0.0"].dist.tarball.split("/-/")[1];
 
     const tarRes = await app.handle(
-      new Request(`http://test/npm/@coopbri/astro/-/${file}`),
+      new Request(`http://test/npm/@coopbri/astro/-/${file}`, {
+        headers: authHeader,
+      }),
     );
     expect(tarRes.status).toBe(200);
     const bytes = new Uint8Array(await tarRes.arrayBuffer());
@@ -391,7 +425,9 @@ describe("npm registry router", () => {
 
     // npm/bun request scoped packages as one `%2F`-encoded segment
     const packRes = await app.handle(
-      new Request("http://test/npm/@coopbri%2fastro"),
+      new Request("http://test/npm/@coopbri%2fastro", {
+        headers: { Authorization: `Bearer ${token}` },
+      }),
     );
     expect(packRes.status).toBe(200);
     const pack = (await packRes.json()) as { "dist-tags": Record<string, string> };
