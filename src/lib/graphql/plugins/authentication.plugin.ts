@@ -75,20 +75,38 @@ const queryClient = new QueryClient({
 });
 
 /**
- * Remote JWKS for verifying JWT signatures from Gatekeeper.
+ * Remote JWKS for verifying JWT signatures from Gatekeeper, created lazily.
+ *
+ * Building it at module load crashed the whole service at boot when
+ * AUTH_BASE_URL was unset (e.g. an ungated single-owner self-host instance):
+ * `new URL("/.well-known/jwks.json")` throws on a base-less URL. Defer it so the
+ * service boots regardless; a JWT request then fails cleanly per-request when
+ * auth is not configured, rather than taking the process down.
  * jose's createRemoteJWKSet handles caching and key rotation automatically.
  * @see https://www.better-auth.com/docs/plugins/jwt
  */
-const JWKS = createRemoteJWKSet(
-  new URL(`${AUTH_BASE_URL}/.well-known/jwks.json`),
-);
+let jwks: ReturnType<typeof createRemoteJWKSet> | null = null;
+const getJwks = (): ReturnType<typeof createRemoteJWKSet> => {
+  if (!AUTH_BASE_URL) {
+    throw new AuthenticationError(
+      "JWT verification is not configured",
+      "AUTH_NOT_CONFIGURED",
+    );
+  }
+  if (!jwks) {
+    jwks = createRemoteJWKSet(
+      new URL(`${AUTH_BASE_URL}/.well-known/jwks.json`),
+    );
+  }
+  return jwks;
+};
 
 /**
  * Verify JWT signature using Gatekeeper's JWKS endpoint.
  * Returns the verified payload or throws an error.
  */
 const verifyAccessToken = async (token: string): Promise<UserInfoClaims> => {
-  const { payload } = await jwtVerify(token, JWKS, {
+  const { payload } = await jwtVerify(token, getJwks(), {
     issuer: AUTH_BASE_URL,
   });
 
