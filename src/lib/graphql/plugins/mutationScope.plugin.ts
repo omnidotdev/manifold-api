@@ -9,6 +9,7 @@ import {
   repositoryTable,
   tagTable,
 } from "lib/db/schema";
+import { authz as defaultAuthz } from "lib/providers";
 
 import type { Plugin } from "graphql-yoga";
 import type {
@@ -202,6 +203,21 @@ const GLOBAL_ENTITIES = new Set([
   "TrustedPublisher",
 ]);
 
+/**
+ * Org mutations that require an admin/owner role, not just membership. When the
+ * authz provider (Warden) is configured these are additionally checked against
+ * the caller's role; when it is not configured (an ungated single-owner
+ * self-host instance) they fall back to the membership check, so the owner
+ * keeps full control.
+ */
+const ADMIN_MUTATIONS = new Set([
+  "deleteNamespace",
+  "deleteNamespaceByName",
+  "deleteRepository",
+  "createApiToken",
+  "deleteApiToken",
+]);
+
 /** Extract the entity name from an auto-CRUD mutation field name. */
 const entityOf = (mutationName: string): string | null => {
   const match = mutationName.match(
@@ -232,7 +248,14 @@ const forbidden = () =>
  * Active only when `PROTECT_ROUTES` is on, matching the read filter: an ungated
  * single-owner self-host instance has no org to isolate.
  */
-const createMutationScopePlugin = (): Plugin => ({
+/** The slice of the authz provider this plugin needs (injectable for tests). */
+type AuthzCheck = Pick<NonNullable<typeof defaultAuthz>, "checkPermission">;
+
+const createMutationScopePlugin = ({
+  authz = defaultAuthz,
+}: {
+  authz?: AuthzCheck;
+} = {}): Plugin => ({
   async onExecute({ args, setResultAndStopExecution }) {
     if (!protectRoutes) return;
 
@@ -287,6 +310,29 @@ const createMutationScopePlugin = (): Plugin => ({
       if (targetOrg && !orgs.includes(targetOrg)) {
         setResultAndStopExecution({ errors: [forbidden()] });
         return;
+      }
+
+      // Admin/owner role gate (Warden) for sensitive org operations, layered on
+      // top of the membership check above. Only enforced when authz is
+      // configured; an ungated self-host instance falls back to membership.
+      if (targetOrg && authz && ADMIN_MUTATIONS.has(name)) {
+        const allowed =
+          (await authz.checkPermission(
+            observer.id,
+            "organization",
+            targetOrg,
+            "admin",
+          )) ||
+          (await authz.checkPermission(
+            observer.id,
+            "organization",
+            targetOrg,
+            "owner",
+          ));
+        if (!allowed) {
+          setResultAndStopExecution({ errors: [forbidden()] });
+          return;
+        }
       }
     }
   },

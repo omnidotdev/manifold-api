@@ -31,6 +31,22 @@ const guardedClient = (observer: ContextObserver) => {
   });
 };
 
+/** A mock Warden authz provider that allows or denies every permission check. */
+const mockAuthz = (allow: boolean) => ({
+  checkPermission: () => Promise.resolve(allow),
+});
+
+/** Guarded client with an injected Warden authz provider (for role checks). */
+const roleGatedClient = (observer: ContextObserver, allow: boolean) => {
+  const { pool, db } = getTestDb();
+  return createTestGraphQLClient({
+    pool,
+    db,
+    observer,
+    plugins: [createMutationScopePlugin({ authz: mockAuthz(allow) })],
+  });
+};
+
 const seed = async () => {
   const { db } = getTestDb();
   const nsA = await namespaceFactory.create(db, {
@@ -245,5 +261,53 @@ describe("GraphQL mutation isolation (integrity)", () => {
 
     expect(result.errors).toBeDefined();
     expect(result.errors?.[0]?.extensions?.code).toBe("FORBIDDEN");
+  });
+
+  const DELETE_REPO = /* GraphQL */ `
+    mutation ($input: DeleteRepositoryInput!) {
+      deleteRepository(input: $input) { repository { rowId } }
+    }
+  `;
+
+  test("Warden: denies a sensitive org mutation when the member lacks admin/owner", async () => {
+    const { nsB } = await seed();
+    const repoB = await repositoryFactory.create(getTestDb().db, {
+      namespaceId: nsB.id,
+      name: "b-repo",
+      isPublic: false,
+    });
+
+    // org-B member, but Warden denies the admin/owner role
+    const result = await roleGatedClient(orgBMember, false).execute(DELETE_REPO, {
+      input: { rowId: repoB.id },
+    });
+
+    expect(result.errors).toBeDefined();
+    const [row] = await getTestDb()
+      .db.select()
+      .from(repositoryTable)
+      .where(eq(repositoryTable.id, repoB.id));
+    expect(row).toBeDefined(); // not deleted
+  });
+
+  test("Warden: allows a sensitive org mutation when the member has admin/owner", async () => {
+    const { nsB } = await seed();
+    const repoB = await repositoryFactory.create(getTestDb().db, {
+      namespaceId: nsB.id,
+      name: "b-repo2",
+      isPublic: false,
+    });
+
+    // org-B member, and Warden grants the admin role
+    const result = await roleGatedClient(orgBMember, true).execute(DELETE_REPO, {
+      input: { rowId: repoB.id },
+    });
+
+    expect(result.errors).toBeUndefined();
+    const [row] = await getTestDb()
+      .db.select()
+      .from(repositoryTable)
+      .where(eq(repositoryTable.id, repoB.id));
+    expect(row).toBeUndefined(); // deleted
   });
 });
