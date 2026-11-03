@@ -3,6 +3,7 @@ import { makePgService } from "postgraphile/adaptors/pg";
 import { PostGraphileAmberPreset } from "postgraphile/presets/amber";
 import { PostGraphileConnectionFilterPreset } from "postgraphile-plugin-connection-filter";
 
+import OmitInternalTablesPlugin from "lib/graphql/plugins/omitInternalTables.plugin";
 import { OrgScopePlugin } from "lib/graphql/plugins/orgScope.plugin";
 import RemoveQueryNodePlugin from "lib/graphql/plugins/removeQueryNode.plugin";
 import { DATABASE_URL, isDevEnv } from "./env.config";
@@ -22,7 +23,7 @@ export const createGraphilePreset = (
     PgSimplifyInflectionPreset,
     PostGraphileConnectionFilterPreset,
   ],
-  plugins: [OrgScopePlugin, RemoveQueryNodePlugin],
+  plugins: [OrgScopePlugin, RemoveQueryNodePlugin, OmitInternalTablesPlugin],
   // NodeAccessorPlugin adds the unscoped `*ById` row accessors; drop it (the
   // dashboard uses the per-table connection and single-by-rowId reads instead)
   disablePlugins: ["NodeAccessorPlugin"],

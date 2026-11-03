@@ -57,15 +57,21 @@ describe("squashed-baseline migration reconciliation", () => {
     const t = await run("SELECT to_regclass('public.namespace') AS present");
     expect(t.rows[0].present).toBe("namespace");
 
-    // the recorded hash matches the file hash drizzle reads (by construction)
-    const [baseline] = readMigrationFiles({ migrationsFolder: MIGRATIONS });
-    const m = await run("SELECT hash FROM drizzle.__drizzle_migrations");
-    expect(m.rows.map((r) => r.hash)).toEqual([baseline.hash]);
+    // every migration file is recorded in order (the baseline plus any that
+    // followed it), with the hashes drizzle reads (by construction)
+    const files = readMigrationFiles({ migrationsFolder: MIGRATIONS });
+    const m = await run(
+      "SELECT hash FROM drizzle.__drizzle_migrations ORDER BY created_at",
+    );
+    expect(m.rows.map((r) => r.hash)).toEqual(files.map((f) => f.hash));
   });
 
   test("a PRE-SQUASH database is reconciled, not recreated", async () => {
-    // simulate the pre-squash state: tables already exist (from the fresh test
-    // above), but __drizzle_migrations holds an old hash, not the baseline's
+    // simulate a true pre-squash state: the baseline-era tables exist (from the
+    // fresh test above) but the post-baseline migrations do NOT (a pre-squash
+    // DB predates them, so drop audit_log which 0001 adds), and
+    // __drizzle_migrations holds an old hash, not the baseline's
+    await run("DROP TABLE IF EXISTS audit_log");
     await run("DELETE FROM drizzle.__drizzle_migrations");
     await run(
       "INSERT INTO drizzle.__drizzle_migrations (hash, created_at) VALUES ($1, $2)",
@@ -86,11 +92,17 @@ describe("squashed-baseline migration reconciliation", () => {
 
     expect(migrateError).toBeNull();
 
-    // the baseline is now the only recorded migration, and tables are intact
-    const [baseline] = readMigrationFiles({ migrationsFolder: MIGRATIONS });
-    const m = await run("SELECT hash FROM drizzle.__drizzle_migrations");
-    expect(m.rows.map((r) => r.hash)).toEqual([baseline.hash]);
+    // baseline-era tables were NOT recreated, and post-baseline migrations ran:
+    // the recorded hashes are exactly the migration files, and audit_log (0001)
+    // now exists while namespace (baseline) is intact
+    const files = readMigrationFiles({ migrationsFolder: MIGRATIONS });
+    const m = await run(
+      "SELECT hash FROM drizzle.__drizzle_migrations ORDER BY created_at",
+    );
+    expect(m.rows.map((r) => r.hash)).toEqual(files.map((f) => f.hash));
     const t = await run("SELECT to_regclass('public.namespace') AS present");
     expect(t.rows[0].present).toBe("namespace");
+    const a = await run("SELECT to_regclass('public.audit_log') AS present");
+    expect(a.rows[0].present).toBe("audit_log");
   });
 });
