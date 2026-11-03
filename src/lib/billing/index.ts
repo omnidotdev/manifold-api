@@ -3,6 +3,7 @@ export {
   enforcePrivateRepoLimit,
   enforceStorageLimit,
   enforceUsageLimit,
+  enforceWebhookLimit,
 } from "./enforce";
 export { featureUnavailable, limitExceeded } from "./errors";
 export {

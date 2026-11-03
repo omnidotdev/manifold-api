@@ -6,6 +6,7 @@ import {
   artifactTable,
   namespaceTable,
   repositoryTable,
+  webhookTable,
 } from "lib/db/schema";
 import { limitExceeded } from "./errors";
 import { getLimit, getTier, resolveEntitlements } from "./resolve";
@@ -118,6 +119,38 @@ export const enforceApiTokenLimit = async (
   const current = row?.count ?? 0;
   if (current >= limit) {
     return limitExceeded("API tokens", current, limit, getTier(entitlements));
+  }
+  return null;
+};
+
+/**
+ * Enforce the `max_webhooks` count limit before a NEW webhook is created.
+ *
+ * `max_webhooks` is an ORGANIZATION limit. A no-op when billing is unconfigured
+ * or the tier is unlimited (-1). Returns a 402 `{ status, body }` when over the
+ * limit, or null to proceed.
+ */
+export const enforceWebhookLimit = async (
+  orgId: string,
+  {
+    db = dbPool,
+    resolve = resolveEntitlements,
+  }: {
+    db?: Db;
+    resolve?: ResolveEntitlements;
+  } = {},
+): Promise<{ status: number; body: unknown } | null> => {
+  const entitlements = await resolve(orgId);
+  const limit = getLimit(entitlements, "max_webhooks");
+  if (limit === -1) return null;
+
+  const [row] = await db
+    .select({ count: count() })
+    .from(webhookTable)
+    .where(eq(webhookTable.organizationId, orgId));
+  const current = row?.count ?? 0;
+  if (current >= limit) {
+    return limitExceeded("Webhooks", current, limit, getTier(entitlements));
   }
   return null;
 };

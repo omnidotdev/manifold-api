@@ -14,7 +14,7 @@
  */
 
 /** Inflection stems (lowercased) of tables to omit from Query and Mutation. */
-const OMITTED_STEMS = ["auditlog"];
+const OMITTED_STEMS = ["auditlog", "webhook"];
 
 const OmitInternalTablesPlugin: GraphileConfig.Plugin = {
   name: "OmitInternalTablesPlugin",

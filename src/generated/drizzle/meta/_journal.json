@@ -15,6 +15,13 @@
       "when": 1793727340696,
       "tag": "0001_icy_adam_destine",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1793728300686,
+      "tag": "0002_regular_spectrum",
+      "breakpoints": true
     }
   ]
 }
