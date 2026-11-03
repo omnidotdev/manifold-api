@@ -27,6 +27,18 @@ CREATE TABLE "artifact" (
 	"created_at" timestamp(6) with time zone DEFAULT now()
 );
 --> statement-breakpoint
+CREATE TABLE "audit_log" (
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"organization_id" text,
+	"user_id" text,
+	"action" text NOT NULL,
+	"resource" text NOT NULL,
+	"resource_id" text,
+	"details" jsonb,
+	"request_id" text,
+	"created_at" timestamp(6) with time zone DEFAULT now()
+);
+--> statement-breakpoint
 CREATE TABLE "cargo_metadata" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"artifact_id" uuid NOT NULL,
@@ -216,6 +228,18 @@ CREATE TABLE "wasm_metadata" (
 	"imports" jsonb DEFAULT '[]'::jsonb NOT NULL
 );
 --> statement-breakpoint
+CREATE TABLE "webhook" (
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"organization_id" text NOT NULL,
+	"namespace_id" text,
+	"url" text NOT NULL,
+	"secret" text NOT NULL,
+	"events" jsonb DEFAULT '["*"]'::jsonb NOT NULL,
+	"is_active" boolean DEFAULT true NOT NULL,
+	"created_at" timestamp(6) with time zone DEFAULT now(),
+	"updated_at" timestamp(6) with time zone DEFAULT now()
+);
+--> statement-breakpoint
 ALTER TABLE "api_token" ADD CONSTRAINT "api_token_namespace_id_namespace_id_fk" FOREIGN KEY ("namespace_id") REFERENCES "public"."namespace"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "api_token" ADD CONSTRAINT "api_token_repository_id_repository_id_fk" FOREIGN KEY ("repository_id") REFERENCES "public"."repository"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "artifact" ADD CONSTRAINT "artifact_repository_id_repository_id_fk" FOREIGN KEY ("repository_id") REFERENCES "public"."repository"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
@@ -246,6 +270,8 @@ CREATE UNIQUE INDEX "artifact_repository_id_digest_index" ON "artifact" USING bt
 CREATE INDEX "artifact_repository_id_index" ON "artifact" USING btree ("repository_id");--> statement-breakpoint
 CREATE INDEX "artifact_digest_index" ON "artifact" USING btree ("digest");--> statement-breakpoint
 CREATE INDEX "artifact_repository_id_subject_index" ON "artifact" USING btree ("repository_id","subject");--> statement-breakpoint
+CREATE INDEX "audit_log_organization_id_index" ON "audit_log" USING btree ("organization_id");--> statement-breakpoint
+CREATE INDEX "audit_log_created_at_index" ON "audit_log" USING btree ("created_at");--> statement-breakpoint
 CREATE UNIQUE INDEX "cargo_metadata_artifact_id_index" ON "cargo_metadata" USING btree ("artifact_id");--> statement-breakpoint
 CREATE UNIQUE INDEX "cargo_metadata_name_vers_index" ON "cargo_metadata" USING btree ("name","vers");--> statement-breakpoint
 CREATE UNIQUE INDEX "federated_skill_cache_id_index" ON "federated_skill_cache" USING btree ("id");--> statement-breakpoint
@@ -283,4 +309,5 @@ CREATE INDEX "trusted_publisher_subject_index" ON "trusted_publisher" USING btre
 CREATE INDEX "trusted_publisher_is_active_index" ON "trusted_publisher" USING btree ("is_active");--> statement-breakpoint
 CREATE UNIQUE INDEX "upload_session_id_index" ON "upload_session" USING btree ("id");--> statement-breakpoint
 CREATE INDEX "upload_session_repository_id_index" ON "upload_session" USING btree ("repository_id");--> statement-breakpoint
-CREATE INDEX "upload_session_expires_at_index" ON "upload_session" USING btree ("expires_at");
+CREATE INDEX "upload_session_expires_at_index" ON "upload_session" USING btree ("expires_at");--> statement-breakpoint
+CREATE INDEX "webhook_organization_id_index" ON "webhook" USING btree ("organization_id");

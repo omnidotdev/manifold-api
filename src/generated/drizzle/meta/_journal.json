@@ -5,22 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1793470963995,
-      "tag": "0000_remarkable_mikhail_rasputin",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1793727340696,
-      "tag": "0001_icy_adam_destine",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1793728300686,
-      "tag": "0002_regular_spectrum",
+      "when": 1793739123609,
+      "tag": "0000_amusing_leper_queen",
       "breakpoints": true
     }
   ]

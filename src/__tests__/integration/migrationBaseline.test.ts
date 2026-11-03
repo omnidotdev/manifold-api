@@ -67,12 +67,9 @@ describe("squashed-baseline migration reconciliation", () => {
   });
 
   test("a PRE-SQUASH database is reconciled, not recreated", async () => {
-    // simulate a true pre-squash state: the baseline-era tables exist (from the
-    // fresh test above) but the post-baseline migrations do NOT (a pre-squash
-    // DB predates them, so drop the tables those migrations add), and
-    // __drizzle_migrations holds an old hash, not the baseline's
-    await run("DROP TABLE IF EXISTS audit_log");
-    await run("DROP TABLE IF EXISTS webhook");
+    // simulate a pre-squash state: all the baseline tables already exist (from
+    // the fresh test above), but __drizzle_migrations holds old pre-squash
+    // hashes rather than the current single-baseline hash
     await run("DELETE FROM drizzle.__drizzle_migrations");
     await run(
       "INSERT INTO drizzle.__drizzle_migrations (hash, created_at) VALUES ($1, $2)",
@@ -93,9 +90,8 @@ describe("squashed-baseline migration reconciliation", () => {
 
     expect(migrateError).toBeNull();
 
-    // baseline-era tables were NOT recreated, and post-baseline migrations ran:
-    // the recorded hashes are exactly the migration files, and audit_log (0001)
-    // now exists while namespace (baseline) is intact
+    // the baseline was stamped (not re-run over existing tables): the recorded
+    // hashes are exactly the migration files, and the tables are all intact
     const files = readMigrationFiles({ migrationsFolder: MIGRATIONS });
     const m = await run(
       "SELECT hash FROM drizzle.__drizzle_migrations ORDER BY created_at",
