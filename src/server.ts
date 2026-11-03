@@ -51,8 +51,10 @@ import npmRouter from "lib/npm/router";
 import { ociRouter } from "lib/oci";
 import { seedTrustedPublishers } from "lib/oidc/seed";
 import { flags } from "lib/providers";
+import schemasRouter from "lib/schemas/router";
 import { storage } from "lib/storage";
 import { checkStorageStatus } from "lib/storage/health";
+import wasmRouter from "lib/wasm/router";
 import webRouter from "lib/web/router";
 
 const commit = (() => {
@@ -202,6 +204,10 @@ const app = new Elysia({
   .use(cargoRouter)
   // npm registry API
   .use(npmRouter)
+  // Schema registry API (OpenAPI / GraphQL / JSON Schema)
+  .use(schemasRouter)
+  // WASM registry API
+  .use(wasmRouter)
   // OCI Distribution API v2
   .use(ociRouter)
   .use(
