@@ -7,6 +7,7 @@ import {
   authenticateRegistryToken,
   requireRegistryWrite,
 } from "lib/auth/registryToken";
+import { enforceWebhookLimit } from "lib/billing";
 import { dbPool } from "lib/db";
 import { namespaceTable, webhookTable } from "lib/db/schema";
 
@@ -129,6 +130,13 @@ const webhooksRouter = new Elysia({ prefix: "/webhook/:namespace" })
         payload.events.every((e) => typeof e === "string")
           ? (payload.events as string[])
           : ["*"];
+
+      // Enforce the org's webhook cap before creating a new one
+      const limitError = await enforceWebhookLimit(resolved.organizationId);
+      if (limitError) {
+        set.status = limitError.status;
+        return limitError.body;
+      }
 
       const secret = `whsec_${randomBytes(24).toString("hex")}`;
 
