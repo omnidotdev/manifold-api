@@ -17,3 +17,4 @@ export * from "./tag.table";
 export * from "./trustedPublisher.table";
 export * from "./uploadSession.table";
 export * from "./wasmMetadata.table";
+export * from "./webhook.table";

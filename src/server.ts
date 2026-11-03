@@ -56,6 +56,7 @@ import { storage } from "lib/storage";
 import { checkStorageStatus } from "lib/storage/health";
 import wasmRouter from "lib/wasm/router";
 import webRouter from "lib/web/router";
+import webhooksRouter from "lib/webhooks/router";
 
 const commit = (() => {
   try {
@@ -208,6 +209,8 @@ const app = new Elysia({
   .use(schemasRouter)
   // WASM registry API
   .use(wasmRouter)
+  // Outbound webhook management API
+  .use(webhooksRouter)
   // OCI Distribution API v2
   .use(ociRouter)
   .use(

@@ -21,6 +21,7 @@ import {
   VORTEX_API_KEY,
   VORTEX_API_URL,
 } from "lib/config/env.config";
+import { dispatchWebhooks } from "lib/webhooks/dispatch";
 
 export const authz = AUTHZ_API_URL
   ? createAuthzProvider({ apiUrl: AUTHZ_API_URL, source: "manifold" })
@@ -35,7 +36,7 @@ export const billing = BILLING_BASE_URL
     })
   : undefined;
 
-export const events = createEventsProvider(
+const eventsProvider = createEventsProvider(
   VORTEX_API_URL && VORTEX_API_KEY
     ? {
         provider: "http",
@@ -45,6 +46,25 @@ export const events = createEventsProvider(
       }
     : {},
 );
+
+/**
+ * Events provider wrapped so every emit also fans out to the organization's
+ * registered outbound webhooks (best-effort, non-blocking). Only `emit` is used
+ * across the codebase, so exposing just it is sufficient.
+ */
+export const events = {
+  emit: async (evt: Parameters<typeof eventsProvider.emit>[0]) => {
+    const result = await eventsProvider.emit(evt);
+    if (evt.organizationId && evt.organizationId !== "system") {
+      void dispatchWebhooks(
+        evt.organizationId,
+        evt.type,
+        (evt.data ?? {}) as Record<string, unknown>,
+      );
+    }
+    return result;
+  },
+};
 
 export const flags = createFlagProvider(
   FLAGS_API_HOST
