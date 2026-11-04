@@ -171,6 +171,15 @@ const RESOLVERS: Record<string, TargetResolver> = {
 };
 
 /**
+ * Mutations that MUST resolve to a non-null target org. A namespace is the root
+ * of the org-ownership chain (every other scoped entity resolves its org through
+ * an existing namespace), so a namespace created without an organization is
+ * orphaned from tenant scoping: it belongs to no workspace and is invisible in
+ * the dashboard. Require the org explicitly rather than silently creating one.
+ */
+const ORG_REQUIRED_MUTATIONS = new Set(["createNamespace"]);
+
+/**
  * Entities owned by a tenant (through the namespace -> organization chain).
  * A create/update/delete on one of these must be scoped to the caller's org.
  */
@@ -305,6 +314,12 @@ const createMutationScopePlugin = ({
       }
 
       const targetOrg = await resolver(db, input);
+      // a namespace create with no resolvable org would orphan the namespace
+      // from tenant scoping: reject rather than create an unowned namespace
+      if (!targetOrg && ORG_REQUIRED_MUTATIONS.has(name)) {
+        setResultAndStopExecution({ errors: [forbidden()] });
+        return;
+      }
       // a resolvable target in another org is rejected; an unresolvable target
       // (missing row/namespace) falls through to the mutation's natural error
       if (targetOrg && !orgs.includes(targetOrg)) {
