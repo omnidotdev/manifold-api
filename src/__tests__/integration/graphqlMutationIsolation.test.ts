@@ -204,6 +204,24 @@ describe("GraphQL mutation isolation (integrity)", () => {
     expect(row).toBeUndefined();
   });
 
+  test("cannot claim a reserved namespace name", async () => {
+    const result = await guardedClient(orgBMember).execute(
+      /* GraphQL */ `
+        mutation ($input: CreateNamespaceInput!) {
+          createNamespace(input: $input) { namespace { rowId } }
+        }
+      `,
+      { input: { namespace: { name: "admin", organizationId: ORG_B } } },
+    );
+
+    expect(result.errors).toBeDefined();
+    const [row] = await getTestDb()
+      .db.select()
+      .from(namespaceTable)
+      .where(eq(namespaceTable.name, "admin"));
+    expect(row).toBeUndefined();
+  });
+
   test("CAN create a namespace in the caller's own org", async () => {
     const result = await guardedClient(orgBMember).execute(
       /* GraphQL */ `

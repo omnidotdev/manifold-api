@@ -10,6 +10,7 @@ import {
   tagTable,
 } from "lib/db/schema";
 import { authz as defaultAuthz } from "lib/providers";
+import { isReservedNamespace } from "lib/registry/reservedNames";
 
 import type { Plugin } from "graphql-yoga";
 import type {
@@ -240,6 +241,11 @@ const forbidden = () =>
     extensions: { code: "FORBIDDEN" },
   });
 
+const reservedName = () =>
+  new GraphQLError("That namespace name is reserved", {
+    extensions: { code: "RESERVED_NAMESPACE_NAME" },
+  });
+
 /**
  * Mutation scope enforcement.
  *
@@ -311,6 +317,16 @@ const createMutationScopePlugin = ({
         // registry-internal table not mutated via the dashboard): deny
         setResultAndStopExecution({ errors: [forbidden()] });
         return;
+      }
+
+      // Block claiming a reserved namespace name (routing/system words and
+      // first-party brand terms), so a tenant cannot squat or impersonate.
+      if (name === "createNamespace") {
+        const nsName = asRecord(input.namespace).name;
+        if (typeof nsName === "string" && isReservedNamespace(nsName)) {
+          setResultAndStopExecution({ errors: [reservedName()] });
+          return;
+        }
       }
 
       const targetOrg = await resolver(db, input);
