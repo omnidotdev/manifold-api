@@ -2,7 +2,12 @@ import { beforeEach, describe, expect, test } from "bun:test";
 import { and, eq, sql } from "drizzle-orm";
 
 import createMutationScopePlugin from "lib/graphql/plugins/mutationScope.plugin";
-import { artifactTable, repositoryTable, tagTable } from "lib/db/schema";
+import {
+  artifactTable,
+  namespaceTable,
+  repositoryTable,
+  tagTable,
+} from "lib/db/schema";
 import { artifactFactory } from "test/factories/artifact.factory";
 import { namespaceFactory } from "test/factories/namespace.factory";
 import { repositoryFactory } from "test/factories/repository.factory";
@@ -178,6 +183,42 @@ describe("GraphQL mutation isolation (integrity)", () => {
           eq(repositoryTable.name, "good-in-b"),
         ),
       );
+    expect(row).toBeDefined();
+  });
+
+  test("cannot create a namespace with no organization (orphan)", async () => {
+    const result = await guardedClient(orgBMember).execute(
+      /* GraphQL */ `
+        mutation ($input: CreateNamespaceInput!) {
+          createNamespace(input: $input) { namespace { rowId } }
+        }
+      `,
+      { input: { namespace: { name: "orphan-ns" } } },
+    );
+
+    expect(result.errors).toBeDefined();
+    const [row] = await getTestDb()
+      .db.select()
+      .from(namespaceTable)
+      .where(eq(namespaceTable.name, "orphan-ns"));
+    expect(row).toBeUndefined();
+  });
+
+  test("CAN create a namespace in the caller's own org", async () => {
+    const result = await guardedClient(orgBMember).execute(
+      /* GraphQL */ `
+        mutation ($input: CreateNamespaceInput!) {
+          createNamespace(input: $input) { namespace { rowId name } }
+        }
+      `,
+      { input: { namespace: { name: "b-ns", organizationId: ORG_B } } },
+    );
+
+    expect(result.errors).toBeUndefined();
+    const [row] = await getTestDb()
+      .db.select()
+      .from(namespaceTable)
+      .where(eq(namespaceTable.name, "b-ns"));
     expect(row).toBeDefined();
   });
 
