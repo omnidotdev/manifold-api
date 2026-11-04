@@ -5,7 +5,7 @@ import { createRemoteJWKSet, jwtVerify } from "jose";
 import ms from "ms";
 
 import { hashToken, isValidTokenFormat } from "lib/auth/token";
-import { AUTH_BASE_URL } from "lib/config/env.config";
+import { AUTH_BASE_URL, CLAIMS_NAMESPACE } from "lib/config/env.config";
 import { dbPool } from "lib/db";
 import { apiTokenTable, namespaceTable } from "lib/db/schema";
 
@@ -53,6 +53,27 @@ const extractOrgIds = (
   return organizations
     .map((org) => (typeof org === "string" ? org : org?.id))
     .filter((id): id is string => typeof id === "string" && id.length > 0);
+};
+
+/**
+ * Resolve the caller's organization ids from a Gatekeeper userinfo response.
+ * Gatekeeper emits membership under the namespaced claim
+ * `${CLAIMS_NAMESPACE}/organizations` (so it survives alongside standard OIDC
+ * claims), never a bare `organizations` key. Read the namespaced claim first,
+ * then fall back to a bare `organizations` for self-host IdPs or callers whose
+ * observer was built directly (e.g. the local namespace-owner path).
+ */
+export const orgIdsFromClaims = (claims: Record<string, unknown>): string[] => {
+  const namespaced = claims[`${CLAIMS_NAMESPACE}/organizations`];
+  const bare = (claims as UserInfoClaims).organizations;
+
+  const ids = extractOrgIds(
+    (Array.isArray(namespaced)
+      ? namespaced
+      : bare) as UserInfoClaims["organizations"],
+  );
+
+  return ids;
 };
 
 class AuthenticationError extends Error {
@@ -280,7 +301,7 @@ const resolveUser: ResolveUserFn<ContextObserver, GraphQLContext> = async (
       id: claims.sub,
       name: claims.name ?? claims.preferred_username,
       email: claims.email,
-      organizations: extractOrgIds(claims.organizations),
+      organizations: orgIdsFromClaims(claims),
     };
   } catch (err) {
     if (err instanceof AuthenticationError) {

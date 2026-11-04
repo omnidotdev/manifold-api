@@ -10,6 +10,14 @@ export const {
   HOST = "0.0.0.0",
   DATABASE_URL,
   AUTH_BASE_URL = "https://localhost:8000",
+  /**
+   * OIDC claim namespace Gatekeeper prefixes custom claims with. Organization
+   * membership arrives under `${CLAIMS_NAMESPACE}/organizations`, never a bare
+   * `organizations` key, so the read-scope filter must read this prefix. Default
+   * mirrors Gatekeeper's own default (`https://manifold.<TRUSTED_DOMAIN>/@omni/claims`
+   * with TRUSTED_DOMAIN=omni.dev); override to match a self-host IdP.
+   */
+  CLAIMS_NAMESPACE = "https://manifold.omni.dev/@omni/claims",
   GRAPHQL_MAX_COMPLEXITY_COST,
   CORS_ALLOWED_ORIGINS,
   /** Secret for verifying auth webhook signatures */
