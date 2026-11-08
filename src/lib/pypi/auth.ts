@@ -2,9 +2,16 @@
  * @file Adapt pip/Twine HTTP Basic auth to Manifold registry tokens.
  *
  * pip and twine send the API token as HTTP Basic auth, conventionally with the
- * username `__token__` and the token as the password. This extracts the token;
- * validation is delegated to the shared registry-token logic by the callers.
+ * username `__token__` and the token as the password. This extracts the token
+ * and defers validation to the shared registry-token logic.
  */
+
+import {
+  authenticateRegistryToken,
+  requireRegistryWrite,
+} from "lib/auth/registryToken";
+
+import type { RegistryAuthResult } from "lib/auth/registryToken";
 
 /**
  * Extract the token from a `Basic` Authorization header. The password component
@@ -32,3 +39,15 @@ export const extractTokenFromBasic = (
   const password = decoded.slice(sep + 1);
   return password.length > 0 ? password : null;
 };
+
+/** Authenticate a pip/Twine request (Basic auth) with read access. */
+export const authenticatePypi = (
+  authHeader: string | null,
+): Promise<RegistryAuthResult | null> =>
+  authenticateRegistryToken(extractTokenFromBasic(authHeader));
+
+/** Require write scope for a Twine upload; throws on failure. */
+export const requirePypiWrite = (
+  authHeader: string | null,
+): Promise<RegistryAuthResult> =>
+  requireRegistryWrite(extractTokenFromBasic(authHeader));
