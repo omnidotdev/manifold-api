@@ -66,6 +66,8 @@ const RESERVED = new Set<string>([
   "npm",
   "oci",
   "wasm",
+  "pypi",
+  "pip",
   "schema",
   "schemas",
   // sentinels

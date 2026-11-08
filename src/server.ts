@@ -51,6 +51,7 @@ import npmRouter from "lib/npm/router";
 import { ociRouter } from "lib/oci";
 import { seedTrustedPublishers } from "lib/oidc/seed";
 import { flags } from "lib/providers";
+import pypiRouter from "lib/pypi/router";
 import schemasRouter from "lib/schemas/router";
 import { storage } from "lib/storage";
 import { checkStorageStatus } from "lib/storage/health";
@@ -205,6 +206,8 @@ const app = new Elysia({
   .use(cargoRouter)
   // npm registry API
   .use(npmRouter)
+  // PyPI registry API
+  .use(pypiRouter)
   // Schema registry API (OpenAPI / GraphQL / JSON Schema)
   .use(schemasRouter)
   // WASM registry API
@@ -263,6 +266,11 @@ console.log(
 // biome-ignore lint/suspicious/noConsole: root logging
 console.log(
   `📦 ${appConfig.name} npm registry running at ${app.server?.url}npm/`,
+);
+
+// biome-ignore lint/suspicious/noConsole: root logging
+console.log(
+  `📦 ${appConfig.name} PyPI registry running at ${app.server?.url}pypi/`,
 );
 
 if (await flags.isEnabled("manifold-api-maintenance-mode")) {

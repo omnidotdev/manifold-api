@@ -10,6 +10,7 @@ export * from "./npmDistTag.table";
 export * from "./npmMetadata.table";
 export * from "./oidcIssuer.table";
 export * from "./plugin.table";
+export * from "./pypiMetadata.table";
 export * from "./repository.table";
 export * from "./scanResult.table";
 export * from "./schemaMetadata.table";
