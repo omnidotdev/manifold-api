@@ -39,6 +39,11 @@ export const {
   AUTHZ_PROVIDER,
   /** Billing service API key for service-to-service auth */
   BILLING_SERVICE_API_KEY,
+  /**
+   * Comma-separated organization ids never hard-blocked by plan limits (the
+   * platform org that owns the fleet's own images). Usage is still metered
+   */
+  BILLING_EXEMPT_ORGANIZATION_IDS = "",
   /** Feature flags */
   FLAGS_API_HOST,
   FLAGS_CLIENT_KEY,
@@ -171,6 +176,9 @@ export const isDevEnv = NODE_ENV === "development",
     (Number.parseInt(PULL_THROUGH_TTL_SECONDS, 10) || 0) * 1000,
   tagRetentionCount = Number.parseInt(TAG_RETENTION_COUNT, 10) || 0,
   maintenanceAllowedNamespaces = MAINTENANCE_ALLOWED_NAMESPACES.split(",")
+    .map((s) => s.trim())
+    .filter(Boolean),
+  billingExemptOrganizationIds = BILLING_EXEMPT_ORGANIZATION_IDS.split(",")
     .map((s) => s.trim())
     .filter(Boolean);
 
