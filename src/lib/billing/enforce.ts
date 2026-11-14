@@ -1,5 +1,6 @@
 import { and, count, eq, gt, isNull, or, sum } from "drizzle-orm";
 
+import { billingExemptOrganizationIds } from "lib/config/env.config";
 import { dbPool } from "lib/db";
 import {
   apiTokenTable,
@@ -16,6 +17,17 @@ type Db = typeof dbPool;
 type ResolveEntitlements = typeof resolveEntitlements;
 
 /**
+ * Whether an organization is exempt from plan-limit enforcement
+ * (`BILLING_EXEMPT_ORGANIZATION_IDS`). The platform org owns every fleet image,
+ * so a hard 402 on its pulls or pushes would stall every deploy. Its usage is
+ * still metered; only the block is skipped
+ */
+export const isBillingExempt = (
+  orgId: string,
+  exempt: readonly string[] = billingExemptOrganizationIds,
+): boolean => exempt.includes(orgId);
+
+/**
  * Enforce a metered usage limit for an organization.
  *
  * Returns a ready-to-send `{ status, body }` (402 Payment Required) when the org
@@ -30,6 +42,7 @@ export const enforceUsageLimit = async (
   label: string,
   additionalUsage?: number,
 ): Promise<{ status: number; body: unknown } | null> => {
+  if (isBillingExempt(orgId)) return null;
   const check = await checkUsage(
     "organization",
     orgId,
@@ -50,6 +63,7 @@ export const enforceUsageLimit = async (
 export const enforcePrivateRepoLimit = async (
   orgId: string,
 ): Promise<{ status: number; body: unknown } | null> => {
+  if (isBillingExempt(orgId)) return null;
   const entitlements = await resolveEntitlements(orgId);
   const limit = getLimit(entitlements, "max_private_repos");
   if (limit === -1) return null;
@@ -95,11 +109,14 @@ export const enforceApiTokenLimit = async (
   {
     db = dbPool,
     resolve = resolveEntitlements,
+    exempt = billingExemptOrganizationIds,
   }: {
     db?: Db;
     resolve?: ResolveEntitlements;
+    exempt?: readonly string[];
   } = {},
 ): Promise<{ status: number; body: unknown } | null> => {
+  if (isBillingExempt(orgId, exempt)) return null;
   const entitlements = await resolve(orgId);
   const limit = getLimit(entitlements, "max_api_tokens");
   if (limit === -1) return null;
@@ -135,11 +152,14 @@ export const enforceWebhookLimit = async (
   {
     db = dbPool,
     resolve = resolveEntitlements,
+    exempt = billingExemptOrganizationIds,
   }: {
     db?: Db;
     resolve?: ResolveEntitlements;
+    exempt?: readonly string[];
   } = {},
 ): Promise<{ status: number; body: unknown } | null> => {
+  if (isBillingExempt(orgId, exempt)) return null;
   const entitlements = await resolve(orgId);
   const limit = getLimit(entitlements, "max_webhooks");
   if (limit === -1) return null;
@@ -202,11 +222,14 @@ export const enforceStorageLimit = async (
   {
     db = dbPool,
     resolve = resolveEntitlements,
+    exempt = billingExemptOrganizationIds,
   }: {
     db?: Db;
     resolve?: ResolveEntitlements;
+    exempt?: readonly string[];
   } = {},
 ): Promise<{ status: number; body: unknown } | null> => {
+  if (isBillingExempt(orgId, exempt)) return null;
   const entitlements = await resolve(orgId);
   const limit = getLimit(entitlements, "max_storage_bytes");
   if (limit === -1) return null;
