@@ -13,6 +13,7 @@ type UsageRecordResponse = {
   remaining: number | null;
 };
 
+/** A usage check verdict, as callers in this service consume it */
 type UsageCheckResponse = {
   withinLimit: boolean;
   value: number;
@@ -20,10 +21,50 @@ type UsageCheckResponse = {
   remaining: number | null;
 };
 
+/**
+ * Body of Aether's `GET /usage/:appId/:entityType/:entityId/:meterKey/check`.
+ * The verdict is `allowed` and the meter reading is `current`; reading
+ * `withinLimit` / `value` straight off it yields undefined, which made every
+ * check look over-limit and 402'd every registry pull once billing was wired
+ */
+type AetherUsageCheck = {
+  allowed: boolean;
+  current: number;
+  limit: number | null;
+  remaining: number | null;
+};
+
+/** Body of Aether's `GET /usage/:appId/:entityType/:entityId/summary` */
 type UsageSummaryResponse = {
+  billingAccountId: string;
   tier: string | null;
-  meters: Record<string, { value: number; limit: number | null }>;
-  creditBalance: number | null;
+  meters: {
+    key: string;
+    value: number;
+    limit: number | null;
+    remaining: number | null;
+    resetsAt: string | null;
+  }[];
+  credits: { balance: number } | null;
+};
+
+/**
+ * Map Aether's check body onto `UsageCheckResponse`. Returns null for a body
+ * without a boolean verdict (an error payload or an unexpected shape), so the
+ * caller fails open exactly as it does for an unreachable Aether
+ */
+export const parseUsageCheck = (body: unknown): UsageCheckResponse | null => {
+  if (typeof body !== "object" || body === null) return null;
+
+  const check = body as Partial<AetherUsageCheck>;
+  if (typeof check.allowed !== "boolean") return null;
+
+  return {
+    withinLimit: check.allowed,
+    value: check.current ?? 0,
+    limit: check.limit ?? null,
+    remaining: check.remaining ?? null,
+  };
 };
 
 /**
@@ -104,9 +145,11 @@ export async function checkUsage(
 ): Promise<UsageCheckResponse | null> {
   const query = additionalUsage ? `?additionalUsage=${additionalUsage}` : "";
 
-  return aetherFetch<UsageCheckResponse>(
+  const body = await aetherFetch<unknown>(
     `/usage/${APP_ID}/${entityType}/${entityId}/${meterKey}/check${query}`,
   );
+
+  return parseUsageCheck(body);
 }
 
 /**
