@@ -1,5 +1,5 @@
 import { eq } from "drizzle-orm";
-import { GraphQLError } from "graphql";
+import { GraphQLError, getArgumentValues } from "graphql";
 
 import { protectRoutes } from "lib/config/env.config";
 import {
@@ -12,6 +12,7 @@ import {
 import { authz as defaultAuthz } from "lib/providers";
 import { isReservedNamespace } from "lib/registry/reservedNames";
 
+import type { FieldNode } from "graphql";
 import type { Plugin } from "graphql-yoga";
 import type {
   ContextObserver,
@@ -181,6 +182,29 @@ const RESOLVERS: Record<string, TargetResolver> = {
 const ORG_REQUIRED_MUTATIONS = new Set(["createNamespace"]);
 
 /**
+ * Ownership-moving patch fields. An update that repoints a row's owning parent
+ * (a repository into another namespace, an artifact or tag onto another
+ * repository, a namespace onto another organization) must land in an org the
+ * caller also belongs to, or it would plant or transfer rows across tenants
+ */
+const PATCH_TARGETS: Record<string, TargetResolver> = {
+  updateRepository: (db, input) =>
+    orgOfNamespace(db, asRecord(input.patch).namespaceId as string),
+  updateNamespace: (_db, input) =>
+    Promise.resolve(
+      (asRecord(input.patch).organizationId as string | undefined) ?? null,
+    ),
+  updateNamespaceByName: (_db, input) =>
+    Promise.resolve(
+      (asRecord(input.patch).organizationId as string | undefined) ?? null,
+    ),
+  updateArtifact: (db, input) =>
+    orgOfRepository(db, asRecord(input.patch).repositoryId as string),
+  updateTag: (db, input) =>
+    orgOfRepository(db, asRecord(input.patch).repositoryId as string),
+};
+
+/**
  * Entities owned by a tenant (through the namespace -> organization chain).
  * A create/update/delete on one of these must be scoped to the caller's org.
  */
@@ -201,9 +225,9 @@ const SCOPED_ENTITIES = new Set([
 ]);
 
 /**
- * Global catalog entities with no tenant dimension. They are not tenant-scoped,
- * so this filter leaves them alone; restricting who may mutate them is an
- * admin-authorization concern (Warden), tracked separately.
+ * Global catalog and registry-trust entities with no tenant dimension. They are
+ * managed server-side only, never through GraphQL, so their mutations are
+ * denied outright (and removed from the schema by the preset).
  */
 const GLOBAL_ENTITIES = new Set([
   "Plugin",
@@ -257,8 +281,8 @@ const reservedName = () =>
  *
  * Deny-by-default: a mutation on a scoped entity that has no explicit resolver
  * (the `*ById` node-id variants, the registry-internal metadata/scan tables) is
- * rejected rather than allowed, so the guard fails closed. Global catalog
- * mutations are left alone (admin gating is a separate concern).
+ * rejected rather than allowed, so the guard fails closed. Global catalog and
+ * registry-trust mutations are denied outright.
  *
  * Active only when `PROTECT_ROUTES` is on, matching the read filter: an ungated
  * single-owner self-host instance has no org to isolate.
@@ -293,17 +317,43 @@ const createMutationScopePlugin = ({
     if (!operation || operation.operation !== "mutation") return;
 
     const orgs = observer.organizations ?? [];
-    const input = asRecord(
-      (args.variableValues as Record<string, unknown> | undefined)?.input,
-    );
+    const mutationFields = args.schema.getMutationType()?.getFields() ?? {};
 
     for (const selection of operation.selectionSet.selections) {
       if (selection.kind !== "Field") continue;
 
       const name = selection.name.value;
       const entity = entityOf(name);
-      // not an auto-CRUD mutation, or a global catalog entity: not tenant-scoped
-      if (!entity || GLOBAL_ENTITIES.has(entity)) continue;
+      const fieldDef = mutationFields[name];
+
+      // Resolve THIS field's arguments as execution will see them: inline
+      // literals, any variable name, and one input per aliased field. Reading
+      // only `variables.input` let an inline or renamed input skip the check
+      let input: Record<string, unknown> = {};
+      if (fieldDef) {
+        try {
+          input = asRecord(
+            getArgumentValues(
+              fieldDef,
+              selection as unknown as FieldNode,
+              args.variableValues as Record<string, unknown> | undefined,
+            ).input,
+          );
+        } catch {
+          // invalid arguments fail validation/execution on their own
+        }
+      }
+      // not an auto-CRUD mutation: custom fields authorize themselves
+      if (!entity) continue;
+
+      // Global catalog and trust configuration (OIDC issuers, trusted
+      // publishers, plugins, federated sources) have no tenant to check and no
+      // GraphQL client; they are hidden from the schema, and any that surface
+      // are denied so a signed-in member can never rewrite registry trust
+      if (GLOBAL_ENTITIES.has(entity)) {
+        setResultAndStopExecution({ errors: [forbidden()] });
+        return;
+      }
 
       if (!SCOPED_ENTITIES.has(entity)) {
         // an unclassified entity: fail closed so a new table must be triaged
@@ -341,6 +391,25 @@ const createMutationScopePlugin = ({
       if (targetOrg && !orgs.includes(targetOrg)) {
         setResultAndStopExecution({ errors: [forbidden()] });
         return;
+      }
+
+      // An update that repoints the row's owning parent must target an org
+      // the caller also belongs to (no transfer into another workspace)
+      const patchTarget = PATCH_TARGETS[name];
+      if (patchTarget) {
+        const patch = asRecord(input.patch);
+        const movesOwner = [
+          "namespaceId",
+          "organizationId",
+          "repositoryId",
+        ].some((key) => patch[key] !== undefined);
+        if (movesOwner) {
+          const newOrg = await patchTarget(db, input);
+          if (!newOrg || !orgs.includes(newOrg)) {
+            setResultAndStopExecution({ errors: [forbidden()] });
+            return;
+          }
+        }
       }
 
       // Admin/owner role gate (Warden) for sensitive org operations, layered on

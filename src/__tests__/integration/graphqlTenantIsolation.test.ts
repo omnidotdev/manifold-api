@@ -12,6 +12,8 @@ import {
 import { setupTestContext } from "test/setup/testContext";
 import { makeYogaServer } from "test/util/server";
 
+import { containerMetadataTable } from "lib/db/schema";
+
 import type { SelectNamespace, SelectRepository } from "lib/db/schema";
 
 const ORG_A = "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa";
@@ -218,6 +220,33 @@ describe("GraphQL tenant isolation (reads)", () => {
     expect(ids).not.toContain(foreignArtifact.id);
   });
 
+  test("artifact metadata connections hide another org's private rows", async () => {
+    const seeded = await seed();
+    const artifact = await artifactFactory.create(ctx.db, {
+      repositoryId: seeded.repoAPrivate.id,
+    });
+    await ctx.db
+      .insert(containerMetadataTable)
+      .values({ artifactId: artifact.id, schemaVersion: 2 });
+
+    // The plural metadata connections were previously unwrapped, so any
+    // signed-in caller could list every org's private image metadata
+    const asOutsider = await ctx
+      .graphqlAs(orgBMember)
+      .execute<{ containerMetadata: { totalCount: number } }>(
+        "{ containerMetadata { totalCount } }",
+      );
+    expect(asOutsider.errors).toBeUndefined();
+    expect(asOutsider.data?.containerMetadata.totalCount).toBe(0);
+
+    const asMember = await ctx
+      .graphqlAs({ id: "user-a", name: "A User", organizations: [ORG_A] })
+      .execute<{ containerMetadata: { totalCount: number } }>(
+        "{ containerMetadata { totalCount } }",
+      );
+    expect(asMember.data?.containerMetadata.totalCount).toBe(1);
+  });
+
   test("every org-scoped read executes without a SQL error for a member", async () => {
     await seed();
 
@@ -231,7 +260,7 @@ describe("GraphQL tenant isolation (reads)", () => {
         artifacts { totalCount }
         tags { totalCount }
         npmDistTags { totalCount }
-        uploadSessions { totalCount }
+        pypiMetadata { totalCount }
         npmMetadata { totalCount }
         cargoMetadata { totalCount }
         scanResults { totalCount }
