@@ -297,25 +297,17 @@ describe("GraphQL mutation isolation (integrity)", () => {
   });
 
   test("denies a scoped mutation with no explicit resolver (fail closed)", async () => {
-    const { repoAPrivate } = await seed();
-    const { db } = getTestDb();
-    const artifact = await artifactFactory.create(db, {
-      repositoryId: repoAPrivate.id,
-    });
+    await seed();
 
-    // createScanResult is a scoped-entity mutation the dashboard never uses; it
-    // must be rejected rather than silently allowed
+    // updateRepositoryById (the node-id variant) is a scoped-entity mutation
+    // with no target resolver; it must be rejected rather than silently allowed
     const result = await guardedClient(orgBMember).execute(
       /* GraphQL */ `
-        mutation ($input: CreateScanResultInput!) {
-          createScanResult(input: $input) { scanResult { rowId } }
+        mutation ($input: UpdateRepositoryByIdInput!) {
+          updateRepositoryById(input: $input) { repository { rowId } }
         }
       `,
-      {
-        input: {
-          scanResult: { artifactId: artifact.id, status: "clean" },
-        },
-      },
+      { input: { id: "any-node-id", patch: { description: "pwned" } } },
     );
 
     expect(result.errors).toBeDefined();
@@ -368,5 +360,156 @@ describe("GraphQL mutation isolation (integrity)", () => {
       .from(repositoryTable)
       .where(eq(repositoryTable.id, repoB.id));
     expect(row).toBeUndefined(); // deleted
+  });
+
+  test("cannot bypass the guard with an inline input literal", async () => {
+    const { repoAPrivate } = await seed();
+
+    const result = await guardedClient(orgBMember).execute(
+      /* GraphQL */ `
+        mutation {
+          updateRepository(
+            input: { rowId: "${repoAPrivate.id}", patch: { description: "pwned" } }
+          ) { repository { rowId } }
+        }
+      `,
+      {},
+    );
+
+    expect(result.errors).toBeDefined();
+    const [row] = await getTestDb()
+      .db.select()
+      .from(repositoryTable)
+      .where(eq(repositoryTable.id, repoAPrivate.id));
+    expect(row?.description).not.toBe("pwned");
+  });
+
+  test("cannot bypass the guard with a renamed variable or a second aliased field", async () => {
+    const { nsB, repoAPrivate } = await seed();
+    const repoB = await repositoryFactory.create(getTestDb().db, {
+      namespaceId: nsB.id,
+      name: "b-own",
+      isPublic: false,
+    });
+
+    const result = await guardedClient(orgBMember).execute(
+      /* GraphQL */ `
+        mutation ($input: DeleteRepositoryInput!, $other: DeleteRepositoryInput!) {
+          mine: deleteRepository(input: $input) { repository { rowId } }
+          theirs: deleteRepository(input: $other) { repository { rowId } }
+        }
+      `,
+      { input: { rowId: repoB.id }, other: { rowId: repoAPrivate.id } },
+    );
+
+    expect(result.errors).toBeDefined();
+    const [row] = await getTestDb()
+      .db.select()
+      .from(repositoryTable)
+      .where(eq(repositoryTable.id, repoAPrivate.id));
+    expect(row).toBeDefined();
+  });
+
+  test("cannot move an own repository into another org's namespace", async () => {
+    const { nsA, nsB } = await seed();
+    const repoB = await repositoryFactory.create(getTestDb().db, {
+      namespaceId: nsB.id,
+      name: "b-mover",
+      isPublic: false,
+    });
+
+    const result = await guardedClient(orgBMember).execute(
+      /* GraphQL */ `
+        mutation ($input: UpdateRepositoryInput!) {
+          updateRepository(input: $input) { repository { rowId } }
+        }
+      `,
+      { input: { rowId: repoB.id, patch: { namespaceId: nsA.id } } },
+    );
+
+    expect(result.errors).toBeDefined();
+    const [row] = await getTestDb()
+      .db.select()
+      .from(repositoryTable)
+      .where(eq(repositoryTable.id, repoB.id));
+    expect(row?.namespaceId).toBe(nsB.id);
+  });
+
+  test("cannot hand an own namespace to another organization", async () => {
+    const { nsB } = await seed();
+
+    const result = await guardedClient(orgBMember).execute(
+      /* GraphQL */ `
+        mutation ($input: UpdateNamespaceInput!) {
+          updateNamespace(input: $input) { namespace { rowId } }
+        }
+      `,
+      { input: { rowId: nsB.id, patch: { organizationId: ORG_A } } },
+    );
+
+    expect(result.errors).toBeDefined();
+    const [row] = await getTestDb()
+      .db.select()
+      .from(namespaceTable)
+      .where(eq(namespaceTable.id, nsB.id));
+    expect(row?.organizationId).toBe(ORG_B);
+  });
+
+  test("CAN edit an own repository without moving it", async () => {
+    const { nsB } = await seed();
+    const repoB = await repositoryFactory.create(getTestDb().db, {
+      namespaceId: nsB.id,
+      name: "b-edit",
+      isPublic: false,
+    });
+
+    const result = await guardedClient(orgBMember).execute(
+      /* GraphQL */ `
+        mutation ($input: UpdateRepositoryInput!) {
+          updateRepository(input: $input) { repository { rowId } }
+        }
+      `,
+      {
+        input: {
+          rowId: repoB.id,
+          patch: { description: "updated", namespaceId: nsB.id },
+        },
+      },
+    );
+
+    expect(result.errors).toBeUndefined();
+    const [row] = await getTestDb()
+      .db.select()
+      .from(repositoryTable)
+      .where(eq(repositoryTable.id, repoB.id));
+    expect(row?.description).toBe("updated");
+  });
+
+  test("registry trust and catalog tables have no GraphQL mutations", async () => {
+    const result = await guardedClient(orgBMember).execute(
+      /* GraphQL */ `
+        { __schema { mutationType { fields { name } } } }
+      `,
+      {},
+    );
+    const names = (
+      result.data as {
+        __schema: { mutationType: { fields: { name: string }[] } };
+      }
+    ).__schema.mutationType.fields.map((f) => f.name);
+
+    for (const entity of [
+      "TrustedPublisher",
+      "OidcIssuer",
+      "Plugin",
+      "FederatedSource",
+      "FederatedSkillCache",
+      "UploadSession",
+      "ApiToken",
+      "ScanResult",
+      "NpmDistTag",
+    ]) {
+      expect(names.some((n) => n.endsWith(entity))).toBe(false);
+    }
   });
 });

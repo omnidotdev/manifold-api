@@ -20,29 +20,20 @@ type Query implements Node {
   """Get a single `Tag`."""
   tag(rowId: UUID!): Tag
 
-  """Get a single `NpmDistTag`."""
-  npmDistTag(rowId: UUID!): NpmDistTag
-
-  """Get a single `UploadSession`."""
-  uploadSession(rowId: UUID!): UploadSession
-
-  """Get a single `SchemaMetadatum`."""
-  schemaMetadatum(artifactId: UUID!): SchemaMetadatum
-
   """Get a single `Namespace`."""
   namespace(rowId: UUID!): Namespace
 
   """Get a single `Namespace`."""
   namespaceByName(name: String!): Namespace
 
+  """Get a single `NpmDistTag`."""
+  npmDistTag(rowId: UUID!): NpmDistTag
+
+  """Get a single `SchemaMetadatum`."""
+  schemaMetadatum(artifactId: UUID!): SchemaMetadatum
+
   """Get a single `Artifact`."""
   artifact(rowId: UUID!): Artifact
-
-  """Get a single `OidcIssuer`."""
-  oidcIssuer(rowId: UUID!): OidcIssuer
-
-  """Get a single `OidcIssuer`."""
-  oidcIssuerByIssuer(issuer: String!): OidcIssuer
 
   """Get a single `Repository`."""
   repository(rowId: UUID!): Repository
@@ -50,32 +41,17 @@ type Query implements Node {
   """Get a single `NpmMetadatum`."""
   npmMetadatum(rowId: UUID!): NpmMetadatum
 
-  """Get a single `Plugin`."""
-  plugin(rowId: UUID!): Plugin
-
-  """Get a single `Plugin`."""
-  pluginByName(name: String!): Plugin
-
-  """Get a single `TrustedPublisher`."""
-  trustedPublisher(rowId: UUID!): TrustedPublisher
-
   """Get a single `ScanResult`."""
   scanResult(rowId: UUID!): ScanResult
-
-  """Get a single `FederatedSource`."""
-  federatedSource(rowId: UUID!): FederatedSource
-
-  """Get a single `FederatedSource`."""
-  federatedSourceByNamespace(namespace: String!): FederatedSource
-
-  """Get a single `FederatedSkillCache`."""
-  federatedSkillCache(rowId: UUID!): FederatedSkillCache
 
   """Get a single `CargoMetadatum`."""
   cargoMetadatum(rowId: UUID!): CargoMetadatum
 
   """Get a single `ApiToken`."""
   apiToken(rowId: UUID!): ApiToken
+
+  """Get a single `PypiMetadatum`."""
+  pypiMetadatum(rowId: UUID!): PypiMetadatum
 
   """Reads and enables pagination through a set of `ContainerMetadatum`."""
   containerMetadata(
@@ -179,6 +155,40 @@ type Query implements Node {
     orderBy: [TagOrderBy!] = [PRIMARY_KEY_ASC]
   ): TagConnection
 
+  """Reads and enables pagination through a set of `Namespace`."""
+  namespaces(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: NamespaceCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: NamespaceFilter
+
+    """The method to use when ordering `Namespace`."""
+    orderBy: [NamespaceOrderBy!] = [PRIMARY_KEY_ASC]
+  ): NamespaceConnection
+
   """Reads and enables pagination through a set of `NpmDistTag`."""
   npmDistTags(
     """Only read the first `n` values of the set."""
@@ -212,40 +222,6 @@ type Query implements Node {
     """The method to use when ordering `NpmDistTag`."""
     orderBy: [NpmDistTagOrderBy!] = [PRIMARY_KEY_ASC]
   ): NpmDistTagConnection
-
-  """Reads and enables pagination through a set of `UploadSession`."""
-  uploadSessions(
-    """Only read the first `n` values of the set."""
-    first: Int
-
-    """Only read the last `n` values of the set."""
-    last: Int
-
-    """
-    Skip the first `n` values from our `after` cursor, an alternative to cursor
-    based pagination. May not be used with `last`.
-    """
-    offset: Int
-
-    """Read all values in the set before (above) this cursor."""
-    before: Cursor
-
-    """Read all values in the set after (below) this cursor."""
-    after: Cursor
-
-    """
-    A condition to be used in determining which values should be returned by the collection.
-    """
-    condition: UploadSessionCondition
-
-    """
-    A filter to be used in determining which values should be returned by the collection.
-    """
-    filter: UploadSessionFilter
-
-    """The method to use when ordering `UploadSession`."""
-    orderBy: [UploadSessionOrderBy!] = [PRIMARY_KEY_ASC]
-  ): UploadSessionConnection
 
   """Reads and enables pagination through a set of `SchemaMetadatum`."""
   schemaMetadata(
@@ -281,40 +257,6 @@ type Query implements Node {
     orderBy: [SchemaMetadatumOrderBy!] = [PRIMARY_KEY_ASC]
   ): SchemaMetadatumConnection
 
-  """Reads and enables pagination through a set of `Namespace`."""
-  namespaces(
-    """Only read the first `n` values of the set."""
-    first: Int
-
-    """Only read the last `n` values of the set."""
-    last: Int
-
-    """
-    Skip the first `n` values from our `after` cursor, an alternative to cursor
-    based pagination. May not be used with `last`.
-    """
-    offset: Int
-
-    """Read all values in the set before (above) this cursor."""
-    before: Cursor
-
-    """Read all values in the set after (below) this cursor."""
-    after: Cursor
-
-    """
-    A condition to be used in determining which values should be returned by the collection.
-    """
-    condition: NamespaceCondition
-
-    """
-    A filter to be used in determining which values should be returned by the collection.
-    """
-    filter: NamespaceFilter
-
-    """The method to use when ordering `Namespace`."""
-    orderBy: [NamespaceOrderBy!] = [PRIMARY_KEY_ASC]
-  ): NamespaceConnection
-
   """Reads and enables pagination through a set of `Artifact`."""
   artifacts(
     """Only read the first `n` values of the set."""
@@ -348,40 +290,6 @@ type Query implements Node {
     """The method to use when ordering `Artifact`."""
     orderBy: [ArtifactOrderBy!] = [PRIMARY_KEY_ASC]
   ): ArtifactConnection
-
-  """Reads and enables pagination through a set of `OidcIssuer`."""
-  oidcIssuers(
-    """Only read the first `n` values of the set."""
-    first: Int
-
-    """Only read the last `n` values of the set."""
-    last: Int
-
-    """
-    Skip the first `n` values from our `after` cursor, an alternative to cursor
-    based pagination. May not be used with `last`.
-    """
-    offset: Int
-
-    """Read all values in the set before (above) this cursor."""
-    before: Cursor
-
-    """Read all values in the set after (below) this cursor."""
-    after: Cursor
-
-    """
-    A condition to be used in determining which values should be returned by the collection.
-    """
-    condition: OidcIssuerCondition
-
-    """
-    A filter to be used in determining which values should be returned by the collection.
-    """
-    filter: OidcIssuerFilter
-
-    """The method to use when ordering `OidcIssuer`."""
-    orderBy: [OidcIssuerOrderBy!] = [PRIMARY_KEY_ASC]
-  ): OidcIssuerConnection
 
   """Reads and enables pagination through a set of `Repository`."""
   repositories(
@@ -451,74 +359,6 @@ type Query implements Node {
     orderBy: [NpmMetadatumOrderBy!] = [PRIMARY_KEY_ASC]
   ): NpmMetadatumConnection
 
-  """Reads and enables pagination through a set of `Plugin`."""
-  plugins(
-    """Only read the first `n` values of the set."""
-    first: Int
-
-    """Only read the last `n` values of the set."""
-    last: Int
-
-    """
-    Skip the first `n` values from our `after` cursor, an alternative to cursor
-    based pagination. May not be used with `last`.
-    """
-    offset: Int
-
-    """Read all values in the set before (above) this cursor."""
-    before: Cursor
-
-    """Read all values in the set after (below) this cursor."""
-    after: Cursor
-
-    """
-    A condition to be used in determining which values should be returned by the collection.
-    """
-    condition: PluginCondition
-
-    """
-    A filter to be used in determining which values should be returned by the collection.
-    """
-    filter: PluginFilter
-
-    """The method to use when ordering `Plugin`."""
-    orderBy: [PluginOrderBy!] = [PRIMARY_KEY_ASC]
-  ): PluginConnection
-
-  """Reads and enables pagination through a set of `TrustedPublisher`."""
-  trustedPublishers(
-    """Only read the first `n` values of the set."""
-    first: Int
-
-    """Only read the last `n` values of the set."""
-    last: Int
-
-    """
-    Skip the first `n` values from our `after` cursor, an alternative to cursor
-    based pagination. May not be used with `last`.
-    """
-    offset: Int
-
-    """Read all values in the set before (above) this cursor."""
-    before: Cursor
-
-    """Read all values in the set after (below) this cursor."""
-    after: Cursor
-
-    """
-    A condition to be used in determining which values should be returned by the collection.
-    """
-    condition: TrustedPublisherCondition
-
-    """
-    A filter to be used in determining which values should be returned by the collection.
-    """
-    filter: TrustedPublisherFilter
-
-    """The method to use when ordering `TrustedPublisher`."""
-    orderBy: [TrustedPublisherOrderBy!] = [PRIMARY_KEY_ASC]
-  ): TrustedPublisherConnection
-
   """Reads and enables pagination through a set of `ScanResult`."""
   scanResults(
     """Only read the first `n` values of the set."""
@@ -552,74 +392,6 @@ type Query implements Node {
     """The method to use when ordering `ScanResult`."""
     orderBy: [ScanResultOrderBy!] = [PRIMARY_KEY_ASC]
   ): ScanResultConnection
-
-  """Reads and enables pagination through a set of `FederatedSource`."""
-  federatedSources(
-    """Only read the first `n` values of the set."""
-    first: Int
-
-    """Only read the last `n` values of the set."""
-    last: Int
-
-    """
-    Skip the first `n` values from our `after` cursor, an alternative to cursor
-    based pagination. May not be used with `last`.
-    """
-    offset: Int
-
-    """Read all values in the set before (above) this cursor."""
-    before: Cursor
-
-    """Read all values in the set after (below) this cursor."""
-    after: Cursor
-
-    """
-    A condition to be used in determining which values should be returned by the collection.
-    """
-    condition: FederatedSourceCondition
-
-    """
-    A filter to be used in determining which values should be returned by the collection.
-    """
-    filter: FederatedSourceFilter
-
-    """The method to use when ordering `FederatedSource`."""
-    orderBy: [FederatedSourceOrderBy!] = [PRIMARY_KEY_ASC]
-  ): FederatedSourceConnection
-
-  """Reads and enables pagination through a set of `FederatedSkillCache`."""
-  federatedSkillCaches(
-    """Only read the first `n` values of the set."""
-    first: Int
-
-    """Only read the last `n` values of the set."""
-    last: Int
-
-    """
-    Skip the first `n` values from our `after` cursor, an alternative to cursor
-    based pagination. May not be used with `last`.
-    """
-    offset: Int
-
-    """Read all values in the set before (above) this cursor."""
-    before: Cursor
-
-    """Read all values in the set after (below) this cursor."""
-    after: Cursor
-
-    """
-    A condition to be used in determining which values should be returned by the collection.
-    """
-    condition: FederatedSkillCacheCondition
-
-    """
-    A filter to be used in determining which values should be returned by the collection.
-    """
-    filter: FederatedSkillCacheFilter
-
-    """The method to use when ordering `FederatedSkillCache`."""
-    orderBy: [FederatedSkillCacheOrderBy!] = [PRIMARY_KEY_ASC]
-  ): FederatedSkillCacheConnection
 
   """Reads and enables pagination through a set of `CargoMetadatum`."""
   cargoMetadata(
@@ -688,6 +460,40 @@ type Query implements Node {
     """The method to use when ordering `ApiToken`."""
     orderBy: [ApiTokenOrderBy!] = [PRIMARY_KEY_ASC]
   ): ApiTokenConnection
+
+  """Reads and enables pagination through a set of `PypiMetadatum`."""
+  pypiMetadata(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: PypiMetadatumCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: PypiMetadatumFilter
+
+    """The method to use when ordering `PypiMetadatum`."""
+    orderBy: [PypiMetadatumOrderBy!] = [PRIMARY_KEY_ASC]
+  ): PypiMetadatumConnection
 }
 
 """An object with a globally unique `ID`."""
@@ -737,57 +543,12 @@ type Artifact implements Node {
   size: BigInt!
   mediaType: String!
   content: String
-  createdAt: Datetime
   storagePath: String
   subject: String
+  createdAt: Datetime
 
   """Reads a single `Repository` that is related to this `Artifact`."""
   repository: Repository
-
-  """
-  Reads a single `ContainerMetadatum` that is related to this `Artifact`.
-  """
-  containerMetadatum: ContainerMetadatum
-
-  """Reads a single `SchemaMetadatum` that is related to this `Artifact`."""
-  schemaMetadatum: SchemaMetadatum
-
-  """Reads and enables pagination through a set of `Tag`."""
-  tags(
-    """Only read the first `n` values of the set."""
-    first: Int
-
-    """Only read the last `n` values of the set."""
-    last: Int
-
-    """
-    Skip the first `n` values from our `after` cursor, an alternative to cursor
-    based pagination. May not be used with `last`.
-    """
-    offset: Int
-
-    """Read all values in the set before (above) this cursor."""
-    before: Cursor
-
-    """Read all values in the set after (below) this cursor."""
-    after: Cursor
-
-    """
-    A condition to be used in determining which values should be returned by the collection.
-    """
-    condition: TagCondition
-
-    """
-    A filter to be used in determining which values should be returned by the collection.
-    """
-    filter: TagFilter
-
-    """The method to use when ordering `Tag`."""
-    orderBy: [TagOrderBy!] = [PRIMARY_KEY_ASC]
-  ): TagConnection!
-
-  """Reads a single `WasmMetadatum` that is related to this `Artifact`."""
-  wasmMetadatum: WasmMetadatum
 
   """Reads and enables pagination through a set of `CargoMetadatum`."""
   cargoMetadata(
@@ -822,6 +583,11 @@ type Artifact implements Node {
     """The method to use when ordering `CargoMetadatum`."""
     orderBy: [CargoMetadatumOrderBy!] = [PRIMARY_KEY_ASC]
   ): CargoMetadatumConnection!
+
+  """
+  Reads a single `ContainerMetadatum` that is related to this `Artifact`.
+  """
+  containerMetadatum: ContainerMetadatum
 
   """Reads and enables pagination through a set of `NpmMetadatum`."""
   npmMetadata(
@@ -890,75 +656,9 @@ type Artifact implements Node {
     """The method to use when ordering `ScanResult`."""
     orderBy: [ScanResultOrderBy!] = [PRIMARY_KEY_ASC]
   ): ScanResultConnection!
-}
 
-"""
-A signed eight-byte integer. The upper big integer values are greater than the
-max value for a JavaScript number. Therefore all big integers will be output as
-strings and not numbers.
-"""
-scalar BigInt
-
-"""
-A point in time as described by the [ISO
-8601](https://en.wikipedia.org/wiki/ISO_8601) and, if it has a timezone, [RFC
-3339](https://datatracker.ietf.org/doc/html/rfc3339) standards. Input values
-that do not conform to both ISO 8601 and RFC 3339 may be coerced, which may lead
-to unexpected results.
-"""
-scalar Datetime
-
-type Repository implements Node {
-  """
-  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
-  """
-  id: ID!
-  rowId: UUID!
-  namespaceId: UUID!
-  name: String!
-  description: String
-  artifactType: String!
-  isPublic: Boolean!
-  createdAt: Datetime
-  updatedAt: Datetime
-  downloadCount: BigInt!
-
-  """Reads a single `Namespace` that is related to this `Repository`."""
-  namespace: Namespace
-
-  """Reads and enables pagination through a set of `Artifact`."""
-  artifacts(
-    """Only read the first `n` values of the set."""
-    first: Int
-
-    """Only read the last `n` values of the set."""
-    last: Int
-
-    """
-    Skip the first `n` values from our `after` cursor, an alternative to cursor
-    based pagination. May not be used with `last`.
-    """
-    offset: Int
-
-    """Read all values in the set before (above) this cursor."""
-    before: Cursor
-
-    """Read all values in the set after (below) this cursor."""
-    after: Cursor
-
-    """
-    A condition to be used in determining which values should be returned by the collection.
-    """
-    condition: ArtifactCondition
-
-    """
-    A filter to be used in determining which values should be returned by the collection.
-    """
-    filter: ArtifactFilter
-
-    """The method to use when ordering `Artifact`."""
-    orderBy: [ArtifactOrderBy!] = [PRIMARY_KEY_ASC]
-  ): ArtifactConnection!
+  """Reads a single `SchemaMetadatum` that is related to this `Artifact`."""
+  schemaMetadatum: SchemaMetadatum
 
   """Reads and enables pagination through a set of `Tag`."""
   tags(
@@ -994,8 +694,11 @@ type Repository implements Node {
     orderBy: [TagOrderBy!] = [PRIMARY_KEY_ASC]
   ): TagConnection!
 
-  """Reads and enables pagination through a set of `UploadSession`."""
-  uploadSessions(
+  """Reads a single `WasmMetadatum` that is related to this `Artifact`."""
+  wasmMetadatum: WasmMetadatum
+
+  """Reads and enables pagination through a set of `PypiMetadatum`."""
+  pypiMetadata(
     """Only read the first `n` values of the set."""
     first: Int
 
@@ -1017,16 +720,51 @@ type Repository implements Node {
     """
     A condition to be used in determining which values should be returned by the collection.
     """
-    condition: UploadSessionCondition
+    condition: PypiMetadatumCondition
 
     """
     A filter to be used in determining which values should be returned by the collection.
     """
-    filter: UploadSessionFilter
+    filter: PypiMetadatumFilter
 
-    """The method to use when ordering `UploadSession`."""
-    orderBy: [UploadSessionOrderBy!] = [PRIMARY_KEY_ASC]
-  ): UploadSessionConnection!
+    """The method to use when ordering `PypiMetadatum`."""
+    orderBy: [PypiMetadatumOrderBy!] = [PRIMARY_KEY_ASC]
+  ): PypiMetadatumConnection!
+}
+
+"""
+A signed eight-byte integer. The upper big integer values are greater than the
+max value for a JavaScript number. Therefore all big integers will be output as
+strings and not numbers.
+"""
+scalar BigInt
+
+"""
+A point in time as described by the [ISO
+8601](https://en.wikipedia.org/wiki/ISO_8601) and, if it has a timezone, [RFC
+3339](https://datatracker.ietf.org/doc/html/rfc3339) standards. Input values
+that do not conform to both ISO 8601 and RFC 3339 may be coerced, which may lead
+to unexpected results.
+"""
+scalar Datetime
+
+type Repository implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  id: ID!
+  rowId: UUID!
+  namespaceId: UUID!
+  name: String!
+  description: String
+  artifactType: String!
+  isPublic: Boolean!
+  downloadCount: BigInt!
+  createdAt: Datetime
+  updatedAt: Datetime
+
+  """Reads a single `Namespace` that is related to this `Repository`."""
+  namespace: Namespace
 
   """Reads and enables pagination through a set of `ApiToken`."""
   apiTokens(
@@ -1061,6 +799,40 @@ type Repository implements Node {
     """The method to use when ordering `ApiToken`."""
     orderBy: [ApiTokenOrderBy!] = [PRIMARY_KEY_ASC]
   ): ApiTokenConnection!
+
+  """Reads and enables pagination through a set of `Artifact`."""
+  artifacts(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: ArtifactCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: ArtifactFilter
+
+    """The method to use when ordering `Artifact`."""
+    orderBy: [ArtifactOrderBy!] = [PRIMARY_KEY_ASC]
+  ): ArtifactConnection!
 
   """Reads and enables pagination through a set of `NpmDistTag`."""
   npmDistTags(
@@ -1095,22 +867,9 @@ type Repository implements Node {
     """The method to use when ordering `NpmDistTag`."""
     orderBy: [NpmDistTagOrderBy!] = [PRIMARY_KEY_ASC]
   ): NpmDistTagConnection!
-}
 
-type Namespace implements Node {
-  """
-  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
-  """
-  id: ID!
-  rowId: UUID!
-  name: String!
-  description: String
-  createdAt: Datetime
-  updatedAt: Datetime
-  organizationId: UUID
-
-  """Reads and enables pagination through a set of `Repository`."""
-  repositories(
+  """Reads and enables pagination through a set of `Tag`."""
+  tags(
     """Only read the first `n` values of the set."""
     first: Int
 
@@ -1132,16 +891,29 @@ type Namespace implements Node {
     """
     A condition to be used in determining which values should be returned by the collection.
     """
-    condition: RepositoryCondition
+    condition: TagCondition
 
     """
     A filter to be used in determining which values should be returned by the collection.
     """
-    filter: RepositoryFilter
+    filter: TagFilter
 
-    """The method to use when ordering `Repository`."""
-    orderBy: [RepositoryOrderBy!] = [PRIMARY_KEY_ASC]
-  ): RepositoryConnection!
+    """The method to use when ordering `Tag`."""
+    orderBy: [TagOrderBy!] = [PRIMARY_KEY_ASC]
+  ): TagConnection!
+}
+
+type Namespace implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  id: ID!
+  rowId: UUID!
+  organizationId: UUID
+  name: String!
+  description: String
+  createdAt: Datetime
+  updatedAt: Datetime
 
   """Reads and enables pagination through a set of `ApiToken`."""
   apiTokens(
@@ -1177,8 +949,8 @@ type Namespace implements Node {
     orderBy: [ApiTokenOrderBy!] = [PRIMARY_KEY_ASC]
   ): ApiTokenConnection!
 
-  """Reads and enables pagination through a set of `TrustedPublisher`."""
-  trustedPublishers(
+  """Reads and enables pagination through a set of `Repository`."""
+  repositories(
     """Only read the first `n` values of the set."""
     first: Int
 
@@ -1200,42 +972,69 @@ type Namespace implements Node {
     """
     A condition to be used in determining which values should be returned by the collection.
     """
-    condition: TrustedPublisherCondition
+    condition: RepositoryCondition
 
     """
     A filter to be used in determining which values should be returned by the collection.
     """
-    filter: TrustedPublisherFilter
+    filter: RepositoryFilter
 
-    """The method to use when ordering `TrustedPublisher`."""
-    orderBy: [TrustedPublisherOrderBy!] = [PRIMARY_KEY_ASC]
-  ): TrustedPublisherConnection!
+    """The method to use when ordering `Repository`."""
+    orderBy: [RepositoryOrderBy!] = [PRIMARY_KEY_ASC]
+  ): RepositoryConnection!
 }
 
-"""A connection to a list of `Repository` values."""
-type RepositoryConnection {
-  """A list of `Repository` objects."""
-  nodes: [Repository]!
+"""A connection to a list of `ApiToken` values."""
+type ApiTokenConnection {
+  """A list of `ApiToken` objects."""
+  nodes: [ApiToken]!
 
   """
-  A list of edges which contains the `Repository` and cursor to aid in pagination.
+  A list of edges which contains the `ApiToken` and cursor to aid in pagination.
   """
-  edges: [RepositoryEdge]!
+  edges: [ApiTokenEdge]!
 
   """Information to aid in pagination."""
   pageInfo: PageInfo!
 
-  """The count of *all* `Repository` you could get from the connection."""
+  """The count of *all* `ApiToken` you could get from the connection."""
   totalCount: Int!
 }
 
-"""A `Repository` edge in the connection."""
-type RepositoryEdge {
+type ApiToken implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  id: ID!
+  rowId: UUID!
+  name: String!
+  tokenHash: String!
+  tokenPrefix: String!
+  namespaceId: UUID!
+  repositoryId: UUID
+  scope: String!
+  createdBy: String!
+  description: String
+  isActive: Boolean!
+  expiresAt: Datetime
+  lastUsedAt: Datetime
+  createdAt: Datetime
+  updatedAt: Datetime
+
+  """Reads a single `Namespace` that is related to this `ApiToken`."""
+  namespace: Namespace
+
+  """Reads a single `Repository` that is related to this `ApiToken`."""
+  repository: Repository
+}
+
+"""A `ApiToken` edge in the connection."""
+type ApiTokenEdge {
   """A cursor for use in pagination."""
   cursor: Cursor
 
-  """The `Repository` at the end of the edge."""
-  node: Repository
+  """The `ApiToken` at the end of the edge."""
+  node: ApiToken
 }
 
 """A location in a connection that can be used for resuming pagination."""
@@ -1257,80 +1056,74 @@ type PageInfo {
 }
 
 """
-A condition to be used against `Repository` object types. All fields are tested
+A condition to be used against `ApiToken` object types. All fields are tested
 for equality and combined with a logical ‘and.’
 """
-input RepositoryCondition {
+input ApiTokenCondition {
   """Checks for equality with the object’s `rowId` field."""
   rowId: UUID
+
+  """Checks for equality with the object’s `tokenHash` field."""
+  tokenHash: String
+
+  """Checks for equality with the object’s `tokenPrefix` field."""
+  tokenPrefix: String
 
   """Checks for equality with the object’s `namespaceId` field."""
   namespaceId: UUID
 
-  """Checks for equality with the object’s `name` field."""
-  name: String
+  """Checks for equality with the object’s `repositoryId` field."""
+  repositoryId: UUID
 
-  """Checks for equality with the object’s `artifactType` field."""
-  artifactType: String
+  """Checks for equality with the object’s `createdBy` field."""
+  createdBy: String
+
+  """Checks for equality with the object’s `isActive` field."""
+  isActive: Boolean
 }
 
 """
-A filter to be used against `Repository` object types. All fields are combined with a logical ‘and.’
+A filter to be used against `ApiToken` object types. All fields are combined with a logical ‘and.’
 """
-input RepositoryFilter {
+input ApiTokenFilter {
   """Filter by the object’s `rowId` field."""
   rowId: UUIDFilter
+
+  """Filter by the object’s `tokenHash` field."""
+  tokenHash: StringFilter
+
+  """Filter by the object’s `tokenPrefix` field."""
+  tokenPrefix: StringFilter
 
   """Filter by the object’s `namespaceId` field."""
   namespaceId: UUIDFilter
 
-  """Filter by the object’s `name` field."""
-  name: StringFilter
+  """Filter by the object’s `repositoryId` field."""
+  repositoryId: UUIDFilter
 
-  """Filter by the object’s `artifactType` field."""
-  artifactType: StringFilter
+  """Filter by the object’s `createdBy` field."""
+  createdBy: StringFilter
 
-  """Filter by the object’s `artifacts` relation."""
-  artifacts: RepositoryToManyArtifactFilter
-
-  """Some related `artifacts` exist."""
-  artifactsExist: Boolean
-
-  """Filter by the object’s `tags` relation."""
-  tags: RepositoryToManyTagFilter
-
-  """Some related `tags` exist."""
-  tagsExist: Boolean
-
-  """Filter by the object’s `uploadSessions` relation."""
-  uploadSessions: RepositoryToManyUploadSessionFilter
-
-  """Some related `uploadSessions` exist."""
-  uploadSessionsExist: Boolean
-
-  """Filter by the object’s `apiTokens` relation."""
-  apiTokens: RepositoryToManyApiTokenFilter
-
-  """Some related `apiTokens` exist."""
-  apiTokensExist: Boolean
-
-  """Filter by the object’s `npmDistTags` relation."""
-  npmDistTags: RepositoryToManyNpmDistTagFilter
-
-  """Some related `npmDistTags` exist."""
-  npmDistTagsExist: Boolean
+  """Filter by the object’s `isActive` field."""
+  isActive: BooleanFilter
 
   """Filter by the object’s `namespace` relation."""
   namespace: NamespaceFilter
 
+  """Filter by the object’s `repository` relation."""
+  repository: RepositoryFilter
+
+  """A related `repository` exists."""
+  repositoryExists: Boolean
+
   """Checks for all expressions in this list."""
-  and: [RepositoryFilter!]
+  and: [ApiTokenFilter!]
 
   """Checks for any expressions in this list."""
-  or: [RepositoryFilter!]
+  or: [ApiTokenFilter!]
 
   """Negates the expression."""
-  not: RepositoryFilter
+  not: ApiTokenFilter
 }
 
 """
@@ -1508,6 +1301,196 @@ input StringFilter {
 }
 
 """
+A filter to be used against Boolean fields. All fields are combined with a logical ‘and.’
+"""
+input BooleanFilter {
+  """
+  Is null (if `true` is specified) or is not null (if `false` is specified).
+  """
+  isNull: Boolean
+
+  """Equal to the specified value."""
+  equalTo: Boolean
+
+  """Not equal to the specified value."""
+  notEqualTo: Boolean
+
+  """
+  Not equal to the specified value, treating null like an ordinary value.
+  """
+  distinctFrom: Boolean
+
+  """Equal to the specified value, treating null like an ordinary value."""
+  notDistinctFrom: Boolean
+
+  """Included in the specified list."""
+  in: [Boolean!]
+
+  """Not included in the specified list."""
+  notIn: [Boolean!]
+
+  """Less than the specified value."""
+  lessThan: Boolean
+
+  """Less than or equal to the specified value."""
+  lessThanOrEqualTo: Boolean
+
+  """Greater than the specified value."""
+  greaterThan: Boolean
+
+  """Greater than or equal to the specified value."""
+  greaterThanOrEqualTo: Boolean
+}
+
+"""
+A filter to be used against `Namespace` object types. All fields are combined with a logical ‘and.’
+"""
+input NamespaceFilter {
+  """Filter by the object’s `rowId` field."""
+  rowId: UUIDFilter
+
+  """Filter by the object’s `organizationId` field."""
+  organizationId: UUIDFilter
+
+  """Filter by the object’s `name` field."""
+  name: StringFilter
+
+  """Filter by the object’s `apiTokens` relation."""
+  apiTokens: NamespaceToManyApiTokenFilter
+
+  """Some related `apiTokens` exist."""
+  apiTokensExist: Boolean
+
+  """Filter by the object’s `repositories` relation."""
+  repositories: NamespaceToManyRepositoryFilter
+
+  """Some related `repositories` exist."""
+  repositoriesExist: Boolean
+
+  """Checks for all expressions in this list."""
+  and: [NamespaceFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [NamespaceFilter!]
+
+  """Negates the expression."""
+  not: NamespaceFilter
+}
+
+"""
+A filter to be used against many `ApiToken` object types. All fields are combined with a logical ‘and.’
+"""
+input NamespaceToManyApiTokenFilter {
+  """
+  Every related `ApiToken` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  every: ApiTokenFilter
+
+  """
+  Some related `ApiToken` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  some: ApiTokenFilter
+
+  """
+  No related `ApiToken` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  none: ApiTokenFilter
+}
+
+"""
+A filter to be used against many `Repository` object types. All fields are combined with a logical ‘and.’
+"""
+input NamespaceToManyRepositoryFilter {
+  """
+  Every related `Repository` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  every: RepositoryFilter
+
+  """
+  Some related `Repository` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  some: RepositoryFilter
+
+  """
+  No related `Repository` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  none: RepositoryFilter
+}
+
+"""
+A filter to be used against `Repository` object types. All fields are combined with a logical ‘and.’
+"""
+input RepositoryFilter {
+  """Filter by the object’s `rowId` field."""
+  rowId: UUIDFilter
+
+  """Filter by the object’s `namespaceId` field."""
+  namespaceId: UUIDFilter
+
+  """Filter by the object’s `name` field."""
+  name: StringFilter
+
+  """Filter by the object’s `artifactType` field."""
+  artifactType: StringFilter
+
+  """Filter by the object’s `apiTokens` relation."""
+  apiTokens: RepositoryToManyApiTokenFilter
+
+  """Some related `apiTokens` exist."""
+  apiTokensExist: Boolean
+
+  """Filter by the object’s `artifacts` relation."""
+  artifacts: RepositoryToManyArtifactFilter
+
+  """Some related `artifacts` exist."""
+  artifactsExist: Boolean
+
+  """Filter by the object’s `npmDistTags` relation."""
+  npmDistTags: RepositoryToManyNpmDistTagFilter
+
+  """Some related `npmDistTags` exist."""
+  npmDistTagsExist: Boolean
+
+  """Filter by the object’s `tags` relation."""
+  tags: RepositoryToManyTagFilter
+
+  """Some related `tags` exist."""
+  tagsExist: Boolean
+
+  """Filter by the object’s `namespace` relation."""
+  namespace: NamespaceFilter
+
+  """Checks for all expressions in this list."""
+  and: [RepositoryFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [RepositoryFilter!]
+
+  """Negates the expression."""
+  not: RepositoryFilter
+}
+
+"""
+A filter to be used against many `ApiToken` object types. All fields are combined with a logical ‘and.’
+"""
+input RepositoryToManyApiTokenFilter {
+  """
+  Every related `ApiToken` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  every: ApiTokenFilter
+
+  """
+  Some related `ApiToken` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  some: ApiTokenFilter
+
+  """
+  No related `ApiToken` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  none: ApiTokenFilter
+}
+
+"""
 A filter to be used against many `Artifact` object types. All fields are combined with a logical ‘and.’
 """
 input RepositoryToManyArtifactFilter {
@@ -1543,11 +1526,29 @@ input ArtifactFilter {
   """Filter by the object’s `subject` field."""
   subject: StringFilter
 
+  """Filter by the object’s `cargoMetadata` relation."""
+  cargoMetadata: ArtifactToManyCargoMetadatumFilter
+
+  """Some related `cargoMetadata` exist."""
+  cargoMetadataExist: Boolean
+
   """Filter by the object’s `containerMetadatum` relation."""
   containerMetadatum: ContainerMetadatumFilter
 
   """A related `containerMetadatum` exists."""
   containerMetadatumExists: Boolean
+
+  """Filter by the object’s `npmMetadata` relation."""
+  npmMetadata: ArtifactToManyNpmMetadatumFilter
+
+  """Some related `npmMetadata` exist."""
+  npmMetadataExist: Boolean
+
+  """Filter by the object’s `scanResults` relation."""
+  scanResults: ArtifactToManyScanResultFilter
+
+  """Some related `scanResults` exist."""
+  scanResultsExist: Boolean
 
   """Filter by the object’s `schemaMetadatum` relation."""
   schemaMetadatum: SchemaMetadatumFilter
@@ -1567,23 +1568,11 @@ input ArtifactFilter {
   """A related `wasmMetadatum` exists."""
   wasmMetadatumExists: Boolean
 
-  """Filter by the object’s `cargoMetadata` relation."""
-  cargoMetadata: ArtifactToManyCargoMetadatumFilter
+  """Filter by the object’s `pypiMetadata` relation."""
+  pypiMetadata: ArtifactToManyPypiMetadatumFilter
 
-  """Some related `cargoMetadata` exist."""
-  cargoMetadataExist: Boolean
-
-  """Filter by the object’s `npmMetadata` relation."""
-  npmMetadata: ArtifactToManyNpmMetadatumFilter
-
-  """Some related `npmMetadata` exist."""
-  npmMetadataExist: Boolean
-
-  """Filter by the object’s `scanResults` relation."""
-  scanResults: ArtifactToManyScanResultFilter
-
-  """Some related `scanResults` exist."""
-  scanResultsExist: Boolean
+  """Some related `pypiMetadata` exist."""
+  pypiMetadataExist: Boolean
 
   """Filter by the object’s `repository` relation."""
   repository: RepositoryFilter
@@ -1596,118 +1585,6 @@ input ArtifactFilter {
 
   """Negates the expression."""
   not: ArtifactFilter
-}
-
-"""
-A filter to be used against `ContainerMetadatum` object types. All fields are combined with a logical ‘and.’
-"""
-input ContainerMetadatumFilter {
-  """Filter by the object’s `artifactId` field."""
-  artifactId: UUIDFilter
-
-  """Filter by the object’s `artifact` relation."""
-  artifact: ArtifactFilter
-
-  """Checks for all expressions in this list."""
-  and: [ContainerMetadatumFilter!]
-
-  """Checks for any expressions in this list."""
-  or: [ContainerMetadatumFilter!]
-
-  """Negates the expression."""
-  not: ContainerMetadatumFilter
-}
-
-"""
-A filter to be used against `SchemaMetadatum` object types. All fields are combined with a logical ‘and.’
-"""
-input SchemaMetadatumFilter {
-  """Filter by the object’s `artifactId` field."""
-  artifactId: UUIDFilter
-
-  """Filter by the object’s `artifact` relation."""
-  artifact: ArtifactFilter
-
-  """Checks for all expressions in this list."""
-  and: [SchemaMetadatumFilter!]
-
-  """Checks for any expressions in this list."""
-  or: [SchemaMetadatumFilter!]
-
-  """Negates the expression."""
-  not: SchemaMetadatumFilter
-}
-
-"""
-A filter to be used against many `Tag` object types. All fields are combined with a logical ‘and.’
-"""
-input ArtifactToManyTagFilter {
-  """
-  Every related `Tag` matches the filter criteria. All fields are combined with a logical ‘and.’
-  """
-  every: TagFilter
-
-  """
-  Some related `Tag` matches the filter criteria. All fields are combined with a logical ‘and.’
-  """
-  some: TagFilter
-
-  """
-  No related `Tag` matches the filter criteria. All fields are combined with a logical ‘and.’
-  """
-  none: TagFilter
-}
-
-"""
-A filter to be used against `Tag` object types. All fields are combined with a logical ‘and.’
-"""
-input TagFilter {
-  """Filter by the object’s `rowId` field."""
-  rowId: UUIDFilter
-
-  """Filter by the object’s `repositoryId` field."""
-  repositoryId: UUIDFilter
-
-  """Filter by the object’s `artifactId` field."""
-  artifactId: UUIDFilter
-
-  """Filter by the object’s `name` field."""
-  name: StringFilter
-
-  """Filter by the object’s `artifact` relation."""
-  artifact: ArtifactFilter
-
-  """Filter by the object’s `repository` relation."""
-  repository: RepositoryFilter
-
-  """Checks for all expressions in this list."""
-  and: [TagFilter!]
-
-  """Checks for any expressions in this list."""
-  or: [TagFilter!]
-
-  """Negates the expression."""
-  not: TagFilter
-}
-
-"""
-A filter to be used against `WasmMetadatum` object types. All fields are combined with a logical ‘and.’
-"""
-input WasmMetadatumFilter {
-  """Filter by the object’s `artifactId` field."""
-  artifactId: UUIDFilter
-
-  """Filter by the object’s `artifact` relation."""
-  artifact: ArtifactFilter
-
-  """Checks for all expressions in this list."""
-  and: [WasmMetadatumFilter!]
-
-  """Checks for any expressions in this list."""
-  or: [WasmMetadatumFilter!]
-
-  """Negates the expression."""
-  not: WasmMetadatumFilter
 }
 
 """
@@ -1757,6 +1634,26 @@ input CargoMetadatumFilter {
 
   """Negates the expression."""
   not: CargoMetadatumFilter
+}
+
+"""
+A filter to be used against `ContainerMetadatum` object types. All fields are combined with a logical ‘and.’
+"""
+input ContainerMetadatumFilter {
+  """Filter by the object’s `artifactId` field."""
+  artifactId: UUIDFilter
+
+  """Filter by the object’s `artifact` relation."""
+  artifact: ArtifactFilter
+
+  """Checks for all expressions in this list."""
+  and: [ContainerMetadatumFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [ContainerMetadatumFilter!]
+
+  """Negates the expression."""
+  not: ContainerMetadatumFilter
 }
 
 """
@@ -1855,9 +1752,29 @@ input ScanResultFilter {
 }
 
 """
+A filter to be used against `SchemaMetadatum` object types. All fields are combined with a logical ‘and.’
+"""
+input SchemaMetadatumFilter {
+  """Filter by the object’s `artifactId` field."""
+  artifactId: UUIDFilter
+
+  """Filter by the object’s `artifact` relation."""
+  artifact: ArtifactFilter
+
+  """Checks for all expressions in this list."""
+  and: [SchemaMetadatumFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [SchemaMetadatumFilter!]
+
+  """Negates the expression."""
+  not: SchemaMetadatumFilter
+}
+
+"""
 A filter to be used against many `Tag` object types. All fields are combined with a logical ‘and.’
 """
-input RepositoryToManyTagFilter {
+input ArtifactToManyTagFilter {
   """
   Every related `Tag` matches the filter criteria. All fields are combined with a logical ‘and.’
   """
@@ -1875,385 +1792,104 @@ input RepositoryToManyTagFilter {
 }
 
 """
-A filter to be used against many `UploadSession` object types. All fields are combined with a logical ‘and.’
+A filter to be used against `Tag` object types. All fields are combined with a logical ‘and.’
 """
-input RepositoryToManyUploadSessionFilter {
-  """
-  Every related `UploadSession` matches the filter criteria. All fields are combined with a logical ‘and.’
-  """
-  every: UploadSessionFilter
-
-  """
-  Some related `UploadSession` matches the filter criteria. All fields are combined with a logical ‘and.’
-  """
-  some: UploadSessionFilter
-
-  """
-  No related `UploadSession` matches the filter criteria. All fields are combined with a logical ‘and.’
-  """
-  none: UploadSessionFilter
-}
-
-"""
-A filter to be used against `UploadSession` object types. All fields are combined with a logical ‘and.’
-"""
-input UploadSessionFilter {
+input TagFilter {
   """Filter by the object’s `rowId` field."""
   rowId: UUIDFilter
 
   """Filter by the object’s `repositoryId` field."""
   repositoryId: UUIDFilter
 
-  """Filter by the object’s `expiresAt` field."""
-  expiresAt: DatetimeFilter
-
-  """Filter by the object’s `repository` relation."""
-  repository: RepositoryFilter
-
-  """Checks for all expressions in this list."""
-  and: [UploadSessionFilter!]
-
-  """Checks for any expressions in this list."""
-  or: [UploadSessionFilter!]
-
-  """Negates the expression."""
-  not: UploadSessionFilter
-}
-
-"""
-A filter to be used against Datetime fields. All fields are combined with a logical ‘and.’
-"""
-input DatetimeFilter {
-  """
-  Is null (if `true` is specified) or is not null (if `false` is specified).
-  """
-  isNull: Boolean
-
-  """Equal to the specified value."""
-  equalTo: Datetime
-
-  """Not equal to the specified value."""
-  notEqualTo: Datetime
-
-  """
-  Not equal to the specified value, treating null like an ordinary value.
-  """
-  distinctFrom: Datetime
-
-  """Equal to the specified value, treating null like an ordinary value."""
-  notDistinctFrom: Datetime
-
-  """Included in the specified list."""
-  in: [Datetime!]
-
-  """Not included in the specified list."""
-  notIn: [Datetime!]
-
-  """Less than the specified value."""
-  lessThan: Datetime
-
-  """Less than or equal to the specified value."""
-  lessThanOrEqualTo: Datetime
-
-  """Greater than the specified value."""
-  greaterThan: Datetime
-
-  """Greater than or equal to the specified value."""
-  greaterThanOrEqualTo: Datetime
-}
-
-"""
-A filter to be used against many `ApiToken` object types. All fields are combined with a logical ‘and.’
-"""
-input RepositoryToManyApiTokenFilter {
-  """
-  Every related `ApiToken` matches the filter criteria. All fields are combined with a logical ‘and.’
-  """
-  every: ApiTokenFilter
-
-  """
-  Some related `ApiToken` matches the filter criteria. All fields are combined with a logical ‘and.’
-  """
-  some: ApiTokenFilter
-
-  """
-  No related `ApiToken` matches the filter criteria. All fields are combined with a logical ‘and.’
-  """
-  none: ApiTokenFilter
-}
-
-"""
-A filter to be used against `ApiToken` object types. All fields are combined with a logical ‘and.’
-"""
-input ApiTokenFilter {
-  """Filter by the object’s `rowId` field."""
-  rowId: UUIDFilter
-
-  """Filter by the object’s `tokenHash` field."""
-  tokenHash: StringFilter
-
-  """Filter by the object’s `tokenPrefix` field."""
-  tokenPrefix: StringFilter
-
-  """Filter by the object’s `namespaceId` field."""
-  namespaceId: UUIDFilter
-
-  """Filter by the object’s `repositoryId` field."""
-  repositoryId: UUIDFilter
-
-  """Filter by the object’s `createdBy` field."""
-  createdBy: StringFilter
-
-  """Filter by the object’s `isActive` field."""
-  isActive: BooleanFilter
-
-  """Filter by the object’s `namespace` relation."""
-  namespace: NamespaceFilter
-
-  """Filter by the object’s `repository` relation."""
-  repository: RepositoryFilter
-
-  """A related `repository` exists."""
-  repositoryExists: Boolean
-
-  """Checks for all expressions in this list."""
-  and: [ApiTokenFilter!]
-
-  """Checks for any expressions in this list."""
-  or: [ApiTokenFilter!]
-
-  """Negates the expression."""
-  not: ApiTokenFilter
-}
-
-"""
-A filter to be used against Boolean fields. All fields are combined with a logical ‘and.’
-"""
-input BooleanFilter {
-  """
-  Is null (if `true` is specified) or is not null (if `false` is specified).
-  """
-  isNull: Boolean
-
-  """Equal to the specified value."""
-  equalTo: Boolean
-
-  """Not equal to the specified value."""
-  notEqualTo: Boolean
-
-  """
-  Not equal to the specified value, treating null like an ordinary value.
-  """
-  distinctFrom: Boolean
-
-  """Equal to the specified value, treating null like an ordinary value."""
-  notDistinctFrom: Boolean
-
-  """Included in the specified list."""
-  in: [Boolean!]
-
-  """Not included in the specified list."""
-  notIn: [Boolean!]
-
-  """Less than the specified value."""
-  lessThan: Boolean
-
-  """Less than or equal to the specified value."""
-  lessThanOrEqualTo: Boolean
-
-  """Greater than the specified value."""
-  greaterThan: Boolean
-
-  """Greater than or equal to the specified value."""
-  greaterThanOrEqualTo: Boolean
-}
-
-"""
-A filter to be used against `Namespace` object types. All fields are combined with a logical ‘and.’
-"""
-input NamespaceFilter {
-  """Filter by the object’s `rowId` field."""
-  rowId: UUIDFilter
+  """Filter by the object’s `artifactId` field."""
+  artifactId: UUIDFilter
 
   """Filter by the object’s `name` field."""
   name: StringFilter
 
-  """Filter by the object’s `organizationId` field."""
-  organizationId: UUIDFilter
-
-  """Filter by the object’s `repositories` relation."""
-  repositories: NamespaceToManyRepositoryFilter
-
-  """Some related `repositories` exist."""
-  repositoriesExist: Boolean
-
-  """Filter by the object’s `apiTokens` relation."""
-  apiTokens: NamespaceToManyApiTokenFilter
-
-  """Some related `apiTokens` exist."""
-  apiTokensExist: Boolean
-
-  """Filter by the object’s `trustedPublishers` relation."""
-  trustedPublishers: NamespaceToManyTrustedPublisherFilter
-
-  """Some related `trustedPublishers` exist."""
-  trustedPublishersExist: Boolean
-
-  """Checks for all expressions in this list."""
-  and: [NamespaceFilter!]
-
-  """Checks for any expressions in this list."""
-  or: [NamespaceFilter!]
-
-  """Negates the expression."""
-  not: NamespaceFilter
-}
-
-"""
-A filter to be used against many `Repository` object types. All fields are combined with a logical ‘and.’
-"""
-input NamespaceToManyRepositoryFilter {
-  """
-  Every related `Repository` matches the filter criteria. All fields are combined with a logical ‘and.’
-  """
-  every: RepositoryFilter
-
-  """
-  Some related `Repository` matches the filter criteria. All fields are combined with a logical ‘and.’
-  """
-  some: RepositoryFilter
-
-  """
-  No related `Repository` matches the filter criteria. All fields are combined with a logical ‘and.’
-  """
-  none: RepositoryFilter
-}
-
-"""
-A filter to be used against many `ApiToken` object types. All fields are combined with a logical ‘and.’
-"""
-input NamespaceToManyApiTokenFilter {
-  """
-  Every related `ApiToken` matches the filter criteria. All fields are combined with a logical ‘and.’
-  """
-  every: ApiTokenFilter
-
-  """
-  Some related `ApiToken` matches the filter criteria. All fields are combined with a logical ‘and.’
-  """
-  some: ApiTokenFilter
-
-  """
-  No related `ApiToken` matches the filter criteria. All fields are combined with a logical ‘and.’
-  """
-  none: ApiTokenFilter
-}
-
-"""
-A filter to be used against many `TrustedPublisher` object types. All fields are combined with a logical ‘and.’
-"""
-input NamespaceToManyTrustedPublisherFilter {
-  """
-  Every related `TrustedPublisher` matches the filter criteria. All fields are combined with a logical ‘and.’
-  """
-  every: TrustedPublisherFilter
-
-  """
-  Some related `TrustedPublisher` matches the filter criteria. All fields are combined with a logical ‘and.’
-  """
-  some: TrustedPublisherFilter
-
-  """
-  No related `TrustedPublisher` matches the filter criteria. All fields are combined with a logical ‘and.’
-  """
-  none: TrustedPublisherFilter
-}
-
-"""
-A filter to be used against `TrustedPublisher` object types. All fields are combined with a logical ‘and.’
-"""
-input TrustedPublisherFilter {
-  """Filter by the object’s `rowId` field."""
-  rowId: UUIDFilter
-
-  """Filter by the object’s `namespaceId` field."""
-  namespaceId: UUIDFilter
-
-  """Filter by the object’s `issuerId` field."""
-  issuerId: UUIDFilter
-
-  """Filter by the object’s `subject` field."""
-  subject: StringFilter
-
-  """Filter by the object’s `isActive` field."""
-  isActive: BooleanFilter
-
-  """Filter by the object’s `issuer` relation."""
-  issuer: OidcIssuerFilter
-
-  """Filter by the object’s `namespace` relation."""
-  namespace: NamespaceFilter
+  """Filter by the object’s `artifact` relation."""
+  artifact: ArtifactFilter
 
   """Filter by the object’s `repository` relation."""
   repository: RepositoryFilter
 
-  """A related `repository` exists."""
-  repositoryExists: Boolean
-
   """Checks for all expressions in this list."""
-  and: [TrustedPublisherFilter!]
+  and: [TagFilter!]
 
   """Checks for any expressions in this list."""
-  or: [TrustedPublisherFilter!]
+  or: [TagFilter!]
 
   """Negates the expression."""
-  not: TrustedPublisherFilter
+  not: TagFilter
 }
 
 """
-A filter to be used against `OidcIssuer` object types. All fields are combined with a logical ‘and.’
+A filter to be used against `WasmMetadatum` object types. All fields are combined with a logical ‘and.’
 """
-input OidcIssuerFilter {
+input WasmMetadatumFilter {
+  """Filter by the object’s `artifactId` field."""
+  artifactId: UUIDFilter
+
+  """Filter by the object’s `artifact` relation."""
+  artifact: ArtifactFilter
+
+  """Checks for all expressions in this list."""
+  and: [WasmMetadatumFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [WasmMetadatumFilter!]
+
+  """Negates the expression."""
+  not: WasmMetadatumFilter
+}
+
+"""
+A filter to be used against many `PypiMetadatum` object types. All fields are combined with a logical ‘and.’
+"""
+input ArtifactToManyPypiMetadatumFilter {
+  """
+  Every related `PypiMetadatum` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  every: PypiMetadatumFilter
+
+  """
+  Some related `PypiMetadatum` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  some: PypiMetadatumFilter
+
+  """
+  No related `PypiMetadatum` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  none: PypiMetadatumFilter
+}
+
+"""
+A filter to be used against `PypiMetadatum` object types. All fields are combined with a logical ‘and.’
+"""
+input PypiMetadatumFilter {
   """Filter by the object’s `rowId` field."""
   rowId: UUIDFilter
 
-  """Filter by the object’s `issuer` field."""
-  issuer: StringFilter
+  """Filter by the object’s `artifactId` field."""
+  artifactId: UUIDFilter
 
-  """Filter by the object’s `trustedPublishersByIssuerId` relation."""
-  trustedPublishersByIssuerId: OidcIssuerToManyTrustedPublisherFilter
+  """Filter by the object’s `name` field."""
+  name: StringFilter
 
-  """Some related `trustedPublishersByIssuerId` exist."""
-  trustedPublishersByIssuerIdExist: Boolean
+  """Filter by the object’s `filename` field."""
+  filename: StringFilter
+
+  """Filter by the object’s `artifact` relation."""
+  artifact: ArtifactFilter
 
   """Checks for all expressions in this list."""
-  and: [OidcIssuerFilter!]
+  and: [PypiMetadatumFilter!]
 
   """Checks for any expressions in this list."""
-  or: [OidcIssuerFilter!]
+  or: [PypiMetadatumFilter!]
 
   """Negates the expression."""
-  not: OidcIssuerFilter
-}
-
-"""
-A filter to be used against many `TrustedPublisher` object types. All fields are combined with a logical ‘and.’
-"""
-input OidcIssuerToManyTrustedPublisherFilter {
-  """
-  Every related `TrustedPublisher` matches the filter criteria. All fields are combined with a logical ‘and.’
-  """
-  every: TrustedPublisherFilter
-
-  """
-  Some related `TrustedPublisher` matches the filter criteria. All fields are combined with a logical ‘and.’
-  """
-  some: TrustedPublisherFilter
-
-  """
-  No related `TrustedPublisher` matches the filter criteria. All fields are combined with a logical ‘and.’
-  """
-  none: TrustedPublisherFilter
+  not: PypiMetadatumFilter
 }
 
 """
@@ -2302,99 +1938,24 @@ input NpmDistTagFilter {
   not: NpmDistTagFilter
 }
 
-"""Methods to use when ordering `Repository`."""
-enum RepositoryOrderBy {
-  NATURAL
-  PRIMARY_KEY_ASC
-  PRIMARY_KEY_DESC
-  ROW_ID_ASC
-  ROW_ID_DESC
-  NAMESPACE_ID_ASC
-  NAMESPACE_ID_DESC
-  NAME_ASC
-  NAME_DESC
-  ARTIFACT_TYPE_ASC
-  ARTIFACT_TYPE_DESC
-}
-
-"""A connection to a list of `ApiToken` values."""
-type ApiTokenConnection {
-  """A list of `ApiToken` objects."""
-  nodes: [ApiToken]!
-
-  """
-  A list of edges which contains the `ApiToken` and cursor to aid in pagination.
-  """
-  edges: [ApiTokenEdge]!
-
-  """Information to aid in pagination."""
-  pageInfo: PageInfo!
-
-  """The count of *all* `ApiToken` you could get from the connection."""
-  totalCount: Int!
-}
-
-type ApiToken implements Node {
-  """
-  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
-  """
-  id: ID!
-  rowId: UUID!
-  name: String!
-  tokenHash: String!
-  tokenPrefix: String!
-  namespaceId: UUID!
-  repositoryId: UUID
-  scope: String!
-  createdBy: String!
-  description: String
-  isActive: Boolean!
-  expiresAt: Datetime
-  lastUsedAt: Datetime
-  createdAt: Datetime
-  updatedAt: Datetime
-
-  """Reads a single `Namespace` that is related to this `ApiToken`."""
-  namespace: Namespace
-
-  """Reads a single `Repository` that is related to this `ApiToken`."""
-  repository: Repository
-}
-
-"""A `ApiToken` edge in the connection."""
-type ApiTokenEdge {
-  """A cursor for use in pagination."""
-  cursor: Cursor
-
-  """The `ApiToken` at the end of the edge."""
-  node: ApiToken
-}
-
 """
-A condition to be used against `ApiToken` object types. All fields are tested
-for equality and combined with a logical ‘and.’
+A filter to be used against many `Tag` object types. All fields are combined with a logical ‘and.’
 """
-input ApiTokenCondition {
-  """Checks for equality with the object’s `rowId` field."""
-  rowId: UUID
+input RepositoryToManyTagFilter {
+  """
+  Every related `Tag` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  every: TagFilter
 
-  """Checks for equality with the object’s `tokenHash` field."""
-  tokenHash: String
+  """
+  Some related `Tag` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  some: TagFilter
 
-  """Checks for equality with the object’s `tokenPrefix` field."""
-  tokenPrefix: String
-
-  """Checks for equality with the object’s `namespaceId` field."""
-  namespaceId: UUID
-
-  """Checks for equality with the object’s `repositoryId` field."""
-  repositoryId: UUID
-
-  """Checks for equality with the object’s `createdBy` field."""
-  createdBy: String
-
-  """Checks for equality with the object’s `isActive` field."""
-  isActive: Boolean
+  """
+  No related `Tag` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  none: TagFilter
 }
 
 """Methods to use when ordering `ApiToken`."""
@@ -2418,129 +1979,52 @@ enum ApiTokenOrderBy {
   IS_ACTIVE_DESC
 }
 
-"""A connection to a list of `TrustedPublisher` values."""
-type TrustedPublisherConnection {
-  """A list of `TrustedPublisher` objects."""
-  nodes: [TrustedPublisher]!
+"""A connection to a list of `Repository` values."""
+type RepositoryConnection {
+  """A list of `Repository` objects."""
+  nodes: [Repository]!
 
   """
-  A list of edges which contains the `TrustedPublisher` and cursor to aid in pagination.
+  A list of edges which contains the `Repository` and cursor to aid in pagination.
   """
-  edges: [TrustedPublisherEdge]!
+  edges: [RepositoryEdge]!
 
   """Information to aid in pagination."""
   pageInfo: PageInfo!
 
-  """
-  The count of *all* `TrustedPublisher` you could get from the connection.
-  """
+  """The count of *all* `Repository` you could get from the connection."""
   totalCount: Int!
 }
 
-type TrustedPublisher implements Node {
-  """
-  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
-  """
-  id: ID!
-  rowId: UUID!
-  namespaceId: UUID!
-  repositoryId: UUID
-  issuerId: UUID!
-  subject: String!
-  claimConstraints: JSON!
-  scope: String!
-  isActive: Boolean!
-  createdBy: String!
-  lastUsedAt: Datetime
-  createdAt: Datetime
-  updatedAt: Datetime
+"""A `Repository` edge in the connection."""
+type RepositoryEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
 
-  """
-  Reads a single `OidcIssuer` that is related to this `TrustedPublisher`.
-  """
-  issuer: OidcIssuer
-
-  """Reads a single `Namespace` that is related to this `TrustedPublisher`."""
-  namespace: Namespace
-
-  """
-  Reads a single `Repository` that is related to this `TrustedPublisher`.
-  """
-  repository: Repository
-}
-
-type OidcIssuer implements Node {
-  """
-  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
-  """
-  id: ID!
-  rowId: UUID!
-  issuer: String!
-  jwksUri: String
-  audience: String!
-  enabled: Boolean!
-  createdAt: Datetime
-  updatedAt: Datetime
-  jwksAuthTokenPath: String
-
-  """Reads and enables pagination through a set of `TrustedPublisher`."""
-  trustedPublishersByIssuerId(
-    """Only read the first `n` values of the set."""
-    first: Int
-
-    """Only read the last `n` values of the set."""
-    last: Int
-
-    """
-    Skip the first `n` values from our `after` cursor, an alternative to cursor
-    based pagination. May not be used with `last`.
-    """
-    offset: Int
-
-    """Read all values in the set before (above) this cursor."""
-    before: Cursor
-
-    """Read all values in the set after (below) this cursor."""
-    after: Cursor
-
-    """
-    A condition to be used in determining which values should be returned by the collection.
-    """
-    condition: TrustedPublisherCondition
-
-    """
-    A filter to be used in determining which values should be returned by the collection.
-    """
-    filter: TrustedPublisherFilter
-
-    """The method to use when ordering `TrustedPublisher`."""
-    orderBy: [TrustedPublisherOrderBy!] = [PRIMARY_KEY_ASC]
-  ): TrustedPublisherConnection!
+  """The `Repository` at the end of the edge."""
+  node: Repository
 }
 
 """
-A condition to be used against `TrustedPublisher` object types. All fields are
-tested for equality and combined with a logical ‘and.’
+A condition to be used against `Repository` object types. All fields are tested
+for equality and combined with a logical ‘and.’
 """
-input TrustedPublisherCondition {
+input RepositoryCondition {
   """Checks for equality with the object’s `rowId` field."""
   rowId: UUID
 
   """Checks for equality with the object’s `namespaceId` field."""
   namespaceId: UUID
 
-  """Checks for equality with the object’s `issuerId` field."""
-  issuerId: UUID
+  """Checks for equality with the object’s `name` field."""
+  name: String
 
-  """Checks for equality with the object’s `subject` field."""
-  subject: String
-
-  """Checks for equality with the object’s `isActive` field."""
-  isActive: Boolean
+  """Checks for equality with the object’s `artifactType` field."""
+  artifactType: String
 }
 
-"""Methods to use when ordering `TrustedPublisher`."""
-enum TrustedPublisherOrderBy {
+"""Methods to use when ordering `Repository`."""
+enum RepositoryOrderBy {
   NATURAL
   PRIMARY_KEY_ASC
   PRIMARY_KEY_DESC
@@ -2548,21 +2032,10 @@ enum TrustedPublisherOrderBy {
   ROW_ID_DESC
   NAMESPACE_ID_ASC
   NAMESPACE_ID_DESC
-  ISSUER_ID_ASC
-  ISSUER_ID_DESC
-  SUBJECT_ASC
-  SUBJECT_DESC
-  IS_ACTIVE_ASC
-  IS_ACTIVE_DESC
-}
-
-"""A `TrustedPublisher` edge in the connection."""
-type TrustedPublisherEdge {
-  """A cursor for use in pagination."""
-  cursor: Cursor
-
-  """The `TrustedPublisher` at the end of the edge."""
-  node: TrustedPublisher
+  NAME_ASC
+  NAME_DESC
+  ARTIFACT_TYPE_ASC
+  ARTIFACT_TYPE_DESC
 }
 
 """A connection to a list of `Artifact` values."""
@@ -2622,6 +2095,76 @@ enum ArtifactOrderBy {
   DIGEST_DESC
   SUBJECT_ASC
   SUBJECT_DESC
+}
+
+"""A connection to a list of `NpmDistTag` values."""
+type NpmDistTagConnection {
+  """A list of `NpmDistTag` objects."""
+  nodes: [NpmDistTag]!
+
+  """
+  A list of edges which contains the `NpmDistTag` and cursor to aid in pagination.
+  """
+  edges: [NpmDistTagEdge]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `NpmDistTag` you could get from the connection."""
+  totalCount: Int!
+}
+
+type NpmDistTag implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  id: ID!
+  rowId: UUID!
+  repositoryId: UUID!
+  tag: String!
+  version: String!
+  createdAt: Datetime
+  updatedAt: Datetime
+
+  """Reads a single `Repository` that is related to this `NpmDistTag`."""
+  repository: Repository
+}
+
+"""A `NpmDistTag` edge in the connection."""
+type NpmDistTagEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `NpmDistTag` at the end of the edge."""
+  node: NpmDistTag
+}
+
+"""
+A condition to be used against `NpmDistTag` object types. All fields are tested
+for equality and combined with a logical ‘and.’
+"""
+input NpmDistTagCondition {
+  """Checks for equality with the object’s `rowId` field."""
+  rowId: UUID
+
+  """Checks for equality with the object’s `repositoryId` field."""
+  repositoryId: UUID
+
+  """Checks for equality with the object’s `tag` field."""
+  tag: String
+}
+
+"""Methods to use when ordering `NpmDistTag`."""
+enum NpmDistTagOrderBy {
+  NATURAL
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+  ROW_ID_ASC
+  ROW_ID_DESC
+  REPOSITORY_ID_ASC
+  REPOSITORY_ID_DESC
+  TAG_ASC
+  TAG_DESC
 }
 
 """A connection to a list of `Tag` values."""
@@ -2699,174 +2242,6 @@ enum TagOrderBy {
   ARTIFACT_ID_DESC
   NAME_ASC
   NAME_DESC
-}
-
-"""A connection to a list of `UploadSession` values."""
-type UploadSessionConnection {
-  """A list of `UploadSession` objects."""
-  nodes: [UploadSession]!
-
-  """
-  A list of edges which contains the `UploadSession` and cursor to aid in pagination.
-  """
-  edges: [UploadSessionEdge]!
-
-  """Information to aid in pagination."""
-  pageInfo: PageInfo!
-
-  """The count of *all* `UploadSession` you could get from the connection."""
-  totalCount: Int!
-}
-
-type UploadSession implements Node {
-  """
-  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
-  """
-  id: ID!
-  rowId: UUID!
-  repositoryId: UUID!
-  offset: BigInt!
-  createdAt: Datetime
-  expiresAt: Datetime!
-
-  """Reads a single `Repository` that is related to this `UploadSession`."""
-  repository: Repository
-}
-
-"""A `UploadSession` edge in the connection."""
-type UploadSessionEdge {
-  """A cursor for use in pagination."""
-  cursor: Cursor
-
-  """The `UploadSession` at the end of the edge."""
-  node: UploadSession
-}
-
-"""
-A condition to be used against `UploadSession` object types. All fields are
-tested for equality and combined with a logical ‘and.’
-"""
-input UploadSessionCondition {
-  """Checks for equality with the object’s `rowId` field."""
-  rowId: UUID
-
-  """Checks for equality with the object’s `repositoryId` field."""
-  repositoryId: UUID
-
-  """Checks for equality with the object’s `expiresAt` field."""
-  expiresAt: Datetime
-}
-
-"""Methods to use when ordering `UploadSession`."""
-enum UploadSessionOrderBy {
-  NATURAL
-  PRIMARY_KEY_ASC
-  PRIMARY_KEY_DESC
-  ROW_ID_ASC
-  ROW_ID_DESC
-  REPOSITORY_ID_ASC
-  REPOSITORY_ID_DESC
-  EXPIRES_AT_ASC
-  EXPIRES_AT_DESC
-}
-
-"""A connection to a list of `NpmDistTag` values."""
-type NpmDistTagConnection {
-  """A list of `NpmDistTag` objects."""
-  nodes: [NpmDistTag]!
-
-  """
-  A list of edges which contains the `NpmDistTag` and cursor to aid in pagination.
-  """
-  edges: [NpmDistTagEdge]!
-
-  """Information to aid in pagination."""
-  pageInfo: PageInfo!
-
-  """The count of *all* `NpmDistTag` you could get from the connection."""
-  totalCount: Int!
-}
-
-type NpmDistTag implements Node {
-  """
-  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
-  """
-  id: ID!
-  rowId: UUID!
-  repositoryId: UUID!
-  tag: String!
-  version: String!
-  createdAt: Datetime
-  updatedAt: Datetime
-
-  """Reads a single `Repository` that is related to this `NpmDistTag`."""
-  repository: Repository
-}
-
-"""A `NpmDistTag` edge in the connection."""
-type NpmDistTagEdge {
-  """A cursor for use in pagination."""
-  cursor: Cursor
-
-  """The `NpmDistTag` at the end of the edge."""
-  node: NpmDistTag
-}
-
-"""
-A condition to be used against `NpmDistTag` object types. All fields are tested
-for equality and combined with a logical ‘and.’
-"""
-input NpmDistTagCondition {
-  """Checks for equality with the object’s `rowId` field."""
-  rowId: UUID
-
-  """Checks for equality with the object’s `repositoryId` field."""
-  repositoryId: UUID
-
-  """Checks for equality with the object’s `tag` field."""
-  tag: String
-}
-
-"""Methods to use when ordering `NpmDistTag`."""
-enum NpmDistTagOrderBy {
-  NATURAL
-  PRIMARY_KEY_ASC
-  PRIMARY_KEY_DESC
-  ROW_ID_ASC
-  ROW_ID_DESC
-  REPOSITORY_ID_ASC
-  REPOSITORY_ID_DESC
-  TAG_ASC
-  TAG_DESC
-}
-
-type SchemaMetadatum implements Node {
-  """
-  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
-  """
-  id: ID!
-  artifactId: UUID!
-  version: String
-  title: String
-  isValid: Boolean!
-  validationErrors: JSON
-
-  """Reads a single `Artifact` that is related to this `SchemaMetadatum`."""
-  artifact: Artifact
-}
-
-type WasmMetadatum implements Node {
-  """
-  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
-  """
-  id: ID!
-  artifactId: UUID!
-  runtime: String
-  exports: JSON!
-  imports: JSON!
-
-  """Reads a single `Artifact` that is related to this `WasmMetadatum`."""
-  artifact: Artifact
 }
 
 """A connection to a list of `CargoMetadatum` values."""
@@ -3106,246 +2481,118 @@ enum ScanResultOrderBy {
   STATUS_DESC
 }
 
-type Plugin implements Node {
+type SchemaMetadatum implements Node {
   """
   A globally unique identifier. Can be used in various places throughout the system to identify this single value.
   """
   id: ID!
-  rowId: UUID!
-  name: String!
-  version: String!
-  description: String!
-  type: String!
-  bin: String
-  endpoint: String
-  commands: JSON
-  packages: JSON
-  createdAt: Datetime
-  updatedAt: Datetime
+  artifactId: UUID!
+  version: String
+  title: String
+  isValid: Boolean!
+  validationErrors: JSON
+
+  """Reads a single `Artifact` that is related to this `SchemaMetadatum`."""
+  artifact: Artifact
 }
 
-type FederatedSource implements Node {
+type WasmMetadatum implements Node {
   """
   A globally unique identifier. Can be used in various places throughout the system to identify this single value.
   """
   id: ID!
-  rowId: UUID!
-  namespace: String!
-  upstreamBaseUrl: String!
-  upstreamType: String!
-  enabled: Boolean!
-  rateLimitRpm: Int!
-  cacheTtlSeconds: Int!
-  tagListCacheTtlSeconds: Int!
-  requireVetting: Boolean!
-  createdAt: Datetime
-  updatedAt: Datetime
+  artifactId: UUID!
+  runtime: String
+  exports: JSON!
+  imports: JSON!
 
-  """Reads and enables pagination through a set of `FederatedSkillCache`."""
-  federatedSkillCachesBySourceId(
-    """Only read the first `n` values of the set."""
-    first: Int
-
-    """Only read the last `n` values of the set."""
-    last: Int
-
-    """
-    Skip the first `n` values from our `after` cursor, an alternative to cursor
-    based pagination. May not be used with `last`.
-    """
-    offset: Int
-
-    """Read all values in the set before (above) this cursor."""
-    before: Cursor
-
-    """Read all values in the set after (below) this cursor."""
-    after: Cursor
-
-    """
-    A condition to be used in determining which values should be returned by the collection.
-    """
-    condition: FederatedSkillCacheCondition
-
-    """
-    A filter to be used in determining which values should be returned by the collection.
-    """
-    filter: FederatedSkillCacheFilter
-
-    """The method to use when ordering `FederatedSkillCache`."""
-    orderBy: [FederatedSkillCacheOrderBy!] = [PRIMARY_KEY_ASC]
-  ): FederatedSkillCacheConnection!
+  """Reads a single `Artifact` that is related to this `WasmMetadatum`."""
+  artifact: Artifact
 }
 
-"""A connection to a list of `FederatedSkillCache` values."""
-type FederatedSkillCacheConnection {
-  """A list of `FederatedSkillCache` objects."""
-  nodes: [FederatedSkillCache]!
+"""A connection to a list of `PypiMetadatum` values."""
+type PypiMetadatumConnection {
+  """A list of `PypiMetadatum` objects."""
+  nodes: [PypiMetadatum]!
 
   """
-  A list of edges which contains the `FederatedSkillCache` and cursor to aid in pagination.
+  A list of edges which contains the `PypiMetadatum` and cursor to aid in pagination.
   """
-  edges: [FederatedSkillCacheEdge]!
+  edges: [PypiMetadatumEdge]!
 
   """Information to aid in pagination."""
   pageInfo: PageInfo!
 
-  """
-  The count of *all* `FederatedSkillCache` you could get from the connection.
-  """
+  """The count of *all* `PypiMetadatum` you could get from the connection."""
   totalCount: Int!
 }
 
-type FederatedSkillCache implements Node {
+type PypiMetadatum implements Node {
   """
   A globally unique identifier. Can be used in various places throughout the system to identify this single value.
   """
   id: ID!
   rowId: UUID!
-  sourceId: UUID!
-  slug: String!
-  content: String
-  contentDigest: String
-  fetchedAt: Datetime
-  expiresAt: Datetime
-  vetStatus: String!
-  vetReason: String
-  vettedBy: String
-  vettedAt: Datetime
-  upstreamMeta: JSON
+  artifactId: UUID!
+  name: String!
+  version: String!
+  filename: String!
+  filetype: String!
+  pythonVersion: String
+  requiresPython: String
+  requiresDist: JSON!
+  metadataVersion: String
+  summary: String
+  sha256: String!
+  blake2256: String
+  yanked: Boolean!
   createdAt: Datetime
+  updatedAt: Datetime
 
-  """
-  Reads a single `FederatedSource` that is related to this `FederatedSkillCache`.
-  """
-  source: FederatedSource
+  """Reads a single `Artifact` that is related to this `PypiMetadatum`."""
+  artifact: Artifact
 }
 
-"""A `FederatedSkillCache` edge in the connection."""
-type FederatedSkillCacheEdge {
+"""A `PypiMetadatum` edge in the connection."""
+type PypiMetadatumEdge {
   """A cursor for use in pagination."""
   cursor: Cursor
 
-  """The `FederatedSkillCache` at the end of the edge."""
-  node: FederatedSkillCache
+  """The `PypiMetadatum` at the end of the edge."""
+  node: PypiMetadatum
 }
 
 """
-A condition to be used against `FederatedSkillCache` object types. All fields
-are tested for equality and combined with a logical ‘and.’
+A condition to be used against `PypiMetadatum` object types. All fields are
+tested for equality and combined with a logical ‘and.’
 """
-input FederatedSkillCacheCondition {
+input PypiMetadatumCondition {
   """Checks for equality with the object’s `rowId` field."""
   rowId: UUID
 
-  """Checks for equality with the object’s `sourceId` field."""
-  sourceId: UUID
+  """Checks for equality with the object’s `artifactId` field."""
+  artifactId: UUID
 
-  """Checks for equality with the object’s `slug` field."""
-  slug: String
+  """Checks for equality with the object’s `name` field."""
+  name: String
 
-  """Checks for equality with the object’s `expiresAt` field."""
-  expiresAt: Datetime
-
-  """Checks for equality with the object’s `vetStatus` field."""
-  vetStatus: String
+  """Checks for equality with the object’s `filename` field."""
+  filename: String
 }
 
-"""
-A filter to be used against `FederatedSkillCache` object types. All fields are combined with a logical ‘and.’
-"""
-input FederatedSkillCacheFilter {
-  """Filter by the object’s `rowId` field."""
-  rowId: UUIDFilter
-
-  """Filter by the object’s `sourceId` field."""
-  sourceId: UUIDFilter
-
-  """Filter by the object’s `slug` field."""
-  slug: StringFilter
-
-  """Filter by the object’s `expiresAt` field."""
-  expiresAt: DatetimeFilter
-
-  """Filter by the object’s `vetStatus` field."""
-  vetStatus: StringFilter
-
-  """Filter by the object’s `source` relation."""
-  source: FederatedSourceFilter
-
-  """Checks for all expressions in this list."""
-  and: [FederatedSkillCacheFilter!]
-
-  """Checks for any expressions in this list."""
-  or: [FederatedSkillCacheFilter!]
-
-  """Negates the expression."""
-  not: FederatedSkillCacheFilter
-}
-
-"""
-A filter to be used against `FederatedSource` object types. All fields are combined with a logical ‘and.’
-"""
-input FederatedSourceFilter {
-  """Filter by the object’s `rowId` field."""
-  rowId: UUIDFilter
-
-  """Filter by the object’s `namespace` field."""
-  namespace: StringFilter
-
-  """Filter by the object’s `upstreamType` field."""
-  upstreamType: StringFilter
-
-  """Filter by the object’s `federatedSkillCachesBySourceId` relation."""
-  federatedSkillCachesBySourceId: FederatedSourceToManyFederatedSkillCacheFilter
-
-  """Some related `federatedSkillCachesBySourceId` exist."""
-  federatedSkillCachesBySourceIdExist: Boolean
-
-  """Checks for all expressions in this list."""
-  and: [FederatedSourceFilter!]
-
-  """Checks for any expressions in this list."""
-  or: [FederatedSourceFilter!]
-
-  """Negates the expression."""
-  not: FederatedSourceFilter
-}
-
-"""
-A filter to be used against many `FederatedSkillCache` object types. All fields are combined with a logical ‘and.’
-"""
-input FederatedSourceToManyFederatedSkillCacheFilter {
-  """
-  Every related `FederatedSkillCache` matches the filter criteria. All fields are combined with a logical ‘and.’
-  """
-  every: FederatedSkillCacheFilter
-
-  """
-  Some related `FederatedSkillCache` matches the filter criteria. All fields are combined with a logical ‘and.’
-  """
-  some: FederatedSkillCacheFilter
-
-  """
-  No related `FederatedSkillCache` matches the filter criteria. All fields are combined with a logical ‘and.’
-  """
-  none: FederatedSkillCacheFilter
-}
-
-"""Methods to use when ordering `FederatedSkillCache`."""
-enum FederatedSkillCacheOrderBy {
+"""Methods to use when ordering `PypiMetadatum`."""
+enum PypiMetadatumOrderBy {
   NATURAL
   PRIMARY_KEY_ASC
   PRIMARY_KEY_DESC
   ROW_ID_ASC
   ROW_ID_DESC
-  SOURCE_ID_ASC
-  SOURCE_ID_DESC
-  SLUG_ASC
-  SLUG_DESC
-  EXPIRES_AT_ASC
-  EXPIRES_AT_DESC
-  VET_STATUS_ASC
-  VET_STATUS_DESC
+  ARTIFACT_ID_ASC
+  ARTIFACT_ID_DESC
+  NAME_ASC
+  NAME_DESC
+  FILENAME_ASC
+  FILENAME_DESC
 }
 
 """A connection to a list of `ContainerMetadatum` values."""
@@ -3438,6 +2685,60 @@ enum WasmMetadatumOrderBy {
   ARTIFACT_ID_DESC
 }
 
+"""A connection to a list of `Namespace` values."""
+type NamespaceConnection {
+  """A list of `Namespace` objects."""
+  nodes: [Namespace]!
+
+  """
+  A list of edges which contains the `Namespace` and cursor to aid in pagination.
+  """
+  edges: [NamespaceEdge]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `Namespace` you could get from the connection."""
+  totalCount: Int!
+}
+
+"""A `Namespace` edge in the connection."""
+type NamespaceEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `Namespace` at the end of the edge."""
+  node: Namespace
+}
+
+"""
+A condition to be used against `Namespace` object types. All fields are tested
+for equality and combined with a logical ‘and.’
+"""
+input NamespaceCondition {
+  """Checks for equality with the object’s `rowId` field."""
+  rowId: UUID
+
+  """Checks for equality with the object’s `organizationId` field."""
+  organizationId: UUID
+
+  """Checks for equality with the object’s `name` field."""
+  name: String
+}
+
+"""Methods to use when ordering `Namespace`."""
+enum NamespaceOrderBy {
+  NATURAL
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+  ROW_ID_ASC
+  ROW_ID_DESC
+  ORGANIZATION_ID_ASC
+  ORGANIZATION_ID_DESC
+  NAME_ASC
+  NAME_DESC
+}
+
 """A connection to a list of `SchemaMetadatum` values."""
 type SchemaMetadatumConnection {
   """A list of `SchemaMetadatum` objects."""
@@ -3484,253 +2785,10 @@ enum SchemaMetadatumOrderBy {
   ARTIFACT_ID_DESC
 }
 
-"""A connection to a list of `Namespace` values."""
-type NamespaceConnection {
-  """A list of `Namespace` objects."""
-  nodes: [Namespace]!
-
-  """
-  A list of edges which contains the `Namespace` and cursor to aid in pagination.
-  """
-  edges: [NamespaceEdge]!
-
-  """Information to aid in pagination."""
-  pageInfo: PageInfo!
-
-  """The count of *all* `Namespace` you could get from the connection."""
-  totalCount: Int!
-}
-
-"""A `Namespace` edge in the connection."""
-type NamespaceEdge {
-  """A cursor for use in pagination."""
-  cursor: Cursor
-
-  """The `Namespace` at the end of the edge."""
-  node: Namespace
-}
-
-"""
-A condition to be used against `Namespace` object types. All fields are tested
-for equality and combined with a logical ‘and.’
-"""
-input NamespaceCondition {
-  """Checks for equality with the object’s `rowId` field."""
-  rowId: UUID
-
-  """Checks for equality with the object’s `name` field."""
-  name: String
-
-  """Checks for equality with the object’s `organizationId` field."""
-  organizationId: UUID
-}
-
-"""Methods to use when ordering `Namespace`."""
-enum NamespaceOrderBy {
-  NATURAL
-  PRIMARY_KEY_ASC
-  PRIMARY_KEY_DESC
-  ROW_ID_ASC
-  ROW_ID_DESC
-  NAME_ASC
-  NAME_DESC
-  ORGANIZATION_ID_ASC
-  ORGANIZATION_ID_DESC
-}
-
-"""A connection to a list of `OidcIssuer` values."""
-type OidcIssuerConnection {
-  """A list of `OidcIssuer` objects."""
-  nodes: [OidcIssuer]!
-
-  """
-  A list of edges which contains the `OidcIssuer` and cursor to aid in pagination.
-  """
-  edges: [OidcIssuerEdge]!
-
-  """Information to aid in pagination."""
-  pageInfo: PageInfo!
-
-  """The count of *all* `OidcIssuer` you could get from the connection."""
-  totalCount: Int!
-}
-
-"""A `OidcIssuer` edge in the connection."""
-type OidcIssuerEdge {
-  """A cursor for use in pagination."""
-  cursor: Cursor
-
-  """The `OidcIssuer` at the end of the edge."""
-  node: OidcIssuer
-}
-
-"""
-A condition to be used against `OidcIssuer` object types. All fields are tested
-for equality and combined with a logical ‘and.’
-"""
-input OidcIssuerCondition {
-  """Checks for equality with the object’s `rowId` field."""
-  rowId: UUID
-
-  """Checks for equality with the object’s `issuer` field."""
-  issuer: String
-}
-
-"""Methods to use when ordering `OidcIssuer`."""
-enum OidcIssuerOrderBy {
-  NATURAL
-  PRIMARY_KEY_ASC
-  PRIMARY_KEY_DESC
-  ROW_ID_ASC
-  ROW_ID_DESC
-  ISSUER_ASC
-  ISSUER_DESC
-}
-
-"""A connection to a list of `Plugin` values."""
-type PluginConnection {
-  """A list of `Plugin` objects."""
-  nodes: [Plugin]!
-
-  """
-  A list of edges which contains the `Plugin` and cursor to aid in pagination.
-  """
-  edges: [PluginEdge]!
-
-  """Information to aid in pagination."""
-  pageInfo: PageInfo!
-
-  """The count of *all* `Plugin` you could get from the connection."""
-  totalCount: Int!
-}
-
-"""A `Plugin` edge in the connection."""
-type PluginEdge {
-  """A cursor for use in pagination."""
-  cursor: Cursor
-
-  """The `Plugin` at the end of the edge."""
-  node: Plugin
-}
-
-"""
-A condition to be used against `Plugin` object types. All fields are tested for equality and combined with a logical ‘and.’
-"""
-input PluginCondition {
-  """Checks for equality with the object’s `rowId` field."""
-  rowId: UUID
-
-  """Checks for equality with the object’s `name` field."""
-  name: String
-}
-
-"""
-A filter to be used against `Plugin` object types. All fields are combined with a logical ‘and.’
-"""
-input PluginFilter {
-  """Filter by the object’s `rowId` field."""
-  rowId: UUIDFilter
-
-  """Filter by the object’s `name` field."""
-  name: StringFilter
-
-  """Checks for all expressions in this list."""
-  and: [PluginFilter!]
-
-  """Checks for any expressions in this list."""
-  or: [PluginFilter!]
-
-  """Negates the expression."""
-  not: PluginFilter
-}
-
-"""Methods to use when ordering `Plugin`."""
-enum PluginOrderBy {
-  NATURAL
-  PRIMARY_KEY_ASC
-  PRIMARY_KEY_DESC
-  ROW_ID_ASC
-  ROW_ID_DESC
-  NAME_ASC
-  NAME_DESC
-}
-
-"""A connection to a list of `FederatedSource` values."""
-type FederatedSourceConnection {
-  """A list of `FederatedSource` objects."""
-  nodes: [FederatedSource]!
-
-  """
-  A list of edges which contains the `FederatedSource` and cursor to aid in pagination.
-  """
-  edges: [FederatedSourceEdge]!
-
-  """Information to aid in pagination."""
-  pageInfo: PageInfo!
-
-  """
-  The count of *all* `FederatedSource` you could get from the connection.
-  """
-  totalCount: Int!
-}
-
-"""A `FederatedSource` edge in the connection."""
-type FederatedSourceEdge {
-  """A cursor for use in pagination."""
-  cursor: Cursor
-
-  """The `FederatedSource` at the end of the edge."""
-  node: FederatedSource
-}
-
-"""
-A condition to be used against `FederatedSource` object types. All fields are
-tested for equality and combined with a logical ‘and.’
-"""
-input FederatedSourceCondition {
-  """Checks for equality with the object’s `rowId` field."""
-  rowId: UUID
-
-  """Checks for equality with the object’s `namespace` field."""
-  namespace: String
-
-  """Checks for equality with the object’s `upstreamType` field."""
-  upstreamType: String
-}
-
-"""Methods to use when ordering `FederatedSource`."""
-enum FederatedSourceOrderBy {
-  NATURAL
-  PRIMARY_KEY_ASC
-  PRIMARY_KEY_DESC
-  ROW_ID_ASC
-  ROW_ID_DESC
-  NAMESPACE_ASC
-  NAMESPACE_DESC
-  UPSTREAM_TYPE_ASC
-  UPSTREAM_TYPE_DESC
-}
-
 """
 The root mutation type which contains root level fields which mutate data.
 """
 type Mutation {
-  """Creates a single `ContainerMetadatum`."""
-  createContainerMetadatum(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: CreateContainerMetadatumInput!
-  ): CreateContainerMetadatumPayload
-
-  """Creates a single `WasmMetadatum`."""
-  createWasmMetadatum(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: CreateWasmMetadatumInput!
-  ): CreateWasmMetadatumPayload
-
   """Creates a single `Tag`."""
   createTag(
     """
@@ -3738,30 +2796,6 @@ type Mutation {
     """
     input: CreateTagInput!
   ): CreateTagPayload
-
-  """Creates a single `NpmDistTag`."""
-  createNpmDistTag(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: CreateNpmDistTagInput!
-  ): CreateNpmDistTagPayload
-
-  """Creates a single `UploadSession`."""
-  createUploadSession(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: CreateUploadSessionInput!
-  ): CreateUploadSessionPayload
-
-  """Creates a single `SchemaMetadatum`."""
-  createSchemaMetadatum(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: CreateSchemaMetadatumInput!
-  ): CreateSchemaMetadatumPayload
 
   """Creates a single `Namespace`."""
   createNamespace(
@@ -3779,14 +2813,6 @@ type Mutation {
     input: CreateArtifactInput!
   ): CreateArtifactPayload
 
-  """Creates a single `OidcIssuer`."""
-  createOidcIssuer(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: CreateOidcIssuerInput!
-  ): CreateOidcIssuerPayload
-
   """Creates a single `Repository`."""
   createRepository(
     """
@@ -3794,106 +2820,6 @@ type Mutation {
     """
     input: CreateRepositoryInput!
   ): CreateRepositoryPayload
-
-  """Creates a single `NpmMetadatum`."""
-  createNpmMetadatum(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: CreateNpmMetadatumInput!
-  ): CreateNpmMetadatumPayload
-
-  """Creates a single `Plugin`."""
-  createPlugin(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: CreatePluginInput!
-  ): CreatePluginPayload
-
-  """Creates a single `TrustedPublisher`."""
-  createTrustedPublisher(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: CreateTrustedPublisherInput!
-  ): CreateTrustedPublisherPayload
-
-  """Creates a single `ScanResult`."""
-  createScanResult(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: CreateScanResultInput!
-  ): CreateScanResultPayload
-
-  """Creates a single `FederatedSource`."""
-  createFederatedSource(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: CreateFederatedSourceInput!
-  ): CreateFederatedSourcePayload
-
-  """Creates a single `FederatedSkillCache`."""
-  createFederatedSkillCache(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: CreateFederatedSkillCacheInput!
-  ): CreateFederatedSkillCachePayload
-
-  """Creates a single `CargoMetadatum`."""
-  createCargoMetadatum(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: CreateCargoMetadatumInput!
-  ): CreateCargoMetadatumPayload
-
-  """Creates a single `ApiToken`."""
-  createApiToken(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: CreateApiTokenInput!
-  ): CreateApiTokenPayload
-
-  """
-  Updates a single `ContainerMetadatum` using its globally unique id and a patch.
-  """
-  updateContainerMetadatumById(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdateContainerMetadatumByIdInput!
-  ): UpdateContainerMetadatumPayload
-
-  """Updates a single `ContainerMetadatum` using a unique key and a patch."""
-  updateContainerMetadatum(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdateContainerMetadatumInput!
-  ): UpdateContainerMetadatumPayload
-
-  """
-  Updates a single `WasmMetadatum` using its globally unique id and a patch.
-  """
-  updateWasmMetadatumById(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdateWasmMetadatumByIdInput!
-  ): UpdateWasmMetadatumPayload
-
-  """Updates a single `WasmMetadatum` using a unique key and a patch."""
-  updateWasmMetadatum(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdateWasmMetadatumInput!
-  ): UpdateWasmMetadatumPayload
 
   """Updates a single `Tag` using its globally unique id and a patch."""
   updateTagById(
@@ -3910,60 +2836,6 @@ type Mutation {
     """
     input: UpdateTagInput!
   ): UpdateTagPayload
-
-  """
-  Updates a single `NpmDistTag` using its globally unique id and a patch.
-  """
-  updateNpmDistTagById(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdateNpmDistTagByIdInput!
-  ): UpdateNpmDistTagPayload
-
-  """Updates a single `NpmDistTag` using a unique key and a patch."""
-  updateNpmDistTag(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdateNpmDistTagInput!
-  ): UpdateNpmDistTagPayload
-
-  """
-  Updates a single `UploadSession` using its globally unique id and a patch.
-  """
-  updateUploadSessionById(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdateUploadSessionByIdInput!
-  ): UpdateUploadSessionPayload
-
-  """Updates a single `UploadSession` using a unique key and a patch."""
-  updateUploadSession(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdateUploadSessionInput!
-  ): UpdateUploadSessionPayload
-
-  """
-  Updates a single `SchemaMetadatum` using its globally unique id and a patch.
-  """
-  updateSchemaMetadatumById(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdateSchemaMetadatumByIdInput!
-  ): UpdateSchemaMetadatumPayload
-
-  """Updates a single `SchemaMetadatum` using a unique key and a patch."""
-  updateSchemaMetadatum(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdateSchemaMetadatumInput!
-  ): UpdateSchemaMetadatumPayload
 
   """Updates a single `Namespace` using its globally unique id and a patch."""
   updateNamespaceById(
@@ -4006,32 +2878,6 @@ type Mutation {
   ): UpdateArtifactPayload
 
   """
-  Updates a single `OidcIssuer` using its globally unique id and a patch.
-  """
-  updateOidcIssuerById(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdateOidcIssuerByIdInput!
-  ): UpdateOidcIssuerPayload
-
-  """Updates a single `OidcIssuer` using a unique key and a patch."""
-  updateOidcIssuer(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdateOidcIssuerInput!
-  ): UpdateOidcIssuerPayload
-
-  """Updates a single `OidcIssuer` using a unique key and a patch."""
-  updateOidcIssuerByIssuer(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdateOidcIssuerByIssuerInput!
-  ): UpdateOidcIssuerPayload
-
-  """
   Updates a single `Repository` using its globally unique id and a patch.
   """
   updateRepositoryById(
@@ -4049,194 +2895,6 @@ type Mutation {
     input: UpdateRepositoryInput!
   ): UpdateRepositoryPayload
 
-  """
-  Updates a single `NpmMetadatum` using its globally unique id and a patch.
-  """
-  updateNpmMetadatumById(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdateNpmMetadatumByIdInput!
-  ): UpdateNpmMetadatumPayload
-
-  """Updates a single `NpmMetadatum` using a unique key and a patch."""
-  updateNpmMetadatum(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdateNpmMetadatumInput!
-  ): UpdateNpmMetadatumPayload
-
-  """Updates a single `Plugin` using its globally unique id and a patch."""
-  updatePluginById(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdatePluginByIdInput!
-  ): UpdatePluginPayload
-
-  """Updates a single `Plugin` using a unique key and a patch."""
-  updatePlugin(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdatePluginInput!
-  ): UpdatePluginPayload
-
-  """Updates a single `Plugin` using a unique key and a patch."""
-  updatePluginByName(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdatePluginByNameInput!
-  ): UpdatePluginPayload
-
-  """
-  Updates a single `TrustedPublisher` using its globally unique id and a patch.
-  """
-  updateTrustedPublisherById(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdateTrustedPublisherByIdInput!
-  ): UpdateTrustedPublisherPayload
-
-  """Updates a single `TrustedPublisher` using a unique key and a patch."""
-  updateTrustedPublisher(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdateTrustedPublisherInput!
-  ): UpdateTrustedPublisherPayload
-
-  """
-  Updates a single `ScanResult` using its globally unique id and a patch.
-  """
-  updateScanResultById(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdateScanResultByIdInput!
-  ): UpdateScanResultPayload
-
-  """Updates a single `ScanResult` using a unique key and a patch."""
-  updateScanResult(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdateScanResultInput!
-  ): UpdateScanResultPayload
-
-  """
-  Updates a single `FederatedSource` using its globally unique id and a patch.
-  """
-  updateFederatedSourceById(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdateFederatedSourceByIdInput!
-  ): UpdateFederatedSourcePayload
-
-  """Updates a single `FederatedSource` using a unique key and a patch."""
-  updateFederatedSource(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdateFederatedSourceInput!
-  ): UpdateFederatedSourcePayload
-
-  """Updates a single `FederatedSource` using a unique key and a patch."""
-  updateFederatedSourceByNamespace(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdateFederatedSourceByNamespaceInput!
-  ): UpdateFederatedSourcePayload
-
-  """
-  Updates a single `FederatedSkillCache` using its globally unique id and a patch.
-  """
-  updateFederatedSkillCacheById(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdateFederatedSkillCacheByIdInput!
-  ): UpdateFederatedSkillCachePayload
-
-  """Updates a single `FederatedSkillCache` using a unique key and a patch."""
-  updateFederatedSkillCache(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdateFederatedSkillCacheInput!
-  ): UpdateFederatedSkillCachePayload
-
-  """
-  Updates a single `CargoMetadatum` using its globally unique id and a patch.
-  """
-  updateCargoMetadatumById(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdateCargoMetadatumByIdInput!
-  ): UpdateCargoMetadatumPayload
-
-  """Updates a single `CargoMetadatum` using a unique key and a patch."""
-  updateCargoMetadatum(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdateCargoMetadatumInput!
-  ): UpdateCargoMetadatumPayload
-
-  """Updates a single `ApiToken` using its globally unique id and a patch."""
-  updateApiTokenById(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdateApiTokenByIdInput!
-  ): UpdateApiTokenPayload
-
-  """Updates a single `ApiToken` using a unique key and a patch."""
-  updateApiToken(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdateApiTokenInput!
-  ): UpdateApiTokenPayload
-
-  """Deletes a single `ContainerMetadatum` using its globally unique id."""
-  deleteContainerMetadatumById(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteContainerMetadatumByIdInput!
-  ): DeleteContainerMetadatumPayload
-
-  """Deletes a single `ContainerMetadatum` using a unique key."""
-  deleteContainerMetadatum(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteContainerMetadatumInput!
-  ): DeleteContainerMetadatumPayload
-
-  """Deletes a single `WasmMetadatum` using its globally unique id."""
-  deleteWasmMetadatumById(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteWasmMetadatumByIdInput!
-  ): DeleteWasmMetadatumPayload
-
-  """Deletes a single `WasmMetadatum` using a unique key."""
-  deleteWasmMetadatum(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteWasmMetadatumInput!
-  ): DeleteWasmMetadatumPayload
-
   """Deletes a single `Tag` using its globally unique id."""
   deleteTagById(
     """
@@ -4252,54 +2910,6 @@ type Mutation {
     """
     input: DeleteTagInput!
   ): DeleteTagPayload
-
-  """Deletes a single `NpmDistTag` using its globally unique id."""
-  deleteNpmDistTagById(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteNpmDistTagByIdInput!
-  ): DeleteNpmDistTagPayload
-
-  """Deletes a single `NpmDistTag` using a unique key."""
-  deleteNpmDistTag(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteNpmDistTagInput!
-  ): DeleteNpmDistTagPayload
-
-  """Deletes a single `UploadSession` using its globally unique id."""
-  deleteUploadSessionById(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteUploadSessionByIdInput!
-  ): DeleteUploadSessionPayload
-
-  """Deletes a single `UploadSession` using a unique key."""
-  deleteUploadSession(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteUploadSessionInput!
-  ): DeleteUploadSessionPayload
-
-  """Deletes a single `SchemaMetadatum` using its globally unique id."""
-  deleteSchemaMetadatumById(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteSchemaMetadatumByIdInput!
-  ): DeleteSchemaMetadatumPayload
-
-  """Deletes a single `SchemaMetadatum` using a unique key."""
-  deleteSchemaMetadatum(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteSchemaMetadatumInput!
-  ): DeleteSchemaMetadatumPayload
 
   """Deletes a single `Namespace` using its globally unique id."""
   deleteNamespaceById(
@@ -4341,30 +2951,6 @@ type Mutation {
     input: DeleteArtifactInput!
   ): DeleteArtifactPayload
 
-  """Deletes a single `OidcIssuer` using its globally unique id."""
-  deleteOidcIssuerById(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteOidcIssuerByIdInput!
-  ): DeleteOidcIssuerPayload
-
-  """Deletes a single `OidcIssuer` using a unique key."""
-  deleteOidcIssuer(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteOidcIssuerInput!
-  ): DeleteOidcIssuerPayload
-
-  """Deletes a single `OidcIssuer` using a unique key."""
-  deleteOidcIssuerByIssuer(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteOidcIssuerByIssuerInput!
-  ): DeleteOidcIssuerPayload
-
   """Deletes a single `Repository` using its globally unique id."""
   deleteRepositoryById(
     """
@@ -4380,238 +2966,6 @@ type Mutation {
     """
     input: DeleteRepositoryInput!
   ): DeleteRepositoryPayload
-
-  """Deletes a single `NpmMetadatum` using its globally unique id."""
-  deleteNpmMetadatumById(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteNpmMetadatumByIdInput!
-  ): DeleteNpmMetadatumPayload
-
-  """Deletes a single `NpmMetadatum` using a unique key."""
-  deleteNpmMetadatum(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteNpmMetadatumInput!
-  ): DeleteNpmMetadatumPayload
-
-  """Deletes a single `Plugin` using its globally unique id."""
-  deletePluginById(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeletePluginByIdInput!
-  ): DeletePluginPayload
-
-  """Deletes a single `Plugin` using a unique key."""
-  deletePlugin(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeletePluginInput!
-  ): DeletePluginPayload
-
-  """Deletes a single `Plugin` using a unique key."""
-  deletePluginByName(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeletePluginByNameInput!
-  ): DeletePluginPayload
-
-  """Deletes a single `TrustedPublisher` using its globally unique id."""
-  deleteTrustedPublisherById(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteTrustedPublisherByIdInput!
-  ): DeleteTrustedPublisherPayload
-
-  """Deletes a single `TrustedPublisher` using a unique key."""
-  deleteTrustedPublisher(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteTrustedPublisherInput!
-  ): DeleteTrustedPublisherPayload
-
-  """Deletes a single `ScanResult` using its globally unique id."""
-  deleteScanResultById(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteScanResultByIdInput!
-  ): DeleteScanResultPayload
-
-  """Deletes a single `ScanResult` using a unique key."""
-  deleteScanResult(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteScanResultInput!
-  ): DeleteScanResultPayload
-
-  """Deletes a single `FederatedSource` using its globally unique id."""
-  deleteFederatedSourceById(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteFederatedSourceByIdInput!
-  ): DeleteFederatedSourcePayload
-
-  """Deletes a single `FederatedSource` using a unique key."""
-  deleteFederatedSource(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteFederatedSourceInput!
-  ): DeleteFederatedSourcePayload
-
-  """Deletes a single `FederatedSource` using a unique key."""
-  deleteFederatedSourceByNamespace(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteFederatedSourceByNamespaceInput!
-  ): DeleteFederatedSourcePayload
-
-  """Deletes a single `FederatedSkillCache` using its globally unique id."""
-  deleteFederatedSkillCacheById(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteFederatedSkillCacheByIdInput!
-  ): DeleteFederatedSkillCachePayload
-
-  """Deletes a single `FederatedSkillCache` using a unique key."""
-  deleteFederatedSkillCache(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteFederatedSkillCacheInput!
-  ): DeleteFederatedSkillCachePayload
-
-  """Deletes a single `CargoMetadatum` using its globally unique id."""
-  deleteCargoMetadatumById(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteCargoMetadatumByIdInput!
-  ): DeleteCargoMetadatumPayload
-
-  """Deletes a single `CargoMetadatum` using a unique key."""
-  deleteCargoMetadatum(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteCargoMetadatumInput!
-  ): DeleteCargoMetadatumPayload
-
-  """Deletes a single `ApiToken` using its globally unique id."""
-  deleteApiTokenById(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteApiTokenByIdInput!
-  ): DeleteApiTokenPayload
-
-  """Deletes a single `ApiToken` using a unique key."""
-  deleteApiToken(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteApiTokenInput!
-  ): DeleteApiTokenPayload
-}
-
-"""The output of our create `ContainerMetadatum` mutation."""
-type CreateContainerMetadatumPayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """The `ContainerMetadatum` that was created by this mutation."""
-  containerMetadatum: ContainerMetadatum
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-
-  """An edge for our `ContainerMetadatum`. May be used by Relay 1."""
-  containerMetadatumEdge(
-    """The method to use when ordering `ContainerMetadatum`."""
-    orderBy: [ContainerMetadatumOrderBy!]! = [PRIMARY_KEY_ASC]
-  ): ContainerMetadatumEdge
-}
-
-"""All input for the create `ContainerMetadatum` mutation."""
-input CreateContainerMetadatumInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-
-  """The `ContainerMetadatum` to be created by this mutation."""
-  containerMetadatum: ContainerMetadatumInput!
-}
-
-"""An input for mutations affecting `ContainerMetadatum`"""
-input ContainerMetadatumInput {
-  artifactId: UUID!
-  schemaVersion: Int!
-  architecture: String
-  os: String
-  configDigest: String
-  layerDigests: JSON
-}
-
-"""The output of our create `WasmMetadatum` mutation."""
-type CreateWasmMetadatumPayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """The `WasmMetadatum` that was created by this mutation."""
-  wasmMetadatum: WasmMetadatum
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-
-  """An edge for our `WasmMetadatum`. May be used by Relay 1."""
-  wasmMetadatumEdge(
-    """The method to use when ordering `WasmMetadatum`."""
-    orderBy: [WasmMetadatumOrderBy!]! = [PRIMARY_KEY_ASC]
-  ): WasmMetadatumEdge
-}
-
-"""All input for the create `WasmMetadatum` mutation."""
-input CreateWasmMetadatumInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-
-  """The `WasmMetadatum` to be created by this mutation."""
-  wasmMetadatum: WasmMetadatumInput!
-}
-
-"""An input for mutations affecting `WasmMetadatum`"""
-input WasmMetadatumInput {
-  artifactId: UUID!
-  runtime: String
-  exports: JSON
-  imports: JSON
 }
 
 """The output of our create `Tag` mutation."""
@@ -4659,139 +3013,6 @@ input TagInput {
   updatedAt: Datetime
 }
 
-"""The output of our create `NpmDistTag` mutation."""
-type CreateNpmDistTagPayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """The `NpmDistTag` that was created by this mutation."""
-  npmDistTag: NpmDistTag
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-
-  """An edge for our `NpmDistTag`. May be used by Relay 1."""
-  npmDistTagEdge(
-    """The method to use when ordering `NpmDistTag`."""
-    orderBy: [NpmDistTagOrderBy!]! = [PRIMARY_KEY_ASC]
-  ): NpmDistTagEdge
-}
-
-"""All input for the create `NpmDistTag` mutation."""
-input CreateNpmDistTagInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-
-  """The `NpmDistTag` to be created by this mutation."""
-  npmDistTag: NpmDistTagInput!
-}
-
-"""An input for mutations affecting `NpmDistTag`"""
-input NpmDistTagInput {
-  rowId: UUID
-  repositoryId: UUID!
-  tag: String!
-  version: String!
-  createdAt: Datetime
-  updatedAt: Datetime
-}
-
-"""The output of our create `UploadSession` mutation."""
-type CreateUploadSessionPayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """The `UploadSession` that was created by this mutation."""
-  uploadSession: UploadSession
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-
-  """An edge for our `UploadSession`. May be used by Relay 1."""
-  uploadSessionEdge(
-    """The method to use when ordering `UploadSession`."""
-    orderBy: [UploadSessionOrderBy!]! = [PRIMARY_KEY_ASC]
-  ): UploadSessionEdge
-}
-
-"""All input for the create `UploadSession` mutation."""
-input CreateUploadSessionInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-
-  """The `UploadSession` to be created by this mutation."""
-  uploadSession: UploadSessionInput!
-}
-
-"""An input for mutations affecting `UploadSession`"""
-input UploadSessionInput {
-  rowId: UUID
-  repositoryId: UUID!
-  offset: BigInt
-  createdAt: Datetime
-  expiresAt: Datetime!
-}
-
-"""The output of our create `SchemaMetadatum` mutation."""
-type CreateSchemaMetadatumPayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """The `SchemaMetadatum` that was created by this mutation."""
-  schemaMetadatum: SchemaMetadatum
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-
-  """An edge for our `SchemaMetadatum`. May be used by Relay 1."""
-  schemaMetadatumEdge(
-    """The method to use when ordering `SchemaMetadatum`."""
-    orderBy: [SchemaMetadatumOrderBy!]! = [PRIMARY_KEY_ASC]
-  ): SchemaMetadatumEdge
-}
-
-"""All input for the create `SchemaMetadatum` mutation."""
-input CreateSchemaMetadatumInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-
-  """The `SchemaMetadatum` to be created by this mutation."""
-  schemaMetadatum: SchemaMetadatumInput!
-}
-
-"""An input for mutations affecting `SchemaMetadatum`"""
-input SchemaMetadatumInput {
-  artifactId: UUID!
-  version: String
-  title: String
-  isValid: Boolean
-  validationErrors: JSON
-}
-
 """The output of our create `Namespace` mutation."""
 type CreateNamespacePayload {
   """
@@ -4830,11 +3051,11 @@ input CreateNamespaceInput {
 """An input for mutations affecting `Namespace`"""
 input NamespaceInput {
   rowId: UUID
+  organizationId: UUID
   name: String!
   description: String
   createdAt: Datetime
   updatedAt: Datetime
-  organizationId: UUID
 }
 
 """The output of our create `Artifact` mutation."""
@@ -4880,56 +3101,9 @@ input ArtifactInput {
   size: BigInt!
   mediaType: String!
   content: String
-  createdAt: Datetime
   storagePath: String
   subject: String
-}
-
-"""The output of our create `OidcIssuer` mutation."""
-type CreateOidcIssuerPayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """The `OidcIssuer` that was created by this mutation."""
-  oidcIssuer: OidcIssuer
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-
-  """An edge for our `OidcIssuer`. May be used by Relay 1."""
-  oidcIssuerEdge(
-    """The method to use when ordering `OidcIssuer`."""
-    orderBy: [OidcIssuerOrderBy!]! = [PRIMARY_KEY_ASC]
-  ): OidcIssuerEdge
-}
-
-"""All input for the create `OidcIssuer` mutation."""
-input CreateOidcIssuerInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-
-  """The `OidcIssuer` to be created by this mutation."""
-  oidcIssuer: OidcIssuerInput!
-}
-
-"""An input for mutations affecting `OidcIssuer`"""
-input OidcIssuerInput {
-  rowId: UUID
-  issuer: String!
-  jwksUri: String
-  audience: String!
-  enabled: Boolean
   createdAt: Datetime
-  updatedAt: Datetime
-  jwksAuthTokenPath: String
 }
 
 """The output of our create `Repository` mutation."""
@@ -4975,553 +3149,9 @@ input RepositoryInput {
   description: String
   artifactType: String!
   isPublic: Boolean
-  createdAt: Datetime
-  updatedAt: Datetime
   downloadCount: BigInt
-}
-
-"""The output of our create `NpmMetadatum` mutation."""
-type CreateNpmMetadatumPayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """The `NpmMetadatum` that was created by this mutation."""
-  npmMetadatum: NpmMetadatum
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-
-  """An edge for our `NpmMetadatum`. May be used by Relay 1."""
-  npmMetadatumEdge(
-    """The method to use when ordering `NpmMetadatum`."""
-    orderBy: [NpmMetadatumOrderBy!]! = [PRIMARY_KEY_ASC]
-  ): NpmMetadatumEdge
-}
-
-"""All input for the create `NpmMetadatum` mutation."""
-input CreateNpmMetadatumInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-
-  """The `NpmMetadatum` to be created by this mutation."""
-  npmMetadatum: NpmMetadatumInput!
-}
-
-"""An input for mutations affecting `NpmMetadatum`"""
-input NpmMetadatumInput {
-  rowId: UUID
-  artifactId: UUID!
-  name: String!
-  version: String!
-  manifest: JSON!
-  shasum: String!
-  integrity: String!
   createdAt: Datetime
   updatedAt: Datetime
-}
-
-"""The output of our create `Plugin` mutation."""
-type CreatePluginPayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """The `Plugin` that was created by this mutation."""
-  plugin: Plugin
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-
-  """An edge for our `Plugin`. May be used by Relay 1."""
-  pluginEdge(
-    """The method to use when ordering `Plugin`."""
-    orderBy: [PluginOrderBy!]! = [PRIMARY_KEY_ASC]
-  ): PluginEdge
-}
-
-"""All input for the create `Plugin` mutation."""
-input CreatePluginInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-
-  """The `Plugin` to be created by this mutation."""
-  plugin: PluginInput!
-}
-
-"""An input for mutations affecting `Plugin`"""
-input PluginInput {
-  rowId: UUID
-  name: String!
-  version: String!
-  description: String!
-  type: String!
-  bin: String
-  endpoint: String
-  commands: JSON
-  packages: JSON
-  createdAt: Datetime
-  updatedAt: Datetime
-}
-
-"""The output of our create `TrustedPublisher` mutation."""
-type CreateTrustedPublisherPayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """The `TrustedPublisher` that was created by this mutation."""
-  trustedPublisher: TrustedPublisher
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-
-  """An edge for our `TrustedPublisher`. May be used by Relay 1."""
-  trustedPublisherEdge(
-    """The method to use when ordering `TrustedPublisher`."""
-    orderBy: [TrustedPublisherOrderBy!]! = [PRIMARY_KEY_ASC]
-  ): TrustedPublisherEdge
-}
-
-"""All input for the create `TrustedPublisher` mutation."""
-input CreateTrustedPublisherInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-
-  """The `TrustedPublisher` to be created by this mutation."""
-  trustedPublisher: TrustedPublisherInput!
-}
-
-"""An input for mutations affecting `TrustedPublisher`"""
-input TrustedPublisherInput {
-  rowId: UUID
-  namespaceId: UUID!
-  repositoryId: UUID
-  issuerId: UUID!
-  subject: String!
-  claimConstraints: JSON
-  scope: String
-  isActive: Boolean
-  createdBy: String!
-  lastUsedAt: Datetime
-  createdAt: Datetime
-  updatedAt: Datetime
-}
-
-"""The output of our create `ScanResult` mutation."""
-type CreateScanResultPayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """The `ScanResult` that was created by this mutation."""
-  scanResult: ScanResult
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-
-  """An edge for our `ScanResult`. May be used by Relay 1."""
-  scanResultEdge(
-    """The method to use when ordering `ScanResult`."""
-    orderBy: [ScanResultOrderBy!]! = [PRIMARY_KEY_ASC]
-  ): ScanResultEdge
-}
-
-"""All input for the create `ScanResult` mutation."""
-input CreateScanResultInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-
-  """The `ScanResult` to be created by this mutation."""
-  scanResult: ScanResultInput!
-}
-
-"""An input for mutations affecting `ScanResult`"""
-input ScanResultInput {
-  rowId: UUID
-  artifactId: UUID!
-  status: String
-  scanner: String
-  critical: Int
-  high: Int
-  medium: Int
-  low: Int
-  unknown: Int
-  findings: JSON
-  error: String
-  createdAt: Datetime
-  scannedAt: Datetime
-}
-
-"""The output of our create `FederatedSource` mutation."""
-type CreateFederatedSourcePayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """The `FederatedSource` that was created by this mutation."""
-  federatedSource: FederatedSource
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-
-  """An edge for our `FederatedSource`. May be used by Relay 1."""
-  federatedSourceEdge(
-    """The method to use when ordering `FederatedSource`."""
-    orderBy: [FederatedSourceOrderBy!]! = [PRIMARY_KEY_ASC]
-  ): FederatedSourceEdge
-}
-
-"""All input for the create `FederatedSource` mutation."""
-input CreateFederatedSourceInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-
-  """The `FederatedSource` to be created by this mutation."""
-  federatedSource: FederatedSourceInput!
-}
-
-"""An input for mutations affecting `FederatedSource`"""
-input FederatedSourceInput {
-  rowId: UUID
-  namespace: String!
-  upstreamBaseUrl: String!
-  upstreamType: String!
-  enabled: Boolean
-  rateLimitRpm: Int
-  cacheTtlSeconds: Int
-  tagListCacheTtlSeconds: Int
-  requireVetting: Boolean
-  createdAt: Datetime
-  updatedAt: Datetime
-}
-
-"""The output of our create `FederatedSkillCache` mutation."""
-type CreateFederatedSkillCachePayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """The `FederatedSkillCache` that was created by this mutation."""
-  federatedSkillCache: FederatedSkillCache
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-
-  """An edge for our `FederatedSkillCache`. May be used by Relay 1."""
-  federatedSkillCacheEdge(
-    """The method to use when ordering `FederatedSkillCache`."""
-    orderBy: [FederatedSkillCacheOrderBy!]! = [PRIMARY_KEY_ASC]
-  ): FederatedSkillCacheEdge
-}
-
-"""All input for the create `FederatedSkillCache` mutation."""
-input CreateFederatedSkillCacheInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-
-  """The `FederatedSkillCache` to be created by this mutation."""
-  federatedSkillCache: FederatedSkillCacheInput!
-}
-
-"""An input for mutations affecting `FederatedSkillCache`"""
-input FederatedSkillCacheInput {
-  rowId: UUID
-  sourceId: UUID!
-  slug: String!
-  content: String
-  contentDigest: String
-  fetchedAt: Datetime
-  expiresAt: Datetime
-  vetStatus: String
-  vetReason: String
-  vettedBy: String
-  vettedAt: Datetime
-  upstreamMeta: JSON
-  createdAt: Datetime
-}
-
-"""The output of our create `CargoMetadatum` mutation."""
-type CreateCargoMetadatumPayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """The `CargoMetadatum` that was created by this mutation."""
-  cargoMetadatum: CargoMetadatum
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-
-  """An edge for our `CargoMetadatum`. May be used by Relay 1."""
-  cargoMetadatumEdge(
-    """The method to use when ordering `CargoMetadatum`."""
-    orderBy: [CargoMetadatumOrderBy!]! = [PRIMARY_KEY_ASC]
-  ): CargoMetadatumEdge
-}
-
-"""All input for the create `CargoMetadatum` mutation."""
-input CreateCargoMetadatumInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-
-  """The `CargoMetadatum` to be created by this mutation."""
-  cargoMetadatum: CargoMetadatumInput!
-}
-
-"""An input for mutations affecting `CargoMetadatum`"""
-input CargoMetadatumInput {
-  rowId: UUID
-  artifactId: UUID!
-  name: String!
-  vers: String!
-  deps: JSON
-  features: JSON
-  cksum: String!
-  yanked: Boolean
-  links: String
-  rustVersion: String
-  v: Int
-  createdAt: Datetime
-  updatedAt: Datetime
-}
-
-"""The output of our create `ApiToken` mutation."""
-type CreateApiTokenPayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """The `ApiToken` that was created by this mutation."""
-  apiToken: ApiToken
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-
-  """An edge for our `ApiToken`. May be used by Relay 1."""
-  apiTokenEdge(
-    """The method to use when ordering `ApiToken`."""
-    orderBy: [ApiTokenOrderBy!]! = [PRIMARY_KEY_ASC]
-  ): ApiTokenEdge
-}
-
-"""All input for the create `ApiToken` mutation."""
-input CreateApiTokenInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-
-  """The `ApiToken` to be created by this mutation."""
-  apiToken: ApiTokenInput!
-}
-
-"""An input for mutations affecting `ApiToken`"""
-input ApiTokenInput {
-  rowId: UUID
-  name: String!
-  tokenHash: String!
-  tokenPrefix: String!
-  namespaceId: UUID!
-  repositoryId: UUID
-  scope: String
-  createdBy: String!
-  description: String
-  isActive: Boolean
-  expiresAt: Datetime
-  lastUsedAt: Datetime
-  createdAt: Datetime
-  updatedAt: Datetime
-}
-
-"""The output of our update `ContainerMetadatum` mutation."""
-type UpdateContainerMetadatumPayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """The `ContainerMetadatum` that was updated by this mutation."""
-  containerMetadatum: ContainerMetadatum
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-
-  """An edge for our `ContainerMetadatum`. May be used by Relay 1."""
-  containerMetadatumEdge(
-    """The method to use when ordering `ContainerMetadatum`."""
-    orderBy: [ContainerMetadatumOrderBy!]! = [PRIMARY_KEY_ASC]
-  ): ContainerMetadatumEdge
-}
-
-"""All input for the `updateContainerMetadatumById` mutation."""
-input UpdateContainerMetadatumByIdInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-
-  """
-  The globally unique `ID` which will identify a single `ContainerMetadatum` to be updated.
-  """
-  id: ID!
-
-  """
-  An object where the defined keys will be set on the `ContainerMetadatum` being updated.
-  """
-  patch: ContainerMetadatumPatch!
-}
-
-"""
-Represents an update to a `ContainerMetadatum`. Fields that are set will be updated.
-"""
-input ContainerMetadatumPatch {
-  artifactId: UUID
-  schemaVersion: Int
-  architecture: String
-  os: String
-  configDigest: String
-  layerDigests: JSON
-}
-
-"""All input for the `updateContainerMetadatum` mutation."""
-input UpdateContainerMetadatumInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-  artifactId: UUID!
-
-  """
-  An object where the defined keys will be set on the `ContainerMetadatum` being updated.
-  """
-  patch: ContainerMetadatumPatch!
-}
-
-"""The output of our update `WasmMetadatum` mutation."""
-type UpdateWasmMetadatumPayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """The `WasmMetadatum` that was updated by this mutation."""
-  wasmMetadatum: WasmMetadatum
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-
-  """An edge for our `WasmMetadatum`. May be used by Relay 1."""
-  wasmMetadatumEdge(
-    """The method to use when ordering `WasmMetadatum`."""
-    orderBy: [WasmMetadatumOrderBy!]! = [PRIMARY_KEY_ASC]
-  ): WasmMetadatumEdge
-}
-
-"""All input for the `updateWasmMetadatumById` mutation."""
-input UpdateWasmMetadatumByIdInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-
-  """
-  The globally unique `ID` which will identify a single `WasmMetadatum` to be updated.
-  """
-  id: ID!
-
-  """
-  An object where the defined keys will be set on the `WasmMetadatum` being updated.
-  """
-  patch: WasmMetadatumPatch!
-}
-
-"""
-Represents an update to a `WasmMetadatum`. Fields that are set will be updated.
-"""
-input WasmMetadatumPatch {
-  artifactId: UUID
-  runtime: String
-  exports: JSON
-  imports: JSON
-}
-
-"""All input for the `updateWasmMetadatum` mutation."""
-input UpdateWasmMetadatumInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-  artifactId: UUID!
-
-  """
-  An object where the defined keys will be set on the `WasmMetadatum` being updated.
-  """
-  patch: WasmMetadatumPatch!
 }
 
 """The output of our update `Tag` mutation."""
@@ -5591,211 +3221,6 @@ input UpdateTagInput {
   patch: TagPatch!
 }
 
-"""The output of our update `NpmDistTag` mutation."""
-type UpdateNpmDistTagPayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """The `NpmDistTag` that was updated by this mutation."""
-  npmDistTag: NpmDistTag
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-
-  """An edge for our `NpmDistTag`. May be used by Relay 1."""
-  npmDistTagEdge(
-    """The method to use when ordering `NpmDistTag`."""
-    orderBy: [NpmDistTagOrderBy!]! = [PRIMARY_KEY_ASC]
-  ): NpmDistTagEdge
-}
-
-"""All input for the `updateNpmDistTagById` mutation."""
-input UpdateNpmDistTagByIdInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-
-  """
-  The globally unique `ID` which will identify a single `NpmDistTag` to be updated.
-  """
-  id: ID!
-
-  """
-  An object where the defined keys will be set on the `NpmDistTag` being updated.
-  """
-  patch: NpmDistTagPatch!
-}
-
-"""
-Represents an update to a `NpmDistTag`. Fields that are set will be updated.
-"""
-input NpmDistTagPatch {
-  rowId: UUID
-  repositoryId: UUID
-  tag: String
-  version: String
-  createdAt: Datetime
-  updatedAt: Datetime
-}
-
-"""All input for the `updateNpmDistTag` mutation."""
-input UpdateNpmDistTagInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-  rowId: UUID!
-
-  """
-  An object where the defined keys will be set on the `NpmDistTag` being updated.
-  """
-  patch: NpmDistTagPatch!
-}
-
-"""The output of our update `UploadSession` mutation."""
-type UpdateUploadSessionPayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """The `UploadSession` that was updated by this mutation."""
-  uploadSession: UploadSession
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-
-  """An edge for our `UploadSession`. May be used by Relay 1."""
-  uploadSessionEdge(
-    """The method to use when ordering `UploadSession`."""
-    orderBy: [UploadSessionOrderBy!]! = [PRIMARY_KEY_ASC]
-  ): UploadSessionEdge
-}
-
-"""All input for the `updateUploadSessionById` mutation."""
-input UpdateUploadSessionByIdInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-
-  """
-  The globally unique `ID` which will identify a single `UploadSession` to be updated.
-  """
-  id: ID!
-
-  """
-  An object where the defined keys will be set on the `UploadSession` being updated.
-  """
-  patch: UploadSessionPatch!
-}
-
-"""
-Represents an update to a `UploadSession`. Fields that are set will be updated.
-"""
-input UploadSessionPatch {
-  rowId: UUID
-  repositoryId: UUID
-  offset: BigInt
-  createdAt: Datetime
-  expiresAt: Datetime
-}
-
-"""All input for the `updateUploadSession` mutation."""
-input UpdateUploadSessionInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-  rowId: UUID!
-
-  """
-  An object where the defined keys will be set on the `UploadSession` being updated.
-  """
-  patch: UploadSessionPatch!
-}
-
-"""The output of our update `SchemaMetadatum` mutation."""
-type UpdateSchemaMetadatumPayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """The `SchemaMetadatum` that was updated by this mutation."""
-  schemaMetadatum: SchemaMetadatum
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-
-  """An edge for our `SchemaMetadatum`. May be used by Relay 1."""
-  schemaMetadatumEdge(
-    """The method to use when ordering `SchemaMetadatum`."""
-    orderBy: [SchemaMetadatumOrderBy!]! = [PRIMARY_KEY_ASC]
-  ): SchemaMetadatumEdge
-}
-
-"""All input for the `updateSchemaMetadatumById` mutation."""
-input UpdateSchemaMetadatumByIdInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-
-  """
-  The globally unique `ID` which will identify a single `SchemaMetadatum` to be updated.
-  """
-  id: ID!
-
-  """
-  An object where the defined keys will be set on the `SchemaMetadatum` being updated.
-  """
-  patch: SchemaMetadatumPatch!
-}
-
-"""
-Represents an update to a `SchemaMetadatum`. Fields that are set will be updated.
-"""
-input SchemaMetadatumPatch {
-  artifactId: UUID
-  version: String
-  title: String
-  isValid: Boolean
-  validationErrors: JSON
-}
-
-"""All input for the `updateSchemaMetadatum` mutation."""
-input UpdateSchemaMetadatumInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-  artifactId: UUID!
-
-  """
-  An object where the defined keys will be set on the `SchemaMetadatum` being updated.
-  """
-  patch: SchemaMetadatumPatch!
-}
-
 """The output of our update `Namespace` mutation."""
 type UpdateNamespacePayload {
   """
@@ -5843,11 +3268,11 @@ Represents an update to a `Namespace`. Fields that are set will be updated.
 """
 input NamespacePatch {
   rowId: UUID
+  organizationId: UUID
   name: String
   description: String
   createdAt: Datetime
   updatedAt: Datetime
-  organizationId: UUID
 }
 
 """All input for the `updateNamespace` mutation."""
@@ -5932,9 +3357,9 @@ input ArtifactPatch {
   size: BigInt
   mediaType: String
   content: String
-  createdAt: Datetime
   storagePath: String
   subject: String
+  createdAt: Datetime
 }
 
 """All input for the `updateArtifact` mutation."""
@@ -5950,92 +3375,6 @@ input UpdateArtifactInput {
   An object where the defined keys will be set on the `Artifact` being updated.
   """
   patch: ArtifactPatch!
-}
-
-"""The output of our update `OidcIssuer` mutation."""
-type UpdateOidcIssuerPayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """The `OidcIssuer` that was updated by this mutation."""
-  oidcIssuer: OidcIssuer
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-
-  """An edge for our `OidcIssuer`. May be used by Relay 1."""
-  oidcIssuerEdge(
-    """The method to use when ordering `OidcIssuer`."""
-    orderBy: [OidcIssuerOrderBy!]! = [PRIMARY_KEY_ASC]
-  ): OidcIssuerEdge
-}
-
-"""All input for the `updateOidcIssuerById` mutation."""
-input UpdateOidcIssuerByIdInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-
-  """
-  The globally unique `ID` which will identify a single `OidcIssuer` to be updated.
-  """
-  id: ID!
-
-  """
-  An object where the defined keys will be set on the `OidcIssuer` being updated.
-  """
-  patch: OidcIssuerPatch!
-}
-
-"""
-Represents an update to a `OidcIssuer`. Fields that are set will be updated.
-"""
-input OidcIssuerPatch {
-  rowId: UUID
-  issuer: String
-  jwksUri: String
-  audience: String
-  enabled: Boolean
-  createdAt: Datetime
-  updatedAt: Datetime
-  jwksAuthTokenPath: String
-}
-
-"""All input for the `updateOidcIssuer` mutation."""
-input UpdateOidcIssuerInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-  rowId: UUID!
-
-  """
-  An object where the defined keys will be set on the `OidcIssuer` being updated.
-  """
-  patch: OidcIssuerPatch!
-}
-
-"""All input for the `updateOidcIssuerByIssuer` mutation."""
-input UpdateOidcIssuerByIssuerInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-  issuer: String!
-
-  """
-  An object where the defined keys will be set on the `OidcIssuer` being updated.
-  """
-  patch: OidcIssuerPatch!
 }
 
 """The output of our update `Repository` mutation."""
@@ -6090,9 +3429,9 @@ input RepositoryPatch {
   description: String
   artifactType: String
   isPublic: Boolean
+  downloadCount: BigInt
   createdAt: Datetime
   updatedAt: Datetime
-  downloadCount: BigInt
 }
 
 """All input for the `updateRepository` mutation."""
@@ -6108,732 +3447,6 @@ input UpdateRepositoryInput {
   An object where the defined keys will be set on the `Repository` being updated.
   """
   patch: RepositoryPatch!
-}
-
-"""The output of our update `NpmMetadatum` mutation."""
-type UpdateNpmMetadatumPayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """The `NpmMetadatum` that was updated by this mutation."""
-  npmMetadatum: NpmMetadatum
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-
-  """An edge for our `NpmMetadatum`. May be used by Relay 1."""
-  npmMetadatumEdge(
-    """The method to use when ordering `NpmMetadatum`."""
-    orderBy: [NpmMetadatumOrderBy!]! = [PRIMARY_KEY_ASC]
-  ): NpmMetadatumEdge
-}
-
-"""All input for the `updateNpmMetadatumById` mutation."""
-input UpdateNpmMetadatumByIdInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-
-  """
-  The globally unique `ID` which will identify a single `NpmMetadatum` to be updated.
-  """
-  id: ID!
-
-  """
-  An object where the defined keys will be set on the `NpmMetadatum` being updated.
-  """
-  patch: NpmMetadatumPatch!
-}
-
-"""
-Represents an update to a `NpmMetadatum`. Fields that are set will be updated.
-"""
-input NpmMetadatumPatch {
-  rowId: UUID
-  artifactId: UUID
-  name: String
-  version: String
-  manifest: JSON
-  shasum: String
-  integrity: String
-  createdAt: Datetime
-  updatedAt: Datetime
-}
-
-"""All input for the `updateNpmMetadatum` mutation."""
-input UpdateNpmMetadatumInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-  rowId: UUID!
-
-  """
-  An object where the defined keys will be set on the `NpmMetadatum` being updated.
-  """
-  patch: NpmMetadatumPatch!
-}
-
-"""The output of our update `Plugin` mutation."""
-type UpdatePluginPayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """The `Plugin` that was updated by this mutation."""
-  plugin: Plugin
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-
-  """An edge for our `Plugin`. May be used by Relay 1."""
-  pluginEdge(
-    """The method to use when ordering `Plugin`."""
-    orderBy: [PluginOrderBy!]! = [PRIMARY_KEY_ASC]
-  ): PluginEdge
-}
-
-"""All input for the `updatePluginById` mutation."""
-input UpdatePluginByIdInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-
-  """
-  The globally unique `ID` which will identify a single `Plugin` to be updated.
-  """
-  id: ID!
-
-  """
-  An object where the defined keys will be set on the `Plugin` being updated.
-  """
-  patch: PluginPatch!
-}
-
-"""
-Represents an update to a `Plugin`. Fields that are set will be updated.
-"""
-input PluginPatch {
-  rowId: UUID
-  name: String
-  version: String
-  description: String
-  type: String
-  bin: String
-  endpoint: String
-  commands: JSON
-  packages: JSON
-  createdAt: Datetime
-  updatedAt: Datetime
-}
-
-"""All input for the `updatePlugin` mutation."""
-input UpdatePluginInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-  rowId: UUID!
-
-  """
-  An object where the defined keys will be set on the `Plugin` being updated.
-  """
-  patch: PluginPatch!
-}
-
-"""All input for the `updatePluginByName` mutation."""
-input UpdatePluginByNameInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-  name: String!
-
-  """
-  An object where the defined keys will be set on the `Plugin` being updated.
-  """
-  patch: PluginPatch!
-}
-
-"""The output of our update `TrustedPublisher` mutation."""
-type UpdateTrustedPublisherPayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """The `TrustedPublisher` that was updated by this mutation."""
-  trustedPublisher: TrustedPublisher
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-
-  """An edge for our `TrustedPublisher`. May be used by Relay 1."""
-  trustedPublisherEdge(
-    """The method to use when ordering `TrustedPublisher`."""
-    orderBy: [TrustedPublisherOrderBy!]! = [PRIMARY_KEY_ASC]
-  ): TrustedPublisherEdge
-}
-
-"""All input for the `updateTrustedPublisherById` mutation."""
-input UpdateTrustedPublisherByIdInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-
-  """
-  The globally unique `ID` which will identify a single `TrustedPublisher` to be updated.
-  """
-  id: ID!
-
-  """
-  An object where the defined keys will be set on the `TrustedPublisher` being updated.
-  """
-  patch: TrustedPublisherPatch!
-}
-
-"""
-Represents an update to a `TrustedPublisher`. Fields that are set will be updated.
-"""
-input TrustedPublisherPatch {
-  rowId: UUID
-  namespaceId: UUID
-  repositoryId: UUID
-  issuerId: UUID
-  subject: String
-  claimConstraints: JSON
-  scope: String
-  isActive: Boolean
-  createdBy: String
-  lastUsedAt: Datetime
-  createdAt: Datetime
-  updatedAt: Datetime
-}
-
-"""All input for the `updateTrustedPublisher` mutation."""
-input UpdateTrustedPublisherInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-  rowId: UUID!
-
-  """
-  An object where the defined keys will be set on the `TrustedPublisher` being updated.
-  """
-  patch: TrustedPublisherPatch!
-}
-
-"""The output of our update `ScanResult` mutation."""
-type UpdateScanResultPayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """The `ScanResult` that was updated by this mutation."""
-  scanResult: ScanResult
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-
-  """An edge for our `ScanResult`. May be used by Relay 1."""
-  scanResultEdge(
-    """The method to use when ordering `ScanResult`."""
-    orderBy: [ScanResultOrderBy!]! = [PRIMARY_KEY_ASC]
-  ): ScanResultEdge
-}
-
-"""All input for the `updateScanResultById` mutation."""
-input UpdateScanResultByIdInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-
-  """
-  The globally unique `ID` which will identify a single `ScanResult` to be updated.
-  """
-  id: ID!
-
-  """
-  An object where the defined keys will be set on the `ScanResult` being updated.
-  """
-  patch: ScanResultPatch!
-}
-
-"""
-Represents an update to a `ScanResult`. Fields that are set will be updated.
-"""
-input ScanResultPatch {
-  rowId: UUID
-  artifactId: UUID
-  status: String
-  scanner: String
-  critical: Int
-  high: Int
-  medium: Int
-  low: Int
-  unknown: Int
-  findings: JSON
-  error: String
-  createdAt: Datetime
-  scannedAt: Datetime
-}
-
-"""All input for the `updateScanResult` mutation."""
-input UpdateScanResultInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-  rowId: UUID!
-
-  """
-  An object where the defined keys will be set on the `ScanResult` being updated.
-  """
-  patch: ScanResultPatch!
-}
-
-"""The output of our update `FederatedSource` mutation."""
-type UpdateFederatedSourcePayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """The `FederatedSource` that was updated by this mutation."""
-  federatedSource: FederatedSource
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-
-  """An edge for our `FederatedSource`. May be used by Relay 1."""
-  federatedSourceEdge(
-    """The method to use when ordering `FederatedSource`."""
-    orderBy: [FederatedSourceOrderBy!]! = [PRIMARY_KEY_ASC]
-  ): FederatedSourceEdge
-}
-
-"""All input for the `updateFederatedSourceById` mutation."""
-input UpdateFederatedSourceByIdInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-
-  """
-  The globally unique `ID` which will identify a single `FederatedSource` to be updated.
-  """
-  id: ID!
-
-  """
-  An object where the defined keys will be set on the `FederatedSource` being updated.
-  """
-  patch: FederatedSourcePatch!
-}
-
-"""
-Represents an update to a `FederatedSource`. Fields that are set will be updated.
-"""
-input FederatedSourcePatch {
-  rowId: UUID
-  namespace: String
-  upstreamBaseUrl: String
-  upstreamType: String
-  enabled: Boolean
-  rateLimitRpm: Int
-  cacheTtlSeconds: Int
-  tagListCacheTtlSeconds: Int
-  requireVetting: Boolean
-  createdAt: Datetime
-  updatedAt: Datetime
-}
-
-"""All input for the `updateFederatedSource` mutation."""
-input UpdateFederatedSourceInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-  rowId: UUID!
-
-  """
-  An object where the defined keys will be set on the `FederatedSource` being updated.
-  """
-  patch: FederatedSourcePatch!
-}
-
-"""All input for the `updateFederatedSourceByNamespace` mutation."""
-input UpdateFederatedSourceByNamespaceInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-  namespace: String!
-
-  """
-  An object where the defined keys will be set on the `FederatedSource` being updated.
-  """
-  patch: FederatedSourcePatch!
-}
-
-"""The output of our update `FederatedSkillCache` mutation."""
-type UpdateFederatedSkillCachePayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """The `FederatedSkillCache` that was updated by this mutation."""
-  federatedSkillCache: FederatedSkillCache
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-
-  """An edge for our `FederatedSkillCache`. May be used by Relay 1."""
-  federatedSkillCacheEdge(
-    """The method to use when ordering `FederatedSkillCache`."""
-    orderBy: [FederatedSkillCacheOrderBy!]! = [PRIMARY_KEY_ASC]
-  ): FederatedSkillCacheEdge
-}
-
-"""All input for the `updateFederatedSkillCacheById` mutation."""
-input UpdateFederatedSkillCacheByIdInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-
-  """
-  The globally unique `ID` which will identify a single `FederatedSkillCache` to be updated.
-  """
-  id: ID!
-
-  """
-  An object where the defined keys will be set on the `FederatedSkillCache` being updated.
-  """
-  patch: FederatedSkillCachePatch!
-}
-
-"""
-Represents an update to a `FederatedSkillCache`. Fields that are set will be updated.
-"""
-input FederatedSkillCachePatch {
-  rowId: UUID
-  sourceId: UUID
-  slug: String
-  content: String
-  contentDigest: String
-  fetchedAt: Datetime
-  expiresAt: Datetime
-  vetStatus: String
-  vetReason: String
-  vettedBy: String
-  vettedAt: Datetime
-  upstreamMeta: JSON
-  createdAt: Datetime
-}
-
-"""All input for the `updateFederatedSkillCache` mutation."""
-input UpdateFederatedSkillCacheInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-  rowId: UUID!
-
-  """
-  An object where the defined keys will be set on the `FederatedSkillCache` being updated.
-  """
-  patch: FederatedSkillCachePatch!
-}
-
-"""The output of our update `CargoMetadatum` mutation."""
-type UpdateCargoMetadatumPayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """The `CargoMetadatum` that was updated by this mutation."""
-  cargoMetadatum: CargoMetadatum
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-
-  """An edge for our `CargoMetadatum`. May be used by Relay 1."""
-  cargoMetadatumEdge(
-    """The method to use when ordering `CargoMetadatum`."""
-    orderBy: [CargoMetadatumOrderBy!]! = [PRIMARY_KEY_ASC]
-  ): CargoMetadatumEdge
-}
-
-"""All input for the `updateCargoMetadatumById` mutation."""
-input UpdateCargoMetadatumByIdInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-
-  """
-  The globally unique `ID` which will identify a single `CargoMetadatum` to be updated.
-  """
-  id: ID!
-
-  """
-  An object where the defined keys will be set on the `CargoMetadatum` being updated.
-  """
-  patch: CargoMetadatumPatch!
-}
-
-"""
-Represents an update to a `CargoMetadatum`. Fields that are set will be updated.
-"""
-input CargoMetadatumPatch {
-  rowId: UUID
-  artifactId: UUID
-  name: String
-  vers: String
-  deps: JSON
-  features: JSON
-  cksum: String
-  yanked: Boolean
-  links: String
-  rustVersion: String
-  v: Int
-  createdAt: Datetime
-  updatedAt: Datetime
-}
-
-"""All input for the `updateCargoMetadatum` mutation."""
-input UpdateCargoMetadatumInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-  rowId: UUID!
-
-  """
-  An object where the defined keys will be set on the `CargoMetadatum` being updated.
-  """
-  patch: CargoMetadatumPatch!
-}
-
-"""The output of our update `ApiToken` mutation."""
-type UpdateApiTokenPayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """The `ApiToken` that was updated by this mutation."""
-  apiToken: ApiToken
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-
-  """An edge for our `ApiToken`. May be used by Relay 1."""
-  apiTokenEdge(
-    """The method to use when ordering `ApiToken`."""
-    orderBy: [ApiTokenOrderBy!]! = [PRIMARY_KEY_ASC]
-  ): ApiTokenEdge
-}
-
-"""All input for the `updateApiTokenById` mutation."""
-input UpdateApiTokenByIdInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-
-  """
-  The globally unique `ID` which will identify a single `ApiToken` to be updated.
-  """
-  id: ID!
-
-  """
-  An object where the defined keys will be set on the `ApiToken` being updated.
-  """
-  patch: ApiTokenPatch!
-}
-
-"""
-Represents an update to a `ApiToken`. Fields that are set will be updated.
-"""
-input ApiTokenPatch {
-  rowId: UUID
-  name: String
-  tokenHash: String
-  tokenPrefix: String
-  namespaceId: UUID
-  repositoryId: UUID
-  scope: String
-  createdBy: String
-  description: String
-  isActive: Boolean
-  expiresAt: Datetime
-  lastUsedAt: Datetime
-  createdAt: Datetime
-  updatedAt: Datetime
-}
-
-"""All input for the `updateApiToken` mutation."""
-input UpdateApiTokenInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-  rowId: UUID!
-
-  """
-  An object where the defined keys will be set on the `ApiToken` being updated.
-  """
-  patch: ApiTokenPatch!
-}
-
-"""The output of our delete `ContainerMetadatum` mutation."""
-type DeleteContainerMetadatumPayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """The `ContainerMetadatum` that was deleted by this mutation."""
-  containerMetadatum: ContainerMetadatum
-  deletedContainerMetadatumId: ID
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-
-  """An edge for our `ContainerMetadatum`. May be used by Relay 1."""
-  containerMetadatumEdge(
-    """The method to use when ordering `ContainerMetadatum`."""
-    orderBy: [ContainerMetadatumOrderBy!]! = [PRIMARY_KEY_ASC]
-  ): ContainerMetadatumEdge
-}
-
-"""All input for the `deleteContainerMetadatumById` mutation."""
-input DeleteContainerMetadatumByIdInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-
-  """
-  The globally unique `ID` which will identify a single `ContainerMetadatum` to be deleted.
-  """
-  id: ID!
-}
-
-"""All input for the `deleteContainerMetadatum` mutation."""
-input DeleteContainerMetadatumInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-  artifactId: UUID!
-}
-
-"""The output of our delete `WasmMetadatum` mutation."""
-type DeleteWasmMetadatumPayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """The `WasmMetadatum` that was deleted by this mutation."""
-  wasmMetadatum: WasmMetadatum
-  deletedWasmMetadatumId: ID
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-
-  """An edge for our `WasmMetadatum`. May be used by Relay 1."""
-  wasmMetadatumEdge(
-    """The method to use when ordering `WasmMetadatum`."""
-    orderBy: [WasmMetadatumOrderBy!]! = [PRIMARY_KEY_ASC]
-  ): WasmMetadatumEdge
-}
-
-"""All input for the `deleteWasmMetadatumById` mutation."""
-input DeleteWasmMetadatumByIdInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-
-  """
-  The globally unique `ID` which will identify a single `WasmMetadatum` to be deleted.
-  """
-  id: ID!
-}
-
-"""All input for the `deleteWasmMetadatum` mutation."""
-input DeleteWasmMetadatumInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-  artifactId: UUID!
 }
 
 """The output of our delete `Tag` mutation."""
@@ -6882,150 +3495,6 @@ input DeleteTagInput {
   """
   clientMutationId: String
   rowId: UUID!
-}
-
-"""The output of our delete `NpmDistTag` mutation."""
-type DeleteNpmDistTagPayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """The `NpmDistTag` that was deleted by this mutation."""
-  npmDistTag: NpmDistTag
-  deletedNpmDistTagId: ID
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-
-  """An edge for our `NpmDistTag`. May be used by Relay 1."""
-  npmDistTagEdge(
-    """The method to use when ordering `NpmDistTag`."""
-    orderBy: [NpmDistTagOrderBy!]! = [PRIMARY_KEY_ASC]
-  ): NpmDistTagEdge
-}
-
-"""All input for the `deleteNpmDistTagById` mutation."""
-input DeleteNpmDistTagByIdInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-
-  """
-  The globally unique `ID` which will identify a single `NpmDistTag` to be deleted.
-  """
-  id: ID!
-}
-
-"""All input for the `deleteNpmDistTag` mutation."""
-input DeleteNpmDistTagInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-  rowId: UUID!
-}
-
-"""The output of our delete `UploadSession` mutation."""
-type DeleteUploadSessionPayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """The `UploadSession` that was deleted by this mutation."""
-  uploadSession: UploadSession
-  deletedUploadSessionId: ID
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-
-  """An edge for our `UploadSession`. May be used by Relay 1."""
-  uploadSessionEdge(
-    """The method to use when ordering `UploadSession`."""
-    orderBy: [UploadSessionOrderBy!]! = [PRIMARY_KEY_ASC]
-  ): UploadSessionEdge
-}
-
-"""All input for the `deleteUploadSessionById` mutation."""
-input DeleteUploadSessionByIdInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-
-  """
-  The globally unique `ID` which will identify a single `UploadSession` to be deleted.
-  """
-  id: ID!
-}
-
-"""All input for the `deleteUploadSession` mutation."""
-input DeleteUploadSessionInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-  rowId: UUID!
-}
-
-"""The output of our delete `SchemaMetadatum` mutation."""
-type DeleteSchemaMetadatumPayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """The `SchemaMetadatum` that was deleted by this mutation."""
-  schemaMetadatum: SchemaMetadatum
-  deletedSchemaMetadatumId: ID
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-
-  """An edge for our `SchemaMetadatum`. May be used by Relay 1."""
-  schemaMetadatumEdge(
-    """The method to use when ordering `SchemaMetadatum`."""
-    orderBy: [SchemaMetadatumOrderBy!]! = [PRIMARY_KEY_ASC]
-  ): SchemaMetadatumEdge
-}
-
-"""All input for the `deleteSchemaMetadatumById` mutation."""
-input DeleteSchemaMetadatumByIdInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-
-  """
-  The globally unique `ID` which will identify a single `SchemaMetadatum` to be deleted.
-  """
-  id: ID!
-}
-
-"""All input for the `deleteSchemaMetadatum` mutation."""
-input DeleteSchemaMetadatumInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-  artifactId: UUID!
 }
 
 """The output of our delete `Namespace` mutation."""
@@ -7134,64 +3603,6 @@ input DeleteArtifactInput {
   rowId: UUID!
 }
 
-"""The output of our delete `OidcIssuer` mutation."""
-type DeleteOidcIssuerPayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """The `OidcIssuer` that was deleted by this mutation."""
-  oidcIssuer: OidcIssuer
-  deletedOidcIssuerId: ID
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-
-  """An edge for our `OidcIssuer`. May be used by Relay 1."""
-  oidcIssuerEdge(
-    """The method to use when ordering `OidcIssuer`."""
-    orderBy: [OidcIssuerOrderBy!]! = [PRIMARY_KEY_ASC]
-  ): OidcIssuerEdge
-}
-
-"""All input for the `deleteOidcIssuerById` mutation."""
-input DeleteOidcIssuerByIdInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-
-  """
-  The globally unique `ID` which will identify a single `OidcIssuer` to be deleted.
-  """
-  id: ID!
-}
-
-"""All input for the `deleteOidcIssuer` mutation."""
-input DeleteOidcIssuerInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-  rowId: UUID!
-}
-
-"""All input for the `deleteOidcIssuerByIssuer` mutation."""
-input DeleteOidcIssuerByIssuerInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-  issuer: String!
-}
-
 """The output of our delete `Repository` mutation."""
 type DeleteRepositoryPayload {
   """
@@ -7240,406 +3651,34 @@ input DeleteRepositoryInput {
   rowId: UUID!
 }
 
-"""The output of our delete `NpmMetadatum` mutation."""
-type DeleteNpmMetadatumPayload {
+type AuditLog implements Node {
   """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """The `NpmMetadatum` that was deleted by this mutation."""
-  npmMetadatum: NpmMetadatum
-  deletedNpmMetadatumId: ID
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-
-  """An edge for our `NpmMetadatum`. May be used by Relay 1."""
-  npmMetadatumEdge(
-    """The method to use when ordering `NpmMetadatum`."""
-    orderBy: [NpmMetadatumOrderBy!]! = [PRIMARY_KEY_ASC]
-  ): NpmMetadatumEdge
-}
-
-"""All input for the `deleteNpmMetadatumById` mutation."""
-input DeleteNpmMetadatumByIdInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-
-  """
-  The globally unique `ID` which will identify a single `NpmMetadatum` to be deleted.
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
   """
   id: ID!
-}
-
-"""All input for the `deleteNpmMetadatum` mutation."""
-input DeleteNpmMetadatumInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
   rowId: UUID!
+  organizationId: String
+  userId: String
+  action: String!
+  resource: String!
+  resourceId: String
+  details: JSON
+  requestId: String
+  createdAt: Datetime
 }
 
-"""The output of our delete `Plugin` mutation."""
-type DeletePluginPayload {
+type Webhook implements Node {
   """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """The `Plugin` that was deleted by this mutation."""
-  plugin: Plugin
-  deletedPluginId: ID
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-
-  """An edge for our `Plugin`. May be used by Relay 1."""
-  pluginEdge(
-    """The method to use when ordering `Plugin`."""
-    orderBy: [PluginOrderBy!]! = [PRIMARY_KEY_ASC]
-  ): PluginEdge
-}
-
-"""All input for the `deletePluginById` mutation."""
-input DeletePluginByIdInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-
-  """
-  The globally unique `ID` which will identify a single `Plugin` to be deleted.
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
   """
   id: ID!
-}
-
-"""All input for the `deletePlugin` mutation."""
-input DeletePluginInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
   rowId: UUID!
-}
-
-"""All input for the `deletePluginByName` mutation."""
-input DeletePluginByNameInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-  name: String!
-}
-
-"""The output of our delete `TrustedPublisher` mutation."""
-type DeleteTrustedPublisherPayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """The `TrustedPublisher` that was deleted by this mutation."""
-  trustedPublisher: TrustedPublisher
-  deletedTrustedPublisherId: ID
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-
-  """An edge for our `TrustedPublisher`. May be used by Relay 1."""
-  trustedPublisherEdge(
-    """The method to use when ordering `TrustedPublisher`."""
-    orderBy: [TrustedPublisherOrderBy!]! = [PRIMARY_KEY_ASC]
-  ): TrustedPublisherEdge
-}
-
-"""All input for the `deleteTrustedPublisherById` mutation."""
-input DeleteTrustedPublisherByIdInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-
-  """
-  The globally unique `ID` which will identify a single `TrustedPublisher` to be deleted.
-  """
-  id: ID!
-}
-
-"""All input for the `deleteTrustedPublisher` mutation."""
-input DeleteTrustedPublisherInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-  rowId: UUID!
-}
-
-"""The output of our delete `ScanResult` mutation."""
-type DeleteScanResultPayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """The `ScanResult` that was deleted by this mutation."""
-  scanResult: ScanResult
-  deletedScanResultId: ID
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-
-  """An edge for our `ScanResult`. May be used by Relay 1."""
-  scanResultEdge(
-    """The method to use when ordering `ScanResult`."""
-    orderBy: [ScanResultOrderBy!]! = [PRIMARY_KEY_ASC]
-  ): ScanResultEdge
-}
-
-"""All input for the `deleteScanResultById` mutation."""
-input DeleteScanResultByIdInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-
-  """
-  The globally unique `ID` which will identify a single `ScanResult` to be deleted.
-  """
-  id: ID!
-}
-
-"""All input for the `deleteScanResult` mutation."""
-input DeleteScanResultInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-  rowId: UUID!
-}
-
-"""The output of our delete `FederatedSource` mutation."""
-type DeleteFederatedSourcePayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """The `FederatedSource` that was deleted by this mutation."""
-  federatedSource: FederatedSource
-  deletedFederatedSourceId: ID
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-
-  """An edge for our `FederatedSource`. May be used by Relay 1."""
-  federatedSourceEdge(
-    """The method to use when ordering `FederatedSource`."""
-    orderBy: [FederatedSourceOrderBy!]! = [PRIMARY_KEY_ASC]
-  ): FederatedSourceEdge
-}
-
-"""All input for the `deleteFederatedSourceById` mutation."""
-input DeleteFederatedSourceByIdInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-
-  """
-  The globally unique `ID` which will identify a single `FederatedSource` to be deleted.
-  """
-  id: ID!
-}
-
-"""All input for the `deleteFederatedSource` mutation."""
-input DeleteFederatedSourceInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-  rowId: UUID!
-}
-
-"""All input for the `deleteFederatedSourceByNamespace` mutation."""
-input DeleteFederatedSourceByNamespaceInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-  namespace: String!
-}
-
-"""The output of our delete `FederatedSkillCache` mutation."""
-type DeleteFederatedSkillCachePayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """The `FederatedSkillCache` that was deleted by this mutation."""
-  federatedSkillCache: FederatedSkillCache
-  deletedFederatedSkillCacheId: ID
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-
-  """An edge for our `FederatedSkillCache`. May be used by Relay 1."""
-  federatedSkillCacheEdge(
-    """The method to use when ordering `FederatedSkillCache`."""
-    orderBy: [FederatedSkillCacheOrderBy!]! = [PRIMARY_KEY_ASC]
-  ): FederatedSkillCacheEdge
-}
-
-"""All input for the `deleteFederatedSkillCacheById` mutation."""
-input DeleteFederatedSkillCacheByIdInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-
-  """
-  The globally unique `ID` which will identify a single `FederatedSkillCache` to be deleted.
-  """
-  id: ID!
-}
-
-"""All input for the `deleteFederatedSkillCache` mutation."""
-input DeleteFederatedSkillCacheInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-  rowId: UUID!
-}
-
-"""The output of our delete `CargoMetadatum` mutation."""
-type DeleteCargoMetadatumPayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """The `CargoMetadatum` that was deleted by this mutation."""
-  cargoMetadatum: CargoMetadatum
-  deletedCargoMetadatumId: ID
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-
-  """An edge for our `CargoMetadatum`. May be used by Relay 1."""
-  cargoMetadatumEdge(
-    """The method to use when ordering `CargoMetadatum`."""
-    orderBy: [CargoMetadatumOrderBy!]! = [PRIMARY_KEY_ASC]
-  ): CargoMetadatumEdge
-}
-
-"""All input for the `deleteCargoMetadatumById` mutation."""
-input DeleteCargoMetadatumByIdInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-
-  """
-  The globally unique `ID` which will identify a single `CargoMetadatum` to be deleted.
-  """
-  id: ID!
-}
-
-"""All input for the `deleteCargoMetadatum` mutation."""
-input DeleteCargoMetadatumInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-  rowId: UUID!
-}
-
-"""The output of our delete `ApiToken` mutation."""
-type DeleteApiTokenPayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """The `ApiToken` that was deleted by this mutation."""
-  apiToken: ApiToken
-  deletedApiTokenId: ID
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-
-  """An edge for our `ApiToken`. May be used by Relay 1."""
-  apiTokenEdge(
-    """The method to use when ordering `ApiToken`."""
-    orderBy: [ApiTokenOrderBy!]! = [PRIMARY_KEY_ASC]
-  ): ApiTokenEdge
-}
-
-"""All input for the `deleteApiTokenById` mutation."""
-input DeleteApiTokenByIdInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-
-  """
-  The globally unique `ID` which will identify a single `ApiToken` to be deleted.
-  """
-  id: ID!
-}
-
-"""All input for the `deleteApiToken` mutation."""
-input DeleteApiTokenInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-  rowId: UUID!
+  organizationId: String!
+  namespaceId: String
+  url: String!
+  secret: String!
+  events: JSON!
+  isActive: Boolean!
+  createdAt: Datetime
+  updatedAt: Datetime
 }

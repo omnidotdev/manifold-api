@@ -184,31 +184,43 @@ const byApiTokenNamespace = wrapApiTokenRead();
  * Wrap every per-table read (connection + single-by-rowId/byName) in the
  * caller's org scope. Field names follow PgSimplifyInflection.
  */
-export const OrgScopePlugin = wrapPlans({
-  Query: {
-    namespace: byNamespace,
-    namespaces: byNamespace,
-    namespaceByName: byNamespace,
-    repository: byRepository,
-    repositories: byRepository,
-    artifact: byRepositoryId,
-    artifacts: byRepositoryId,
-    tag: byRepositoryId,
-    tags: byRepositoryId,
-    npmDistTag: byRepositoryId,
-    npmDistTags: byRepositoryId,
-    uploadSession: byRepositoryId,
-    uploadSessions: byRepositoryId,
-    npmMetadatum: byArtifactId,
-    npmMetadata: byArtifactId,
-    cargoMetadatum: byArtifactId,
-    cargoMetadata: byArtifactId,
-    scanResult: byArtifactId,
-    scanResults: byArtifactId,
-    containerMetadatum: byArtifactId,
-    wasmMetadatum: byArtifactId,
-    schemaMetadatum: byArtifactId,
-    apiToken: byApiTokenNamespace,
-    apiTokens: byApiTokenNamespace,
-  },
-});
+const QUERY_RULES: Record<string, PlanWrapperFn> = {
+  namespace: byNamespace,
+  namespaces: byNamespace,
+  namespaceByName: byNamespace,
+  repository: byRepository,
+  repositories: byRepository,
+  artifact: byRepositoryId,
+  artifacts: byRepositoryId,
+  tag: byRepositoryId,
+  tags: byRepositoryId,
+  npmDistTag: byRepositoryId,
+  npmDistTags: byRepositoryId,
+  npmMetadatum: byArtifactId,
+  npmMetadata: byArtifactId,
+  cargoMetadatum: byArtifactId,
+  cargoMetadata: byArtifactId,
+  scanResult: byArtifactId,
+  scanResults: byArtifactId,
+  containerMetadatum: byArtifactId,
+  containerMetadata: byArtifactId,
+  wasmMetadatum: byArtifactId,
+  wasmMetadata: byArtifactId,
+  schemaMetadatum: byArtifactId,
+  schemaMetadata: byArtifactId,
+  pypiMetadatum: byArtifactId,
+  pypiMetadata: byArtifactId,
+  apiToken: byApiTokenNamespace,
+  apiTokens: byApiTokenNamespace,
+};
+
+export const OrgScopePlugin = wrapPlans({ Query: QUERY_RULES });
+
+/**
+ * Every Query field the org scope wraps. The reviewed-surface test asserts
+ * each table read in the schema is in this set, so a new table cannot ship an
+ * unscoped read
+ */
+export const ORG_SCOPED_QUERY_FIELDS: ReadonlySet<string> = new Set(
+  Object.keys(QUERY_RULES),
+);
