@@ -1,12 +1,12 @@
-# syntax=docker/dockerfile:1
+# syntax=docker/dockerfile:1@sha256:572cebbc2b15e6f84c077742952674889cb63cd5e9b80abdffcbe587b6f19183
 
-FROM oven/bun:1.4.4 AS base
+FROM oven/bun:1.4.4@sha256:1d22548f177f4ff38e0c15baa3c2c46c6c2060ba2d1bc573bb4720b407548f1d AS base
 WORKDIR /app
 
 # Trivy vulnerability scanner (static binary copied from the official image).
 # Inert unless SCAN_ENABLED=true; the scan worker no-ops when trivy is absent,
 # so this only makes the runtime scan-capable, it does not turn scanning on.
-FROM aquasec/trivy:0.72.0 AS trivy
+FROM aquasec/trivy:0.72.0@sha256:cffe3f5161a47a6823fbd23d985795b3ed72a4c806da4c4df16266c02accdd6f AS trivy
 
 # Build
 FROM base AS builder
